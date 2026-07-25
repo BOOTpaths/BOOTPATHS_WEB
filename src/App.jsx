@@ -57,7 +57,7 @@ const INITIAL_TREKS = [
     slotsLeft: 4,
     description: 'Trek through lush green shola forests and grassy ridges of Kudremukh range to reach the mist-shrouded peak.',
     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-    videoLocal: '/netravathi.mp4',
+    videoLocal: 'netravathi.mp4',
     dates: ['2026-07-11', '2026-07-18', '2026-07-25'],
     location: 'Chikkamagaluru, Karnataka',
     altitude: '1,520 m / 4,986 ft',
@@ -75,7 +75,7 @@ const INITIAL_TREKS = [
     slotsLeft: 12,
     description: 'Cross the border of Coorg into dense forests, wild animal habitats, and climb to the legendary Brahmagiri peak.',
     image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
-    videoLocal: '/brahmagiri.mp4',
+    videoLocal: 'brahmagiri.mp4',
     dates: ['2026-07-15', '2026-07-22', '2026-07-29'],
     location: 'Coorg, Karnataka',
     altitude: '1,608 m / 5,275 ft',
@@ -93,7 +93,7 @@ const INITIAL_TREKS = [
     slotsLeft: 6,
     description: 'An ancient, hidden mountain village trek near Kodaikanal. Steep forest ascents, pine ridges, and deep silence.',
     image: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=800&q=80',
-    videoLocal: '/vellagavi.mp4',
+    videoLocal: 'vellagavi.mp4',
     dates: ['2026-07-17', '2026-07-24', '2026-07-31'],
     location: 'Kodaikanal, Tamil Nadu',
     altitude: '2,100 m / 6,890 ft',
@@ -704,7 +704,7 @@ export default function App() {
           {/* Logo */}
           <a href="#" className="flex items-center gap-3 group">
             <img 
-              src="/logo.jpg" 
+              src="logo.jpg" 
               alt="BOOTpaths Logo" 
               className="h-10 w-10 rounded-full object-cover border border-autumn-mist/10 transition-transform duration-300 group-hover:scale-105 group-hover:border-autumn-maple/50"
             />
@@ -852,7 +852,7 @@ export default function App() {
       <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden py-16 px-6 md:px-12">
         {/* Full-Bleed Background Video */}
         <video 
-          src="/landing.mp4" 
+          src="landing.mp4" 
           className="absolute inset-0 h-full w-full object-cover z-0" 
           autoPlay 
           loop 
@@ -1580,7 +1580,7 @@ export default function App() {
           <div className="lg:col-span-2 space-y-6">
             <a href="#" className="flex items-center gap-3">
               <img 
-                src="/logo.jpg" 
+                src="logo.jpg" 
                 alt="BOOTpaths Logo" 
                 className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
               />
@@ -1653,7 +1653,7 @@ export default function App() {
             <div className="bg-autumn-bark p-6 flex justify-between items-center border-b border-autumn-mist/10">
               <div className="flex items-center gap-3">
                 <img 
-                  src="/logo.jpg" 
+                  src="logo.jpg" 
                   alt="BOOTpaths Logo" 
                   className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
                 />
@@ -1776,7 +1776,7 @@ export default function App() {
             <div className="bg-autumn-bark/30 p-5 flex justify-between items-center border-b border-autumn-mist/10">
               <div className="flex items-center gap-3">
                 <img 
-                  src="/logo.jpg" 
+                  src="logo.jpg" 
                   alt="BOOTpaths Logo" 
                   className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
                 />
