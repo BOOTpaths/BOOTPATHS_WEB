@@ -18,18 +18,18 @@
   }
 }
 
-/* Custom Scrollbar for premium dark-theme rugged feel */
+/* Custom Scrollbar for premium light-theme organic feel */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #3A2A1E; /* autumn-bark */
+  background: #F3ECDD; /* autumn-mist */
 }
 ::-webkit-scrollbar-thumb {
-  background: #4F3A2B; /* elevated bark tone */
+  background: #E0D7C5; /* elevated mist tone */
   border-radius: 4px;
-  border: 2px solid #3A2A1E;
+  border: 2px solid #F3ECDD;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #C1571F; /* autumn-maple */

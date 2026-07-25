@@ -696,35 +696,35 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-autumn-bark text-autumn-mist font-sans selection:bg-autumn-maple selection:text-black">
+    <div className="min-h-screen bg-autumn-mist text-autumn-bark font-sans selection:bg-autumn-maple selection:text-black">
       
       {/* 1. NAVIGATION BAR */}
-      <header className="sticky top-0 z-40 w-full border-b border-stone-900 bg-autumn-bark/70 backdrop-blur-md transition-all duration-300">
+      <header className="sticky top-0 z-40 w-full border-b border-autumn-bark/10 bg-autumn-mist/70 backdrop-blur-md transition-all duration-300">
         <div className="mx-auto flex max-w-7xl h-20 items-center justify-between px-6 md:px-12">
           {/* Logo */}
           <a href="#" className="flex items-center gap-3 group">
             <img 
               src="logo.jpg" 
               alt="BOOTpaths Logo" 
-              className="h-10 w-10 rounded-full object-cover border border-autumn-mist/10 transition-transform duration-300 group-hover:scale-105 group-hover:border-autumn-maple/50"
+              className="h-10 w-10 rounded-full object-cover border border-autumn-bark/10 transition-transform duration-300 group-hover:scale-105 group-hover:border-autumn-maple/50"
             />
-            <span className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-mist md:text-3xl">
+            <span className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-bark md:text-3xl">
               BOOT<span className="text-autumn-maple">paths</span>
             </span>
           </a>
 
           {/* Desktop Nav Links */}
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#upcoming-treks" className="font-outfit text-sm font-medium tracking-wide text-autumn-mist/80 transition-colors hover:text-autumn-maple">
+            <a href="#upcoming-treks" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Upcoming Treks
             </a>
-            <a href="#safety-standards" className="font-outfit text-sm font-medium tracking-wide text-autumn-mist/80 transition-colors hover:text-autumn-maple">
+            <a href="#safety-standards" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Safety Standards
             </a>
-            <a href="#advantage" className="font-outfit text-sm font-medium tracking-wide text-autumn-mist/80 transition-colors hover:text-autumn-maple">
+            <a href="#advantage" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Our Crew
             </a>
-            <a href="#community" className="font-outfit text-sm font-medium tracking-wide text-autumn-mist/80 transition-colors hover:text-autumn-maple">
+            <a href="#community" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Community
             </a>
           </nav>
@@ -733,15 +733,15 @@ export default function App() {
           <div className="hidden items-center gap-4 md:flex">
             {user ? (
               <div className="relative group">
-                <button className="flex items-center gap-2.5 rounded-full border border-autumn-mist/10 bg-[#2A1D14]/60 p-1.5 pr-4 transition-all duration-200 hover:border-autumn-maple/50 hover:bg-[#2A1D14] focus:outline-none focus:ring-2 focus:ring-autumn-maple">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-autumn-maple font-outfit text-sm font-bold text-stone-955 shadow-md">
+                <button className="flex items-center gap-2.5 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 p-1.5 pr-4 transition-all duration-200 hover:border-autumn-maple/50 hover:bg-[#EFE8D6] focus:outline-none focus:ring-2 focus:ring-autumn-maple">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-autumn-maple font-outfit text-sm font-bold text-[#F3ECDD] shadow-md">
                     {user.initials}
                   </div>
-                  <span className="font-outfit text-xs font-bold text-autumn-mist/80 tracking-wide">{user.name}</span>
+                  <span className="font-outfit text-xs font-bold text-autumn-bark/80 tracking-wide">{user.name}</span>
                 </button>
                 {/* Dropdown Menu */}
-                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-lg border border-autumn-mist/10 bg-[#2A1D14] p-2 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto z-50">
-                  <div className="px-3 py-1.5 border-b border-autumn-mist/10 text-[10px] text-autumn-mist0 uppercase tracking-widest font-bold">
+                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-lg border border-autumn-bark/10 bg-[#EFE8D6] p-2 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto z-50">
+                  <div className="px-3 py-1.5 border-b border-autumn-bark/10 text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
                     {user.email}
                   </div>
                   <button 
@@ -761,7 +761,7 @@ export default function App() {
             ) : (
               <button 
                 onClick={() => handleTrigger({ type: 'nav_book' })}
-                className="inline-flex h-11 items-center justify-center rounded-md border border-autumn-maple/20 bg-autumn-maple/10 px-6 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 hover:bg-autumn-maple hover:text-stone-950 hover:shadow-[0_0_20px_rgba(193,87,31,0.3)] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-autumn-maple/20 bg-autumn-maple/10 px-6 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 hover:bg-autumn-maple hover:text-[#F3ECDD] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
               >
                 Book a Trek
               </button>
@@ -770,7 +770,7 @@ export default function App() {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-autumn-mist/10 bg-[#2A1D14]/40 text-autumn-mist transition-colors hover:bg-[#2A1D14] md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/40 text-autumn-bark transition-colors hover:bg-[#EFE8D6] md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
@@ -780,46 +780,46 @@ export default function App() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="absolute top-20 left-0 w-full border-b border-stone-900 bg-autumn-bark/95 px-8 py-6 backdrop-blur-lg md:hidden animate-in slide-in-from-top-4 duration-200">
+          <div className="absolute top-20 left-0 w-full border-b border-autumn-bark/10 bg-autumn-mist/95 px-8 py-6 backdrop-blur-lg md:hidden animate-in slide-in-from-top-4 duration-200">
             <nav className="flex flex-col gap-5">
               <a 
                 href="#upcoming-treks" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-outfit text-lg font-medium text-autumn-mist/80 hover:text-autumn-maple"
+                className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
               >
                 Upcoming Treks
               </a>
               <a 
                 href="#safety-standards" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-outfit text-lg font-medium text-autumn-mist/80 hover:text-autumn-maple"
+                className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
               >
                 Safety Standards
               </a>
               <a 
                 href="#advantage" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-outfit text-lg font-medium text-autumn-mist/80 hover:text-autumn-maple"
+                className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
               >
                 Our Crew
               </a>
               <a 
                 href="#community" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-outfit text-lg font-medium text-autumn-mist/80 hover:text-autumn-maple"
+                className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
               >
                 Community
               </a>
-              <hr className="my-2 border-autumn-mist/10" />
+              <hr className="my-2 border-autumn-bark/10" />
               {user ? (
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-3 px-1 py-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-autumn-maple font-outfit text-md font-bold text-stone-955 shadow-md">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-autumn-maple font-outfit text-md font-bold text-[#F3ECDD] shadow-md">
                       {user.initials}
                     </div>
                     <div>
-                      <div className="font-outfit text-sm font-bold text-autumn-mist">{user.name}</div>
-                      <div className="text-xxs text-autumn-mist0">{user.email}</div>
+                      <div className="font-outfit text-sm font-bold text-autumn-bark">{user.name}</div>
+                      <div className="text-xxs text-autumn-bark/50">{user.email}</div>
                     </div>
                   </div>
                   <button 
@@ -827,7 +827,7 @@ export default function App() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="flex h-12 w-full items-center justify-center rounded-lg border border-autumn-mist/10 bg-[#2A1D14]/40 font-outfit text-sm font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    className="flex h-12 w-full items-center justify-center rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/40 font-outfit text-sm font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors"
                   >
                     Sign Out
                   </button>
@@ -838,7 +838,7 @@ export default function App() {
                     setMobileMenuOpen(false);
                     handleTrigger({ type: 'nav_book' });
                   }}
-                  className="flex h-12 w-full items-center justify-center rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-stone-950 shadow-md hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
+                  className="flex h-12 w-full items-center justify-center rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] shadow-md hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
                 >
                   Book a Trek
                 </button>
@@ -871,15 +871,15 @@ export default function App() {
         <div className="relative z-20 mx-auto w-full max-w-5xl text-center md:text-left">
           
           {/* Trust Badge / Decathlon Pill */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-autumn-mist/10 bg-[#2A1D14]/60 py-1.5 px-4 backdrop-blur-md transition-colors hover:border-autumn-maple/30">
+          <div className="inline-flex items-center gap-2 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 py-1.5 px-4 backdrop-blur-md transition-colors hover:border-autumn-maple/30">
             <span className="flex h-2 w-2 rounded-full bg-autumn-maple animate-ping"></span>
-            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-mist/80">
+            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-bark/80">
               Official Trekking Partner with <span className="text-autumn-maple font-extrabold">Decathlon</span>
             </span>
           </div>
 
           {/* Main Slogan */}
-          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-autumn-mist sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-autumn-bark sm:text-6xl md:text-7xl lg:text-8xl">
             Every Trail <br />
             <span className="bg-gradient-to-r from-autumn-maple via-autumn-amber to-autumn-rhodo bg-clip-text text-transparent">
               Turns You
@@ -887,27 +887,27 @@ export default function App() {
           </h1>
 
           {/* Value Proposition */}
-          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-autumn-mist/80 md:text-lg">
-            <span className="font-bold text-autumn-mist">Come green. Leave gold.</span> Safe, Responsible, and Quality Treks in the Western Ghats led by Certified Mountaineers. Backed by premium gear partnership and zero-waste ecotourism benchmarks.
+          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-autumn-bark/80 md:text-lg">
+            <span className="font-bold text-autumn-bark">Come green. Leave gold.</span> Safe, Responsible, and Quality Treks in the Western Ghats led by Certified Mountaineers. Backed by premium gear partnership and zero-waste ecotourism benchmarks.
           </p>
 
           {/* Key Facts Summary Banner (Eco-Tourism Portal style) */}
-          <div className="mt-10 grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-stone-900 bg-[#2A1D14]/30 p-4 backdrop-blur-sm sm:grid-cols-4">
-            <div className="flex flex-col border-r border-autumn-mist/10 pr-4">
+          <div className="mt-10 grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-4 backdrop-blur-sm sm:grid-cols-4">
+            <div className="flex flex-col border-r border-autumn-bark/10 pr-4">
               <span className="font-outfit text-lg font-bold text-autumn-maple">100%</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Certified Guides</span>
+              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Certified Guides</span>
             </div>
-            <div className="flex flex-col border-r border-autumn-mist/10 pr-4 sm:border-r">
+            <div className="flex flex-col border-r border-autumn-bark/10 pr-4 sm:border-r">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Zero Waste</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Green Trail Policy</span>
+              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Green Trail Policy</span>
             </div>
-            <div className="flex flex-col border-r border-autumn-mist/10 pr-4 sm:pr-0 sm:border-r-0 md:border-r md:pr-4">
+            <div className="flex flex-col border-r border-autumn-bark/10 pr-4 sm:pr-0 sm:border-r-0 md:border-r md:pr-4">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Premium Gear</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Decathlon Powered</span>
+              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Decathlon Powered</span>
             </div>
             <div className="flex flex-col">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Live Slots</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Instant Approval</span>
+              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Instant Approval</span>
             </div>
           </div>
 
@@ -915,14 +915,14 @@ export default function App() {
           <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row sm:justify-start">
             <button 
               onClick={() => handleTrigger({ type: 'explore_trails' })}
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg bg-autumn-maple px-8 font-outfit text-sm font-bold uppercase tracking-wider text-stone-950 transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_30px_rgba(193,87,31,0.4)] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg bg-autumn-maple px-8 font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_30px_rgba(193,87,31,0.4)] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
             >
               Explore Trails
               <ArrowRight className="h-4.5 w-4.5 transition-transform hover:translate-x-1" />
             </button>
             <a 
               href="#safety-standards" 
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg border border-autumn-mist/10 bg-[#2A1D14]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-mist backdrop-blur-sm transition-all duration-300 hover:bg-[#2A1D14] hover:text-white"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark backdrop-blur-sm transition-all duration-300 hover:bg-[#EFE8D6] hover:text-white"
             >
               Safety Standards
             </a>
@@ -932,14 +932,14 @@ export default function App() {
       </section>
 
       {/* 3. THE BOOTpaths ADVANTAGE */}
-      <section id="advantage" className="relative border-y border-stone-900 bg-autumn-bark py-24 px-6 md:px-12">
+      <section id="advantage" className="relative border-y border-autumn-bark/10 bg-autumn-mist py-24 px-6 md:px-12">
         <div className="mx-auto max-w-7xl">
           
           <div className="text-center">
             <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
               The BOOTpaths Standard
             </span>
-            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-mist sm:text-4xl md:text-5xl">
+            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl md:text-5xl">
               Why Wilderness Lovers Trek With Us
             </h2>
             <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-autumn-maple"></div>
@@ -949,23 +949,23 @@ export default function App() {
           <div className="mt-16 grid gap-8 md:grid-cols-3">
             
             {/* Advantage 1 */}
-            <div className="group relative rounded-xl border border-stone-900 bg-[#2A1D14]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-mist/10 hover:bg-[#2A1D14]/40 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-bark/10 hover:bg-[#EFE8D6]/40 hover:-translate-y-1">
               <div className="absolute top-0 left-8 h-[2px] w-20 bg-autumn-maple transition-all duration-300 group-hover:w-36"></div>
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-autumn-maple/10 text-autumn-maple">
                 <Award className="h-6 w-6" />
               </div>
-              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-mist">
+              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-bark">
                 Certified Mountaineers
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-autumn-mist/70">
+              <p className="mt-3 text-sm leading-relaxed text-autumn-bark/70">
                 Our outdoor leads are certified in wilderness medicine (WFR/WAFA) and advanced mountaineering. Safety-first protocols mean oxygen, sat-communicators, and backup systems are standard on every batch.
               </p>
               <ul className="mt-6 flex flex-col gap-2.5">
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   Himalayan Mountaineering Institute Alum
                 </li>
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   Wilderness First Aid (WFA) Certified
                 </li>
@@ -973,23 +973,23 @@ export default function App() {
             </div>
 
             {/* Advantage 2 */}
-            <div className="group relative rounded-xl border border-stone-900 bg-[#2A1D14]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-mist/10 hover:bg-[#2A1D14]/40 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-bark/10 hover:bg-[#EFE8D6]/40 hover:-translate-y-1">
               <div className="absolute top-0 left-8 h-[2px] w-20 bg-autumn-maple transition-all duration-300 group-hover:w-36"></div>
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-autumn-maple/10 text-autumn-maple">
                 <Leaf className="h-6 w-6" />
               </div>
-              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-mist">
+              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-bark">
                 Responsible Travel
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-autumn-mist/70">
+              <p className="mt-3 text-sm leading-relaxed text-autumn-bark/70">
                 We practice strictly eco-conscious trekking. Our "Green Trails" initiative ensures zero inorganic waste is left behind. Trekkers receive reusable canvas collection bags for minor path cleanups.
               </p>
               <ul className="mt-6 flex flex-col gap-2.5">
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   100% Trash Backing Commitment
                 </li>
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   Support for local tribal community guides
                 </li>
@@ -997,23 +997,23 @@ export default function App() {
             </div>
 
             {/* Advantage 3 */}
-            <div className="group relative rounded-xl border border-stone-900 bg-[#2A1D14]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-mist/10 hover:bg-[#2A1D14]/40 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-bark/10 hover:bg-[#EFE8D6]/40 hover:-translate-y-1">
               <div className="absolute top-0 left-8 h-[2px] w-20 bg-autumn-maple transition-all duration-300 group-hover:w-36"></div>
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-autumn-maple/10 text-autumn-maple">
                 <Shield className="h-6 w-6" />
               </div>
-              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-mist">
+              <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-bark">
                 Decathlon Standards
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-autumn-mist/70">
+              <p className="mt-3 text-sm leading-relaxed text-autumn-bark/70">
                 Our official alliance guarantees premium Decathlon equipment: Quechua tents, high-grade warm sleeping bags, and reliable safety harnesses. Rigorously benchmarked outdoor gears for every climate.
               </p>
               <ul className="mt-6 flex flex-col gap-2.5">
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   Quechua-approved camp hygiene setup
                 </li>
-                <li className="flex items-center gap-2 text-xs text-autumn-mist/80">
+                <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
                   Gear maintenance audited monthly
                 </li>
@@ -1025,7 +1025,7 @@ export default function App() {
       </section>
 
       {/* 4. UPCOMING TREKS GALLERY */}
-      <section id="upcoming-treks" className="relative bg-[#2A1D14]/10 py-24 px-6 md:px-12">
+      <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-6 md:px-12">
         <div className="mx-auto max-w-7xl">
           
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:items-end">
@@ -1033,16 +1033,16 @@ export default function App() {
               <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
                 Live Batches
               </span>
-              <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-mist sm:text-4xl md:text-5xl">
+              <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl md:text-5xl">
                 Upcoming Western Ghats Trails
               </h2>
             </div>
-            <p className="max-w-md text-sm text-autumn-mist/70 md:text-right">
+            <p className="max-w-md text-sm text-autumn-bark/70 md:text-right">
               Fully approved routes with Forest Department clearance. Orderly batch structures with strict sizing of 12-15 trekkers max.
             </p>
           </div>
           
-          <div className="mx-auto mt-6 h-1 w-full rounded-full bg-[#2A1D14]">
+          <div className="mx-auto mt-6 h-1 w-full rounded-full bg-[#EFE8D6]">
             <div className="h-1 w-1/4 rounded-full bg-autumn-maple"></div>
           </div>
 
@@ -1051,7 +1051,7 @@ export default function App() {
             {(showAllTreks ? treks : treks.slice(0, 3)).map((trek) => (
               <div 
                 key={trek.id}
-                className="group flex flex-col overflow-hidden rounded-xl border border-autumn-mist/10 bg-[#2A1D14]/40 backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-autumn-maple/30 hover:bg-[#2A1D14]/70 hover:scale-[1.02] hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                className="group flex flex-col overflow-hidden rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/40 backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-autumn-maple/30 hover:bg-[#EFE8D6]/70 hover:scale-[1.02] hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
               >
                 {/* Image & Badges Container */}
                 <div className="relative h-56 w-full overflow-hidden">
@@ -1083,18 +1083,18 @@ export default function App() {
                   
                   {/* Top Badges */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
-                    <span className="rounded backdrop-blur-md bg-[#2A1D14]/40 border border-autumn-mist/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 group-hover:border-autumn-maple/40 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.25)]">
+                    <span className="rounded backdrop-blur-md bg-[#EFE8D6]/40 border border-autumn-bark/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 group-hover:border-autumn-maple/40 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.25)]">
                       {trek.tag}
                     </span>
                   </div>
 
                   {/* Difficulty Badge */}
                   <div className="absolute bottom-4 left-4 flex gap-2">
-                    <span className="inline-flex items-center gap-1 rounded bg-autumn-bark/80 px-2 py-0.5 text-xs text-autumn-mist/80 backdrop-blur-sm">
+                    <span className="inline-flex items-center gap-1 rounded bg-autumn-mist/80 px-2 py-0.5 text-xs text-autumn-bark/80 backdrop-blur-sm">
                       <Clock className="h-3.5 w-3.5 text-autumn-maple" />
                       {trek.duration}
                     </span>
-                    <span className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-bold backdrop-blur-sm bg-autumn-bark/80 ${
+                    <span className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-bold backdrop-blur-sm bg-autumn-mist/80 ${
                       trek.difficulty === 'Challenging' ? 'text-amber-400' : 'text-autumn-maple'
                     }`}>
                       {trek.difficulty}
@@ -1108,27 +1108,27 @@ export default function App() {
                   {/* Title & Altitude */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-outfit text-xl font-bold text-autumn-mist group-hover:text-autumn-maple transition-colors">
+                      <h3 className="font-outfit text-xl font-bold text-autumn-bark group-hover:text-autumn-maple transition-colors">
                         {trek.title}
                       </h3>
-                      <span className="inline-flex items-center gap-1 text-xs text-autumn-mist0 mt-1">
+                      <span className="inline-flex items-center gap-1 text-xs text-autumn-bark/50 mt-1">
                         <MapPin className="h-3 w-3" />
                         {trek.location}
                       </span>
                     </div>
-                    <span className="shrink-0 rounded bg-stone-850/80 px-2 py-0.5 text-xxs font-mono text-autumn-mist/70">
+                    <span className="shrink-0 rounded bg-stone-850/80 px-2 py-0.5 text-xxs font-mono text-autumn-bark/70">
                       {trek.altitude}
                     </span>
                   </div>
 
                   {/* Description */}
-                  <p className="mt-4 text-xs leading-relaxed text-autumn-mist/70">
+                  <p className="mt-4 text-xs leading-relaxed text-autumn-bark/70">
                     {trek.description}
                   </p>
 
                   {/* Quick details / inclusions */}
-                  <div className="mt-5 border-t border-autumn-mist/10 pt-4">
-                    <div className="grid grid-cols-2 gap-2 text-xxs text-autumn-mist/70">
+                  <div className="mt-5 border-t border-autumn-bark/10 pt-4">
+                    <div className="grid grid-cols-2 gap-2 text-xxs text-autumn-bark/70">
                       {trek.inclusion.slice(0, 4).map((inc, i) => (
                         <div key={i} className="flex items-center gap-1">
                           <CheckCircle2 className="h-3 w-3 text-autumn-maple shrink-0" />
@@ -1139,21 +1139,21 @@ export default function App() {
                   </div>
 
                   {/* Slot warning label */}
-                  <div className="mt-5 flex items-center justify-between border-t border-autumn-mist/10 pt-4">
+                  <div className="mt-5 flex items-center justify-between border-t border-autumn-bark/10 pt-4">
                     <div>
-                      <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Live Slots Left</span>
+                      <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Live Slots Left</span>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <span className={`h-2 w-2 rounded-full ${trek.slotsLeft <= 5 ? 'bg-red-500 animate-ping' : 'bg-autumn-maple'}`}></span>
-                        <span className={`text-xs font-bold ${trek.slotsLeft <= 5 ? 'text-red-400' : 'text-autumn-mist/80'}`}>
+                        <span className={`text-xs font-bold ${trek.slotsLeft <= 5 ? 'text-red-400' : 'text-autumn-bark/80'}`}>
                           {trek.slotsLeft} slots remaining
                         </span>
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Price Starts At</span>
+                      <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Price Starts At</span>
                       <div className="mt-0.5">
-                        <span className="text-xs text-autumn-mist0 line-through mr-1 font-semibold">₹{trek.originalPrice}</span>
+                        <span className="text-xs text-autumn-bark/50 line-through mr-1 font-semibold">₹{trek.originalPrice}</span>
                         <span className="text-base font-bold text-autumn-maple">₹{trek.price}</span>
                       </div>
                     </div>
@@ -1162,7 +1162,7 @@ export default function App() {
                   {/* Book Trigger Button */}
                   <button 
                     onClick={() => handleBookNow(trek)}
-                    className="mt-6 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded bg-[#2A1D14] border border-autumn-mist/10 text-autumn-mist font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-autumn-maple hover:text-stone-950 hover:border-autumn-maple"
+                    className="mt-6 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded bg-[#EFE8D6] border border-autumn-bark/10 text-autumn-bark font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-autumn-maple hover:text-[#F3ECDD] hover:border-autumn-maple"
                   >
                     View Live Slots
                     <ChevronRight className="h-4 w-4" />
@@ -1177,7 +1177,7 @@ export default function App() {
           <div className="mt-12 flex justify-center">
             <button 
               onClick={() => setShowAllTreks(!showAllTreks)}
-              className="group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-lg border border-autumn-mist/10 bg-[#2A1D14]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-mist backdrop-blur-sm transition-all duration-300 hover:border-autumn-maple/50 hover:bg-[#2A1D14] hover:text-autumn-maple focus:outline-none"
+              className="group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark backdrop-blur-sm transition-all duration-300 hover:border-autumn-maple/50 hover:bg-[#EFE8D6] hover:text-autumn-maple focus:outline-none"
             >
               <span className="relative z-10 flex items-center gap-2">
                 {showAllTreks ? 'Show Fewer Trails' : 'Explore More Experiences'}
@@ -1191,7 +1191,7 @@ export default function App() {
       </section>
 
       {/* 5. INTERACTIVE SLOT BOOKING WIDGET */}
-      <section id="booking-widget" className="relative border-t border-stone-900 bg-autumn-bark py-24 px-6 md:px-12">
+      <section id="booking-widget" className="relative border-t border-autumn-bark/10 bg-autumn-mist py-24 px-6 md:px-12">
         {/* Abstract mountain wireframe background glow */}
         <div className="absolute bottom-0 right-0 h-[400px] w-[500px] bg-autumn-maple/5 blur-[150px] pointer-events-none"></div>
         
@@ -1201,10 +1201,10 @@ export default function App() {
             <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
               Instant Booking System
             </span>
-            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-mist sm:text-4xl">
+            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
               Live Slot Reservation Widget
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm text-autumn-mist/70">
+            <p className="mx-auto mt-4 max-w-md text-sm text-autumn-bark/70">
               Check real-time batch vacancies, calculate prices dynamically, and trigger instant authorization.
             </p>
           </div>
@@ -1212,8 +1212,8 @@ export default function App() {
           <div className="mt-12 grid gap-8 lg:grid-cols-12">
             
             {/* Left: Input Selection Column (7 cols) */}
-            <div className="rounded-xl border border-stone-900 bg-[#2A1D14]/20 p-8 backdrop-blur-sm lg:col-span-7">
-              <h3 className="font-outfit text-lg font-bold text-autumn-mist mb-6 flex items-center gap-2">
+            <div className="rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 backdrop-blur-sm lg:col-span-7">
+              <h3 className="font-outfit text-lg font-bold text-autumn-bark mb-6 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-autumn-maple" />
                 Select Destination & Batch
               </h3>
@@ -1222,12 +1222,12 @@ export default function App() {
                 
                 {/* Trek Selection */}
                 <div>
-                  <label htmlFor="trek-select" className="block text-xs font-bold uppercase tracking-wider text-autumn-mist/70 mb-2">
+                  <label htmlFor="trek-select" className="block text-xs font-bold uppercase tracking-wider text-autumn-bark/70 mb-2">
                     Select Trek
                   </label>
                   <select 
                     id="trek-select"
-                    className="w-full h-12 rounded-lg border border-autumn-mist/10 bg-autumn-bark px-4 text-sm text-autumn-mist transition-colors focus:border-autumn-maple focus:outline-none"
+                    className="w-full h-12 rounded-lg border border-autumn-bark/10 bg-autumn-mist px-4 text-sm text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none"
                     value={selectedTrek.id}
                     onChange={(e) => handleTrekChange(e.target.value)}
                   >
@@ -1242,12 +1242,12 @@ export default function App() {
                   
                   {/* Date selection */}
                   <div>
-                    <label htmlFor="date-select" className="block text-xs font-bold uppercase tracking-wider text-autumn-mist/70 mb-2">
+                    <label htmlFor="date-select" className="block text-xs font-bold uppercase tracking-wider text-autumn-bark/70 mb-2">
                       Available Batch Date
                     </label>
                     <select
                       id="date-select"
-                      className="w-full h-12 rounded-lg border border-autumn-mist/10 bg-autumn-bark px-4 text-sm text-autumn-mist transition-colors focus:border-autumn-maple focus:outline-none"
+                      className="w-full h-12 rounded-lg border border-autumn-bark/10 bg-autumn-mist px-4 text-sm text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
                     >
@@ -1263,26 +1263,26 @@ export default function App() {
 
                   {/* Trekkers Count */}
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-autumn-mist/70 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-autumn-bark/70 mb-2">
                       Number of Trekkers
                     </label>
-                    <div className="flex h-12 items-center rounded-lg border border-autumn-mist/10 bg-autumn-bark px-2">
+                    <div className="flex h-12 items-center rounded-lg border border-autumn-bark/10 bg-autumn-mist px-2">
                       <button 
                         type="button"
                         onClick={() => setNumTrekkers(prev => Math.max(1, prev - 1))}
                         disabled={numTrekkers <= 1}
-                        className="flex h-8 w-8 items-center justify-center rounded bg-[#2A1D14] text-autumn-mist/80 transition-colors hover:bg-stone-850 hover:text-white disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      <span className="flex-1 text-center font-outfit text-base font-bold text-autumn-mist">
+                      <span className="flex-1 text-center font-outfit text-base font-bold text-autumn-bark">
                         {numTrekkers}
                       </span>
                       <button 
                         type="button"
                         onClick={() => setNumTrekkers(prev => Math.min(currentSlotsLeft, prev + 1))}
                         disabled={numTrekkers >= currentSlotsLeft}
-                        className="flex h-8 w-8 items-center justify-center rounded bg-[#2A1D14] text-autumn-mist/80 transition-colors hover:bg-stone-850 hover:text-white disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
@@ -1291,16 +1291,16 @@ export default function App() {
 
                 </div>
 
-                <hr className="border-stone-900 my-4" />
+                <hr className="border-autumn-bark/10 my-4" />
 
                 {/* Personal Information for Checkout */}
-                <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-mist/70 mb-4">
+                <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark/70 mb-4">
                   Lead Trekker Details
                 </h3>
 
                 <div className="space-y-4">
                   <div>
-                    <label htmlFor="user-name" className="block text-xxs font-bold uppercase tracking-wider text-autumn-mist5 mb-1">
+                    <label htmlFor="user-name" className="block text-xxs font-bold uppercase tracking-wider text-autumn-bark5 mb-1">
                       Full Name
                     </label>
                     <input 
@@ -1309,8 +1309,8 @@ export default function App() {
                       placeholder="Enter full name" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className={`w-full h-11 rounded-lg border bg-autumn-bark px-4 text-xs text-autumn-mist transition-colors focus:border-autumn-maple focus:outline-none ${
-                        formErrors.name ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-mist/10'
+                      className={`w-full h-11 rounded-lg border bg-autumn-mist px-4 text-xs text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none ${
+                        formErrors.name ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-bark/10'
                       }`}
                     />
                     {formErrors.name && <p className="text-red-455 text-xxs mt-1">{formErrors.name}</p>}
@@ -1318,7 +1318,7 @@ export default function App() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="user-email" className="block text-xxs font-bold uppercase tracking-wider text-autumn-mist5 mb-1">
+                      <label htmlFor="user-email" className="block text-xxs font-bold uppercase tracking-wider text-autumn-bark5 mb-1">
                         Email Address
                       </label>
                       <input 
@@ -1327,15 +1327,15 @@ export default function App() {
                         placeholder="trekker@gmail.com" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className={`w-full h-11 rounded-lg border bg-autumn-bark px-4 text-xs text-autumn-mist transition-colors focus:border-autumn-maple focus:outline-none ${
-                          formErrors.email ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-mist/10'
+                        className={`w-full h-11 rounded-lg border bg-autumn-mist px-4 text-xs text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none ${
+                          formErrors.email ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-bark/10'
                         }`}
                       />
                       {formErrors.email && <p className="text-red-455 text-xxs mt-1">{formErrors.email}</p>}
                     </div>
 
                     <div>
-                      <label htmlFor="user-phone" className="block text-xxs font-bold uppercase tracking-wider text-autumn-mist5 mb-1">
+                      <label htmlFor="user-phone" className="block text-xxs font-bold uppercase tracking-wider text-autumn-bark5 mb-1">
                         Contact Phone (WhatsApp)
                       </label>
                       <input 
@@ -1344,8 +1344,8 @@ export default function App() {
                         placeholder="10-digit number" 
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className={`w-full h-11 rounded-lg border bg-autumn-bark px-4 text-xs text-autumn-mist transition-colors focus:border-autumn-maple focus:outline-none ${
-                          formErrors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-mist/10'
+                        className={`w-full h-11 rounded-lg border bg-autumn-mist px-4 text-xs text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none ${
+                          formErrors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-autumn-bark/10'
                         }`}
                       />
                       {formErrors.phone && <p className="text-red-455 text-xxs mt-1">{formErrors.phone}</p>}
@@ -1356,7 +1356,7 @@ export default function App() {
                 {/* Razorpay Simulation Trigger Button */}
                 <button
                   type="submit"
-                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-stone-950 transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)]"
+                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)]"
                 >
                   Secure Reservation
                   <ArrowRight className="h-4 w-4" />
@@ -1366,38 +1366,38 @@ export default function App() {
             </div>
 
             {/* Right: Dynamic Pricing Card Column (5 cols) */}
-            <div className="flex flex-col justify-between rounded-xl border border-autumn-mist/10 bg-[#2A1D14]/30 p-8 backdrop-blur-sm lg:col-span-5">
+            <div className="flex flex-col justify-between rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-8 backdrop-blur-sm lg:col-span-5">
               <div>
                 <span className="font-mono text-xxs text-autumn-maple border border-autumn-maple/20 bg-autumn-maple/5 px-2 py-0.5 rounded">
                   Live Vacancy Check
                 </span>
                 
                 {/* Selected Trek Info */}
-                <h3 className="mt-4 font-outfit text-2xl font-black text-autumn-mist">
+                <h3 className="mt-4 font-outfit text-2xl font-black text-autumn-bark">
                   {selectedTrek.title}
                 </h3>
-                <span className="text-xs text-autumn-mist/70 block mt-1.5 flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 text-autumn-mist0" />
+                <span className="text-xs text-autumn-bark/70 block mt-1.5 flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5 text-autumn-bark/50" />
                   {selectedTrek.location}
                 </span>
 
                 <div className="mt-6 space-y-4">
-                  <div className="flex justify-between text-xs py-1.5 border-b border-stone-900">
-                    <span className="text-autumn-mist0">Trip Duration</span>
-                    <span className="text-autumn-mist/80 font-semibold">{selectedTrek.duration}</span>
+                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                    <span className="text-autumn-bark/50">Trip Duration</span>
+                    <span className="text-autumn-bark/80 font-semibold">{selectedTrek.duration}</span>
                   </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-stone-900">
-                    <span className="text-autumn-mist0">Altitude Reached</span>
-                    <span className="text-autumn-mist/80 font-mono font-semibold">{selectedTrek.altitude}</span>
+                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                    <span className="text-autumn-bark/50">Altitude Reached</span>
+                    <span className="text-autumn-bark/80 font-mono font-semibold">{selectedTrek.altitude}</span>
                   </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-stone-900">
-                    <span className="text-autumn-mist0">Trek Cost (Per Trekker)</span>
-                    <span className="text-autumn-mist/80 font-bold">₹{selectedTrek.price}</span>
+                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                    <span className="text-autumn-bark/50">Trek Cost (Per Trekker)</span>
+                    <span className="text-autumn-bark/80 font-bold">₹{selectedTrek.price}</span>
                   </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-stone-900">
-                    <span className="text-autumn-mist0">Decathlon Gear Kit</span>
+                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                    <span className="text-autumn-bark/50">Decathlon Gear Kit</span>
                     <span className="text-autumn-maple font-semibold flex items-center gap-1">
-                      Included <Info className="h-3 w-3 text-autumn-mist0 hover:text-autumn-maple cursor-help" />
+                      Included <Info className="h-3 w-3 text-autumn-bark/50 hover:text-autumn-maple cursor-help" />
                     </span>
                   </div>
                 </div>
@@ -1418,7 +1418,7 @@ export default function App() {
                       <h4 className={`text-xs font-bold uppercase tracking-wider ${currentSlotsLeft <= 5 ? 'text-red-400' : 'text-autumn-maple'}`}>
                         {currentSlotsLeft <= 5 ? 'High Demand!' : 'Slots Available'}
                       </h4>
-                      <p className="text-xxs text-autumn-mist/70 mt-1">
+                      <p className="text-xxs text-autumn-bark/70 mt-1">
                         {currentSlotsLeft <= 5 
                           ? `Only ${currentSlotsLeft} vacancies left. Prices may rise shortly for this peak batch.` 
                           : `${currentSlotsLeft} slots remaining on selected dates.`}
@@ -1429,19 +1429,19 @@ export default function App() {
               </div>
 
               {/* Dynamic Price Display */}
-              <div className="mt-8 border-t border-autumn-mist/10 pt-6">
+              <div className="mt-8 border-t border-autumn-bark/10 pt-6">
                 <div className="flex items-end justify-between">
                   <div>
-                    <span className="text-xxs uppercase tracking-wider text-autumn-mist0">Total Price</span>
-                    <div className="text-xxs text-autumn-mist0 mt-0.5">
+                    <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Total Price</span>
+                    <div className="text-xxs text-autumn-bark/50 mt-0.5">
                       ₹{selectedTrek.price} x {numTrekkers} {numTrekkers === 1 ? 'Trekker' : 'Trekkers'}
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="font-outfit text-3xl font-black text-autumn-mist block">
+                    <span className="font-outfit text-3xl font-black text-autumn-bark block">
                       ₹{totalPrice.toLocaleString('en-IN')}
                     </span>
-                    <span className="text-xxs text-autumn-mist0 uppercase tracking-widest block mt-0.5">
+                    <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block mt-0.5">
                       + Inclusive of Taxes
                     </span>
                   </div>
@@ -1455,7 +1455,7 @@ export default function App() {
       </section>
 
       {/* SAFETY STANDARDS SECTION (Eco-Portal Style details) */}
-      <section id="safety-standards" className="relative border-t border-stone-900 bg-[#2A1D14]/10 py-24 px-6 md:px-12">
+      <section id="safety-standards" className="relative border-t border-autumn-bark/10 bg-[#EFE8D6]/10 py-24 px-6 md:px-12">
         <div className="mx-auto max-w-5xl">
           <div className="grid gap-12 md:grid-cols-12 items-center">
             
@@ -1464,27 +1464,27 @@ export default function App() {
               <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
                 Eco-Tourism Protocols
               </span>
-              <h2 className="font-outfit text-3xl font-black tracking-tight text-autumn-mist sm:text-4xl">
+              <h2 className="font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
                 Rigorous Safety Checklists
               </h2>
-              <p className="text-sm leading-relaxed text-autumn-mist/70">
+              <p className="text-sm leading-relaxed text-autumn-bark/70">
                 Structured like official state forest eco-tourism divisions. Every single batch goes through strict validation before departure.
               </p>
 
-              <div className="flex items-center gap-4 rounded-lg border border-stone-900 bg-[#2A1D14]/30 p-4">
+              <div className="flex items-center gap-4 rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/30 p-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-autumn-maple/10 text-autumn-maple">
                   <Shield className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-autumn-mist/80 uppercase tracking-wider">Forest Dept. Authorized</h4>
-                  <p className="text-xxs text-autumn-mist5 mt-0.5">Permits and approvals sorted. No illegal access trails.</p>
+                  <h4 className="text-xs font-bold text-autumn-bark/80 uppercase tracking-wider">Forest Dept. Authorized</h4>
+                  <p className="text-xxs text-autumn-bark5 mt-0.5">Permits and approvals sorted. No illegal access trails.</p>
                 </div>
               </div>
             </div>
 
             {/* Right: Checklist Cards */}
-            <div className="md:col-span-7 rounded-xl border border-autumn-mist/10 bg-autumn-bark p-8">
-              <h3 className="font-outfit text-sm font-bold uppercase tracking-widest text-autumn-mist/70 mb-6 border-b border-stone-900 pb-3 flex items-center gap-2">
+            <div className="md:col-span-7 rounded-xl border border-autumn-bark/10 bg-autumn-mist p-8">
+              <h3 className="font-outfit text-sm font-bold uppercase tracking-widest text-autumn-bark/70 mb-6 border-b border-autumn-bark/10 pb-3 flex items-center gap-2">
                 <AlertTriangle className="h-4.5 w-4.5 text-autumn-maple" />
                 Wilderness Safety Standards
               </h3>
@@ -1492,10 +1492,10 @@ export default function App() {
               <ul className="space-y-4">
                 {SAFETY_STANDARDS.map((std, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-autumn-maple text-stone-950 mt-0.5">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-autumn-maple text-[#F3ECDD] mt-0.5">
                       <Check className="h-3 w-3 stroke-[3]" />
                     </div>
-                    <span className="text-xs text-autumn-mist/80 leading-normal">{std}</span>
+                    <span className="text-xs text-autumn-bark/80 leading-normal">{std}</span>
                   </li>
                 ))}
               </ul>
@@ -1506,14 +1506,14 @@ export default function App() {
       </section>
 
       {/* 6. INSTAGRAM COMMUNITY FEED */}
-      <section id="community" className="relative border-t border-stone-900 bg-autumn-bark py-24 px-6 md:px-12">
+      <section id="community" className="relative border-t border-autumn-bark/10 bg-autumn-mist py-24 px-6 md:px-12">
         <div className="mx-auto max-w-7xl">
           
           <div className="text-center">
             <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
               Community Vibes
             </span>
-            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-mist sm:text-4xl">
+            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
               Catch the Vibe on Instagram
             </h2>
             <a 
@@ -1524,7 +1524,7 @@ export default function App() {
             >
               <Instagram className="h-5 w-5" />
               @bootpaths
-              <ExternalLink className="h-3.5 w-3.5 text-autumn-mist0" />
+              <ExternalLink className="h-3.5 w-3.5 text-autumn-bark/50" />
             </a>
           </div>
 
@@ -1533,7 +1533,7 @@ export default function App() {
             {INSTAGRAM_POSTS.map((post) => (
               <div 
                 key={post.id}
-                className="group relative aspect-square overflow-hidden rounded-lg bg-autumn-bark border border-stone-900 cursor-pointer"
+                className="group relative aspect-square overflow-hidden rounded-lg bg-autumn-mist border border-autumn-bark/10 cursor-pointer"
               >
                 <img 
                   src={post.imageUrl} 
@@ -1544,8 +1544,8 @@ export default function App() {
                 <div className="absolute inset-0 bg-stone-955/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center z-10 gap-2">
                   <Instagram className="h-6 w-6 text-autumn-maple" />
                   <div className="text-center">
-                    <span className="text-xs font-bold text-autumn-mist block">♥ {post.likes}</span>
-                    <span className="text-xxs text-autumn-mist/70 block mt-0.5">💬 {post.comments}</span>
+                    <span className="text-xs font-bold text-autumn-bark block">♥ {post.likes}</span>
+                    <span className="text-xxs text-autumn-bark/70 block mt-0.5">💬 {post.comments}</span>
                   </div>
                 </div>
               </div>
@@ -1553,18 +1553,18 @@ export default function App() {
           </div>
 
           {/* Decathlon Partner Spotlight */}
-          <div className="mt-16 rounded-xl border border-autumn-mist/10 bg-[#2A1D14]/20 p-8 text-center max-w-4xl mx-auto backdrop-blur-sm">
+          <div className="mt-16 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 text-center max-w-4xl mx-auto backdrop-blur-sm">
             <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
-              <div className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-mist/80">
+              <div className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-bark/80">
                 BOOT<span className="text-autumn-maple">paths</span>
               </div>
               <div className="h-px w-12 bg-stone-800 sm:h-8 sm:w-px"></div>
-              <div className="flex items-center gap-2 font-outfit text-lg font-bold tracking-widest text-autumn-mist/70 uppercase">
+              <div className="flex items-center gap-2 font-outfit text-lg font-bold tracking-widest text-autumn-bark/70 uppercase">
                 <span>Trekking Partner</span>
-                <span className="px-2 py-0.5 bg-autumn-maple text-stone-950 text-xxs font-extrabold rounded">DECATHLON</span>
+                <span className="px-2 py-0.5 bg-autumn-maple text-[#F3ECDD] text-xxs font-extrabold rounded">DECATHLON</span>
               </div>
             </div>
-            <p className="mt-4 text-xs text-autumn-mist0 leading-relaxed max-w-2xl mx-auto">
+            <p className="mt-4 text-xs text-autumn-bark/50 leading-relaxed max-w-2xl mx-auto">
               Our trekkers enjoy access to exclusive trail gears and product tests at local Decathlon centers. Join our weekend workshops for trail hacks, map reading, and hiking pack essentials.
             </p>
           </div>
@@ -1573,7 +1573,7 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-stone-900 bg-autumn-bark py-16 px-6 md:px-12 text-autumn-mist/70 text-xs">
+      <footer className="border-t border-autumn-bark/10 bg-autumn-mist py-16 px-6 md:px-12 text-autumn-bark/70 text-xs">
         <div className="mx-auto max-w-7xl grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
           
           {/* Brand Info */}
@@ -1582,17 +1582,17 @@ export default function App() {
               <img 
                 src="logo.jpg" 
                 alt="BOOTpaths Logo" 
-                className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
+                className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
               />
-              <span className="font-outfit text-xl font-black uppercase tracking-wider text-autumn-mist">
+              <span className="font-outfit text-xl font-black uppercase tracking-wider text-autumn-bark">
                 BOOT<span className="text-autumn-maple">paths</span>
               </span>
             </a>
-            <p className="text-xs text-autumn-mist0 leading-relaxed max-w-sm">
+            <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
               We guide adventurers to unexplored peaks and premium trails across Southern India. Fully vetted batches, certified mountain leads, and environment first.
             </p>
             <div className="flex items-center gap-4">
-              <a href="https://instagram.com/bootpaths" target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full border border-autumn-mist/10 flex items-center justify-center text-autumn-mist/70 hover:text-autumn-maple hover:border-emerald-505/30 transition-colors bg-[#2A1D14]/20">
+              <a href="https://instagram.com/bootpaths" target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full border border-autumn-bark/10 flex items-center justify-center text-autumn-bark/70 hover:text-autumn-maple hover:border-emerald-505/30 transition-colors bg-[#EFE8D6]/20">
                 <Instagram className="h-4.5 w-4.5" />
               </a>
             </div>
@@ -1600,8 +1600,8 @@ export default function App() {
 
           {/* Links 1 */}
           <div className="space-y-4">
-            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-mist/80">Popular Trails</h4>
-            <ul className="space-y-2.5 text-autumn-mist0">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Popular Trails</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
               <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Netravathi Peak Trek</a></li>
               <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Brahmagiri Coorg Trek</a></li>
               <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Vellagavi Village Trek</a></li>
@@ -1610,8 +1610,8 @@ export default function App() {
 
           {/* Links 2 */}
           <div className="space-y-4">
-            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-mist/80">Safety & Standards</h4>
-            <ul className="space-y-2.5 text-autumn-mist0">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Safety & Standards</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
               <li><a href="#safety-standards" className="hover:text-autumn-maple transition-colors">Wilderness Medicine</a></li>
               <li><a href="#safety-standards" className="hover:text-autumn-maple transition-colors">Green Trails Policy</a></li>
               <li><a href="#advantage" className="hover:text-autumn-maple transition-colors">Decathlon Partnership</a></li>
@@ -1620,8 +1620,8 @@ export default function App() {
 
           {/* Contacts */}
           <div className="space-y-4">
-            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-mist/80">Get in Touch</h4>
-            <ul className="space-y-2.5 text-autumn-mist0">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Get in Touch</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
               <li>Email: contact@bootpaths.com</li>
               <li>WhatsApp Support: +91 98765 43210</li>
               <li>Instagram DM: @bootpaths</li>
@@ -1630,14 +1630,14 @@ export default function App() {
 
         </div>
 
-        <div className="mx-auto max-w-7xl mt-12 pt-8 border-t border-stone-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xxs text-autumn-mist/40">
+        <div className="mx-auto max-w-7xl mt-12 pt-8 border-t border-autumn-bark/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xxs text-autumn-bark/40">
           <div>
             &copy; {new Date().getFullYear()} BOOTpaths Adventure Labs. All rights reserved.
           </div>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-autumn-mist/70">Terms of Service</a>
-            <a href="#" className="hover:text-autumn-mist/70">Privacy Policy</a>
-            <a href="#" className="hover:text-autumn-mist/70">Refund Guidelines</a>
+            <a href="#" className="hover:text-autumn-bark/70">Terms of Service</a>
+            <a href="#" className="hover:text-autumn-bark/70">Privacy Policy</a>
+            <a href="#" className="hover:text-autumn-bark/70">Refund Guidelines</a>
             <a href="#admin" className="hover:text-autumn-maple font-bold transition-colors">Admin Console</a>
           </div>
         </div>
@@ -1645,28 +1645,28 @@ export default function App() {
 
       {/* RAZORPAY SECURE PAYMENT PORTAL SIMULATOR MODAL */}
       {isRazorpayModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-bark/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-mist/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
           
-          <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-autumn-mist/10 bg-[#2A1D14] shadow-2xl animate-in zoom-in-95 duration-250">
+          <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-autumn-bark/10 bg-[#EFE8D6] shadow-2xl animate-in zoom-in-95 duration-250">
             
             {/* Razorpay Top Banner */}
-            <div className="bg-autumn-bark p-6 flex justify-between items-center border-b border-autumn-mist/10">
+            <div className="bg-autumn-mist p-6 flex justify-between items-center border-b border-autumn-bark/10">
               <div className="flex items-center gap-3">
                 <img 
                   src="logo.jpg" 
                   alt="BOOTpaths Logo" 
-                  className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
+                  className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
                 />
                 <div>
-                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-mist">
+                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark">
                     BOOTpaths
                   </span>
-                  <span className="block text-xxs text-autumn-mist0 tracking-wider">RAZORPAY SECURE API</span>
+                  <span className="block text-xxs text-autumn-bark/50 tracking-wider">RAZORPAY SECURE API</span>
                 </div>
               </div>
               <button 
                 onClick={() => setIsRazorpayModalOpen(false)}
-                className="h-8 w-8 rounded-full bg-[#2A1D14] flex items-center justify-center text-autumn-mist/70 hover:text-white transition-colors"
+                className="h-8 w-8 rounded-full bg-[#EFE8D6] flex items-center justify-center text-autumn-bark/70 hover:text-white transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1677,23 +1677,23 @@ export default function App() {
               <div className="p-6">
                 {isProcessingPayment ? (
                   <div className="py-12 flex flex-col items-center justify-center gap-4 text-center">
-                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-mist/10 border-t-emerald-500"></div>
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-bark/10 border-t-emerald-500"></div>
                     <div>
-                      <h4 className="text-sm font-bold text-autumn-mist/80 uppercase tracking-widest">Processing Transaction</h4>
-                      <p className="text-xxs text-autumn-mist0 mt-1">Please do not refresh or close this window.</p>
+                      <h4 className="text-sm font-bold text-autumn-bark/80 uppercase tracking-widest">Processing Transaction</h4>
+                      <p className="text-xxs text-autumn-bark/50 mt-1">Please do not refresh or close this window.</p>
                     </div>
                   </div>
                 ) : (
                   <div>
                     {/* Bill summary */}
                     <div className="rounded-lg bg-stone-955 p-4 mb-6">
-                      <span className="text-xxs uppercase tracking-wider text-autumn-mist0 block">Secure Payment Request For</span>
-                      <span className="text-xs font-bold text-autumn-mist/80 block mt-1">{selectedTrek.title}</span>
-                      <span className="text-xxs text-autumn-mist5 mt-0.5 block">Batch Date: {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                      <span className="text-xxs text-autumn-mist5 block">Trekkers: {numTrekkers}</span>
+                      <span className="text-xxs uppercase tracking-wider text-autumn-bark/50 block">Secure Payment Request For</span>
+                      <span className="text-xs font-bold text-autumn-bark/80 block mt-1">{selectedTrek.title}</span>
+                      <span className="text-xxs text-autumn-bark5 mt-0.5 block">Batch Date: {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      <span className="text-xxs text-autumn-bark5 block">Trekkers: {numTrekkers}</span>
                       
-                      <div className="mt-4 pt-3 border-t border-stone-900 flex items-center justify-between">
-                        <span className="text-xxs text-autumn-mist/70 font-bold uppercase">Payable Amount</span>
+                      <div className="mt-4 pt-3 border-t border-autumn-bark/10 flex items-center justify-between">
+                        <span className="text-xxs text-autumn-bark/70 font-bold uppercase">Payable Amount</span>
                         <span className="font-outfit text-xl font-black text-autumn-maple">₹{totalPrice.toLocaleString('en-IN')}</span>
                       </div>
                     </div>
@@ -1704,22 +1704,22 @@ export default function App() {
                         <Info className="h-4.5 w-4.5 text-amber-400 shrink-0 mt-0.5" />
                         <div>
                           <h5 className="text-xxs font-bold uppercase tracking-wider text-amber-400">Sandbox Environment</h5>
-                          <p className="text-xxs text-autumn-mist/70 mt-1">This Razorpay window is simulated. No real currency is exchanged. Click below to mimic a successful transaction.</p>
+                          <p className="text-xxs text-autumn-bark/70 mt-1">This Razorpay window is simulated. No real currency is exchanged. Click below to mimic a successful transaction.</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Payer details review */}
-                    <div className="text-xxs text-autumn-mist0 space-y-1 mb-6 border-b border-autumn-mist/10 pb-4">
-                      <div><span className="font-bold text-autumn-mist/70">Payer Name:</span> {name}</div>
-                      <div><span className="font-bold text-autumn-mist/70">Email:</span> {email}</div>
-                      <div><span className="font-bold text-autumn-mist/70">Phone:</span> {phone}</div>
+                    <div className="text-xxs text-autumn-bark/50 space-y-1 mb-6 border-b border-autumn-bark/10 pb-4">
+                      <div><span className="font-bold text-autumn-bark/70">Payer Name:</span> {name}</div>
+                      <div><span className="font-bold text-autumn-bark/70">Email:</span> {email}</div>
+                      <div><span className="font-bold text-autumn-bark/70">Phone:</span> {phone}</div>
                     </div>
 
                     {/* Pay Button */}
                     <button
                       onClick={handleConfirmPayment}
-                      className="w-full flex h-11 items-center justify-center gap-2 rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-stone-950 transition-colors hover:bg-[#a44717]"
+                      className="w-full flex h-11 items-center justify-center gap-2 rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-colors hover:bg-[#a44717]"
                     >
                       Simulate Success Payment
                     </button>
@@ -1733,27 +1733,27 @@ export default function App() {
                   <CheckCircle2 className="h-8 w-8 stroke-[2.5]" />
                 </div>
                 
-                <h3 className="font-outfit text-xl font-black text-autumn-mist uppercase tracking-wide">
+                <h3 className="font-outfit text-xl font-black text-autumn-bark uppercase tracking-wide">
                   Trek Booked Successfully!
                 </h3>
-                <p className="text-xxs text-autumn-mist/70 mt-2">
+                <p className="text-xxs text-autumn-bark/70 mt-2">
                   Booking ID: <span className="font-mono font-bold text-autumn-maple uppercase">BP-{Math.floor(100000 + Math.random() * 900000)}</span>
                 </p>
 
                 <div className="rounded-lg bg-stone-955 p-4 my-6 text-left space-y-2">
-                  <div className="text-xxs text-autumn-mist/70"><span className="font-bold text-autumn-mist/80">Destination:</span> {selectedTrek.title}</div>
-                  <div className="text-xxs text-autumn-mist/70"><span className="font-bold text-autumn-mist/80">Date:</span> {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
-                  <div className="text-xxs text-autumn-mist/70"><span className="font-bold text-autumn-mist/80">Trekkers:</span> {numTrekkers}</div>
-                  <div className="text-xxs text-autumn-mist/70"><span className="font-bold text-autumn-mist/80">Total Paid:</span> ₹{totalPrice.toLocaleString('en-IN')}</div>
+                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Destination:</span> {selectedTrek.title}</div>
+                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Date:</span> {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Trekkers:</span> {numTrekkers}</div>
+                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Total Paid:</span> ₹{totalPrice.toLocaleString('en-IN')}</div>
                 </div>
 
-                <div className="text-xxs text-autumn-mist5 bg-[#2A1D14]/50 p-3.5 rounded border border-autumn-mist/10 leading-relaxed mb-6">
-                  📢 <span className="font-bold text-autumn-mist/70">Next Steps:</span> A confirmation summary and Decathlon prep list have been dispatched to your email & WhatsApp. Our mountaineering crew will contact you shortly for details.
+                <div className="text-xxs text-autumn-bark5 bg-[#EFE8D6]/50 p-3.5 rounded border border-autumn-bark/10 leading-relaxed mb-6">
+                  📢 <span className="font-bold text-autumn-bark/70">Next Steps:</span> A confirmation summary and Decathlon prep list have been dispatched to your email & WhatsApp. Our mountaineering crew will contact you shortly for details.
                 </div>
 
                 <button
                   onClick={handleCloseSuccess}
-                  className="w-full flex h-11 items-center justify-center rounded bg-stone-955 border border-autumn-mist/10 text-autumn-mist/80 font-outfit text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[#2A1D14] hover:text-white"
+                  className="w-full flex h-11 items-center justify-center rounded bg-stone-955 border border-autumn-bark/10 text-autumn-bark/80 font-outfit text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[#EFE8D6] hover:text-white"
                 >
                   Close & Back to Site
                 </button>
@@ -1773,15 +1773,15 @@ export default function App() {
           >
             
             {/* Auth Top Header */}
-            <div className="bg-autumn-bark/30 p-5 flex justify-between items-center border-b border-autumn-mist/10">
+            <div className="bg-autumn-mist/30 p-5 flex justify-between items-center border-b border-autumn-bark/10">
               <div className="flex items-center gap-3">
                 <img 
                   src="logo.jpg" 
                   alt="BOOTpaths Logo" 
-                  className="h-8 w-8 rounded-full object-cover border border-autumn-mist/10"
+                  className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
                 />
                 <div>
-                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-mist drop-shadow-sm">
+                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark drop-shadow-sm">
                     BOOTpaths Identity
                   </span>
                   <span className="block text-[10px] text-autumn-maple tracking-wider font-extrabold uppercase drop-shadow-sm">Decathlon Partner Portal</span>
@@ -1789,7 +1789,7 @@ export default function App() {
               </div>
               <button 
                 onClick={() => setIsAuthModalOpen(false)}
-                className="h-8 w-8 rounded-full bg-[#2A1D14]/40 flex items-center justify-center text-autumn-mist/70 hover:text-white transition-colors"
+                className="h-8 w-8 rounded-full bg-[#EFE8D6]/40 flex items-center justify-center text-autumn-bark/70 hover:text-white transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1798,27 +1798,27 @@ export default function App() {
             {/* Auth Content */}
             {isAuthenticating ? (
               <div className="p-8 py-16 flex flex-col items-center justify-center gap-4 text-center">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-mist/10 border-t-emerald-500"></div>
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-bark/10 border-t-emerald-500"></div>
                 <div>
-                  <h4 className="text-sm font-bold text-autumn-mist/80 uppercase tracking-widest drop-shadow-sm">Securing Session</h4>
-                  <p className="text-xxs text-autumn-mist0 mt-1">Setting up mountaineering client profile...</p>
+                  <h4 className="text-sm font-bold text-autumn-bark/80 uppercase tracking-widest drop-shadow-sm">Securing Session</h4>
+                  <p className="text-xxs text-autumn-bark/50 mt-1">Setting up mountaineering client profile...</p>
                 </div>
               </div>
             ) : (
               <div>
                 {/* Tab Switcher */}
-                <div className="flex border-b border-autumn-mist/10 bg-autumn-bark/20">
+                <div className="flex border-b border-autumn-bark/10 bg-autumn-mist/20">
                   <button 
                     type="button"
                     onClick={() => { setAuthMode('login'); setAuthErrors({}); }}
-                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'login' ? 'text-autumn-maple border-autumn-maple bg-[#2A1D14]/10' : 'text-autumn-mist0 border-transparent hover:text-autumn-mist/80'}`}
+                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'login' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
                   >
                     Sign In
                   </button>
                   <button 
                     type="button"
                     onClick={() => { setAuthMode('register'); setAuthErrors({}); }}
-                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'register' ? 'text-autumn-maple border-autumn-maple bg-[#2A1D14]/10' : 'text-autumn-mist0 border-transparent hover:text-autumn-mist/80'}`}
+                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'register' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
                   >
                     Create Account
                   </button>
@@ -1830,7 +1830,7 @@ export default function App() {
                     <button 
                       type="button"
                       onClick={() => handleOAuth('google')}
-                      className="flex h-10 w-full max-w-xs items-center justify-center gap-2 rounded bg-autumn-bark/60 border border-autumn-mist/10 text-xs font-bold font-outfit text-autumn-mist/80 hover:bg-[#2A1D14]/80 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-autumn-maple shadow-md"
+                      className="flex h-10 w-full max-w-xs items-center justify-center gap-2 rounded bg-autumn-mist/60 border border-autumn-bark/10 text-xs font-bold font-outfit text-autumn-bark/80 hover:bg-[#EFE8D6]/80 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-autumn-maple shadow-md"
                     >
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -1845,9 +1845,9 @@ export default function App() {
                   {/* Separator */}
                   <div className="relative mb-5 flex items-center justify-center">
                     <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-autumn-mist/10"></div>
+                      <div className="w-full border-t border-autumn-bark/10"></div>
                     </div>
-                    <span className="relative bg-[#2A1D14]/30 px-3 text-[10px] uppercase font-bold tracking-widest text-autumn-mist0">
+                    <span className="relative bg-[#EFE8D6]/30 px-3 text-[10px] uppercase font-bold tracking-widest text-autumn-bark/50">
                       or continue with email
                     </span>
                   </div>
@@ -1856,7 +1856,7 @@ export default function App() {
                   <form onSubmit={handleAuthSubmit} className="space-y-4">
                     {authMode === 'register' && (
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-mist/70 mb-1.5">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
                           Full Name
                         </label>
                         <input 
@@ -1864,7 +1864,7 @@ export default function App() {
                           value={authName}
                           onChange={(e) => setAuthName(e.target.value)}
                           placeholder="Decathlon Hiker"
-                          className="w-full h-10 px-3 rounded border border-autumn-mist/10 bg-autumn-bark/30 text-xs text-autumn-mist placeholder-stone-600 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                          className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
                         />
                         {authErrors.name && (
                           <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.name}</span>
@@ -1873,7 +1873,7 @@ export default function App() {
                     )}
 
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-mist/70 mb-1.5">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
                         Email Address
                       </label>
                       <input 
@@ -1881,7 +1881,7 @@ export default function App() {
                         value={authEmail}
                         onChange={(e) => setAuthEmail(e.target.value)}
                         placeholder="hiker@decathlon.com"
-                        className="w-full h-10 px-3 rounded border border-autumn-mist/10 bg-autumn-bark/30 text-xs text-autumn-mist placeholder-stone-600 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                        className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
                       />
                       {authErrors.email && (
                         <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.email}</span>
@@ -1889,7 +1889,7 @@ export default function App() {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-mist/70 mb-1.5">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
                         Password
                       </label>
                       <input 
@@ -1897,7 +1897,7 @@ export default function App() {
                         value={authPassword}
                         onChange={(e) => setAuthPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full h-10 px-3 rounded border border-autumn-mist/10 bg-autumn-bark/30 text-xs text-autumn-mist placeholder-stone-600 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                        className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
                       />
                       <div className="flex justify-end mt-1.5">
                         <button 
@@ -1915,15 +1915,15 @@ export default function App() {
 
                     <button 
                       type="submit"
-                      className="w-full flex h-11 items-center justify-center rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-stone-955 transition-colors hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple shadow-[0_4px_12px_rgba(193,87,31,0.35)]"
+                      className="w-full flex h-11 items-center justify-center rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-colors hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple shadow-[0_4px_12px_rgba(193,87,31,0.35)]"
                     >
                       {authMode === 'login' ? 'Sign In' : 'Create Account'}
                     </button>
                   </form>
 
                   {/* Guest selection & footer */}
-                  <div className="mt-6 pt-4 border-t border-autumn-mist/10 flex items-center justify-between text-xxs">
-                    <span className="text-autumn-mist0">Unsure about booking?</span>
+                  <div className="mt-6 pt-4 border-t border-autumn-bark/10 flex items-center justify-between text-xxs">
+                    <span className="text-autumn-bark/50">Unsure about booking?</span>
                     <button 
                       type="button"
                       onClick={handleContinueAsGuest}
@@ -1942,40 +1942,40 @@ export default function App() {
 
       {/* CUSTOMER PROFILE & BOOKING HISTORY DASHBOARD */}
       {isDashboardOpen && user && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-bark/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-4xl h-[85vh] flex flex-col md:flex-row overflow-hidden rounded-3xl border border-autumn-mist/10 bg-autumn-bark/40 backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-250">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-mist/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-4xl h-[85vh] flex flex-col md:flex-row overflow-hidden rounded-3xl border border-autumn-bark/10 bg-autumn-mist/40 backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-250">
             
             {/* Close Button */}
             <button 
               onClick={() => setIsDashboardOpen(false)}
-              className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-[#2A1D14]/60 flex items-center justify-center text-autumn-mist/70 hover:text-autumn-maple transition-colors focus:outline-none"
+              className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-[#EFE8D6]/60 flex items-center justify-center text-autumn-bark/70 hover:text-autumn-maple transition-colors focus:outline-none"
             >
               <X className="h-5 w-5" />
             </button>
 
             {/* Sidebar / Tabs */}
-            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-autumn-mist/10 bg-autumn-bark/60 p-6 flex flex-col">
+            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-autumn-bark/10 bg-autumn-mist/60 p-6 flex flex-col">
               <div className="flex items-center gap-3 mb-10">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-autumn-maple/20 text-autumn-maple font-outfit text-xl font-bold border border-autumn-maple/30 shadow-[0_0_15px_rgba(193,87,31,0.2)]">
                   {user.initials}
                 </div>
                 <div>
-                  <h3 className="font-outfit text-sm font-bold text-autumn-mist">{user.name}</h3>
-                  <span className="text-xxs text-autumn-mist0 uppercase tracking-widest block truncate w-32">{user.email}</span>
+                  <h3 className="font-outfit text-sm font-bold text-autumn-bark">{user.name}</h3>
+                  <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block truncate w-32">{user.email}</span>
                 </div>
               </div>
 
               <div className="flex flex-row md:flex-col gap-2 overflow-x-auto pb-4 md:pb-0 hide-scrollbar">
                 <button 
                   onClick={() => setDashboardTab('bookings')}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'bookings' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-mist/70 hover:bg-[#2A1D14]/50 hover:text-autumn-mist border border-transparent'}`}
+                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'bookings' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-bark/70 hover:bg-[#EFE8D6]/50 hover:text-autumn-bark border border-transparent'}`}
                 >
                   <Calendar className="h-4 w-4" />
                   Expeditions
                 </button>
                 <button 
                   onClick={() => setDashboardTab('profile')}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'profile' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-mist/70 hover:bg-[#2A1D14]/50 hover:text-autumn-mist border border-transparent'}`}
+                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'profile' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-bark/70 hover:bg-[#EFE8D6]/50 hover:text-autumn-bark border border-transparent'}`}
                 >
                   <User className="h-4 w-4" />
                   Hiker Profile
@@ -1985,7 +1985,7 @@ export default function App() {
               <div className="mt-auto hidden md:block">
                 <button 
                   onClick={() => { setIsDashboardOpen(false); handleLogout(); }}
-                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-autumn-mist0 hover:text-rose-400 transition-colors focus:outline-none"
+                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-autumn-bark/50 hover:text-rose-400 transition-colors focus:outline-none"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign Out Securely
@@ -1999,31 +1999,31 @@ export default function App() {
               {dashboardTab === 'bookings' && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                   <div className="mb-8">
-                    <h2 className="font-outfit text-3xl font-black text-autumn-mist tracking-tight">Expedition Records</h2>
-                    <p className="text-sm text-autumn-mist/70 mt-1">Your confirmed wilderness passes and historical trails.</p>
+                    <h2 className="font-outfit text-3xl font-black text-autumn-bark tracking-tight">Expedition Records</h2>
+                    <p className="text-sm text-autumn-bark/70 mt-1">Your confirmed wilderness passes and historical trails.</p>
                   </div>
 
                   <div className="space-y-4">
                     {EXPEDITION_RECORDS.map((record, i) => (
-                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-autumn-mist/10 bg-autumn-bark/40 backdrop-blur-md transition-colors hover:border-autumn-maple/30 hover:bg-[#2A1D14]/40">
+                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-autumn-bark/10 bg-autumn-mist/40 backdrop-blur-md transition-colors hover:border-autumn-maple/30 hover:bg-[#EFE8D6]/40">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-3">
-                            <span className="text-xxs font-mono text-autumn-mist0 bg-[#2A1D14] px-2 py-0.5 rounded border border-autumn-mist/10">
+                            <span className="text-xxs font-mono text-autumn-bark/50 bg-[#EFE8D6] px-2 py-0.5 rounded border border-autumn-bark/10">
                               {record.id}
                             </span>
-                            <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${record.status === 'Confirmed' ? 'text-autumn-maple' : 'text-autumn-mist0'}`}>
+                            <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${record.status === 'Confirmed' ? 'text-autumn-maple' : 'text-autumn-bark/50'}`}>
                               {record.status === 'Confirmed' && <span className="flex h-1.5 w-1.5 rounded-full bg-autumn-maple animate-pulse"></span>}
                               {record.status}
                             </span>
                           </div>
-                          <h4 className="font-outfit text-lg font-bold text-autumn-mist mt-1">{record.title}</h4>
-                          <span className="text-xs text-autumn-mist/70 flex items-center gap-2 mt-1">
+                          <h4 className="font-outfit text-lg font-bold text-autumn-bark mt-1">{record.title}</h4>
+                          <span className="text-xs text-autumn-bark/70 flex items-center gap-2 mt-1">
                             <Calendar className="h-3 w-3" />
                             {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </span>
                         </div>
-                        <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-autumn-mist/10 pt-4 sm:pt-0">
-                          <span className="text-xs text-autumn-mist/70">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
+                        <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-autumn-bark/10 pt-4 sm:pt-0">
+                          <span className="text-xs text-autumn-bark/70">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
                           <span className="font-outfit text-xl font-black text-autumn-maple">₹{record.price.toLocaleString('en-IN')}</span>
                         </div>
                       </div>
@@ -2035,8 +2035,8 @@ export default function App() {
               {dashboardTab === 'profile' && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                   <div className="mb-8">
-                    <h2 className="font-outfit text-3xl font-black text-autumn-mist tracking-tight">Hiker Vital Profile</h2>
-                    <p className="text-sm text-autumn-mist/70 mt-1">Manage your wilderness credentials and emergency protocols.</p>
+                    <h2 className="font-outfit text-3xl font-black text-autumn-bark tracking-tight">Hiker Vital Profile</h2>
+                    <p className="text-sm text-autumn-bark/70 mt-1">Manage your wilderness credentials and emergency protocols.</p>
                   </div>
 
                   <form 
@@ -2052,32 +2052,32 @@ export default function App() {
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-mist0 mb-2">Legal Full Name</label>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Legal Full Name</label>
                         <input 
                           type="text"
                           value={profileData.fullName || user.name}
                           onChange={(e) => setProfileData({...profileData, fullName: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-mist/10 bg-autumn-bark/50 text-sm text-autumn-mist placeholder-stone-700 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
+                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
                           placeholder="As per Government ID"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-mist0 mb-2">Contact Mobile</label>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Contact Mobile</label>
                         <input 
                           type="tel"
                           value={profileData.mobile}
                           onChange={(e) => setProfileData({...profileData, mobile: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-mist/10 bg-autumn-bark/50 text-sm text-autumn-mist placeholder-stone-700 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
+                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
                           placeholder="+91 00000 00000"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-mist0 mb-2">Blood Group</label>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Blood Group</label>
                         <div className="relative">
                           <select 
                             value={profileData.bloodGroup}
                             onChange={(e) => setProfileData({...profileData, bloodGroup: e.target.value})}
-                            className="w-full h-12 px-4 rounded-xl border border-autumn-mist/10 bg-autumn-bark/50 text-sm text-autumn-mist focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 appearance-none"
+                            className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 appearance-none"
                           >
                             <option value="" disabled>Select Blood Type</option>
                             <option value="A+">A+</option>
@@ -2089,37 +2089,37 @@ export default function App() {
                             <option value="O+">O+</option>
                             <option value="O-">O-</option>
                           </select>
-                          <ChevronDown className="absolute right-4 top-4 h-4 w-4 text-autumn-mist0 pointer-events-none" />
+                          <ChevronDown className="absolute right-4 top-4 h-4 w-4 text-autumn-bark/50 pointer-events-none" />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-mist0 mb-2">Emergency Contact</label>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Emergency Contact</label>
                         <input 
                           type="tel"
                           value={profileData.emergencyContact}
                           onChange={(e) => setProfileData({...profileData, emergencyContact: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-mist/10 bg-autumn-bark/50 text-sm text-autumn-mist placeholder-stone-700 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
+                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
                           placeholder="Family or Guardian"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-mist0 mb-2">Medical Conditions / Allergies</label>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Medical Conditions / Allergies</label>
                       <textarea 
                         rows="4"
                         value={profileData.medicalConditions}
                         onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
-                        className="w-full p-4 rounded-xl border border-autumn-mist/10 bg-autumn-bark/50 text-sm text-autumn-mist placeholder-stone-700 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 resize-none"
+                        className="w-full p-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 resize-none"
                         placeholder="List any altitude sickness history, asthma, or severe allergies crucial for our medics."
                       ></textarea>
                     </div>
 
-                    <div className="pt-4 border-t border-autumn-mist/10 flex justify-end">
+                    <div className="pt-4 border-t border-autumn-bark/10 flex justify-end">
                       <button
                         type="submit"
                         disabled={isSavingProfile}
-                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-autumn-maple px-8 font-outfit text-xs font-bold uppercase tracking-widest text-stone-950 transition-all hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple focus:ring-offset-2 focus:ring-offset-stone-950 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(193,87,31,0.2)]"
+                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-autumn-maple px-8 font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-all hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple focus:ring-offset-2 focus:ring-offset-stone-950 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(193,87,31,0.2)]"
                       >
                         {isSavingProfile ? (
                           <>
