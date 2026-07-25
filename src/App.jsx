@@ -852,7 +852,7 @@ export default function App() {
       <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden py-16 px-6 md:px-12">
         {/* Full-Bleed Background Video */}
         <video 
-          src="landing.mp4" 
+          src="landing2.mp4" 
           className="absolute inset-0 h-full w-full object-cover z-0" 
           autoPlay 
           loop 
