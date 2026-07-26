@@ -907,9 +907,8 @@ export default function App() {
             </div>
           );
         })}
-        {/* Advanced Gradient Overlays */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-stone-950 via-stone-950/80 to-transparent"></div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-stone-950/95 via-transparent to-stone-950/20"></div>
+        {/* Advanced Gradient Overlays - Light Uniform Tint */}
+        <div className="absolute inset-0 z-10 bg-stone-950/20"></div>
 
         {/* Dynamic Background Glow Elements */}
         <div className="absolute top-1/4 left-1/4 h-[300px] w-[300px] rounded-full bg-autumn-maple/10 blur-[100px] z-10"></div>
@@ -927,7 +926,7 @@ export default function App() {
           </div>
 
           {/* Main Slogan */}
-          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-[#F3ECDD] sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-[#F3ECDD] sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-lg">
             Every Trail <br />
             <span className="bg-gradient-to-r from-autumn-maple via-autumn-amber to-autumn-rhodo bg-clip-text text-transparent">
               Turns You
@@ -935,7 +934,7 @@ export default function App() {
           </h1>
 
           {/* Value Proposition */}
-          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-[#F3ECDD]/80 md:text-lg">
+          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-[#F3ECDD] md:text-lg drop-shadow-md">
             <span className="font-bold text-[#F3ECDD]">Come green. Leave gold.</span> Safe, Responsible, and Quality Treks in the Western Ghats led by Certified Mountaineers. Backed by premium gear partnership and zero-waste ecotourism benchmarks.
           </p>
 
