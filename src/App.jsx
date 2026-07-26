@@ -456,6 +456,7 @@ export default function App() {
   }, [activeHeroIndex]);
 
   const [showAllTreks, setShowAllTreks] = useState(false);
+  const [detailedTrek, setDetailedTrek] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState(INITIAL_TREKS[0]);
   const [selectedDate, setSelectedDate] = useState(INITIAL_TREKS[0].dates[0]);
@@ -676,6 +677,10 @@ export default function App() {
   // Keep compatibility with card calls
   const handleBookNow = (trek) => {
     handleTrigger({ type: 'book_trek', payload: trek });
+  };
+
+  const handleGetDetails = (trek) => {
+    setDetailedTrek(trek);
   };
 
   // Start Razorpay Checkout Simulation
@@ -1240,14 +1245,21 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Book Trigger Button */}
-                  <button 
-                    onClick={() => handleBookNow(trek)}
-                    className="mt-6 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded bg-[#EFE8D6] border border-autumn-bark/10 text-autumn-bark font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-autumn-maple hover:text-[#F3ECDD] hover:border-autumn-maple"
-                  >
-                    View Live Slots
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
+                  {/* Action Row */}
+                  <div className="grid grid-cols-2 gap-3 mt-6">
+                    <button
+                      onClick={() => handleGetDetails(trek)}
+                      className="inline-flex h-11 items-center justify-center rounded-lg border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10"
+                    >
+                      Get Details
+                    </button>
+                    <button
+                      onClick={() => handleBookNow(trek)}
+                      className="inline-flex h-11 items-center justify-center rounded-lg bg-[#C1571F] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_4px_12px_rgba(193,87,31,0.2)]"
+                    >
+                      Book Now
+                    </button>
+                  </div>
 
                 </div>
               </div>
@@ -1840,6 +1852,135 @@ export default function App() {
                 </button>
               </div>
             )}
+
+          </div>
+        </div>
+      )}
+
+      {/* CONDITIONAL TREK DETAILS & ITINERARY MODAL */}
+      {detailedTrek && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-autumn-maple/20 bg-autumn-mist text-autumn-bark shadow-2xl animate-in zoom-in-95 duration-300 max-h-[85vh] flex flex-col">
+            
+            {/* Modal Header */}
+            <div className="bg-[#EFE8D6] p-5 flex justify-between items-center border-b border-autumn-bark/10 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-autumn-maple/10 flex items-center justify-center text-autumn-maple">
+                  <Sparkles className="h-5 w-5 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-outfit text-base font-bold uppercase tracking-wider text-autumn-bark">
+                    {detailedTrek.title}
+                  </h3>
+                  <span className="text-[10px] uppercase tracking-widest text-[#6E7042] font-semibold">
+                    Expedition Details & Itinerary
+                  </span>
+                </div>
+              </div>
+              <button 
+                onClick={() => setDetailedTrek(null)}
+                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-autumn-bark/10 text-autumn-bark/60 hover:text-autumn-bark transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Modal Body (Scrollable) */}
+            <div className="p-6 overflow-y-auto space-y-6 flex-1 text-sm leading-relaxed">
+              
+              {/* Quick Specs */}
+              <div className="grid grid-cols-2 gap-4 bg-[#EFE8D6]/40 p-4 rounded-xl border border-autumn-bark/5">
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-autumn-bark/50 tracking-wider">Duration</span>
+                  <span className="font-outfit text-sm font-semibold text-autumn-bark">{detailedTrek.duration}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-autumn-bark/50 tracking-wider">Difficulty</span>
+                  <span className="font-outfit text-sm font-semibold text-autumn-maple uppercase">{detailedTrek.difficulty}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-autumn-bark/50 tracking-wider">Altitude</span>
+                  <span className="font-outfit text-sm font-semibold text-autumn-bark">{detailedTrek.altitude || 'N/A'}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-autumn-bark/50 tracking-wider">Location</span>
+                  <span className="font-outfit text-sm font-semibold text-autumn-bark">{detailedTrek.location || 'Western Ghats'}</span>
+                </div>
+              </div>
+
+              {/* Day-by-Day Itinerary */}
+              <div>
+                <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-maple mb-3 flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4" /> Day-by-Day Plan
+                </h4>
+                <div className="space-y-4 border-l-2 border-[#6E7042]/20 pl-4 ml-2">
+                  <div className="relative">
+                    <span className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-[#6E7042] border-2 border-autumn-mist"></span>
+                    <span className="font-outfit text-xs font-bold uppercase text-[#6E7042]">Day 1: Base Camp Ascent</span>
+                    <p className="text-xs text-autumn-bark/80 mt-1">
+                      Register with forest guards, ascend through shola forest patches and misty ridges to the wilderness base camp. Setup camp and enjoy a warm local dinner.
+                    </p>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-[#6E7042] border-2 border-autumn-mist"></span>
+                    <span className="font-outfit text-xs font-bold uppercase text-[#6E7042]">Day 2: Peak Bid & Descent</span>
+                    <p className="text-xs text-autumn-bark/80 mt-1">
+                      Summit bid at sunrise to witness panoramic views above the clouds. Retrace steps back to the trailhead, collect ecotourism certifications, and depart.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Inclusions */}
+              <div>
+                <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-maple mb-2.5 flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4" /> Inclusions
+                </h4>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {detailedTrek.inclusion.map((inc, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-autumn-bark/90">
+                      <Check className="h-4.5 w-4.5 text-autumn-maple shrink-0" />
+                      <span>{inc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Required Packing List */}
+              <div>
+                <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-maple mb-2 flex items-center gap-1.5">
+                  <Info className="h-4 w-4" /> Recommended Packing List
+                </h4>
+                <ul className="list-disc pl-5 text-xs text-autumn-bark/80 space-y-1">
+                  <li>20L to 30L rugged backpack with rain cover</li>
+                  <li>Trekking shoes with solid grip (Decathlon Quechua recommended)</li>
+                  <li>Re-usable water bottle (minimum 2 Litres)</li>
+                  <li>Rain poncho or windproof jacket for wet weather</li>
+                  <li>Headlamp or lightweight torch (with spare batteries)</li>
+                </ul>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-[#EFE8D6]/40 p-5 border-t border-autumn-bark/10 flex gap-3 shrink-0">
+              <button 
+                onClick={() => setDetailedTrek(null)}
+                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg border border-autumn-bark/20 hover:bg-autumn-bark/5 text-autumn-bark/80 font-outfit text-xs font-bold uppercase tracking-wider transition-colors"
+              >
+                Close Itinerary
+              </button>
+              <button 
+                onClick={() => {
+                  const trek = detailedTrek;
+                  setDetailedTrek(null);
+                  handleBookNow(trek);
+                }}
+                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-[#C1571F] hover:bg-[#a44717] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 shadow-md"
+              >
+                Book This Trek
+              </button>
+            </div>
 
           </div>
         </div>
