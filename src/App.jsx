@@ -44,6 +44,33 @@ const Instagram = (props) => (
   </svg>
 );
 
+const HERO_MEDIA = [
+  {
+    type: 'video',
+    src: 'landing2.mp4',
+    title: 'Wilderness',
+    thumbnail: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=150&q=80'
+  },
+  {
+    type: 'video',
+    src: 'netravathi.mp4',
+    title: 'Netravathi',
+    thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=150&q=80'
+  },
+  {
+    type: 'video',
+    src: 'brahmagiri.mp4',
+    title: 'Brahmagiri',
+    thumbnail: 'https://images.unsplash.com/photo-1486916856992-e4db22c8df33?auto=format&fit=crop&w=150&q=80'
+  },
+  {
+    type: 'video',
+    src: 'vellagavi.mp4',
+    title: 'Vellagavi',
+    thumbnail: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=150&q=80'
+  }
+];
+
 const INITIAL_TREKS = [
   {
     id: 'netravathi',
@@ -418,6 +445,15 @@ export default function App() {
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveHeroIndex((prev) => (prev + 1) % HERO_MEDIA.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [activeHeroIndex]);
 
   const [showAllTreks, setShowAllTreks] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -850,15 +886,27 @@ export default function App() {
 
       {/* 2. HERO SECTION */}
       <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden py-16 px-6 md:px-12">
-        {/* Full-Bleed Background Video */}
-        <video 
-          src="landing2.mp4" 
-          className="absolute inset-0 h-full w-full object-cover z-0" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-        />
+        {/* Full-Bleed Background Media Stack with Cross-Fade */}
+        {HERO_MEDIA.map((media, idx) => {
+          const isActive = idx === activeHeroIndex;
+          return (
+            <div
+              key={media.src}
+              className={`absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out z-0 ${
+                isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <video
+                src={media.src}
+                className="h-full w-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            </div>
+          );
+        })}
         {/* Advanced Gradient Overlays */}
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-stone-950 via-stone-950/80 to-transparent"></div>
         <div className="absolute inset-0 z-10 bg-gradient-to-r from-stone-950/95 via-transparent to-stone-950/20"></div>
@@ -871,15 +919,15 @@ export default function App() {
         <div className="relative z-20 mx-auto w-full max-w-5xl text-center md:text-left">
           
           {/* Trust Badge / Decathlon Pill */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 py-1.5 px-4 backdrop-blur-md transition-colors hover:border-autumn-maple/30">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#F3ECDD]/10 bg-[#3A2A1E]/40 py-1.5 px-4 backdrop-blur-md transition-colors hover:border-autumn-maple/30">
             <span className="flex h-2 w-2 rounded-full bg-autumn-maple animate-ping"></span>
-            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-bark/80">
+            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#F3ECDD]/80">
               Official Trekking Partner with <span className="text-autumn-maple font-extrabold">Decathlon</span>
             </span>
           </div>
 
           {/* Main Slogan */}
-          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-autumn-bark sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-[#F3ECDD] sm:text-6xl md:text-7xl lg:text-8xl">
             Every Trail <br />
             <span className="bg-gradient-to-r from-autumn-maple via-autumn-amber to-autumn-rhodo bg-clip-text text-transparent">
               Turns You
@@ -887,27 +935,27 @@ export default function App() {
           </h1>
 
           {/* Value Proposition */}
-          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-autumn-bark/80 md:text-lg">
-            <span className="font-bold text-autumn-bark">Come green. Leave gold.</span> Safe, Responsible, and Quality Treks in the Western Ghats led by Certified Mountaineers. Backed by premium gear partnership and zero-waste ecotourism benchmarks.
+          <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-[#F3ECDD]/80 md:text-lg">
+            <span className="font-bold text-[#F3ECDD]">Come green. Leave gold.</span> Safe, Responsible, and Quality Treks in the Western Ghats led by Certified Mountaineers. Backed by premium gear partnership and zero-waste ecotourism benchmarks.
           </p>
 
           {/* Key Facts Summary Banner (Eco-Tourism Portal style) */}
-          <div className="mt-10 grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-4 backdrop-blur-sm sm:grid-cols-4">
-            <div className="flex flex-col border-r border-autumn-bark/10 pr-4">
+          <div className="mt-10 grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-[#F3ECDD]/10 bg-[#3A2A1E]/40 p-4 backdrop-blur-sm sm:grid-cols-4">
+            <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4">
               <span className="font-outfit text-lg font-bold text-autumn-maple">100%</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Certified Guides</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Certified Guides</span>
             </div>
-            <div className="flex flex-col border-r border-autumn-bark/10 pr-4 sm:border-r">
+            <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4 sm:border-r">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Zero Waste</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Green Trail Policy</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Green Trail Policy</span>
             </div>
-            <div className="flex flex-col border-r border-autumn-bark/10 pr-4 sm:pr-0 sm:border-r-0 md:border-r md:pr-4">
+            <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4 sm:pr-0 sm:border-r-0 md:border-r md:pr-4">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Premium Gear</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Decathlon Powered</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Decathlon Powered</span>
             </div>
             <div className="flex flex-col">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Live Slots</span>
-              <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Instant Approval</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Instant Approval</span>
             </div>
           </div>
 
@@ -922,12 +970,46 @@ export default function App() {
             </button>
             <a 
               href="#safety-standards" 
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark backdrop-blur-sm transition-all duration-300 hover:bg-[#EFE8D6] hover:text-white"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg border border-[#F3ECDD]/10 bg-[#3A2A1E]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] backdrop-blur-sm transition-all duration-300 hover:bg-[#3A2A1E] hover:text-white"
             >
               Safety Standards
             </a>
           </div>
 
+        </div>
+
+        {/* Floating Tiles Grid Switcher */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 z-20 backdrop-blur-md bg-[#3A2A1E]/60 border border-[#C1571F]/30 rounded-2xl p-2.5 shadow-2xl flex flex-col items-center sm:items-start max-w-[95vw] sm:max-w-sm">
+          <div className="text-[9px] font-bold uppercase tracking-widest text-[#F3ECDD]/60 mb-2 px-1">
+            Expedition Views
+          </div>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar max-w-full">
+            {HERO_MEDIA.map((media, idx) => {
+              const isActive = idx === activeHeroIndex;
+              return (
+                <button
+                  key={media.src}
+                  onClick={() => setActiveHeroIndex(idx)}
+                  className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-xl overflow-hidden border transition-all duration-300 group shrink-0 ${
+                    isActive 
+                      ? 'border-[#C1571F] ring-2 ring-[#C1571F] scale-105 shadow-[0_0_15px_rgba(193,87,31,0.5)]' 
+                      : 'border-[#F3ECDD]/20 opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <img
+                    src={media.thumbnail}
+                    alt={media.title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/35 flex items-end p-1">
+                    <span className="text-[7px] sm:text-[8px] font-bold text-white uppercase tracking-wider truncate block w-full text-center bg-black/50 py-0.5 rounded">
+                      {media.title}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 
