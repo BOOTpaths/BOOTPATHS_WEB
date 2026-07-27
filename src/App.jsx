@@ -801,10 +801,10 @@ export default function App() {
               </div>
             ) : (
               <button 
-                onClick={() => handleTrigger({ type: 'nav_book' })}
-                className="inline-flex h-11 items-center justify-center rounded-md border border-autumn-maple/20 bg-autumn-maple/10 px-6 font-outfit text-sm font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 hover:bg-autumn-maple hover:text-[#F3ECDD] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
+                onClick={() => setIsAuthModalOpen(true)}
+                className="border border-[#C1571F] text-[#C1571F] hover:bg-[#C1571F] hover:text-[#3A2A1E] font-bold text-xs uppercase tracking-wider rounded-lg px-4 py-2 transition-all duration-200 focus:outline-none"
               >
-                Book a Trek
+                Login
               </button>
             )}
           </div>
@@ -877,11 +877,11 @@ export default function App() {
                 <button 
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    handleTrigger({ type: 'nav_book' });
+                    setIsAuthModalOpen(true);
                   }}
-                  className="flex h-12 w-full items-center justify-center rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] shadow-md hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
+                  className="flex h-12 w-full items-center justify-center rounded-lg border border-[#C1571F] text-[#C1571F] hover:bg-[#C1571F] hover:text-[#3A2A1E] font-outfit text-sm font-bold uppercase tracking-wider transition-all duration-200 focus:outline-none"
                 >
-                  Book a Trek
+                  Login
                 </button>
               )}
             </nav>
