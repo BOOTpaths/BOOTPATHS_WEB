@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import AdminConsole from './components/AdminConsole';
+import BlogSection from './components/BlogSection';
 import { 
   Shield, 
   Leaf, 
@@ -68,6 +69,42 @@ const HERO_MEDIA = [
     src: 'vellagavi.mp4',
     title: 'Vellagavi',
     thumbnail: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=150&q=80'
+  }
+];
+
+const INITIAL_BLOGS = [
+  {
+    id: 'blog-1',
+    title: 'Monsoon Magic: Conquering the Netravathi Ridge',
+    category: 'Trail Stories',
+    coverUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+    author: 'Sarah Jenkins',
+    authorBadge: 'Community Trekker',
+    date: '2026-07-20',
+    status: 'published',
+    content: `The Western Ghats undergo a dramatic transformation during the monsoons. Streams erupt from hidden fissures, shola grasslands glow with an incandescent green, and the peak of Netravathi becomes a fortress of fog and wind.\n\nOur journey started at dawn from the base camp. Registering at the forest checkpost, our certified mountaineer lead briefed us on keeping our footprints green and our trash packed. The ascent was challenging—wet clay patches made every step a test of grip, but our Decathlon waterproof boots held strong.\n\nReaching the summit ridge felt surreal. The valley below was completely submerged in a sea of mist, which parted occasionally to reveal the rolling green hills of Kudremukh range. It was a stark reminder of why we trek: not to conquer the peak, but to be conquered by the silence of the wilderness.`
+  },
+  {
+    id: 'blog-2',
+    title: 'Decathlon Gear Checklist for Rugged Ghats Trails',
+    category: 'Gear & Packing',
+    coverUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+    author: 'Rohan Mehta',
+    authorBadge: 'Certified Guide',
+    date: '2026-07-15',
+    status: 'published',
+    content: `Packing for a multi-day trek in the Western Ghats requires a delicate balance between weight and preparedness. The weather here is notoriously volatile; a hot sunny afternoon can turn into a torrential downpour in minutes.\n\nHere are the top 4 essentials we recommend from Decathlon's Quechua range:\n\n1. MH500 Trekking Shoes: Crucial for wet, slippery rock faces. They offer robust ankle support and excellent water-resistance.\n2. Arpenaz 30L Backpack: Perfect size for 2-day hikes. Lightweight, with mesh pockets for easy water bottle access.\n3. Quechua Rain Poncho: Compact and covers both you and your pack. Do not rely on cheap umbrellas that blow away in ridge winds.\n4. Quick-dry synthetic t-shirts: Cotton is your enemy on high-humidity climbs. It retains sweat and causes chills once you reach windy peaks.`
+  },
+  {
+    id: 'blog-3',
+    title: 'Trail Safety Protocols: Navigating Sudden Weather Shifts',
+    category: 'Safety First',
+    coverUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=800&q=80',
+    author: 'Captain Vikram',
+    authorBadge: 'Certified Guide',
+    date: '2026-07-02',
+    status: 'published',
+    content: `Safety on high-altitude ridges isn't just about having the right gear; it is about decision-making under pressure. As a guide, the most critical skill I teach is learning when to turn back.\n\nOn a recent hike to Agastyarkoodam, we encountered a sudden thunderstorm. Lighting on an exposed ridge is highly dangerous. We immediately halted our ascent, had the team crouch on their insulated backpacks (to avoid lightning conduction from the wet ground), and waited for the cell to pass.\n\nAlways check local permits and coordinate with forest wardens. Keep a copy of medical vitals handy, pack a basic first-aid kit with rehydration salts, and never trek alone. Remember: the mountains will always be there, but you only have one life.`
   }
 ];
 
@@ -456,6 +493,15 @@ export default function App() {
   }, [activeHeroIndex]);
 
   const [showAllTreks, setShowAllTreks] = useState(false);
+  const [blogs, setBlogs] = useState(() => {
+    const saved = localStorage.getItem('bootpaths_blogs');
+    return saved ? JSON.parse(saved) : INITIAL_BLOGS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bootpaths_blogs', JSON.stringify(blogs));
+  }, [blogs]);
+
   const [detailedTrek, setDetailedTrek] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState(INITIAL_TREKS[0]);
@@ -731,6 +777,8 @@ export default function App() {
       <AdminConsole 
         treks={treks} 
         setTreks={setTreks} 
+        blogs={blogs}
+        setBlogs={setBlogs}
         onReturnToSite={() => { window.location.hash = ''; }} 
       />
     );
@@ -1664,6 +1712,16 @@ export default function App() {
 
         </div>
       </section>
+
+      <BlogSection 
+        blogs={blogs} 
+        onAddBlog={(newBlog) => setBlogs(prev => [newBlog, ...prev])} 
+        user={user} 
+        onOpenAuth={(action) => {
+          setPendingAction(action);
+          setIsAuthModalOpen(true);
+        }}
+      />
 
       {/* FOOTER */}
       <footer className="border-t border-autumn-bark/10 bg-autumn-mist py-16 px-6 md:px-12 text-autumn-bark/70 text-xs">

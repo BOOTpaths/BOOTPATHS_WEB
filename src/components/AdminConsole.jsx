@@ -18,7 +18,8 @@ import {
   Lock,
   Mail,
   Search,
-  CheckCircle2
+  CheckCircle2,
+  Eye
 } from 'lucide-react';
 
 const BADGE_OPTIONS = [
@@ -38,7 +39,7 @@ const INCLUSION_OPTIONS = [
   'Wildlife Warden Permit'
 ];
 
-export default function AdminConsole({ treks, setTreks, onReturnToSite }) {
+export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, onReturnToSite }) {
   // Session State
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [authView, setAuthView] = useState('login'); // 'login' | 'forgot_password'
@@ -55,6 +56,8 @@ export default function AdminConsole({ treks, setTreks, onReturnToSite }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTrek, setEditingTrek] = useState(null);
   const [deleteConfirmTrek, setDeleteConfirmTrek] = useState(null);
+  const [activeTab, setActiveTab] = useState('inventory');
+  const [viewingBlog, setViewingBlog] = useState(null);
 
   // Form State for Add / Edit Trek
   const [formData, setFormData] = useState({
@@ -201,6 +204,15 @@ export default function AdminConsole({ treks, setTreks, onReturnToSite }) {
       setTreks(prev => prev.filter(t => t.id !== deleteConfirmTrek.id));
       setDeleteConfirmTrek(null);
     }
+  };
+
+  // Blog Moderation
+  const handleApproveBlog = (id) => {
+    setBlogs(prev => prev.map(b => b.id === id ? { ...b, status: 'published' } : b));
+  };
+
+  const handleRejectBlog = (id) => {
+    setBlogs(prev => prev.filter(b => b.id !== id));
   };
 
   // Toggle inclusion item in form
@@ -470,9 +482,35 @@ export default function AdminConsole({ treks, setTreks, onReturnToSite }) {
 
       {/* MAIN CONTAINER */}
       <main className="mx-auto max-w-7xl p-4 sm:p-8 space-y-6">
-        
-        {/* HEADER & ACTION BAR */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+
+        {/* Tab Switcher */}
+        <div className="flex gap-4 border-b border-autumn-bark/10 pb-1">
+          <button
+            onClick={() => setActiveTab('inventory')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'inventory' 
+                ? 'border-autumn-maple text-autumn-maple' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Trek Inventory
+          </button>
+          <button
+            onClick={() => setActiveTab('blogs')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'blogs' 
+                ? 'border-autumn-maple text-autumn-maple' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Community Blogs ({blogs.filter(b => b.status === 'pending').length} Pending)
+          </button>
+        </div>
+
+        {activeTab === 'inventory' ? (
+          <>
+            {/* HEADER & ACTION BAR */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
           <div>
             <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
               Trek Inventory Management
@@ -639,7 +677,196 @@ export default function AdminConsole({ treks, setTreks, onReturnToSite }) {
             </table>
           </div>
         </div>
+      </>
+    ) : (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Header & Stats Banner */}
+            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h1 className="font-outfit text-xl sm:text-2xl font-black text-autumn-bark">
+                  Community Blogs Moderation
+                </h1>
+                <p className="text-xs text-autumn-bark/70 mt-1">
+                  Approve, publish, or reject trail stories and articles submitted by explorers.
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="px-4 py-2 bg-autumn-maple/10 border border-autumn-maple/35 text-autumn-maple rounded-xl text-xs font-bold font-outfit">
+                  {blogs.filter(b => b.status === 'pending').length} Pending Review
+                </div>
+                <div className="px-4 py-2 bg-autumn-amber/10 border border-autumn-amber/35 text-[#C1571F] rounded-xl text-xs font-bold font-outfit">
+                  {blogs.filter(b => b.status === 'published').length} Published
+                </div>
+              </div>
+            </div>
+
+            {/* Moderation Table */}
+            <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/30 overflow-hidden backdrop-blur-md">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs text-autumn-bark">
+                  <thead className="bg-[#EFE8D6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-autumn-bark/15">
+                    <tr>
+                      <th className="py-4 px-5">Cover & Title</th>
+                      <th className="py-4 px-5">Author</th>
+                      <th className="py-4 px-5">Category</th>
+                      <th className="py-4 px-5">Date</th>
+                      <th className="py-4 px-5">Status</th>
+                      <th className="py-4 px-5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-autumn-bark/10">
+                    {blogs.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="py-12 text-center text-autumn-bark/50">
+                          No blog posts found in database.
+                        </td>
+                      </tr>
+                    ) : (
+                      blogs.map((post) => (
+                        <tr key={post.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                          <td className="py-4 px-5 font-medium">
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src={post.coverUrl} 
+                                alt={post.title} 
+                                className="h-10 w-16 object-cover rounded-lg border border-autumn-bark/10 bg-stone-200 shrink-0" 
+                              />
+                              <div className="max-w-xs sm:max-w-sm">
+                                <span className="font-outfit text-sm font-bold text-autumn-bark block line-clamp-1">
+                                  {post.title}
+                                </span>
+                                <span className="text-[10px] text-autumn-bark/60 block line-clamp-1 mt-0.5">
+                                  {post.content}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5">
+                            <div>
+                              <span className="font-semibold block text-autumn-bark">{post.author}</span>
+                              <span className="text-[9px] uppercase tracking-wider text-[#E3A21E] font-bold block mt-0.5">
+                                {post.authorBadge}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5">
+                            <span className="inline-block rounded-full bg-autumn-maple/10 border border-autumn-maple/20 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-autumn-maple">
+                              {post.category}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 text-autumn-bark/70 font-semibold">{post.date}</td>
+                          <td className="py-4 px-5">
+                            <span className={`inline-block rounded-full border px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                              post.status === 'published' 
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600' 
+                                : 'bg-[#E3A21E]/10 border-[#E3A21E]/30 text-[#E3A21E]'
+                            }`}>
+                              {post.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 text-right">
+                            <div className="flex items-center justify-end gap-2.5">
+                              {/* Preview Action */}
+                              <button 
+                                onClick={() => setViewingBlog(post)}
+                                className="h-8 w-8 rounded-full border border-autumn-bark/20 bg-autumn-mist/5 flex items-center justify-center hover:bg-autumn-mist/10 text-autumn-bark transition-all"
+                                title="Preview Full Article"
+                              >
+                                <Eye className="h-3.5 w-3.5" />
+                              </button>
+
+                              {/* Approve Action */}
+                              {post.status === 'pending' && (
+                                <button 
+                                  onClick={() => handleApproveBlog(post.id)}
+                                  className="h-8 w-8 rounded-full border border-[#6E7042]/30 bg-[#6E7042]/10 flex items-center justify-center hover:bg-[#6E7042]/20 text-[#6E7042] transition-all"
+                                  title="Approve & Publish"
+                                >
+                                  <Check className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+
+                              {/* Reject/Delete Action */}
+                              <button 
+                                onClick={() => handleRejectBlog(post.id)}
+                                className="h-8 w-8 rounded-full border border-[#8C2B2A]/30 bg-[#8C2B2A]/10 flex items-center justify-center hover:bg-[#8C2B2A]/20 text-[#8C2B2A] transition-all"
+                                title="Reject & Delete"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
+
+      {/* BLOG PREVIEW MODAL */}
+      {viewingBlog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-autumn-maple/20 bg-[#F3ECDD] text-autumn-bark shadow-2xl animate-in zoom-in-95 duration-200 max-h-[80vh] flex flex-col">
+            
+            {/* Modal Header */}
+            <div className="bg-[#EFE8D6] p-5 flex justify-between items-center border-b border-autumn-bark/10 shrink-0">
+              <div>
+                <h3 className="font-outfit text-base font-bold uppercase tracking-wider text-autumn-bark">
+                  Preview Story
+                </h3>
+                <span className="text-[10px] uppercase tracking-widest text-[#6E7042] font-semibold">
+                  {viewingBlog.category} • Submitted by {viewingBlog.author}
+                </span>
+              </div>
+              <button 
+                onClick={() => setViewingBlog(null)}
+                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-autumn-bark/10 text-autumn-bark/60 hover:text-autumn-bark transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-4 flex-1 text-sm leading-relaxed">
+              <img 
+                src={viewingBlog.coverUrl} 
+                alt={viewingBlog.title} 
+                className="h-48 w-full object-cover rounded-xl border border-autumn-bark/10" 
+              />
+              <h2 className="font-outfit text-xl font-bold">{viewingBlog.title}</h2>
+              <div className="whitespace-pre-line text-xs text-autumn-bark/85">
+                {viewingBlog.content}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-[#EFE8D6]/40 p-5 border-t border-autumn-bark/10 flex gap-3 shrink-0">
+              <button 
+                onClick={() => setViewingBlog(null)}
+                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg border border-autumn-bark/20 hover:bg-autumn-bark/5 text-autumn-bark/80 font-outfit text-xs font-bold uppercase tracking-wider transition-colors"
+              >
+                Close Preview
+              </button>
+              {viewingBlog.status === 'pending' && (
+                <button 
+                  onClick={() => {
+                    handleApproveBlog(viewingBlog.id);
+                    setViewingBlog(null);
+                  }}
+                  className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-[#6E7042] hover:bg-[#5b5d36] text-[#F3ECDD] font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-md"
+                >
+                  Approve & Publish
+                </button>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* CREATE / EDIT MODAL */}
       {isModalOpen && (
