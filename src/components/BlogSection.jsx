@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import { BookOpen, X, Sparkles, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { BookOpen, X, Sparkles, AlertCircle, CheckCircle, ArrowRight, Upload, Trash2 } from 'lucide-react';
 
 export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState('Trail Stories');
-  const [formCoverUrl, setFormCoverUrl] = useState('');
+  const [formCoverImage, setFormCoverImage] = useState('');
+  const [isDragOver, setIsDragOver] = useState(false);
   const [formContent, setFormContent] = useState('');
   const [formError, setFormError] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+  
+  const fileInputRef = useRef(null);
 
   // Filter published blogs for public view
   const publishedBlogs = blogs.filter(b => b.status === 'published');
@@ -27,13 +30,52 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setFormError('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFormCoverImage(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setFormError('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFormCoverImage(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError('');
 
     if (!formTitle.trim()) return setFormError('Article title is required.');
-    if (!formCoverUrl.trim() || !formCoverUrl.startsWith('http')) {
-      return setFormError('Please enter a valid cover photo URL starting with http/https.');
+    if (!formCoverImage) {
+      return setFormError('Please select or drag a cover image for your story.');
     }
     if (formContent.trim().length < 50) {
       return setFormError('Story content must be at least 50 characters.');
@@ -43,7 +85,7 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
       id: `blog-${Date.now()}`,
       title: formTitle,
       category: formCategory,
-      coverUrl: formCoverUrl,
+      coverUrl: formCoverImage,
       author: user?.name || 'Guest Hiker',
       authorBadge: 'Community Hiker',
       date: new Date().toISOString().split('T')[0],
@@ -57,7 +99,7 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
     // Reset form
     setFormTitle('');
     setFormCategory('Trail Stories');
-    setFormCoverUrl('');
+    setFormCoverImage('');
     setFormContent('');
 
     showToast('Story submitted! Our team will review and publish it shortly.');
@@ -289,14 +331,56 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[#F3ECDD]/60">Cover Photo URL</label>
-                <input 
-                  type="text" 
-                  value={formCoverUrl}
-                  onChange={(e) => setFormCoverUrl(e.target.value)}
-                  placeholder="Paste high-res Unsplash image URL..."
-                  className="h-11 rounded-lg border border-[#C1571F]/20 bg-[#2A1D14]/85 px-4 text-sm text-[#F3ECDD] placeholder-[#F3ECDD]/30 outline-none focus:border-[#C1571F]/60 transition-colors"
-                />
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#F3ECDD]/60">Cover Image</label>
+                
+                {formCoverImage ? (
+                  <div className="relative group rounded-xl overflow-hidden border border-[#C1571F]/30 bg-[#2A1D14] p-3 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={formCoverImage} 
+                        alt="Preview" 
+                        className="h-14 w-20 object-cover rounded-lg border border-[#C1571F]/20"
+                      />
+                      <div>
+                        <span className="text-xs font-semibold text-[#F3ECDD]">Selected Image</span>
+                        <span className="text-[10px] text-[#F3ECDD]/50 block">Ready to upload</span>
+                      </div>
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => setFormCoverImage('')}
+                      className="h-8 w-8 rounded-lg bg-[#8C2B2A]/20 hover:bg-[#8C2B2A] text-rose-300 hover:text-white flex items-center justify-center transition-colors"
+                      title="Remove Image"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`border-2 border-dashed transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 ${
+                      isDragOver 
+                        ? 'border-[#C1571F] bg-[#2A1D14]/90 scale-[0.99]' 
+                        : 'border-[#C1571F]/50 bg-[#2A1D14] hover:border-[#C1571F]'
+                    }`}
+                  >
+                    <input 
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <Upload className="h-6 w-6 text-[#C1571F]" />
+                    <div className="text-xs text-[#F3ECDD]/80 font-medium">
+                      Click or drag an image from your device
+                    </div>
+                    <span className="text-[9px] text-[#F3ECDD]/40">Supports PNG, JPG, JPEG, WEBP up to 5MB</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
