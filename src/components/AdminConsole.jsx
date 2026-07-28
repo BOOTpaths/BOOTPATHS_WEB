@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Plus, 
   Edit2, 
@@ -19,7 +19,8 @@ import {
   Mail,
   Search,
   CheckCircle2,
-  Eye
+  Eye,
+  Upload
 } from 'lucide-react';
 
 const BADGE_OPTIONS = [
@@ -58,6 +59,49 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
   const [deleteConfirmTrek, setDeleteConfirmTrek] = useState(null);
   const [activeTab, setActiveTab] = useState('inventory');
   const [viewingBlog, setViewingBlog] = useState(null);
+
+  // Trek image local upload selectors
+  const [isAdminDragOver, setIsAdminDragOver] = useState(false);
+  const trekFileInputRef = useRef(null);
+
+  const handleTrekFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFormData(prev => ({ ...prev, image: event.target.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAdminDragOver = (e) => {
+    e.preventDefault();
+    setIsAdminDragOver(true);
+  };
+
+  const handleAdminDragLeave = () => {
+    setIsAdminDragOver(false);
+  };
+
+  const handleAdminDrop = (e) => {
+    e.preventDefault();
+    setIsAdminDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFormData(prev => ({ ...prev, image: event.target.result }));
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Form State for Add / Edit Trek
   const [formData, setFormData] = useState({
@@ -140,7 +184,7 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
       slotsLeft: '10',
       tag: 'FILLING FAST!',
       description: '',
-      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+      image: '',
       inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead']
     });
     setIsModalOpen(true);
@@ -169,6 +213,10 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
   // Save (Create or Update) Trek
   const handleSaveTrek = (e) => {
     e.preventDefault();
+    if (!formData.image) {
+      alert('Please upload a banner image for the trek package.');
+      return;
+    }
     const tagMatch = BADGE_OPTIONS.find(b => b.label === formData.tag);
     const tagColor = tagMatch ? tagMatch.color : 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40';
 
@@ -1015,17 +1063,58 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1">
-                  Image Banner URL
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                  Trek Banner Image
                 </label>
-                <input 
-                  type="url"
-                  required
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
-                />
+                
+                {formData.image ? (
+                  <div className="relative rounded-xl overflow-hidden border border-autumn-maple/20 bg-[#3A2A1E]/5 p-3 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={formData.image} 
+                        alt="Trek Preview" 
+                        className="h-14 w-24 object-cover rounded-lg border border-autumn-maple/10"
+                      />
+                      <div>
+                        <span className="text-xs font-semibold text-autumn-bark">Banner Selected</span>
+                        <span className="text-[10px] text-autumn-bark/50 block">Ready to save</span>
+                      </div>
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                      className="h-8 w-8 rounded-lg bg-[#8C2B2A]/10 hover:bg-[#8C2B2A] text-[#8C2B2A] hover:text-white flex items-center justify-center transition-colors border border-[#8C2B2A]/20"
+                      title="Remove Image"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onDragOver={handleAdminDragOver}
+                    onDragLeave={handleAdminDragLeave}
+                    onDrop={handleAdminDrop}
+                    onClick={() => trekFileInputRef.current?.click()}
+                    className={`border-2 border-dashed transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 ${
+                      isAdminDragOver 
+                        ? 'border-[#C1571F] bg-[#3A2A1E]/10 scale-[0.99]' 
+                        : 'border-[#C1571F]/40 bg-[#3A2A1E]/5 hover:border-[#C1571F]'
+                    }`}
+                  >
+                    <input 
+                      type="file"
+                      ref={trekFileInputRef}
+                      onChange={handleTrekFileChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <Upload className="h-5 w-5 text-autumn-maple" />
+                    <div className="text-xs text-autumn-bark/85 font-medium">
+                      Click or drag trek banner photo from local device
+                    </div>
+                    <span className="text-[9px] text-autumn-bark/40">Supports PNG, JPG, JPEG, WEBP</span>
+                  </div>
+                )}
               </div>
 
               <div>
