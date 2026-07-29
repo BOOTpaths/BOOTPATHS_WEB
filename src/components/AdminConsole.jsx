@@ -20,7 +20,9 @@ import {
   Search,
   CheckCircle2,
   Eye,
-  Upload
+  Upload,
+  Phone,
+  Compass
 } from 'lucide-react';
 
 const BADGE_OPTIONS = [
@@ -40,7 +42,17 @@ const INCLUSION_OPTIONS = [
   'Wildlife Warden Permit'
 ];
 
-export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, onReturnToSite }) {
+export default function AdminConsole({ 
+  treks, 
+  setTreks, 
+  blogs = [], 
+  setBlogs, 
+  isCareersEnabled, 
+  setIsCareersEnabled, 
+  leadApplications = [], 
+  setLeadApplications, 
+  onReturnToSite 
+}) {
   // Session State
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [authView, setAuthView] = useState('login'); // 'login' | 'forgot_password'
@@ -261,6 +273,19 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
 
   const handleRejectBlog = (id) => {
     setBlogs(prev => prev.filter(b => b.id !== id));
+  };
+
+  // Lead Applications Moderation
+  const handleMarkContacted = (id) => {
+    setLeadApplications(prev => prev.map(l => l.id === id ? { ...l, status: 'Contacted' } : l));
+  };
+
+  const handleApproveLead = (id) => {
+    setLeadApplications(prev => prev.map(l => l.id === id ? { ...l, status: 'Approved' } : l));
+  };
+
+  const handleDeleteApplication = (id) => {
+    setLeadApplications(prev => prev.filter(l => l.id !== id));
   };
 
   // Toggle inclusion item in form
@@ -553,9 +578,19 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
           >
             Community Blogs ({blogs.filter(b => b.status === 'pending').length} Pending)
           </button>
+          <button
+            onClick={() => setActiveTab('leads')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'leads' 
+                ? 'border-autumn-maple text-autumn-maple' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Lead Applications ({leadApplications.filter(l => l.status === 'Pending').length} Pending)
+          </button>
         </div>
 
-        {activeTab === 'inventory' ? (
+        {activeTab === 'inventory' && (
           <>
             {/* HEADER & ACTION BAR */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
@@ -726,7 +761,9 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
           </div>
         </div>
       </>
-    ) : (
+    )}
+
+    {activeTab === 'blogs' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Header & Stats Banner */}
             <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -851,6 +888,190 @@ export default function AdminConsole({ treks, setTreks, blogs = [], setBlogs, on
                 </table>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* 3. LEAD CAREERS APPLICATIONS MANAGEMENT */}
+        {activeTab === 'leads' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Header & Global Settings Toggle Switch */}
+            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h1 className="font-outfit text-xl sm:text-2xl font-black text-autumn-bark">
+                  Lead Careers Management
+                </h1>
+                <p className="text-xs text-autumn-bark/70 mt-1">
+                  Manage candidate applications, view certifications and resumes, or toggle careers section visibility.
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-4 bg-[#EFE8D6]/60 border border-autumn-bark/10 rounded-xl px-4 py-2 shrink-0">
+                <span className="text-[10px] font-bold text-autumn-bark uppercase tracking-wider">
+                  Enable Careers Section
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsCareersEnabled(!isCareersEnabled)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                    isCareersEnabled ? 'bg-[#C1571F]' : 'bg-stone-500'
+                  }`}
+                  aria-label="Toggle Careers Section Visibility"
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      isCareersEnabled ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Metrics counter card */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="p-5 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm">
+                <span className="text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold block">Total Applications Received</span>
+                <span className="font-outfit text-2xl font-black text-autumn-bark mt-1 block">
+                  {leadApplications.length} Lead Applications
+                </span>
+              </div>
+              <div className="p-5 rounded-xl border border-autumn-amber/20 bg-autumn-amber/5 backdrop-blur-sm">
+                <span className="text-xxs uppercase tracking-wider text-[#C1571F] font-bold block">Pending Review</span>
+                <span className="font-outfit text-2xl font-black text-[#C1571F] mt-1 block">
+                  {leadApplications.filter(l => l.status === 'Pending').length} Candidates
+                </span>
+              </div>
+              <div className="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-sm">
+                <span className="text-xxs uppercase tracking-wider text-emerald-400 font-bold block">Approved Leads</span>
+                <span className="font-outfit text-2xl font-black text-emerald-400 mt-1 block">
+                  {leadApplications.filter(l => l.status === 'Approved').length} Guides
+                </span>
+              </div>
+            </div>
+
+            {/* Applications Table */}
+            <div className="rounded-2xl border border-autumn-bark/10 bg-[#F3ECDD]/70 backdrop-blur-xl shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs text-autumn-bark">
+                  <thead className="bg-[#EFE8D6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-autumn-bark/15">
+                    <tr>
+                      <th className="py-4 px-5">Candidate Name</th>
+                      <th className="py-4 px-5">Contact (WhatsApp)</th>
+                      <th className="py-4 px-5">Experience & Credentials</th>
+                      <th className="py-4 px-5">Regions</th>
+                      <th className="py-4 px-5">Date</th>
+                      <th className="py-4 px-5">Status</th>
+                      <th className="py-4 px-5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-autumn-bark/10">
+                    {leadApplications.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="py-12 text-center text-autumn-bark/50">
+                          No expedition lead applications received yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      leadApplications.map((app) => (
+                        <tr key={app.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                          {/* Full Name & Resume */}
+                          <td className="py-4 px-5 font-semibold">
+                            <div>
+                              <span className="font-outfit text-sm font-bold text-autumn-bark block">{app.fullName}</span>
+                              <span className="text-[10px] text-autumn-bark/50 block mt-0.5">{app.resumeFilename}</span>
+                            </div>
+                          </td>
+
+                          {/* Contact Info */}
+                          <td className="py-4 px-5 font-medium font-mono text-autumn-bark/80">
+                            {app.phone}
+                          </td>
+
+                          {/* Experience */}
+                          <td className="py-4 px-5">
+                            <p className="max-w-xs text-xxs text-autumn-bark/80 leading-relaxed line-clamp-2" title={app.experience}>
+                              {app.experience}
+                            </p>
+                          </td>
+
+                          {/* Regions */}
+                          <td className="py-4 px-5">
+                            <span className="text-[10px] font-bold text-[#E3A21E] bg-[#E3A21E]/10 border border-[#E3A21E]/20 px-2 py-0.5 rounded uppercase">
+                              {app.regions}
+                            </span>
+                          </td>
+
+                          {/* Date */}
+                          <td className="py-4 px-5 text-autumn-bark/60">
+                            {app.date}
+                          </td>
+
+                          {/* Status */}
+                          <td className="py-4 px-5">
+                            <span className={`inline-block px-2.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border ${
+                              app.status === 'Approved'
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                                : app.status === 'Contacted'
+                                ? 'bg-autumn-amber/10 border-autumn-amber/30 text-autumn-amber'
+                                : 'bg-autumn-rhodo/10 border-autumn-rhodo/30 text-autumn-rhodo'
+                            }`}>
+                              {app.status}
+                            </span>
+                          </td>
+
+                          {/* Actions */}
+                          <td className="py-4 px-5 text-right">
+                            <div className="flex items-center justify-end gap-2 shrink-0">
+                              {/* Resume Download */}
+                              <a
+                                href={app.resumeUrl}
+                                download={app.resumeFilename}
+                                className="h-8 px-2.5 rounded-lg border border-autumn-bark/20 bg-autumn-mist/5 flex items-center justify-center hover:bg-autumn-mist/10 text-autumn-bark text-[10px] font-bold uppercase tracking-wider transition-all gap-1"
+                                title="Download CV File"
+                              >
+                                <Upload className="h-3.5 w-3.5 rotate-180" />
+                                <span>CV</span>
+                              </a>
+
+                              {/* Mark as Contacted */}
+                              {app.status === 'Pending' && (
+                                <button
+                                  onClick={() => handleMarkContacted(app.id)}
+                                  className="h-8 w-8 rounded-lg border border-autumn-amber/30 bg-autumn-amber/10 flex items-center justify-center hover:bg-autumn-amber/20 text-[#C1571F] transition-all"
+                                  title="Mark as Contacted"
+                                >
+                                  <Phone className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+
+                              {/* Approve candidate */}
+                              {app.status !== 'Approved' && (
+                                <button
+                                  onClick={() => handleApproveLead(app.id)}
+                                  className="h-8 w-8 rounded-lg border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center hover:bg-emerald-500/20 text-emerald-400 transition-all"
+                                  title="Approve Expedition Lead"
+                                >
+                                  <Check className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+
+                              {/* Delete Application */}
+                              <button
+                                onClick={() => handleDeleteApplication(app.id)}
+                                className="h-8 w-8 rounded-lg border border-autumn-rhodo/30 bg-autumn-rhodo/10 flex items-center justify-center hover:bg-autumn-rhodo/20 text-autumn-rhodo transition-all"
+                                title="Delete Candidate Application"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
         )}
       </main>

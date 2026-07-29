@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AdminConsole from './components/AdminConsole';
 import BlogSection from './components/BlogSection';
+import LeadCareers from './components/LeadCareers';
 import { 
   Shield, 
   Leaf, 
@@ -502,6 +503,38 @@ export default function App() {
     localStorage.setItem('bootpaths_blogs', JSON.stringify(blogs));
   }, [blogs]);
 
+  // Careers lead application state definitions
+  const [isCareersEnabled, setIsCareersEnabled] = useState(() => {
+    const saved = localStorage.getItem('bootpaths_careers_enabled');
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const [leadApplications, setLeadApplications] = useState(() => {
+    const saved = localStorage.getItem('bootpaths_lead_applications');
+    if (saved) return JSON.parse(saved);
+    return [
+      {
+        id: 'lead-1',
+        fullName: 'Akash Kumar',
+        phone: '+91 98765 43210',
+        experience: 'Completed Basic Mountaineering Course (BMC) at NIM. Guided 15+ treks in Chikkamagaluru & Coorg over the past 3 years. Certified WFA First Responder.',
+        regions: 'Chikkamagaluru, Coorg',
+        resumeUrl: 'data:application/pdf;base64,JVBERi0xLjQKJdPr6gogMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nIC9QYWdlcyAyIDAgUiA+PiBlbmRvYmo...',
+        resumeFilename: 'Akash_Resume_BMC.pdf',
+        status: 'Pending',
+        date: '2026-07-28'
+      }
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bootpaths_careers_enabled', String(isCareersEnabled));
+  }, [isCareersEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('bootpaths_lead_applications', JSON.stringify(leadApplications));
+  }, [leadApplications]);
+
   const [detailedTrek, setDetailedTrek] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState(INITIAL_TREKS[0]);
@@ -779,6 +812,10 @@ export default function App() {
         setTreks={setTreks} 
         blogs={blogs}
         setBlogs={setBlogs}
+        isCareersEnabled={isCareersEnabled}
+        setIsCareersEnabled={setIsCareersEnabled}
+        leadApplications={leadApplications}
+        setLeadApplications={setLeadApplications}
         onReturnToSite={() => { window.location.hash = ''; }} 
       />
     );
@@ -816,6 +853,11 @@ export default function App() {
             <a href="#community" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Community
             </a>
+            {isCareersEnabled && (
+              <a href="#careers" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
+                Careers
+              </a>
+            )}
           </nav>
 
           {/* Nav CTA / User Avatar */}
@@ -899,6 +941,15 @@ export default function App() {
               >
                 Community
               </a>
+              {isCareersEnabled && (
+                <a 
+                  href="#careers" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
+                >
+                  Careers
+                </a>
+              )}
               <hr className="my-2 border-autumn-bark/10" />
               {user ? (
                 <div className="flex flex-col gap-3">
@@ -1712,6 +1763,12 @@ export default function App() {
 
         </div>
       </section>
+
+      <LeadCareers 
+        isCareersEnabled={isCareersEnabled}
+        leadApplications={leadApplications}
+        setLeadApplications={setLeadApplications}
+      />
 
       <BlogSection 
         blogs={blogs} 
