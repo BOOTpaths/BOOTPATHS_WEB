@@ -118,7 +118,7 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
   };
 
   return (
-    <section id="careers" className="relative bg-[#3A2A1E] py-24 px-6 md:px-12 text-[#F3ECDD] overflow-hidden border-t border-[#C1571F]/15">
+    <section id="careers" className="relative bg-[#F3ECDD] py-24 px-6 md:px-12 text-[#3A2A1E] overflow-hidden border-t border-[#C1571F]/15">
       {/* Background aesthetics */}
       <div className="absolute top-1/4 left-0 h-[300px] w-[300px] rounded-full bg-[#C1571F]/5 blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-1/3 right-0 h-[400px] w-[400px] rounded-full bg-[#E3A21E]/5 blur-[120px] pointer-events-none"></div>
@@ -126,12 +126,12 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
       <div className="mx-auto max-w-7xl relative z-10">
         {!isCareersEnabled ? (
           /* PAUSED BANNER STATE */
-          <div className="max-w-4xl mx-auto backdrop-blur-xl bg-[#2A1D14]/80 border border-[#C1571F]/30 rounded-3xl p-12 text-center shadow-2xl">
-            <Compass className="h-12 w-12 text-[#E3A21E] mx-auto animate-spin-slow mb-6" />
-            <h2 className="font-outfit text-2xl sm:text-3xl font-black text-[#F3ECDD]">
+          <div className="max-w-4xl mx-auto backdrop-blur-xl bg-[#EBE3D3] border border-[#3A2A1E]/10 rounded-3xl p-12 text-center shadow-sm">
+            <Compass className="h-12 w-12 text-[#C1571F] mx-auto animate-spin-slow mb-6" />
+            <h2 className="font-outfit text-2xl sm:text-3xl font-black text-[#3A2A1E]">
               Trek Lead Applications Paused
             </h2>
-            <p className="mt-4 text-sm text-[#F3ECDD]/75 leading-relaxed max-w-xl mx-auto">
+            <p className="mt-4 text-sm text-stone-700 leading-relaxed max-w-xl mx-auto">
               Our active recruitment batches for expedition leads are currently closed. Check back soon for upcoming season openings and decathlon partner spotlight workshops!
             </p>
           </div>
@@ -141,65 +141,65 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
             
             {/* Header Block */}
             <div className="text-center max-w-3xl mx-auto space-y-4">
-              <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#E3A21E]">
+              <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#C1571F]">
                 Join the Crew
               </span>
-              <h2 className="font-outfit text-3xl font-black tracking-tight text-[#F3ECDD] sm:text-4xl md:text-5xl">
+              <h2 className="font-outfit text-3xl font-black tracking-tight text-[#3A2A1E] sm:text-4xl md:text-5xl">
                 Lead the Ghats — Become a BOOTpaths Expedition Lead
               </h2>
-              <p className="text-sm text-[#F3ECDD]/70 leading-relaxed">
+              <p className="text-sm text-stone-700 leading-relaxed">
                 We are searching for certified mountaineers, first responders, and local trail experts to guide our exclusive premium batches across Southern India.
               </p>
             </div>
 
             {/* Features Row */}
             <div className="grid gap-8 md:grid-cols-3">
-              <div className="p-6 rounded-2xl bg-[#2A1D14]/80 border border-[#C1571F]/20 backdrop-blur-md space-y-4 hover:border-[#C1571F]/50 transition-colors">
+              <div className="p-6 rounded-2xl bg-[#EBE3D3] border border-[#3A2A1E]/10 shadow-sm space-y-4 hover:border-[#C1571F]/30 transition-all">
                 <div className="h-10 w-10 rounded-xl bg-[#E3A21E]/10 border border-[#E3A21E]/30 flex items-center justify-center text-[#E3A21E]">
                   <Award className="h-5 w-5" />
                 </div>
-                <h3 className="font-outfit text-lg font-bold text-[#F3ECDD]">Professional Growth & WFA</h3>
-                <p className="text-xs text-[#F3ECDD]/70 leading-relaxed">
+                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">Professional Growth & WFA</h3>
+                <p className="text-xs text-stone-700 leading-relaxed">
                   Get certified with Wilderness First Aid (WFA) courses, advanced navigation mapping, and search-and-rescue drills sponsored fully by BOOTpaths.
                 </p>
               </div>
 
-              <div className="p-6 rounded-2xl bg-[#2A1D14]/80 border border-[#C1571F]/20 backdrop-blur-md space-y-4 hover:border-[#C1571F]/50 transition-colors">
+              <div className="p-6 rounded-2xl bg-[#EBE3D3] border border-[#3A2A1E]/10 shadow-sm space-y-4 hover:border-[#C1571F]/30 transition-all">
                 <div className="h-10 w-10 rounded-xl bg-[#C1571F]/10 border border-[#C1571F]/30 flex items-center justify-center text-[#C1571F]">
                   <Shield className="h-5 w-5" />
                 </div>
-                <h3 className="font-outfit text-lg font-bold text-[#F3ECDD]">Decathlon Gear Sponsorship</h3>
-                <p className="text-xs text-[#F3ECDD]/70 leading-relaxed">
+                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">Decathlon Gear Sponsorship</h3>
+                <p className="text-xs text-stone-700 leading-relaxed">
                   Equip yourself with elite Quechua technical layers, waterproof backpacks, carbon trekking poles, and tents sponsored for all active guides.
                 </p>
               </div>
 
-              <div className="p-6 rounded-2xl bg-[#2A1D14]/80 border border-[#C1571F]/20 backdrop-blur-md space-y-4 hover:border-[#C1571F]/50 transition-colors">
-                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="p-6 rounded-2xl bg-[#EBE3D3] border border-[#3A2A1E]/10 shadow-sm space-y-4 hover:border-[#C1571F]/30 transition-all">
+                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600">
                   <Leaf className="h-5 w-5" />
                 </div>
-                <h3 className="font-outfit text-lg font-bold text-[#F3ECDD]">Eco-Trail Stewardship</h3>
-                <p className="text-xs text-[#F3ECDD]/70 leading-relaxed">
+                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">Eco-Trail Stewardship</h3>
+                <p className="text-xs text-stone-700 leading-relaxed">
                   Lead carbon-neutral forest cleanups and nature awareness programs as a certified steward under the BOOTpaths Green Trails initiative.
                 </p>
               </div>
             </div>
 
             {/* Checklist & CTA Split */}
-            <div className="rounded-3xl border border-[#C1571F]/20 bg-[#2A1D14]/50 p-8 md:p-12 backdrop-blur-lg flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
+            <div className="rounded-3xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-8 md:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
               <div className="space-y-6 max-w-lg">
-                <h3 className="font-outfit text-xl font-bold text-[#F3ECDD]">Expedition Lead Eligibility Checklist</h3>
-                <ul className="space-y-3.5 text-xs text-[#F3ECDD]/85">
+                <h3 className="font-outfit text-xl font-bold text-[#3A2A1E]">Expedition Lead Eligibility Checklist</h3>
+                <ul className="space-y-3.5 text-xs text-stone-700">
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-[#E3A21E] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4.5 w-4.5 text-[#C1571F] shrink-0 mt-0.5" />
                     <span>Basic Mountaineering Course (BMC) or Advanced (AMC) certified from recognized institutions (HMI, NIM, JIM, etc.) preferred.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-[#E3A21E] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4.5 w-4.5 text-[#C1571F] shrink-0 mt-0.5" />
                     <span>In-depth trail routing, water point, and navigation familiarity with Western Ghats ridges (Chikkamagaluru, Coorg, Wayanad).</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-[#E3A21E] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4.5 w-4.5 text-[#C1571F] shrink-0 mt-0.5" />
                     <span>Physical fitness capability to traverse 15km+ per day bearing 12kg technical crew load packs.</span>
                   </li>
                 </ul>
@@ -208,7 +208,7 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
               <div className="w-full md:w-auto shrink-0">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="w-full md:w-auto h-14 inline-flex items-center justify-center gap-2 rounded-xl bg-[#C1571F] hover:bg-[#a44717] text-white px-8 font-outfit text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(193,87,31,0.25)] hover:shadow-[0_4px_25px_rgba(193,87,31,0.4)]"
+                  className="w-full md:w-auto h-14 inline-flex items-center justify-center gap-2 rounded-xl bg-[#C1571F] hover:bg-[#a44717] text-[#3A2A1E] px-8 font-outfit text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(193,87,31,0.15)]"
                 >
                   <Compass className="h-4.5 w-4.5" />
                   Apply as Expedition Lead

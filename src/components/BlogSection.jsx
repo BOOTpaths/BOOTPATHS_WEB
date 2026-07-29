@@ -106,7 +106,7 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
   };
 
   return (
-    <section id="blog" className="relative bg-[#3A2A1E] py-24 px-6 md:px-12 text-[#F3ECDD] overflow-hidden">
+    <section id="blog" className="relative bg-[#F3ECDD] py-24 px-6 md:px-12 text-[#3A2A1E] overflow-hidden border-t border-[#C1571F]/15">
       
       {/* Background Subtle Gradient Blobs for Ecotourism Depth */}
       <div className="absolute top-1/3 right-0 h-[400px] w-[400px] rounded-full bg-[#C1571F]/5 blur-[120px] pointer-events-none"></div>
@@ -117,13 +117,13 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#C1571F]/20 pb-8 mb-16">
           <div>
-            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#E3A21E]">
+            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#C1571F]">
               Community Voices
             </span>
-            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-[#F3ECDD] sm:text-4xl md:text-5xl">
+            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-[#3A2A1E] sm:text-4xl md:text-5xl">
               Tales from the Trail
             </h2>
-            <p className="mt-4 max-w-xl text-sm text-[#F3ECDD]/70">
+            <p className="mt-4 max-w-xl text-sm text-stone-700">
               Read organic stories, gear checklists, and mountaineering guides written by our certified crew and community explorers.
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
           <div>
             <button
               onClick={handleShareStoryClick}
-              className="inline-flex h-12 items-center gap-2 rounded-lg bg-[#C1571F] hover:bg-[#a44717] text-white px-6 font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(193,87,31,0.25)] hover:shadow-[0_4px_25px_rgba(193,87,31,0.4)]"
+              className="inline-flex h-12 items-center gap-2 rounded-lg bg-[#C1571F] hover:bg-[#a44717] text-[#3A2A1E] font-bold px-6 font-outfit text-xs uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(193,87,31,0.15)]"
             >
               <BookOpen className="h-4 w-4" />
               Share Your Story
@@ -141,15 +141,15 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
 
         {/* Blog Posts Grid */}
         {publishedBlogs.length === 0 ? (
-          <div className="text-center py-16 backdrop-blur-xl bg-[#3A2A1E]/40 border border-[#C1571F]/10 rounded-2xl">
-            <p className="text-[#F3ECDD]/60">No published articles yet. Be the first to share your story!</p>
+          <div className="text-center py-16 bg-[#EBE3D3] border border-[#3A2A1E]/10 rounded-2xl">
+            <p className="text-stone-700">No published articles yet. Be the first to share your story!</p>
           </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {publishedBlogs.map((post) => (
               <article 
                 key={post.id}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#C1571F]/20 bg-[#3A2A1E]/80 backdrop-blur-xl shadow-xl transition-all duration-300 hover:border-[#C1571F]/50 hover:shadow-2xl flex-1"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] shadow-sm transition-all duration-300 hover:border-[#C1571F]/30 hover:shadow-md flex-1"
               >
                 {/* Image Section */}
                 <div className="relative aspect-[16/10] overflow-hidden shrink-0">
@@ -169,28 +169,28 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
                 <div className="p-6 flex flex-col flex-1 justify-between">
                   <div>
                     {/* Meta Header */}
-                    <div className="flex items-center gap-2 text-xxs uppercase tracking-wider text-[#F3ECDD]/50">
+                    <div className="flex items-center gap-2 text-xxs uppercase tracking-wider text-stone-600/70">
                       <span>{post.date}</span>
                       <span>•</span>
-                      <span className="text-[#E3A21E] font-bold px-1.5 py-0.5 rounded bg-[#E3A21E]/10 border border-[#E3A21E]/20">
+                      <span className="text-[#C1571F] font-bold px-1.5 py-0.5 rounded bg-[#C1571F]/10 border border-[#C1571F]/20">
                         {post.authorBadge}
                       </span>
                     </div>
 
-                    <h3 className="mt-3 font-outfit text-lg font-bold leading-snug text-[#F3ECDD] group-hover:text-[#E3A21E] transition-colors line-clamp-2">
+                    <h3 className="mt-3 font-outfit text-lg font-bold leading-snug text-[#3A2A1E] group-hover:text-[#C1571F] transition-colors line-clamp-2">
                       {post.title}
                     </h3>
 
-                    <p className="mt-3 text-xs text-[#F3ECDD]/75 line-clamp-3 leading-relaxed">
+                    <p className="mt-3 text-xs text-stone-700 line-clamp-3 leading-relaxed">
                       {post.content}
                     </p>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-[#C1571F]/10 flex items-center justify-between">
-                    <span className="text-xxs text-[#F3ECDD]/60 font-semibold">By {post.author}</span>
+                  <div className="mt-6 pt-4 border-t border-[#3A2A1E]/10 flex items-center justify-between">
+                    <span className="text-xxs text-stone-600 font-semibold">By {post.author}</span>
                     <button
                       onClick={() => setSelectedBlog(post)}
-                      className="inline-flex items-center gap-1.5 font-outfit text-xxs font-bold uppercase tracking-wider text-[#C1571F] group-hover:text-[#E3A21E] transition-colors"
+                      className="inline-flex items-center gap-1.5 font-outfit text-xxs font-bold uppercase tracking-wider text-[#C1571F] group-hover:text-[#a44717] transition-colors"
                     >
                       Read Full Story <ArrowRight className="h-3 w-3" />
                     </button>
