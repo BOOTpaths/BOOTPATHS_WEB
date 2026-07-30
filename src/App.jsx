@@ -827,16 +827,12 @@ export default function App() {
       {/* 1. NAVIGATION BAR */}
       <header className="sticky top-0 z-40 w-full border-b border-autumn-bark/10 bg-autumn-mist/70 backdrop-blur-md transition-all duration-300">
         <div className="mx-auto flex max-w-7xl h-20 items-center justify-between px-6 md:px-12">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group">
+          <a href="#" className="flex items-center group">
             <img 
-              src="logo.jpg" 
-              alt="BOOTpaths Logo" 
-              className="h-10 w-10 rounded-full object-cover border border-autumn-bark/10 transition-transform duration-300 group-hover:scale-105 group-hover:border-autumn-maple/50"
+              src="assets/logo-dark.png" 
+              alt="BOOTpaths" 
+              className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-102"
             />
-            <span className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-bark md:text-3xl">
-              BOOT<span className="text-autumn-maple">paths</span>
-            </span>
           </a>
 
           {/* Desktop Nav Links */}
@@ -1786,15 +1782,12 @@ export default function App() {
           
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-6">
-            <a href="#" className="flex items-center gap-3">
+            <a href="#" className="flex items-center">
               <img 
-                src="logo.jpg" 
-                alt="BOOTpaths Logo" 
-                className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
+                src="assets/logo-dark.png" 
+                alt="BOOTpaths" 
+                className="h-8 md:h-10 w-auto object-contain"
               />
-              <span className="font-outfit text-xl font-black uppercase tracking-wider text-autumn-bark">
-                BOOT<span className="text-autumn-maple">paths</span>
-              </span>
             </a>
             <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
               We guide adventurers to unexplored peaks and premium trails across Southern India. Fully vetted batches, certified mountain leads, and environment first.
@@ -1861,15 +1854,12 @@ export default function App() {
             <div className="bg-autumn-mist p-6 flex justify-between items-center border-b border-autumn-bark/10">
               <div className="flex items-center gap-3">
                 <img 
-                  src="logo.jpg" 
-                  alt="BOOTpaths Logo" 
-                  className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
+                  src="assets/logo-dark.png" 
+                  alt="BOOTpaths" 
+                  className="h-8 w-auto object-contain"
                 />
                 <div>
-                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark">
-                    BOOTpaths
-                  </span>
-                  <span className="block text-xxs text-autumn-bark/50 tracking-wider">RAZORPAY SECURE API</span>
+                  <span className="block text-[8px] text-autumn-bark/50 tracking-wider uppercase font-bold mt-0.5">RAZORPAY SECURE API</span>
                 </div>
               </div>
               <button 
@@ -2113,14 +2103,11 @@ export default function App() {
             <div className="bg-autumn-mist/30 p-5 flex justify-between items-center border-b border-autumn-bark/10">
               <div className="flex items-center gap-3">
                 <img 
-                  src="logo.jpg" 
-                  alt="BOOTpaths Logo" 
-                  className="h-8 w-8 rounded-full object-cover border border-autumn-bark/10"
+                  src="assets/logo-light.png" 
+                  alt="BOOTpaths" 
+                  className="h-8 w-auto object-contain"
                 />
                 <div>
-                  <span className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark drop-shadow-sm">
-                    BOOTpaths Identity
-                  </span>
                   <span className="block text-[10px] text-autumn-maple tracking-wider font-extrabold uppercase drop-shadow-sm">Decathlon Partner Portal</span>
                 </div>
               </div>

@@ -320,14 +320,14 @@ export default function AdminConsole({
           {/* Header */}
           <div className="bg-[#EFE8D6]/80 p-6 border-b border-autumn-bark/10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-autumn-maple/20 border border-autumn-maple/40 flex items-center justify-center text-autumn-maple">
-                <ShieldAlert className="h-5 w-5" />
-              </div>
+              <img 
+                src="assets/logo-dark.png" 
+                alt="BOOTpaths" 
+                className="h-8 w-auto object-contain"
+              />
+              <div className="h-px w-4 bg-autumn-bark/20 rotate-90"></div>
               <div>
-                <h2 className="font-outfit text-base font-bold uppercase tracking-wider text-autumn-bark">
-                  BOOTpaths <span className="text-autumn-maple">Console</span>
-                </h2>
-                <span className="text-xxs text-autumn-bark/60 block font-mono">RBAC Admin Access Portal</span>
+                <span className="text-[10px] text-autumn-bark/60 block font-mono uppercase font-bold tracking-wider">Console Login</span>
               </div>
             </div>
             {onReturnToSite && (
@@ -515,14 +515,17 @@ export default function AdminConsole({
         <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-8">
           
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-3 w-3 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <span className="font-outfit text-base font-black uppercase tracking-wider text-autumn-bark">
-                BOOT<span className="text-autumn-maple">paths</span> Console
-              </span>
+              <img 
+                src="assets/logo-dark.png" 
+                alt="BOOTpaths" 
+                className="h-7 w-auto object-contain"
+              />
+              <span className="text-[10px] text-autumn-bark/60 font-mono uppercase font-bold tracking-wider hidden sm:inline">Console</span>
             </div>
             
             <div className="hidden md:flex items-center gap-2 pl-4 border-l border-autumn-bark/10 text-xs text-autumn-bark/70">
