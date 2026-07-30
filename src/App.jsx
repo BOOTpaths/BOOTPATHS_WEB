@@ -1063,7 +1063,7 @@ export default function App() {
         </div>
 
         {/* Floating Tiles Grid Switcher */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 z-20 backdrop-blur-md bg-[#3A2A1E]/60 border border-[#C1571F]/30 rounded-2xl p-2.5 shadow-2xl flex flex-col items-center sm:items-start max-w-[95vw] sm:max-w-sm">
+        <div className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 z-20 backdrop-blur-md bg-[#3A2A1E]/60 border border-[#C1571F]/30 rounded-2xl p-2.5 shadow-2xl flex-col items-center sm:items-start max-w-[95vw] sm:max-w-sm">
           <div className="text-[9px] font-bold uppercase tracking-widest text-[#F3ECDD]/60 mb-2 px-1">
             Expedition Views
           </div>
