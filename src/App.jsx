@@ -827,12 +827,17 @@ export default function App() {
       {/* 1. NAVIGATION BAR */}
       <header className="sticky top-0 z-40 w-full border-b border-autumn-bark/10 bg-autumn-mist/70 backdrop-blur-md transition-all duration-300">
         <div className="mx-auto flex max-w-7xl h-20 items-center justify-between px-6 md:px-12">
-          <a href="#" className="flex items-center group">
-            <img 
-              src="assets/logo-dark.png" 
-              alt="BOOTpaths" 
-              className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-102"
-            />
+          <a href="#" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-[#2A1D14] flex items-center justify-center shadow-md border border-[#C1571F]/30 transition-transform duration-300 group-hover:scale-105">
+              <img 
+                src="assets/logo-dark.png" 
+                alt="BOOTpaths Logo" 
+                className="w-full h-full object-cover scale-105" 
+              />
+            </div>
+            <span className="font-outfit text-xl font-extrabold tracking-tight text-[#3A2A1E]">
+              BOOT<span className="text-[#C1571F]">paths</span>
+            </span>
           </a>
 
           {/* Desktop Nav Links */}
