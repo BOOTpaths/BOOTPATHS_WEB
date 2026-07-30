@@ -421,13 +421,6 @@ const INITIAL_TREKS = [
   }
 ];
 
-const SAFETY_STANDARDS = [
-  'Certified Wilderness First Aid Leads (WFR)',
-  'Oxygen cylinders & medical rescue kits carried on all high trails',
-  'Eco-waste clearance matching Leave No Trace (LNT) guidelines',
-  'Decathlon certified rugged outdoor camping equipment only',
-  'Real-time emergency tracking and satellite coordination (where supported)'
-];
 
 const INSTAGRAM_POSTS = [
   {
@@ -845,9 +838,7 @@ export default function App() {
             <a href="#upcoming-treks" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Upcoming Treks
             </a>
-            <a href="#safety-standards" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
-              Safety Standards
-            </a>
+
             <a href="#advantage" className="font-outfit text-sm font-medium tracking-wide text-autumn-bark/80 transition-colors hover:text-autumn-maple">
               Our Crew
             </a>
@@ -921,13 +912,7 @@ export default function App() {
               >
                 Upcoming Treks
               </a>
-              <a 
-                href="#safety-standards" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="font-outfit text-lg font-medium text-autumn-bark/80 hover:text-autumn-maple"
-              >
-                Safety Standards
-              </a>
+
               <a 
                 href="#advantage" 
                 onClick={() => setMobileMenuOpen(false)}
@@ -1072,12 +1057,7 @@ export default function App() {
               Explore Trails
               <ArrowRight className="h-4.5 w-4.5 transition-transform hover:translate-x-1" />
             </button>
-            <a 
-              href="#safety-standards" 
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-lg border border-[#F3ECDD]/10 bg-[#3A2A1E]/30 px-8 font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] backdrop-blur-sm transition-all duration-300 hover:bg-[#3A2A1E] hover:text-white"
-            >
-              Safety Standards
-            </a>
+
           </div>
 
         </div>
@@ -1647,56 +1627,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* SAFETY STANDARDS SECTION (Eco-Portal Style details) */}
-      <section id="safety-standards" className="relative border-t border-autumn-bark/10 bg-[#EFE8D6]/10 py-24 px-6 md:px-12">
-        <div className="mx-auto max-w-5xl">
-          <div className="grid gap-12 md:grid-cols-12 items-center">
-            
-            {/* Left: Certifications Grid */}
-            <div className="md:col-span-5 space-y-6">
-              <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
-                Eco-Tourism Protocols
-              </span>
-              <h2 className="font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
-                Rigorous Safety Checklists
-              </h2>
-              <p className="text-sm leading-relaxed text-autumn-bark/70">
-                Structured like official state forest eco-tourism divisions. Every single batch goes through strict validation before departure.
-              </p>
-
-              <div className="flex items-center gap-4 rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/30 p-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-autumn-maple/10 text-autumn-maple">
-                  <Shield className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-autumn-bark/80 uppercase tracking-wider">Forest Dept. Authorized</h4>
-                  <p className="text-xxs text-autumn-bark5 mt-0.5">Permits and approvals sorted. No illegal access trails.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Checklist Cards */}
-            <div className="md:col-span-7 rounded-xl border border-autumn-bark/10 bg-autumn-mist p-8">
-              <h3 className="font-outfit text-sm font-bold uppercase tracking-widest text-autumn-bark/70 mb-6 border-b border-autumn-bark/10 pb-3 flex items-center gap-2">
-                <AlertTriangle className="h-4.5 w-4.5 text-autumn-maple" />
-                Wilderness Safety Standards
-              </h3>
-              
-              <ul className="space-y-4">
-                {SAFETY_STANDARDS.map((std, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-autumn-maple text-[#F3ECDD] mt-0.5">
-                      <Check className="h-3 w-3 stroke-[3]" />
-                    </div>
-                    <span className="text-xs text-autumn-bark/80 leading-normal">{std}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-          </div>
-        </div>
-      </section>
 
       {/* 6. INSTAGRAM COMMUNITY FEED */}
       <section id="community" className="relative border-t border-autumn-bark/10 bg-autumn-mist py-24 px-6 md:px-12">
@@ -1816,11 +1746,13 @@ export default function App() {
 
           {/* Links 2 */}
           <div className="space-y-4">
-            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Safety & Standards</h4>
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Company Info</h4>
             <ul className="space-y-2.5 text-autumn-bark/50">
-              <li><a href="#safety-standards" className="hover:text-autumn-maple transition-colors">Wilderness Medicine</a></li>
-              <li><a href="#safety-standards" className="hover:text-autumn-maple transition-colors">Green Trails Policy</a></li>
-              <li><a href="#advantage" className="hover:text-autumn-maple transition-colors">Decathlon Partnership</a></li>
+              <li><a href="#advantage" className="hover:text-autumn-maple transition-colors">Our Crew & Advantage</a></li>
+              <li><a href="#community" className="hover:text-autumn-maple transition-colors">Community Stories</a></li>
+              {isCareersEnabled && (
+                <li><a href="#careers" className="hover:text-autumn-maple transition-colors">Careers for Leads</a></li>
+              )}
             </ul>
           </div>
 
