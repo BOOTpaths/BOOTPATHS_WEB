@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminConsole from './components/AdminConsole';
 import BlogSection from './components/BlogSection';
 import LeadCareers from './components/LeadCareers';
+import TermsOfService from './components/TermsOfService';
 import { 
   Shield, 
   Leaf, 
@@ -470,11 +471,21 @@ const EXPEDITION_RECORDS = [
 export default function App() {
   const [treks, setTreks] = useState(INITIAL_TREKS);
   const [currentHash, setCurrentHash] = useState(typeof window !== 'undefined' ? window.location.hash : '');
+  const [isTermsRoute, setIsTermsRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/terms') : false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
   useEffect(() => {
-    const handleHashChange = () => setCurrentHash(window.location.hash);
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash);
+      setIsTermsRoute(window.location.pathname.endsWith('/terms'));
+    };
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
+    };
   }, []);
 
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
@@ -762,6 +773,7 @@ export default function App() {
     if (!name.trim()) errors.name = 'Full name is required';
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errors.email = 'Valid email is required';
     if (!phone.trim() || phone.length < 10) errors.phone = '10-digit phone number is required';
+    if (!hasAgreedToTerms) errors.terms = 'You must agree to the Terms of Service to book';
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -794,9 +806,26 @@ export default function App() {
     setName('');
     setEmail('');
     setPhone('');
+    setHasAgreedToTerms(false);
     setNumTrekkers(1);
     setIsDashboardOpen(true); // Open dashboard to view the confirmed booking
   };
+
+  if (isTermsRoute || currentHash === '#/terms' || currentHash === '#terms') {
+    return (
+      <TermsOfService 
+        onClose={() => {
+          if (isTermsRoute) {
+            window.history.pushState(null, '', '/');
+            setIsTermsRoute(false);
+          } else {
+            window.location.hash = '';
+          }
+        }}
+        isFullPage={true}
+      />
+    );
+  }
 
   if (currentHash === '#admin') {
     return (
@@ -1526,6 +1555,30 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* Terms of Service Checkbox */}
+                <div className="mt-4">
+                  <div className="flex items-start gap-2.5">
+                    <input 
+                      type="checkbox" 
+                      id="agree-tos" 
+                      checked={hasAgreedToTerms} 
+                      onChange={(e) => setHasAgreedToTerms(e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-autumn-bark/20 text-[#C1571F] focus:ring-[#C1571F] accent-[#C1571F]"
+                    />
+                    <label htmlFor="agree-tos" className="text-xxs text-autumn-bark/70 leading-normal">
+                      I have read and agree to the{' '}
+                      <button 
+                        type="button" 
+                        onClick={() => setIsTermsModalOpen(true)}
+                        className="text-[#C1571F] font-bold hover:underline bg-transparent border-none p-0 inline-block align-baseline"
+                      >
+                        BOOTpaths Terms of Service
+                      </button>
+                    </label>
+                  </div>
+                  {formErrors.terms && <p className="text-red-455 text-xxs mt-1">{formErrors.terms}</p>}
+                </div>
+
                 {/* Razorpay Simulation Trigger Button */}
                 <button
                   type="submit"
@@ -1773,13 +1826,30 @@ export default function App() {
             &copy; {new Date().getFullYear()} BOOTpaths Adventure Labs. All rights reserved.
           </div>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-autumn-bark/70">Terms of Service</a>
+            <a 
+              href="#/terms" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/terms';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Terms of Service
+            </a>
             <a href="#" className="hover:text-autumn-bark/70">Privacy Policy</a>
             <a href="#" className="hover:text-autumn-bark/70">Refund Guidelines</a>
             <a href="#admin" className="hover:text-autumn-maple font-bold transition-colors">Admin Console</a>
           </div>
         </div>
       </footer>
+
+      {/* TERMS OF SERVICE MODAL OVERLAY */}
+      {isTermsModalOpen && (
+        <TermsOfService 
+          onClose={() => setIsTermsModalOpen(false)} 
+          isFullPage={false} 
+        />
+      )}
 
       {/* RAZORPAY SECURE PAYMENT PORTAL SIMULATOR MODAL */}
       {isRazorpayModalOpen && (
