@@ -4,6 +4,7 @@ import BlogSection from './components/BlogSection';
 import LeadCareers from './components/LeadCareers';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import RefundPolicy from './components/RefundPolicy';
 import { 
   Shield, 
   Leaf, 
@@ -474,6 +475,7 @@ export default function App() {
   const [currentHash, setCurrentHash] = useState(typeof window !== 'undefined' ? window.location.hash : '');
   const [isTermsRoute, setIsTermsRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/terms') : false);
   const [isPrivacyRoute, setIsPrivacyRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/privacy') : false);
+  const [isRefundRoute, setIsRefundRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/refund') : false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
@@ -482,6 +484,7 @@ export default function App() {
       setCurrentHash(window.location.hash);
       setIsTermsRoute(window.location.pathname.endsWith('/terms'));
       setIsPrivacyRoute(window.location.pathname.endsWith('/privacy'));
+      setIsRefundRoute(window.location.pathname.endsWith('/refund'));
     };
     window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('popstate', handleHashChange);
@@ -837,6 +840,21 @@ export default function App() {
           if (isPrivacyRoute) {
             window.history.pushState(null, '', '/');
             setIsPrivacyRoute(false);
+          } else {
+            window.location.hash = '';
+          }
+        }}
+      />
+    );
+  }
+
+  if (isRefundRoute || currentHash === '#/refund' || currentHash === '#refund') {
+    return (
+      <RefundPolicy 
+        onClose={() => {
+          if (isRefundRoute) {
+            window.history.pushState(null, '', '/');
+            setIsRefundRoute(false);
           } else {
             window.location.hash = '';
           }
@@ -1864,7 +1882,16 @@ export default function App() {
             >
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-autumn-bark/70">Refund Guidelines</a>
+            <a 
+              href="#/refund" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/refund';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Cancellation & Refund Policy
+            </a>
             <a href="#admin" className="hover:text-autumn-maple font-bold transition-colors">Admin Console</a>
           </div>
         </div>
