@@ -3,6 +3,7 @@ import AdminConsole from './components/AdminConsole';
 import BlogSection from './components/BlogSection';
 import LeadCareers from './components/LeadCareers';
 import TermsOfService from './components/TermsOfService';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import { 
   Shield, 
   Leaf, 
@@ -472,6 +473,7 @@ export default function App() {
   const [treks, setTreks] = useState(INITIAL_TREKS);
   const [currentHash, setCurrentHash] = useState(typeof window !== 'undefined' ? window.location.hash : '');
   const [isTermsRoute, setIsTermsRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/terms') : false);
+  const [isPrivacyRoute, setIsPrivacyRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/privacy') : false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
@@ -479,6 +481,7 @@ export default function App() {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash);
       setIsTermsRoute(window.location.pathname.endsWith('/terms'));
+      setIsPrivacyRoute(window.location.pathname.endsWith('/privacy'));
     };
     window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('popstate', handleHashChange);
@@ -823,6 +826,21 @@ export default function App() {
           }
         }}
         isFullPage={true}
+      />
+    );
+  }
+
+  if (isPrivacyRoute || currentHash === '#/privacy' || currentHash === '#privacy') {
+    return (
+      <PrivacyPolicy 
+        onClose={() => {
+          if (isPrivacyRoute) {
+            window.history.pushState(null, '', '/');
+            setIsPrivacyRoute(false);
+          } else {
+            window.location.hash = '';
+          }
+        }}
       />
     );
   }
@@ -1836,7 +1854,16 @@ export default function App() {
             >
               Terms of Service
             </a>
-            <a href="#" className="hover:text-autumn-bark/70">Privacy Policy</a>
+            <a 
+              href="#/privacy" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/privacy';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Privacy Policy
+            </a>
             <a href="#" className="hover:text-autumn-bark/70">Refund Guidelines</a>
             <a href="#admin" className="hover:text-autumn-maple font-bold transition-colors">Admin Console</a>
           </div>
