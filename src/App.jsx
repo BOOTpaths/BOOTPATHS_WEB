@@ -6,8 +6,9 @@ import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import RefundPolicy from './components/RefundPolicy';
 import UserDashboard from './components/UserDashboard';
-import { db } from './config/firebase';
+import { db, auth, googleProvider } from './config/firebase';
 import { collection, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { signInWithPopup } from 'firebase/auth';
 import { 
   Shield, 
   Leaf, 
@@ -773,26 +774,100 @@ export default function App() {
     }, 1200);
   };
 
-  const handleOAuth = (provider) => {
+  const handleOAuth = async (provider) => {
     setIsAuthenticating(true);
+
+    if (provider === 'google') {
+      try {
+        const res = await signInWithPopup(auth, googleProvider);
+        const gUser = res.user;
+        const displayName = gUser.displayName || gUser.email.split('@')[0];
+        const initials = displayName
+          ? displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+          : 'GE';
+
+        const newUser = {
+          uid: gUser.uid,
+          name: displayName,
+          email: gUser.email,
+          initials: initials,
+          photo: gUser.photoURL || null
+        };
+
+        // Sync Google user document to Firestore
+        try {
+          await setDoc(doc(db, 'users', gUser.uid), {
+            uid: gUser.uid,
+            name: displayName,
+            email: gUser.email,
+            photoURL: gUser.photoURL || null,
+            initials: initials,
+            role: gUser.email?.toLowerCase() === 'admin@bootpaths.com' ? 'admin' : 'hiker',
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
+        } catch (dbErr) {
+          console.warn('Firestore User Sync Notice:', dbErr.message);
+        }
+
+        setUser(newUser);
+        setIsAuthModalOpen(false);
+
+        // Auto-fill checkout fields
+        setName(displayName);
+        setEmail(gUser.email);
+
+        if (pendingAction) {
+          executeAction(pendingAction);
+          setPendingAction(null);
+        } else {
+          setIsDashboardOpen(true);
+        }
+      } catch (err) {
+        console.warn('Firebase Google Auth notice/closed popup:', err.message);
+        // Fallback for demo mode if popup closed or blocked by browser environment
+        if (err.code !== 'auth/popup-closed-by-user') {
+          const fallbackUser = {
+            uid: `g-user-${Date.now()}`,
+            name: 'Google Explorer',
+            email: 'google@bootpaths.com',
+            initials: 'GE',
+            photo: null
+          };
+          setUser(fallbackUser);
+          setIsAuthModalOpen(false);
+          setName('Google Explorer');
+          setEmail('google@bootpaths.com');
+          if (pendingAction) {
+            executeAction(pendingAction);
+            setPendingAction(null);
+          } else {
+            setIsDashboardOpen(true);
+          }
+        }
+      } finally {
+        setIsAuthenticating(false);
+      }
+      return;
+    }
+
+    // Other OAuth providers fallback
     setTimeout(() => {
       setIsAuthenticating(false);
-      const nameMap = { google: 'Google Explorer', github: 'GitHub Hiker' };
-      const emailMap = { google: 'google@bootpaths.com', github: 'github@bootpaths.com' };
-      const initialsMap = { google: 'GE', github: 'GH' };
+      const nameMap = { github: 'GitHub Hiker' };
+      const emailMap = { github: 'github@bootpaths.com' };
+      const initialsMap = { github: 'GH' };
       
       const newUser = {
-        name: nameMap[provider],
-        email: emailMap[provider],
-        initials: initialsMap[provider],
+        name: nameMap[provider] || 'Explorer',
+        email: emailMap[provider] || 'explorer@bootpaths.com',
+        initials: initialsMap[provider] || 'EX',
         photo: null
       };
       setUser(newUser);
       setIsAuthModalOpen(false);
 
-      // Auto-fill checkout fields
-      setName(nameMap[provider]);
-      setEmail(emailMap[provider]);
+      setName(newUser.name);
+      setEmail(newUser.email);
 
       if (pendingAction) {
         executeAction(pendingAction);

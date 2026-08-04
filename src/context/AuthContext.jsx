@@ -2,11 +2,12 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signInWithPopup,
   signOut 
 } from 'firebase/auth';
 import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebase';
+import { auth, db, googleProvider } from '../config/firebase';
 
 const AuthContext = createContext();
 
@@ -40,10 +41,15 @@ export function AuthProvider({ children }) {
             if (data.role === 'admin') setIsAdmin(true);
           } else {
             // Create user document if it doesn't exist yet
+            const initials = user.displayName
+              ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+              : user.email[0].toUpperCase();
             const initialUserData = {
               uid: user.uid,
               name: user.displayName || user.email.split('@')[0],
               email: user.email,
+              photoURL: user.photoURL || null,
+              initials: initials,
               walletBalance: 0,
               role: adminFlag ? 'admin' : 'hiker',
               createdAt: new Date().toISOString()
@@ -95,10 +101,12 @@ export function AuthProvider({ children }) {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       if (res.user) {
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
         await setDoc(doc(db, 'users', res.user.uid), {
           uid: res.user.uid,
           name: name,
           email: email,
+          initials: initials,
           walletBalance: 0,
           role: 'hiker',
           createdAt: new Date().toISOString()
@@ -110,6 +118,32 @@ export function AuthProvider({ children }) {
       const mockUser = { uid: `user-${Date.now()}`, email, displayName: name };
       setCurrentUser(mockUser);
       return { user: mockUser };
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
+      if (res.user) {
+        const userDocRef = doc(db, 'users', res.user.uid);
+        const initials = res.user.displayName
+          ? res.user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+          : res.user.email[0].toUpperCase();
+
+        await setDoc(userDocRef, {
+          uid: res.user.uid,
+          name: res.user.displayName || res.user.email.split('@')[0],
+          email: res.user.email,
+          photoURL: res.user.photoURL || null,
+          initials: initials,
+          role: res.user.email?.toLowerCase() === 'admin@bootpaths.com' ? 'admin' : 'hiker',
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      }
+      return res;
+    } catch (err) {
+      console.warn('Firebase Google Login Notice:', err.message);
+      throw err;
     }
   };
 
@@ -134,6 +168,7 @@ export function AuthProvider({ children }) {
     loading,
     login,
     signup,
+    loginWithGoogle,
     logout
   };
 

@@ -108,8 +108,12 @@ export default function UserDashboard({
         {/* Sidebar / Navigation Tabs */}
         <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#3A2A1E]/10 bg-[#EBE3D3]/60 p-6 flex flex-col">
           <div className="flex items-center gap-3 mb-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#C1571F]/20 text-[#C1571F] font-outfit text-xl font-bold border border-[#C1571F]/30 shadow-[0_0_15px_rgba(193,87,31,0.2)] shrink-0">
-              {user.initials}
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#C1571F]/20 text-[#C1571F] font-outfit text-xl font-bold border border-[#C1571F]/30 shadow-[0_0_15px_rgba(193,87,31,0.2)] shrink-0 overflow-hidden">
+              {user.photo ? (
+                <img src={user.photo} alt={user.name} className="h-full w-full object-cover" />
+              ) : (
+                user.initials
+              )}
             </div>
             <div className="min-w-0">
               <h3 className="font-outfit text-sm font-bold text-[#3A2A1E] truncate">{user.name}</h3>
