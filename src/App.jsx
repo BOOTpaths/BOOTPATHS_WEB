@@ -648,17 +648,31 @@ export default function App() {
   }, [user, isAuthModalOpen]);
 
   // Dynamic booking details
-  const currentSlotsLeft = selectedTrek.slotsLeft;
-  const totalPrice = selectedTrek.price * numTrekkers;
+  const currentPackageData = treks.find(t => t.id === selectedTrek.id) || selectedTrek;
+  const availableBatchDates = currentPackageData.batchDates || currentPackageData.dates || [];
+  const currentSlotsLeft = currentPackageData.slotsLeft;
+  const totalPrice = currentPackageData.price * numTrekkers;
   const appliedWalletDiscount = (useWalletCredit && walletBalance > 0) ? Math.min(walletBalance, totalPrice) : 0;
   const finalPayablePrice = Math.max(0, totalPrice - appliedWalletDiscount);
+
+  // Auto-sync selectedDate to available batch dates
+  useEffect(() => {
+    if (availableBatchDates.length > 0) {
+      if (!selectedDate || !availableBatchDates.includes(selectedDate)) {
+        setSelectedDate(availableBatchDates[0]);
+      }
+    } else {
+      setSelectedDate('');
+    }
+  }, [selectedTrek.id, availableBatchDates, selectedDate]);
 
   // Handle trek change in the widget
   const handleTrekChange = (trekId) => {
     const trek = treks.find(t => t.id === trekId);
     if (trek) {
       setSelectedTrek(trek);
-      setSelectedDate(trek.dates[0]);
+      const trekDates = trek.batchDates || trek.dates || [];
+      setSelectedDate(trekDates.length > 0 ? trekDates[0] : '');
       setNumTrekkers(1);
     }
   };
@@ -1566,20 +1580,25 @@ export default function App() {
                     </label>
                     <select
                       id="date-select"
-                      className="w-full h-12 rounded-lg border border-autumn-bark/10 bg-autumn-mist px-4 text-sm text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none"
+                      className="w-full h-12 rounded-lg border border-autumn-bark/10 bg-autumn-mist px-4 text-sm text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none disabled:opacity-50"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
+                      disabled={availableBatchDates.length === 0}
                     >
-                      {(selectedTrek.batchDates || selectedTrek.dates || ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']).map(date => {
-                        let formattedDate = date;
-                        if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-                          const parsedDate = new Date(date + 'T00:00:00');
-                          formattedDate = parsedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-                        }
-                        return (
-                          <option key={date} value={date}>{formattedDate}</option>
-                        );
-                      })}
+                      {availableBatchDates.length === 0 ? (
+                        <option value="" disabled>No active batches available</option>
+                      ) : (
+                        availableBatchDates.map((dateStr, idx) => {
+                          let formattedDate = dateStr;
+                          if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                            const parsedDate = new Date(dateStr + 'T00:00:00');
+                            formattedDate = parsedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                          }
+                          return (
+                            <option key={idx} value={dateStr}>{formattedDate}</option>
+                          );
+                        })
+                      )}
                     </select>
                   </div>
 
@@ -1592,7 +1611,7 @@ export default function App() {
                       <button 
                         type="button"
                         onClick={() => setNumTrekkers(prev => Math.max(1, prev - 1))}
-                        disabled={numTrekkers <= 1}
+                        disabled={numTrekkers <= 1 || availableBatchDates.length === 0}
                         className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
                       >
                         <Minus className="h-4 w-4" />
@@ -1603,7 +1622,7 @@ export default function App() {
                       <button 
                         type="button"
                         onClick={() => setNumTrekkers(prev => Math.min(currentSlotsLeft, prev + 1))}
-                        disabled={numTrekkers >= currentSlotsLeft}
+                        disabled={numTrekkers >= currentSlotsLeft || availableBatchDates.length === 0}
                         className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
                       >
                         <Plus className="h-4 w-4" />
@@ -1702,9 +1721,10 @@ export default function App() {
                 {/* Razorpay Simulation Trigger Button */}
                 <button
                   type="submit"
-                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)]"
+                  disabled={availableBatchDates.length === 0}
+                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Secure Reservation
+                  {availableBatchDates.length === 0 ? 'No Batches Available' : 'Secure Reservation'}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>

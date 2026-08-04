@@ -231,26 +231,50 @@ export default function AdminConsole({
   };
 
   // Add Batch Date
-  const handleAddBatchDate = () => {
+  const handleAddBatchDate = async () => {
     if (!newBatchDateInput) return;
     const parsedDate = new Date(newBatchDateInput + 'T00:00:00');
     const formattedDate = parsedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     
     if (!formData.batchDates.includes(formattedDate)) {
+      const updatedDates = [...formData.batchDates, formattedDate];
       setFormData(prev => ({
         ...prev,
-        batchDates: [...prev.batchDates, formattedDate]
+        batchDates: updatedDates
       }));
+
+      if (editingTrek && editingTrek.id) {
+        try {
+          await updateDoc(doc(db, 'packages', editingTrek.id), {
+            batchDates: updatedDates,
+            dates: updatedDates
+          });
+        } catch (err) {
+          console.warn('Live Firestore update notice:', err.message);
+        }
+      }
     }
     setNewBatchDateInput('');
   };
 
   // Remove Batch Date
-  const handleRemoveBatchDate = (indexToRemove) => {
+  const handleRemoveBatchDate = async (indexToRemove) => {
+    const updatedDates = formData.batchDates.filter((_, idx) => idx !== indexToRemove);
     setFormData(prev => ({
       ...prev,
-      batchDates: prev.batchDates.filter((_, idx) => idx !== indexToRemove)
+      batchDates: updatedDates
     }));
+
+    if (editingTrek && editingTrek.id) {
+      try {
+        await updateDoc(doc(db, 'packages', editingTrek.id), {
+          batchDates: updatedDates,
+          dates: updatedDates
+        });
+      } catch (err) {
+        console.warn('Live Firestore update notice:', err.message);
+      }
+    }
   };
 
   // Save (Create or Update) Trek
