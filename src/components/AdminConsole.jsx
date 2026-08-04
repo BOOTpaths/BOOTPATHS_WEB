@@ -267,25 +267,60 @@ export default function AdminConsole({
   };
 
   // Blog Moderation
-  const handleApproveBlog = (id) => {
+  const handleApproveBlog = async (id) => {
     setBlogs(prev => prev.map(b => b.id === id ? { ...b, status: 'published' } : b));
+    try {
+      await updateDoc(doc(db, 'blogs', id), { status: 'published' });
+    } catch (err) {
+      console.warn('Firestore Blog Approve Notice:', err.message);
+    }
   };
 
-  const handleRejectBlog = (id) => {
+  const handleRejectBlog = async (id) => {
     setBlogs(prev => prev.filter(b => b.id !== id));
+    try {
+      await deleteDoc(doc(db, 'blogs', id));
+    } catch (err) {
+      console.warn('Firestore Blog Reject Notice:', err.message);
+    }
   };
 
   // Lead Applications Moderation
-  const handleMarkContacted = (id) => {
+  const handleMarkContacted = async (id) => {
     setLeadApplications(prev => prev.map(l => l.id === id ? { ...l, status: 'Contacted' } : l));
+    try {
+      await updateDoc(doc(db, 'leadApplications', id), { status: 'Contacted' });
+    } catch (err) {
+      console.warn('Firestore Lead Status Notice:', err.message);
+    }
   };
 
-  const handleApproveLead = (id) => {
+  const handleApproveLead = async (id) => {
     setLeadApplications(prev => prev.map(l => l.id === id ? { ...l, status: 'Approved' } : l));
+    try {
+      await updateDoc(doc(db, 'leadApplications', id), { status: 'Approved' });
+    } catch (err) {
+      console.warn('Firestore Lead Status Notice:', err.message);
+    }
   };
 
-  const handleDeleteApplication = (id) => {
+  const handleDeleteApplication = async (id) => {
     setLeadApplications(prev => prev.filter(l => l.id !== id));
+    try {
+      await deleteDoc(doc(db, 'leadApplications', id));
+    } catch (err) {
+      console.warn('Firestore Lead Delete Notice:', err.message);
+    }
+  };
+
+  const handleToggleCareersEnabled = async () => {
+    const nextVal = !isCareersEnabled;
+    setIsCareersEnabled(nextVal);
+    try {
+      await setDoc(doc(db, 'appSettings', 'global'), { careersEnabled: nextVal }, { merge: true });
+    } catch (err) {
+      console.warn('Firestore Careers Toggle Notice:', err.message);
+    }
   };
 
   // Toggle inclusion item in form

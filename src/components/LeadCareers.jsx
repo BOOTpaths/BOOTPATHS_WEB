@@ -1,21 +1,39 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Award, Shield, Leaf, X, Upload, CheckCircle2, AlertCircle, Phone, Compass } from 'lucide-react';
+import { db, storage } from '../config/firebase';
+import { collection, addDoc, doc, onSnapshot } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-export default function LeadCareers({ isCareersEnabled, leadApplications, setLeadApplications }) {
+export default function LeadCareers({ isCareersEnabled: propCareersEnabled, leadApplications, setLeadApplications }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [experience, setExperience] = useState('');
   const [regions, setRegions] = useState([]);
+  const [resumeFile, setResumeFile] = useState(null);
   const [resumeData, setResumeData] = useState('');
   const [resumeName, setResumeName] = useState('');
   const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isCareersEnabled, setIsCareersEnabled] = useState(propCareersEnabled ?? true);
 
   const fileInputRef = useRef(null);
 
   const availableRegions = ['Chikkamagaluru', 'Coorg', 'Wayanad', 'Idukki'];
+
+  // Subscribe to live global app settings for careers toggle
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'appSettings', 'global'), (docSnap) => {
+      if (docSnap.exists()) {
+        setIsCareersEnabled(docSnap.data().careersEnabled ?? true);
+      }
+    }, (err) => {
+      console.warn('AppSettings Notice:', err.message);
+    });
+    return () => unsub();
+  }, []);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -38,6 +56,7 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
       return;
     }
 
+    setResumeFile(file);
     setResumeName(file.name);
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -60,13 +79,14 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
     setIsDragOver(false);
     const file = e.dataTransfer.files[0];
     if (!file) return;
-
+    
     const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
     if (!allowedExtensions.exec(file.name)) {
       setFormError('Invalid file type. Only PDF and DOC/DOCX files are allowed.');
       return;
     }
 
+    setResumeFile(file);
     setResumeName(file.name);
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -75,7 +95,7 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
 
@@ -87,34 +107,65 @@ export default function LeadCareers({ isCareersEnabled, leadApplications, setLea
     if (regions.length === 0) {
       return setFormError('Please select at least one preferred region.');
     }
-    if (!resumeData) {
+    if (!resumeData && !resumeFile) {
       return setFormError('Please upload your resume (PDF or DOC/DOCX).');
     }
 
-    const newApplication = {
-      id: `lead-${Date.now()}`,
-      fullName,
-      phone,
-      experience,
-      regions: regions.join(', '),
-      resumeUrl: resumeData,
-      resumeFilename: resumeName,
-      status: 'Pending',
-      date: new Date().toISOString().split('T')[0]
-    };
+    setIsSubmitting(true);
 
-    setLeadApplications(prev => [newApplication, ...prev]);
-    setIsModalOpen(false);
+    try {
+      let finalResumeUrl = resumeData;
 
-    // Reset Form
-    setFullName('');
-    setPhone('');
-    setExperience('');
-    setRegions([]);
-    setResumeData('');
-    setResumeName('');
+      // Upload file to Firebase Storage if online
+      if (resumeFile) {
+        try {
+          const storageRef = ref(storage, `resumes/${Date.now()}_${resumeFile.name}`);
+          const snapshot = await uploadBytes(storageRef, resumeFile);
+          finalResumeUrl = await getDownloadURL(snapshot.ref);
+        } catch (uploadErr) {
+          console.warn('Firebase Storage notice, fallback to data URL:', uploadErr.message);
+        }
+      }
 
-    showToast('Application submitted! Our operations team will review your profile shortly.');
+      const newApplication = {
+        fullName,
+        phone,
+        experience,
+        regions: regions.join(', '),
+        resumeUrl: finalResumeUrl,
+        resumeFilename: resumeName,
+        status: 'Pending',
+        date: new Date().toISOString().split('T')[0],
+        submittedAt: new Date().toISOString()
+      };
+
+      // Add document to Firestore leadApplications collection
+      try {
+        const docRef = await addDoc(collection(db, 'leadApplications'), newApplication);
+        newApplication.id = docRef.id;
+      } catch (dbErr) {
+        console.warn('Firestore notice, using local ID fallback:', dbErr.message);
+        newApplication.id = `lead-${Date.now()}`;
+      }
+
+      setLeadApplications(prev => [newApplication, ...prev]);
+      setIsModalOpen(false);
+
+      // Reset Form
+      setFullName('');
+      setPhone('');
+      setExperience('');
+      setRegions([]);
+      setResumeFile(null);
+      setResumeData('');
+      setResumeName('');
+
+      showToast('Application submitted! Our operations team will review your profile shortly.');
+    } catch (err) {
+      setFormError('Submission failed: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

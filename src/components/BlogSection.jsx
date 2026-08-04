@@ -1,7 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { BookOpen, X, Sparkles, AlertCircle, CheckCircle, ArrowRight, Upload, Trash2 } from 'lucide-react';
+import { db } from '../config/firebase';
+import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore';
 
-export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
+export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenAuth }) {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [formTitle, setFormTitle] = useState('');
@@ -10,12 +12,33 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [formContent, setFormContent] = useState('');
   const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [liveBlogs, setLiveBlogs] = useState(propBlogs || []);
   
   const fileInputRef = useRef(null);
 
+  // Subscribe to live published blogs from Firestore
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'blogs'), where('status', '==', 'published'));
+      const unsub = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const fetched = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          setLiveBlogs(fetched);
+        }
+      }, (err) => {
+        console.warn('Blogs Firestore Notice:', err.message);
+      });
+      return () => unsub();
+    } catch (err) {
+      console.warn('Blogs Listener Fallback:', err.message);
+    }
+  }, []);
+
   // Filter published blogs for public view
-  const publishedBlogs = blogs.filter(b => b.status === 'published');
+  const displayBlogs = liveBlogs.length > 0 ? liveBlogs : propBlogs;
+  const publishedBlogs = displayBlogs.filter(b => b.status === 'published' || !b.status);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -57,8 +80,7 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
     e.preventDefault();
     setIsDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
+    if (!file || !file.type.startsWith('image/')) {
       setFormError('Please select a valid image file.');
       return;
     }
@@ -69,20 +91,19 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmitStory = async (e) => {
     e.preventDefault();
     setFormError('');
 
-    if (!formTitle.trim()) return setFormError('Article title is required.');
-    if (!formCoverImage) {
-      return setFormError('Please select or drag a cover image for your story.');
-    }
+    if (!formTitle.trim()) return setFormError('Story title is required.');
+    if (!formCoverImage) return setFormError('Cover image is required.');
     if (formContent.trim().length < 50) {
       return setFormError('Story content must be at least 50 characters.');
     }
 
+    setIsSubmitting(true);
+
     const newBlog = {
-      id: `blog-${Date.now()}`,
       title: formTitle,
       category: formCategory,
       coverUrl: formCoverImage,
@@ -90,11 +111,21 @@ export default function BlogSection({ blogs, onAddBlog, user, onOpenAuth }) {
       authorBadge: 'Community Hiker',
       date: new Date().toISOString().split('T')[0],
       status: 'pending',
-      content: formContent
+      content: formContent,
+      submittedAt: new Date().toISOString()
     };
 
-    onAddBlog(newBlog);
+    try {
+      const docRef = await addDoc(collection(db, 'blogs'), newBlog);
+      newBlog.id = docRef.id;
+    } catch (err) {
+      console.warn('Firestore Notice, using fallback ID:', err.message);
+      newBlog.id = `blog-${Date.now()}`;
+    }
+
+    if (onAddBlog) onAddBlog(newBlog);
     setIsSubmitModalOpen(false);
+    setIsSubmitting(false);
 
     // Reset form
     setFormTitle('');

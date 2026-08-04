@@ -5,6 +5,9 @@ import LeadCareers from './components/LeadCareers';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import RefundPolicy from './components/RefundPolicy';
+import UserDashboard from './components/UserDashboard';
+import { db } from './config/firebase';
+import { collection, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
 import { 
   Shield, 
   Leaf, 
@@ -27,6 +30,8 @@ import {
   AlertTriangle,
   User,
   LogOut,
+  Wallet,
+  Compass,
   ChevronDown
 } from 'lucide-react';
 
@@ -571,10 +576,14 @@ export default function App() {
   const [authErrors, setAuthErrors] = useState({});
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  // Customer Dashboard State
+  // Customer Dashboard State & Trail Wallet
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
-  const [dashboardTab, setDashboardTab] = useState('bookings'); // 'bookings' or 'profile'
+  const [dashboardTab, setDashboardTab] = useState('bookings'); // 'bookings', 'profile', or 'wallet'
   const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [expeditionRecords, setExpeditionRecords] = useState(EXPEDITION_RECORDS);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [walletTransactions, setWalletTransactions] = useState([]);
+  const [useWalletCredit, setUseWalletCredit] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: '',
     mobile: '',
@@ -582,6 +591,46 @@ export default function App() {
     emergencyContact: '',
     medicalConditions: ''
   });
+
+  // Handle Cancellation Confirmation from Dashboard
+  const handleConfirmCancellation = async ({ booking, refundOption, cancelDetails }) => {
+    setExpeditionRecords(prev => prev.map(rec => 
+      rec.id === booking.id ? { ...rec, status: 'Cancelled' } : rec
+    ));
+
+    if (refundOption === 'bonus_credit') {
+      const bonusCredit = cancelDetails.bonusCreditAmount;
+      const newBalance = walletBalance + bonusCredit;
+      setWalletBalance(newBalance);
+      
+      const newTxn = {
+        id: `TXN-${Math.floor(100000 + Math.random() * 900000)}`,
+        date: new Date().toISOString().split('T')[0],
+        type: 'credit',
+        amount: bonusCredit,
+        desc: `+₹${bonusCredit.toLocaleString('en-IN')} - 50% Bonus Cancellation Credit for ${booking.id}`,
+        expiry: cancelDetails.formattedExpiry,
+        trekRef: booking.id
+      };
+      setWalletTransactions(prev => [newTxn, ...prev]);
+
+      // Sync to Firestore if user logged in
+      if (user && user.uid) {
+        try {
+          await updateDoc(doc(db, 'users', user.uid), {
+            walletBalance: newBalance
+          });
+        } catch (err) {
+          console.warn('Firestore User Wallet Notice:', err.message);
+        }
+      }
+
+      setDashboardTab('wallet');
+    } else {
+      const cashRefund = cancelDetails.baseRefundAmount;
+      alert(`Standard cash refund of ₹${cashRefund.toLocaleString('en-IN')} (Base ${cancelDetails.refundPercentage}%) has been initiated to your original payment method.`);
+    }
+  };
 
   // Auto-trigger auth modal after 15 seconds if not logged in or modal not opened manually
   useEffect(() => {
@@ -601,6 +650,8 @@ export default function App() {
   // Dynamic booking details
   const currentSlotsLeft = selectedTrek.slotsLeft;
   const totalPrice = selectedTrek.price * numTrekkers;
+  const appliedWalletDiscount = (useWalletCredit && walletBalance > 0) ? Math.min(walletBalance, totalPrice) : 0;
+  const finalPayablePrice = Math.max(0, totalPrice - appliedWalletDiscount);
 
   // Handle trek change in the widget
   const handleTrekChange = (trekId) => {
@@ -809,11 +860,41 @@ export default function App() {
   const handleCloseSuccess = () => {
     setIsRazorpayModalOpen(false);
     setPaymentSuccess(false);
+
+    // Register new confirmed booking record
+    const newBookingId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
+    const newRecord = {
+      id: newBookingId,
+      title: selectedTrek.title,
+      date: selectedDate || selectedTrek.dates[0],
+      trekkers: numTrekkers,
+      price: finalPayablePrice,
+      status: 'Confirmed'
+    };
+    setExpeditionRecords(prev => [newRecord, ...prev]);
+
+    // Deduct wallet balance if credit discount was applied
+    if (appliedWalletDiscount > 0) {
+      setWalletBalance(prev => Math.max(0, prev - appliedWalletDiscount));
+      const debitTxn = {
+        id: `TXN-${Math.floor(100000 + Math.random() * 900000)}`,
+        date: new Date().toISOString().split('T')[0],
+        type: 'debit',
+        amount: appliedWalletDiscount,
+        desc: `-₹${appliedWalletDiscount.toLocaleString('en-IN')} - Redeemed for ${selectedTrek.title} (${newBookingId})`,
+        expiry: 'N/A',
+        trekRef: newBookingId
+      };
+      setWalletTransactions(prev => [debitTxn, ...prev]);
+      setUseWalletCredit(false);
+    }
+
     setName('');
     setEmail('');
     setPhone('');
     setHasAgreedToTerms(false);
     setNumTrekkers(1);
+    setDashboardTab('bookings');
     setIsDashboardOpen(true); // Open dashboard to view the confirmed booking
   };
 
@@ -1688,6 +1769,35 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+
+                {/* Trail Wallet Credit Checkout Auto-Redemption */}
+                {walletBalance > 0 && (
+                  <div className="mt-4 p-3.5 rounded-xl border border-[#C1571F]/30 bg-[#C1571F]/5 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input 
+                          type="checkbox"
+                          checked={useWalletCredit}
+                          onChange={(e) => setUseWalletCredit(e.target.checked)}
+                          className="h-4 w-4 rounded border-[#3A2A1E]/20 text-[#C1571F] focus:ring-[#C1571F] accent-[#C1571F]"
+                        />
+                        <span className="text-xs font-bold text-autumn-bark flex items-center gap-1.5">
+                          <Wallet className="h-3.5 w-3.5 text-[#C1571F]" />
+                          Apply Trail Wallet Credit
+                        </span>
+                      </label>
+                      <span className="text-xs font-extrabold text-[#C1571F]">
+                        ₹{walletBalance.toLocaleString('en-IN')} Available
+                      </span>
+                    </div>
+                    {useWalletCredit && (
+                      <div className="text-xxs text-emerald-700 font-bold flex items-center justify-between pt-1 border-t border-[#C1571F]/10">
+                        <span>Discount Applied:</span>
+                        <span>-₹{appliedWalletDiscount.toLocaleString('en-IN')}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Dynamic Price Display */}
@@ -1700,8 +1810,13 @@ export default function App() {
                     </div>
                   </div>
                   <div className="text-right">
+                    {appliedWalletDiscount > 0 && (
+                      <span className="text-xs text-emerald-700 font-bold block line-through opacity-75">
+                        ₹{totalPrice.toLocaleString('en-IN')}
+                      </span>
+                    )}
                     <span className="font-outfit text-3xl font-black text-autumn-bark block">
-                      ₹{totalPrice.toLocaleString('en-IN')}
+                      ₹{finalPayablePrice.toLocaleString('en-IN')}
                     </span>
                     <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block mt-0.5">
                       + Inclusive of Taxes
@@ -2326,204 +2441,30 @@ export default function App() {
       )}
 
       {/* CUSTOMER PROFILE & BOOKING HISTORY DASHBOARD */}
-      {isDashboardOpen && user && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-mist/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-4xl h-[85vh] flex flex-col md:flex-row overflow-hidden rounded-3xl border border-autumn-bark/10 bg-autumn-mist/40 backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-250">
-            
-            {/* Close Button */}
-            <button 
-              onClick={() => setIsDashboardOpen(false)}
-              className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-[#EFE8D6]/60 flex items-center justify-center text-autumn-bark/70 hover:text-autumn-maple transition-colors focus:outline-none"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* Sidebar / Tabs */}
-            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-autumn-bark/10 bg-autumn-mist/60 p-6 flex flex-col">
-              <div className="flex items-center gap-3 mb-10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-autumn-maple/20 text-autumn-maple font-outfit text-xl font-bold border border-autumn-maple/30 shadow-[0_0_15px_rgba(193,87,31,0.2)]">
-                  {user.initials}
-                </div>
-                <div>
-                  <h3 className="font-outfit text-sm font-bold text-autumn-bark">{user.name}</h3>
-                  <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block truncate w-32">{user.email}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-row md:flex-col gap-2 overflow-x-auto pb-4 md:pb-0 hide-scrollbar">
-                <button 
-                  onClick={() => setDashboardTab('bookings')}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'bookings' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-bark/70 hover:bg-[#EFE8D6]/50 hover:text-autumn-bark border border-transparent'}`}
-                >
-                  <Calendar className="h-4 w-4" />
-                  Expeditions
-                </button>
-                <button 
-                  onClick={() => setDashboardTab('profile')}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${dashboardTab === 'profile' ? 'bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20' : 'text-autumn-bark/70 hover:bg-[#EFE8D6]/50 hover:text-autumn-bark border border-transparent'}`}
-                >
-                  <User className="h-4 w-4" />
-                  Hiker Profile
-                </button>
-              </div>
-
-              <div className="mt-auto hidden md:block">
-                <button 
-                  onClick={() => { setIsDashboardOpen(false); handleLogout(); }}
-                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-autumn-bark/50 hover:text-rose-400 transition-colors focus:outline-none"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sign Out Securely
-                </button>
-              </div>
-            </div>
-
-            {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-10 bg-gradient-to-br from-stone-950/20 to-stone-900/10">
-              
-              {dashboardTab === 'bookings' && (
-                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                  <div className="mb-8">
-                    <h2 className="font-outfit text-3xl font-black text-autumn-bark tracking-tight">Expedition Records</h2>
-                    <p className="text-sm text-autumn-bark/70 mt-1">Your confirmed wilderness passes and historical trails.</p>
-                  </div>
-
-                  <div className="space-y-4">
-                    {EXPEDITION_RECORDS.map((record, i) => (
-                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-autumn-bark/10 bg-autumn-mist/40 backdrop-blur-md transition-colors hover:border-autumn-maple/30 hover:bg-[#EFE8D6]/40">
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-3">
-                            <span className="text-xxs font-mono text-autumn-bark/50 bg-[#EFE8D6] px-2 py-0.5 rounded border border-autumn-bark/10">
-                              {record.id}
-                            </span>
-                            <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${record.status === 'Confirmed' ? 'text-autumn-maple' : 'text-autumn-bark/50'}`}>
-                              {record.status === 'Confirmed' && <span className="flex h-1.5 w-1.5 rounded-full bg-autumn-maple animate-pulse"></span>}
-                              {record.status}
-                            </span>
-                          </div>
-                          <h4 className="font-outfit text-lg font-bold text-autumn-bark mt-1">{record.title}</h4>
-                          <span className="text-xs text-autumn-bark/70 flex items-center gap-2 mt-1">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-                          </span>
-                        </div>
-                        <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-autumn-bark/10 pt-4 sm:pt-0">
-                          <span className="text-xs text-autumn-bark/70">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
-                          <span className="font-outfit text-xl font-black text-autumn-maple">₹{record.price.toLocaleString('en-IN')}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {dashboardTab === 'profile' && (
-                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                  <div className="mb-8">
-                    <h2 className="font-outfit text-3xl font-black text-autumn-bark tracking-tight">Hiker Vital Profile</h2>
-                    <p className="text-sm text-autumn-bark/70 mt-1">Manage your wilderness credentials and emergency protocols.</p>
-                  </div>
-
-                  <form 
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      setIsSavingProfile(true);
-                      setTimeout(() => {
-                        setIsSavingProfile(false);
-                        alert("Database Mutation Hook: Profile synchronized to Firestore successfully!");
-                      }, 1200);
-                    }}
-                    className="space-y-6"
-                  >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Legal Full Name</label>
-                        <input 
-                          type="text"
-                          value={profileData.fullName || user.name}
-                          onChange={(e) => setProfileData({...profileData, fullName: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
-                          placeholder="As per Government ID"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Contact Mobile</label>
-                        <input 
-                          type="tel"
-                          value={profileData.mobile}
-                          onChange={(e) => setProfileData({...profileData, mobile: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
-                          placeholder="+91 00000 00000"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Blood Group</label>
-                        <div className="relative">
-                          <select 
-                            value={profileData.bloodGroup}
-                            onChange={(e) => setProfileData({...profileData, bloodGroup: e.target.value})}
-                            className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 appearance-none"
-                          >
-                            <option value="" disabled>Select Blood Type</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                          </select>
-                          <ChevronDown className="absolute right-4 top-4 h-4 w-4 text-autumn-bark/50 pointer-events-none" />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Emergency Contact</label>
-                        <input 
-                          type="tel"
-                          value={profileData.emergencyContact}
-                          onChange={(e) => setProfileData({...profileData, emergencyContact: e.target.value})}
-                          className="w-full h-12 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200"
-                          placeholder="Family or Guardian"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/50 mb-2">Medical Conditions / Allergies</label>
-                      <textarea 
-                        rows="4"
-                        value={profileData.medicalConditions}
-                        onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
-                        className="w-full p-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist/50 text-sm text-autumn-bark placeholder-autumn-bark/35 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all duration-200 resize-none"
-                        placeholder="List any altitude sickness history, asthma, or severe allergies crucial for our medics."
-                      ></textarea>
-                    </div>
-
-                    <div className="pt-4 border-t border-autumn-bark/10 flex justify-end">
-                      <button
-                        type="submit"
-                        disabled={isSavingProfile}
-                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-autumn-maple px-8 font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-all hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple focus:ring-offset-2 focus:ring-offset-stone-950 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(193,87,31,0.2)]"
-                      >
-                        {isSavingProfile ? (
-                          <>
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-stone-950 border-t-transparent"></div>
-                            Synchronizing...
-                          </>
-                        ) : (
-                          <>Save Profile Configurations</>
-                        )}
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </div>
-      )}
+      <UserDashboard 
+        isOpen={isDashboardOpen}
+        onClose={() => setIsDashboardOpen(false)}
+        user={user}
+        handleLogout={handleLogout}
+        dashboardTab={dashboardTab}
+        setDashboardTab={setDashboardTab}
+        expeditionRecords={expeditionRecords}
+        setExpeditionRecords={setExpeditionRecords}
+        walletBalance={walletBalance}
+        walletTransactions={walletTransactions}
+        onConfirmCancellation={handleConfirmCancellation}
+        profileData={profileData}
+        setProfileData={setProfileData}
+        isSavingProfile={isSavingProfile}
+        onSaveProfile={(e) => {
+          e.preventDefault();
+          setIsSavingProfile(true);
+          setTimeout(() => {
+            setIsSavingProfile(false);
+            alert("Database Mutation Hook: Profile synchronized to Firestore successfully!");
+          }, 1000);
+        }}
+      />
 
     </div>
   );
