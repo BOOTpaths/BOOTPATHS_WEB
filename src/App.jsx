@@ -1570,9 +1570,12 @@ export default function App() {
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
                     >
-                      {selectedTrek.dates.map(date => {
-                        const parsedDate = new Date(date);
-                        const formattedDate = parsedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                      {(selectedTrek.batchDates || selectedTrek.dates || ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']).map(date => {
+                        let formattedDate = date;
+                        if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+                          const parsedDate = new Date(date + 'T00:00:00');
+                          formattedDate = parsedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                        }
                         return (
                           <option key={date} value={date}>{formattedDate}</option>
                         );

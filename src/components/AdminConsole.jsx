@@ -115,21 +115,7 @@ export default function AdminConsole({
     reader.readAsDataURL(file);
   };
 
-  // Form State for Add / Edit Trek
-  const [formData, setFormData] = useState({
-    title: '',
-    location: '',
-    altitude: '',
-    duration: '',
-    difficulty: 'Moderate',
-    price: '',
-    originalPrice: '',
-    slotsLeft: '',
-    tag: 'FILLING FAST!',
-    description: '',
-    image: '',
-    inclusion: []
-  });
+
 
   // Check persistent login on mount
   useEffect(() => {
@@ -182,6 +168,23 @@ export default function AdminConsole({
     setAuthView('login');
   };
 
+  const [newBatchDateInput, setNewBatchDateInput] = useState('');
+  const [formData, setFormData] = useState({
+    title: '',
+    location: '',
+    altitude: '',
+    duration: '2 Days / 1 Night',
+    difficulty: 'Moderate',
+    price: '',
+    originalPrice: '',
+    slotsLeft: '10',
+    tag: 'FILLING FAST!',
+    description: '',
+    image: '',
+    inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
+    batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+  });
+
   // Open Create Modal
   const handleOpenCreateModal = () => {
     setEditingTrek(null);
@@ -197,14 +200,17 @@ export default function AdminConsole({
       tag: 'FILLING FAST!',
       description: '',
       image: '',
-      inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead']
+      inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
     });
+    setNewBatchDateInput('');
     setIsModalOpen(true);
   };
 
   // Open Edit Modal
   const handleOpenEditModal = (trek) => {
     setEditingTrek(trek);
+    const existingDates = trek.batchDates || trek.dates || ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'];
     setFormData({
       title: trek.title || '',
       location: trek.location || '',
@@ -217,13 +223,38 @@ export default function AdminConsole({
       tag: trek.tag || 'FILLING FAST!',
       description: trek.description || '',
       image: trek.image || '',
-      inclusion: trek.inclusion || []
+      inclusion: trek.inclusion || [],
+      batchDates: existingDates
     });
+    setNewBatchDateInput('');
     setIsModalOpen(true);
   };
 
+  // Add Batch Date
+  const handleAddBatchDate = () => {
+    if (!newBatchDateInput) return;
+    const parsedDate = new Date(newBatchDateInput + 'T00:00:00');
+    const formattedDate = parsedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    
+    if (!formData.batchDates.includes(formattedDate)) {
+      setFormData(prev => ({
+        ...prev,
+        batchDates: [...prev.batchDates, formattedDate]
+      }));
+    }
+    setNewBatchDateInput('');
+  };
+
+  // Remove Batch Date
+  const handleRemoveBatchDate = (indexToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      batchDates: prev.batchDates.filter((_, idx) => idx !== indexToRemove)
+    }));
+  };
+
   // Save (Create or Update) Trek
-  const handleSaveTrek = (e) => {
+  const handleSaveTrek = async (e) => {
     e.preventDefault();
     if (!formData.image) {
       alert('Please upload a banner image for the trek package.');
@@ -232,28 +263,34 @@ export default function AdminConsole({
     const tagMatch = BADGE_OPTIONS.find(b => b.label === formData.tag);
     const tagColor = tagMatch ? tagMatch.color : 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40';
 
+    const payload = {
+      ...formData,
+      price: Number(formData.price),
+      originalPrice: Number(formData.originalPrice),
+      slotsLeft: Number(formData.slotsLeft),
+      tagColor,
+      batchDates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
+      dates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    };
+
     if (editingTrek) {
       // UPDATE
-      setTreks(prev => prev.map(t => t.id === editingTrek.id ? {
-        ...t,
-        ...formData,
-        price: Number(formData.price),
-        originalPrice: Number(formData.originalPrice),
-        slotsLeft: Number(formData.slotsLeft),
-        tagColor
-      } : t));
+      setTreks(prev => prev.map(t => t.id === editingTrek.id ? { ...t, ...payload } : t));
+      try {
+        await setDoc(doc(db, 'packages', editingTrek.id), payload, { merge: true });
+      } catch (err) {
+        console.warn('Firestore package update notice:', err.message);
+      }
     } else {
       // CREATE
-      const newTrek = {
-        id: `trek-${Date.now()}`,
-        ...formData,
-        price: Number(formData.price),
-        originalPrice: Number(formData.originalPrice),
-        slotsLeft: Number(formData.slotsLeft),
-        tagColor,
-        dates: ['2026-08-01', '2026-08-15', '2026-08-22']
-      };
+      const newId = `trek-${Date.now()}`;
+      const newTrek = { id: newId, ...payload };
       setTreks(prev => [newTrek, ...prev]);
+      try {
+        await setDoc(doc(db, 'packages', newId), payload);
+      } catch (err) {
+        console.warn('Firestore package create notice:', err.message);
+      }
     }
     setIsModalOpen(false);
   };
@@ -1414,6 +1451,54 @@ export default function AdminConsole({
                       </button>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* AVAILABLE BATCH DATES MANAGER */}
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">
+                  Available Batch Dates
+                </label>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <input 
+                    type="date"
+                    value={newBatchDateInput}
+                    onChange={(e) => setNewBatchDateInput(e.target.value)}
+                    className="bg-[#EBE3D3] border border-[#3A2A1E]/20 text-[#3A2A1E] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C1571F] flex-1"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddBatchDate}
+                    className="bg-[#C1571F] text-white font-bold hover:bg-[#a44717] rounded-lg px-4 py-2 text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 shadow-sm shrink-0"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Add Batch Date
+                  </button>
+                </div>
+
+                {/* Active Dates List (Pill Tags) */}
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {formData.batchDates.length === 0 ? (
+                    <span className="text-xxs text-autumn-bark/40 italic">No batch dates added yet. Select a date above.</span>
+                  ) : (
+                    formData.batchDates.map((dateStr, index) => (
+                      <span 
+                        key={index} 
+                        className="bg-[#3A2A1E] text-[#F3ECDD] rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-[#C1571F]/30"
+                      >
+                        <Calendar className="h-3 w-3 text-[#C1571F]" />
+                        {dateStr}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveBatchDate(index)}
+                          className="hover:text-amber-400 focus:outline-none ml-1 transition-colors"
+                          title="Remove batch date"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))
+                  )}
                 </div>
               </div>
 
