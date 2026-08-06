@@ -1174,21 +1174,37 @@ export default function App() {
               <hr className="my-2 border-autumn-bark/10" />
               {user ? (
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 px-1 py-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-autumn-maple font-outfit text-md font-bold text-[#F3ECDD] shadow-md">
-                      {user.initials}
+                  {/* User Profile Summary Badge */}
+                  <div className="bg-[#EBE3D3] border border-[#3A2A1E]/10 p-4 rounded-2xl flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-autumn-maple font-outfit text-md font-bold text-[#F3ECDD] shadow-md overflow-hidden shrink-0">
+                      {user.photo ? (
+                        <img src={user.photo} alt={user.name} className="h-full w-full object-cover" />
+                      ) : (
+                        user.initials
+                      )}
                     </div>
-                    <div>
-                      <div className="font-outfit text-sm font-bold text-autumn-bark">{user.name}</div>
-                      <div className="text-xxs text-autumn-bark/50">{user.email}</div>
+                    <div className="min-w-0">
+                      <div className="font-outfit text-sm font-bold text-[#3A2A1E] truncate">{user.name}</div>
+                      <div className="text-xxs text-[#3A2A1E]/60 truncate">{user.email}</div>
                     </div>
                   </div>
+                  {/* My Dashboard Button */}
+                  <button 
+                    onClick={() => {
+                      setIsDashboardOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="bg-[#C1571F] text-white font-bold py-3 w-full rounded-xl text-center font-outfit text-sm uppercase tracking-wider transition-all duration-200 hover:bg-[#a44717] focus:outline-none"
+                  >
+                    My Dashboard
+                  </button>
+                  {/* Sign Out Button */}
                   <button 
                     onClick={() => {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="flex h-12 w-full items-center justify-center rounded-lg border border-autumn-bark/10 bg-[#EFE8D6]/40 font-outfit text-sm font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    className="text-[#8C2B2A] font-semibold text-center w-full mt-2 text-xs uppercase tracking-wider transition-colors hover:text-[#732221]"
                   >
                     Sign Out
                   </button>
