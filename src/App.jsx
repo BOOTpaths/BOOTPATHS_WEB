@@ -471,11 +471,7 @@ const INSTAGRAM_POSTS = [
   }
 ];
 
-const EXPEDITION_RECORDS = [
-  { id: 'BP-589142', title: 'Netravathi Peak Trek', date: '2026-07-11', trekkers: 2, price: 6998, status: 'Confirmed' },
-  { id: 'BP-218491', title: 'Brahmagiri Trek', date: '2025-11-20', trekkers: 1, price: 3299, status: 'Completed' },
-  { id: 'BP-109283', title: 'Vellagavi Trek', date: '2024-05-15', trekkers: 3, price: 17997, status: 'Completed' }
-];
+const EXPEDITION_RECORDS = [];
 
 export default function App() {
   const [treks, setTreks] = useState(INITIAL_TREKS);

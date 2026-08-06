@@ -15,7 +15,7 @@ import {
   Gift,
   Compass
 } from 'lucide-react';
-import { db } from '../config/firebase';
+import { db, auth } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function UserDashboard({
@@ -35,14 +35,14 @@ export default function UserDashboard({
   isSavingProfile,
   onSaveProfile
 }) {
-  const [bookings, setBookings] = useState([]);
+  const [userBookings, setUserBookings] = useState([]);
   const [selectedBookingForCancel, setSelectedBookingForCancel] = useState(null);
   const [selectedRefundOption, setSelectedRefundOption] = useState('bonus_credit'); // 'cash' or 'bonus_credit'
 
   useEffect(() => {
-    if (!isOpen || !user || !user.uid) return;
+    if (!isOpen || !auth.currentUser) return;
 
-    const q = query(collection(db, 'bookings'), where('userId', '==', user.uid));
+    const q = query(collection(db, 'bookings'), where('userId', '==', auth.currentUser.uid));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = [];
       snapshot.forEach((doc) => {
@@ -50,13 +50,13 @@ export default function UserDashboard({
       });
       // Sort bookings by date descending
       docs.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setBookings(docs);
+      setUserBookings(docs);
     }, (err) => {
       console.warn('User bookings subscription error:', err);
     });
 
     return () => unsubscribe();
-  }, [isOpen, user]);
+  }, [isOpen, auth.currentUser]);
 
   if (!isOpen || !user) return null;
 
@@ -210,11 +210,11 @@ export default function UserDashboard({
               </div>
 
               <div className="space-y-4">
-                {bookings.length === 0 ? (
+                {userBookings.length === 0 ? (
                   <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#EBE3D3]/40 rounded-3xl border border-[#3A2A1E]/10 animate-in fade-in zoom-in-95 duration-200">
                     <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
                     <h3 className="font-outfit text-lg font-black text-[#3A2A1E] uppercase tracking-wider">No Active Expeditions Found</h3>
-                    <p className="text-xs text-[#3A2A1E]/60 max-w-sm mt-2">You haven't reserved any wilderness passes yet.</p>
+                    <p className="text-xs text-[#3A2A1E]/60 max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
                     <button
                       onClick={() => {
                         onClose();
@@ -231,7 +231,7 @@ export default function UserDashboard({
                     </button>
                   </div>
                 ) : (
-                  bookings.map((record) => {
+                  userBookings.map((record) => {
                     const isConfirmed = record.status === 'Confirmed';
                     const isCancelled = record.status === 'Cancelled';
                     const isCompleted = record.status === 'Completed';
