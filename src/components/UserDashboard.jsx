@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   X, 
   Calendar, 
@@ -12,8 +12,11 @@ import {
   ShieldCheck, 
   ChevronDown,
   Info,
-  Gift
+  Gift,
+  Compass
 } from 'lucide-react';
+import { db } from '../config/firebase';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function UserDashboard({
   isOpen,
@@ -32,8 +35,28 @@ export default function UserDashboard({
   isSavingProfile,
   onSaveProfile
 }) {
+  const [bookings, setBookings] = useState([]);
   const [selectedBookingForCancel, setSelectedBookingForCancel] = useState(null);
   const [selectedRefundOption, setSelectedRefundOption] = useState('bonus_credit'); // 'cash' or 'bonus_credit'
+
+  useEffect(() => {
+    if (!isOpen || !user || !user.uid) return;
+
+    const q = query(collection(db, 'bookings'), where('userId', '==', user.uid));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = [];
+      snapshot.forEach((doc) => {
+        docs.push({ id: doc.id, ...doc.data() });
+      });
+      // Sort bookings by date descending
+      docs.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setBookings(docs);
+    }, (err) => {
+      console.warn('User bookings subscription error:', err);
+    });
+
+    return () => unsubscribe();
+  }, [isOpen, user]);
 
   if (!isOpen || !user) return null;
 
@@ -187,63 +210,85 @@ export default function UserDashboard({
               </div>
 
               <div className="space-y-4">
-                {expeditionRecords.map((record) => {
-                  const isConfirmed = record.status === 'Confirmed';
-                  const isCancelled = record.status === 'Cancelled';
-                  const isCompleted = record.status === 'Completed';
-
-                  return (
-                    <div 
-                      key={record.id} 
-                      className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all ${
-                        isCancelled 
-                          ? 'border-[#3A2A1E]/10 bg-[#EBE3D3]/40 opacity-75' 
-                          : 'border-[#3A2A1E]/15 bg-[#EBE3D3] hover:border-[#C1571F]/40 shadow-sm'
-                      }`}
+                {bookings.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#EBE3D3]/40 rounded-3xl border border-[#3A2A1E]/10 animate-in fade-in zoom-in-95 duration-200">
+                    <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
+                    <h3 className="font-outfit text-lg font-black text-[#3A2A1E] uppercase tracking-wider">No Active Expeditions Found</h3>
+                    <p className="text-xs text-[#3A2A1E]/60 max-w-sm mt-2">You haven't reserved any wilderness passes yet.</p>
+                    <button
+                      onClick={() => {
+                        onClose();
+                        setTimeout(() => {
+                          const upcoming = document.getElementById('upcoming-treks');
+                          if (upcoming) {
+                            upcoming.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }, 150);
+                      }}
+                      className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#a44717] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-[#C1571F]/20"
                     >
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xxs font-mono text-[#3A2A1E]/60 bg-[#F3ECDD] px-2 py-0.5 rounded border border-[#3A2A1E]/10 font-bold">
-                            {record.id}
-                          </span>
-                          <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${
-                            isConfirmed ? 'text-[#C1571F]' : isCompleted ? 'text-emerald-700' : 'text-[#8C2B2A]'
-                          }`}>
-                            {isConfirmed && <span className="flex h-2 w-2 rounded-full bg-[#C1571F] animate-pulse"></span>}
-                            {record.status}
+                      Explore Upcoming Treks
+                    </button>
+                  </div>
+                ) : (
+                  bookings.map((record) => {
+                    const isConfirmed = record.status === 'Confirmed';
+                    const isCancelled = record.status === 'Cancelled';
+                    const isCompleted = record.status === 'Completed';
+
+                    return (
+                      <div 
+                        key={record.id} 
+                        className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all ${
+                          isCancelled 
+                            ? 'border-[#3A2A1E]/10 bg-[#EBE3D3]/40 opacity-75' 
+                            : 'border-[#3A2A1E]/15 bg-[#EBE3D3] hover:border-[#C1571F]/40 shadow-sm'
+                        }`}
+                      >
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-3">
+                            <span className="text-xxs font-mono text-[#3A2A1E]/60 bg-[#F3ECDD] px-2 py-0.5 rounded border border-[#3A2A1E]/10 font-bold">
+                              {record.id}
+                            </span>
+                            <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${
+                              isConfirmed ? 'text-[#C1571F]' : isCompleted ? 'text-emerald-700' : 'text-[#8C2B2A]'
+                            }`}>
+                              {isConfirmed && <span className="flex h-2 w-2 rounded-full bg-[#C1571F] animate-pulse"></span>}
+                              {record.status}
+                            </span>
+                          </div>
+                          <h4 className="font-outfit text-lg font-bold text-[#3A2A1E] mt-1">{record.title}</h4>
+                          <span className="text-xs text-[#3A2A1E]/70 flex items-center gap-2 mt-0.5">
+                            <Calendar className="h-3.5 w-3.5 text-[#C1571F]" />
+                            {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </span>
                         </div>
-                        <h4 className="font-outfit text-lg font-bold text-[#3A2A1E] mt-1">{record.title}</h4>
-                        <span className="text-xs text-[#3A2A1E]/70 flex items-center gap-2 mt-0.5">
-                          <Calendar className="h-3.5 w-3.5 text-[#C1571F]" />
-                          {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        </span>
-                      </div>
 
-                      <div className="mt-4 sm:mt-0 flex flex-col items-start sm:items-end justify-between border-t sm:border-t-0 border-[#3A2A1E]/10 pt-3 sm:pt-0 gap-2">
-                        <div className="text-right">
-                          <span className="text-xs text-[#3A2A1E]/60 block">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
-                          <span className="font-outfit text-xl font-black text-[#C1571F]">₹{record.price.toLocaleString('en-IN')}</span>
+                        <div className="mt-4 sm:mt-0 flex flex-col items-start sm:items-end justify-between border-t sm:border-t-0 border-[#3A2A1E]/10 pt-3 sm:pt-0 gap-2">
+                          <div className="text-right">
+                            <span className="text-xs text-[#3A2A1E]/60 block">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
+                            <span className="font-outfit text-xl font-black text-[#C1571F]">₹{record.price.toLocaleString('en-IN')}</span>
+                          </div>
+
+                          {/* RENDER CANCEL BUTTON ONLY FOR CONFIRMED BOOKINGS */}
+                          {isConfirmed && (
+                            <button
+                              onClick={() => setSelectedBookingForCancel(record)}
+                              className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1 shadow-xs"
+                            >
+                              Cancel Booking
+                            </button>
+                          )}
+                          {isCancelled && (
+                            <span className="text-[10px] font-bold text-[#8C2B2A] uppercase tracking-wider bg-[#8C2B2A]/10 px-2.5 py-1 rounded-md">
+                              Cancelled & Processed
+                            </span>
+                          )}
                         </div>
-
-                        {/* RENDER CANCEL BUTTON ONLY FOR CONFIRMED BOOKINGS */}
-                        {isConfirmed && (
-                          <button
-                            onClick={() => setSelectedBookingForCancel(record)}
-                            className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1 shadow-xs"
-                          >
-                            Cancel Booking
-                          </button>
-                        )}
-                        {isCancelled && (
-                          <span className="text-[10px] font-bold text-[#8C2B2A] uppercase tracking-wider bg-[#8C2B2A]/10 px-2.5 py-1 rounded-md">
-                            Cancelled & Processed
-                          </span>
-                        )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           )}

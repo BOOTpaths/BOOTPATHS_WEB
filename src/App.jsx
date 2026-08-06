@@ -599,6 +599,15 @@ export default function App() {
       rec.id === booking.id ? { ...rec, status: 'Cancelled' } : rec
     ));
 
+    // Update cancelled status in Firestore bookings collection
+    try {
+      await setDoc(doc(db, 'bookings', booking.id), {
+        status: 'Cancelled'
+      }, { merge: true });
+    } catch (err) {
+      console.warn('Firestore booking cancellation sync notice:', err.message);
+    }
+
     if (refundOption === 'bonus_credit') {
       const bonusCredit = cancelDetails.bonusCreditAmount;
       const newBalance = walletBalance + bonusCredit;
@@ -797,12 +806,13 @@ export default function App() {
         // Sync Google user document to Firestore
         try {
           await setDoc(doc(db, 'users', gUser.uid), {
-            uid: gUser.uid,
-            name: displayName,
+            displayName: gUser.displayName || '',
             email: gUser.email,
             photoURL: gUser.photoURL || null,
+            role: 'user',
+            uid: gUser.uid,
+            name: displayName,
             initials: initials,
-            role: gUser.email?.toLowerCase() === 'admin@bootpaths.com' ? 'admin' : 'hiker',
             updatedAt: new Date().toISOString()
           }, { merge: true });
         } catch (dbErr) {
@@ -961,6 +971,21 @@ export default function App() {
       status: 'Confirmed'
     };
     setExpeditionRecords(prev => [newRecord, ...prev]);
+
+    // Save booking to Firestore bookings collection
+    if (user && user.uid) {
+      try {
+        setDoc(doc(db, 'bookings', newBookingId), {
+          ...newRecord,
+          userId: user.uid,
+          createdAt: new Date().toISOString()
+        }).catch((err) => {
+          console.warn('Firestore booking sync notice:', err.message);
+        });
+      } catch (err) {
+        console.warn('Firestore booking sync error:', err.message);
+      }
+    }
 
     // Deduct wallet balance if credit discount was applied
     if (appliedWalletDiscount > 0) {

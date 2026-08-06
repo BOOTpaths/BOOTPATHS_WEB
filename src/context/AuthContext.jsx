@@ -133,10 +133,11 @@ export function AuthProvider({ children }) {
         await setDoc(userDocRef, {
           uid: res.user.uid,
           name: res.user.displayName || res.user.email.split('@')[0],
+          displayName: res.user.displayName || '',
           email: res.user.email,
           photoURL: res.user.photoURL || null,
           initials: initials,
-          role: res.user.email?.toLowerCase() === 'admin@bootpaths.com' ? 'admin' : 'hiker',
+          role: 'user',
           updatedAt: new Date().toISOString()
         }, { merge: true });
       }
