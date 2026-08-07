@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { db, storage } from '../config/firebase';
+import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { 
   Plus, 
   Edit2, 
@@ -51,7 +54,8 @@ export default function AdminConsole({
   setIsCareersEnabled, 
   leadApplications = [], 
   setLeadApplications, 
-  onReturnToSite 
+  onReturnToSite,
+  expeditionViews = []
 }) {
   // Session State
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -74,6 +78,15 @@ export default function AdminConsole({
 
   // Trek image local upload selectors
   const [isAdminDragOver, setIsAdminDragOver] = useState(false);
+
+  // Expedition Views State
+  const [viewTitle, setViewTitle] = useState('');
+  const [displayOrder, setDisplayOrder] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [dragOver, setDragOver] = useState(false);
   const trekFileInputRef = useRef(null);
 
   const handleTrekFileChange = (e) => {
@@ -384,6 +397,88 @@ export default function AdminConsole({
     }
   };
 
+  const handleUploadView = async (e) => {
+    e.preventDefault();
+    if (!selectedFile) {
+      setUploadError('Please select a local image or video file.');
+      return;
+    }
+    if (!viewTitle.trim()) {
+      setUploadError('Please enter a view title.');
+      return;
+    }
+    if (!displayOrder.trim() || isNaN(Number(displayOrder))) {
+      setUploadError('Please enter a valid numeric display order.');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError('');
+    setUploadProgress(0);
+
+    const storagePath = `expedition_views/${Date.now()}_${selectedFile.name}`;
+    const storageRef = ref(storage, storagePath);
+    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setUploadProgress(percent);
+      },
+      (err) => {
+        console.error('Firebase Storage upload error:', err);
+        setUploadError(`Upload failed: ${err.message}`);
+        setIsUploading(false);
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          const mediaType = selectedFile.type.startsWith('video') ? 'video' : 'image';
+
+          // Store metadata in Firestore
+          await addDoc(collection(db, 'expeditionViews'), {
+            title: viewTitle.trim().toUpperCase(),
+            mediaUrl: downloadURL,
+            mediaType: mediaType,
+            order: Number(displayOrder),
+            storagePath: storagePath,
+            createdAt: serverTimestamp()
+          });
+
+          // Reset fields
+          setViewTitle('');
+          setDisplayOrder('');
+          setSelectedFile(null);
+          setUploadProgress(0);
+          setIsUploading(false);
+        } catch (dbErr) {
+          console.error('Firestore save error:', dbErr);
+          setUploadError(`Failed to save details: ${dbErr.message}`);
+          setIsUploading(false);
+        }
+      }
+    );
+  };
+
+  const handleDeleteView = async (record) => {
+    if (!window.confirm(`Are you sure you want to delete "${record.title}"?`)) return;
+
+    try {
+      // 1. Delete from Firestore
+      await deleteDoc(doc(db, 'expeditionViews', record.id));
+
+      // 2. Clean up from Storage
+      if (record.storagePath) {
+        const fileRef = ref(storage, record.storagePath);
+        await deleteObject(fileRef);
+      }
+    } catch (err) {
+      console.error('Delete view error:', err);
+      alert(`Delete failed: ${err.message}`);
+    }
+  };
+
   // Toggle inclusion item in form
   const toggleInclusion = (item) => {
     setFormData(prev => {
@@ -686,6 +781,16 @@ export default function AdminConsole({
             }`}
           >
             Lead Applications ({leadApplications.filter(l => l.status === 'Pending').length} Pending)
+          </button>
+          <button
+            onClick={() => setActiveTab('views')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'views' 
+                ? 'border-autumn-maple text-autumn-maple' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Expedition Views ({(expeditionViews || []).length})
           </button>
         </div>
 
@@ -1171,6 +1276,235 @@ export default function AdminConsole({
               </div>
             </div>
 
+          </div>
+        )}
+
+        {activeTab === 'views' && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* Header Description */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+              <div>
+                <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
+                  Expedition Views Management
+                </h1>
+                <p className="text-xs text-autumn-bark/70 mt-1">
+                  Upload custom showcase images and looping videos directly to Firebase Storage and update the homepage Hero background section in real-time.
+                </p>
+              </div>
+            </div>
+
+            {/* Split layout: Upload Form & Live Preview vs Gallery List */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              
+              {/* Left Side: Upload Panel */}
+              <div className="lg:col-span-4 space-y-6">
+                <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm p-6 space-y-5">
+                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-autumn-bark/10 pb-3 flex items-center gap-2">
+                    <Upload className="h-5 w-5 text-[#C1571F]" />
+                    Upload New View
+                  </h3>
+
+                  {uploadError && (
+                    <div className="p-3 rounded-lg bg-autumn-rhodo/10 border border-autumn-rhodo/30 text-autumn-rhodo text-xxs font-semibold flex items-start gap-2">
+                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span>{uploadError}</span>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleUploadView} className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">View Title</label>
+                      <input 
+                        type="text"
+                        value={viewTitle}
+                        onChange={(e) => setViewTitle(e.target.value)}
+                        className="w-full h-11 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist text-xs text-autumn-bark placeholder-stone-500 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                        placeholder="e.g. NETRAVATHI"
+                        disabled={isUploading}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">Display Order</label>
+                      <input 
+                        type="number"
+                        min="1"
+                        value={displayOrder}
+                        onChange={(e) => setDisplayOrder(e.target.value)}
+                        className="w-full h-11 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist text-xs text-autumn-bark placeholder-stone-500 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                        placeholder="e.g. 1"
+                        disabled={isUploading}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/70 mb-2">Select Media File</label>
+                      <label 
+                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                        onDragLeave={() => setDragOver(false)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setDragOver(false);
+                          const file = e.dataTransfer.files[0];
+                          if (file) setSelectedFile(file);
+                        }}
+                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer block transition-all ${
+                          dragOver 
+                            ? 'border-[#C1571F] bg-[#EBE3D3]/80' 
+                            : selectedFile 
+                              ? 'border-emerald-500/40 bg-emerald-500/5' 
+                              : 'border-[#C1571F]/40 bg-[#EBE3D3] hover:border-[#C1571F]'
+                        }`}
+                      >
+                        <input 
+                          type="file" 
+                          accept="image/*,video/*" 
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) setSelectedFile(file);
+                          }}
+                          className="hidden"
+                          disabled={isUploading}
+                        />
+                        
+                        {selectedFile ? (
+                          <div className="space-y-2">
+                            <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto" />
+                            <div className="text-xs font-bold text-autumn-bark truncate max-w-[200px] mx-auto">
+                              {selectedFile.name}
+                            </div>
+                            <div className="text-[10px] text-autumn-bark/50">
+                              {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • {selectedFile.type.split('/')[0].toUpperCase()}
+                            </div>
+                            <div className="text-[10px] text-[#C1571F] font-semibold hover:underline">Click to change file</div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <Upload className="h-8 w-8 text-[#C1571F]/60 mx-auto" />
+                            <div className="text-xs font-bold text-autumn-bark">Drag and drop here</div>
+                            <div className="text-[10px] text-autumn-bark/50">or click to browse local files</div>
+                          </div>
+                        )}
+                      </label>
+                    </div>
+
+                    {isUploading && (
+                      <div className="space-y-2 pt-2">
+                        <div className="flex justify-between text-[10px] font-bold text-[#C1571F] uppercase tracking-wider">
+                          <span>Uploading View...</span>
+                          <span>{uploadProgress}%</span>
+                        </div>
+                        <div className="w-full bg-autumn-bark/10 h-2 rounded-full overflow-hidden">
+                          <div 
+                            className="bg-[#C1571F] h-full rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={isUploading || !selectedFile || !viewTitle.trim() || !displayOrder.trim()}
+                      className="w-full h-12 bg-[#C1571F] hover:bg-[#a44717] disabled:bg-stone-500 text-white font-outfit text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 mt-4"
+                    >
+                      {isUploading ? (
+                        <>
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-4 w-4" />
+                          Publish View
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              {/* Right Side: Showcase Gallery Table */}
+              <div className="lg:col-span-8">
+                <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm p-6">
+                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-autumn-bark/10 pb-3 flex items-center gap-2 mb-6">
+                    <Compass className="h-5 w-5 text-[#C1571F]" />
+                    Live Slideshow Gallery
+                  </h3>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-autumn-bark/10 text-[10px] font-bold uppercase tracking-wider text-autumn-bark/60">
+                          <th className="py-3 px-4">Preview</th>
+                          <th className="py-3 px-4">Title</th>
+                          <th className="py-3 px-4">Order</th>
+                          <th className="py-3 px-4">Format</th>
+                          <th className="py-3 px-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-autumn-bark/10 text-xs">
+                        {(expeditionViews || []).length === 0 ? (
+                          <tr>
+                            <td colSpan="5" className="py-12 text-center text-autumn-bark/40 italic">
+                              No custom showcase views uploaded yet. Using default landing assets.
+                            </td>
+                          </tr>
+                        ) : (
+                          (expeditionViews || []).map((record) => (
+                            <tr key={record.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                              <td className="py-3 px-4">
+                                <div className="h-12 w-20 rounded-lg overflow-hidden border border-autumn-bark/10 bg-autumn-mist flex items-center justify-center">
+                                  {record.mediaType === 'video' ? (
+                                    <video 
+                                      src={record.mediaUrl}
+                                      className="h-full w-full object-cover"
+                                      muted
+                                      playsInline
+                                    />
+                                  ) : (
+                                    <img 
+                                      src={record.mediaUrl}
+                                      alt={record.title}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                              <td className="py-3 px-4 font-bold uppercase text-[#3A2A1E]">
+                                {record.title}
+                              </td>
+                              <td className="py-3 px-4 font-mono font-bold text-[#C1571F]">
+                                #{record.order}
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                  record.mediaType === 'video' 
+                                    ? 'bg-[#C1571F]/10 text-[#C1571F] border border-[#C1571F]/20'
+                                    : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                                }`}>
+                                  {record.mediaType}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-right">
+                                <button
+                                  onClick={() => handleDeleteView(record)}
+                                  className="h-8 w-8 rounded-lg border border-autumn-rhodo/30 bg-autumn-rhodo/10 flex items-center justify-center hover:bg-autumn-rhodo/20 text-autumn-rhodo transition-all"
+                                  title="Delete View"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         )}
       </main>

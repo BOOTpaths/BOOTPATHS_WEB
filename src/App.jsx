@@ -9,7 +9,7 @@ import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
-import { collection, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
 import { 
   Shield, 
@@ -152,12 +152,15 @@ export default function App() {
 
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
 
+  // Auto-slide Hero Media
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveHeroIndex((prev) => (prev + 1) % HERO_MEDIA.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [activeHeroIndex]);
+    const mediaLength = expeditionViews.length > 0 ? expeditionViews.length : HERO_MEDIA.length;
+    if (mediaLength <= 1) return;
+    const interval = setInterval(() => {
+      setActiveHeroIndex((prev) => (prev + 1) % mediaLength);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [activeHeroIndex, expeditionViews.length]);
 
   const [showAllTreks, setShowAllTreks] = useState(false);
   const [blogs, setBlogs] = useState([]);
@@ -220,6 +223,27 @@ export default function App() {
       console.warn('AppSettings snapshot error:', err);
     });
     return () => unsub();
+  }, []);
+
+  const [expeditionViews, setExpeditionViews] = useState([]);
+
+  // Subscribe to live expeditionViews collection in Firestore
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'expeditionViews'), orderBy('order', 'asc'));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const docs = [];
+        snapshot.forEach((doc) => {
+          docs.push({ id: doc.id, ...doc.data() });
+        });
+        setExpeditionViews(docs);
+      }, (err) => {
+        console.warn('ExpeditionViews snapshot error:', err);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn('Failed to listen to expeditionViews:', e.message);
+    }
   }, []);
 
   const [detailedTrek, setDetailedTrek] = useState(null);
@@ -606,10 +630,13 @@ export default function App() {
         setIsCareersEnabled={setIsCareersEnabled}
         leadApplications={leadApplications}
         setLeadApplications={setLeadApplications}
+        expeditionViews={expeditionViews}
         onReturnToSite={() => { window.location.hash = ''; }} 
       />
     );
   }
+
+  const activeHeroMedia = expeditionViews.length > 0 ? expeditionViews : HERO_MEDIA;
 
   return (
     <div className="min-h-screen bg-autumn-mist text-autumn-bark font-sans selection:bg-autumn-maple selection:text-black">
@@ -789,24 +816,34 @@ export default function App() {
 
       {/* 2. HERO SECTION */}
       <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden py-16 px-6 md:px-12">
-        {/* Full-Bleed Background Media Stack with Cross-Fade */}
-        {HERO_MEDIA.map((media, idx) => {
+        {activeHeroMedia.map((media, idx) => {
           const isActive = idx === activeHeroIndex;
+          const mediaUrl = media.mediaUrl || media.src;
+          const mediaType = media.mediaType || media.type;
+          const key = media.id || media.src;
           return (
             <div
-              key={media.src}
+              key={key}
               className={`absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out z-0 ${
                 isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
-              <video
-                src={media.src}
-                className="h-full w-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
+              {mediaType === 'video' ? (
+                <video
+                  src={mediaUrl}
+                  className="h-full w-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={mediaUrl}
+                  alt={media.title}
+                  className="h-full w-full object-cover animate-in fade-in zoom-in-105 duration-1000"
+                />
+              )}
             </div>
           );
         })}
@@ -881,11 +918,14 @@ export default function App() {
             Expedition Views
           </div>
           <div className="flex gap-2 overflow-x-auto no-scrollbar max-w-full">
-            {HERO_MEDIA.map((media, idx) => {
+            {activeHeroMedia.map((media, idx) => {
               const isActive = idx === activeHeroIndex;
+              const mediaUrl = media.mediaUrl || media.src;
+              const mediaType = media.mediaType || media.type;
+              const key = media.id || media.src;
               return (
                 <button
-                  key={media.src}
+                  key={key}
                   onClick={() => setActiveHeroIndex(idx)}
                   className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-xl overflow-hidden border transition-all duration-300 group shrink-0 ${
                     isActive 
@@ -893,11 +933,20 @@ export default function App() {
                       : 'border-[#F3ECDD]/20 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img
-                    src={media.thumbnail}
-                    alt={media.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {mediaType === 'video' ? (
+                    <video
+                      src={mediaUrl}
+                      className="h-full w-full object-cover"
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={mediaUrl}
+                      alt={media.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/35 flex items-end p-1">
                     <span className="text-[7px] sm:text-[8px] font-bold text-white uppercase tracking-wider truncate block w-full text-center bg-black/50 py-0.5 rounded">
                       {media.title}
