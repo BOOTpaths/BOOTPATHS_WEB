@@ -333,7 +333,7 @@ export default function App() {
   const executeAction = (action) => {
     if (action.type === 'book_trek') {
       setSelectedTrek(action.payload);
-      setSelectedDate(action.payload.dates[0]);
+      setSelectedDate(action.payload.batchDates ? action.payload.batchDates[0] : (action.payload.dates ? action.payload.dates[0] : ''));
       setNumTrekkers(1);
       const widget = document.getElementById('booking-widget');
       if (widget) {
@@ -416,7 +416,7 @@ export default function App() {
     const newRecord = {
       id: newBookingId,
       title: selectedTrek.title,
-      date: selectedDate || selectedTrek.dates[0],
+      date: selectedDate || (selectedTrek.batchDates ? selectedTrek.batchDates[0] : (selectedTrek.dates ? selectedTrek.dates[0] : '')),
       trekkers: numTrekkers,
       price: finalPayablePrice,
       status: 'Confirmed'
@@ -1317,123 +1317,130 @@ export default function App() {
             </div>
 
             {/* Right: Dynamic Pricing Card Column (5 cols) */}
-            <div className="flex flex-col justify-between rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-8 backdrop-blur-sm lg:col-span-5">
-              <div>
-                <span className="font-mono text-xxs text-autumn-maple border border-autumn-maple/20 bg-autumn-maple/5 px-2 py-0.5 rounded">
-                  Live Vacancy Check
-                </span>
-                
-                {/* Selected Trek Info */}
-                <h3 className="mt-4 font-outfit text-2xl font-black text-autumn-bark">
-                  {selectedTrek.title}
-                </h3>
-                <span className="text-xs text-autumn-bark/70 block mt-1.5 flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 text-autumn-bark/50" />
-                  {selectedTrek.location}
-                </span>
+            {!selectedTrek ? (
+              <div className="flex flex-col items-center justify-center rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-8 backdrop-blur-sm lg:col-span-5 py-24 text-center">
+                <Compass className="h-12 w-12 text-[#C1571F] animate-pulse mb-3" />
+                <p className="text-xs text-autumn-bark/60 uppercase tracking-widest font-bold">Select a trek destination</p>
+                <p className="text-xxs text-autumn-bark/40 mt-1 max-w-xs">Available vacancies and dynamic pricing details will load instantly.</p>
+              </div>
+            ) : (
+              <div className="flex flex-col justify-between rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/30 p-8 backdrop-blur-sm lg:col-span-5">
+                <div>
+                  <span className="font-mono text-xxs text-autumn-maple border border-autumn-maple/20 bg-autumn-maple/5 px-2 py-0.5 rounded">
+                    Live Vacancy Check
+                  </span>
+                  
+                  {/* Selected Trek Info */}
+                  <h3 className="mt-4 font-outfit text-2xl font-black text-autumn-bark">
+                    {selectedTrek.title}
+                  </h3>
+                  <span className="text-xs text-autumn-bark/70 block mt-1.5 flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5 text-autumn-bark/50" />
+                    {selectedTrek.location}
+                  </span>
 
-                <div className="mt-6 space-y-4">
-                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
-                    <span className="text-autumn-bark/50">Trip Duration</span>
-                    <span className="text-autumn-bark/80 font-semibold">{selectedTrek.duration}</span>
-                  </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
-                    <span className="text-autumn-bark/50">Altitude Reached</span>
-                    <span className="text-autumn-bark/80 font-mono font-semibold">{selectedTrek.altitude}</span>
-                  </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
-                    <span className="text-autumn-bark/50">Trek Cost (Per Trekker)</span>
-                    <span className="text-autumn-bark/80 font-bold">₹{selectedTrek.price}</span>
-                  </div>
-                  <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
-                    <span className="text-autumn-bark/50">Decathlon Gear Kit</span>
-                    <span className="text-autumn-maple font-semibold flex items-center gap-1">
-                      Included <Info className="h-3 w-3 text-autumn-bark/50 hover:text-autumn-maple cursor-help" />
-                    </span>
-                  </div>
-                </div>
-
-                {/* Real-time Vacancy Warning */}
-                <div className={`mt-6 rounded-lg border p-4 ${
-                  currentSlotsLeft <= 5 
-                    ? 'border-red-500/20 bg-red-500/5' 
-                    : 'border-autumn-maple/10 bg-autumn-maple/5'
-                }`}>
-                  <div className="flex gap-3">
-                    {currentSlotsLeft <= 5 ? (
-                      <Flame className="h-5 w-5 text-red-400 shrink-0" />
-                    ) : (
-                      <CheckCircle2 className="h-5 w-5 text-autumn-maple shrink-0" />
-                    )}
-                    <div>
-                      <h4 className={`text-xs font-bold uppercase tracking-wider ${currentSlotsLeft <= 5 ? 'text-red-400' : 'text-autumn-maple'}`}>
-                        {currentSlotsLeft <= 5 ? 'High Demand!' : 'Slots Available'}
-                      </h4>
-                      <p className="text-xxs text-autumn-bark/70 mt-1">
-                        {currentSlotsLeft <= 5 
-                          ? `Only ${currentSlotsLeft} vacancies left. Prices may rise shortly for this peak batch.` 
-                          : `${currentSlotsLeft} slots remaining on selected dates.`}
-                      </p>
+                  <div className="mt-6 space-y-4">
+                    <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                      <span className="text-autumn-bark/50">Trip Duration</span>
+                      <span className="text-autumn-bark/80 font-semibold">{selectedTrek.duration}</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Trail Wallet Credit Checkout Auto-Redemption */}
-                {walletBalance > 0 && (
-                  <div className="mt-4 p-3.5 rounded-xl border border-[#C1571F]/30 bg-[#C1571F]/5 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input 
-                          type="checkbox"
-                          checked={useWalletCredit}
-                          onChange={(e) => setUseWalletCredit(e.target.checked)}
-                          className="h-4 w-4 rounded border-[#3A2A1E]/20 text-[#C1571F] focus:ring-[#C1571F] accent-[#C1571F]"
-                        />
-                        <span className="text-xs font-bold text-autumn-bark flex items-center gap-1.5">
-                          <Wallet className="h-3.5 w-3.5 text-[#C1571F]" />
-                          Apply Trail Wallet Credit
-                        </span>
-                      </label>
-                      <span className="text-xs font-extrabold text-[#C1571F]">
-                        ₹{walletBalance.toLocaleString('en-IN')} Available
+                    <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                      <span className="text-autumn-bark/50">Altitude Reached</span>
+                      <span className="text-autumn-bark/80 font-mono font-semibold">{selectedTrek.altitude}</span>
+                    </div>
+                    <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                      <span className="text-autumn-bark/50">Trek Cost (Per Trekker)</span>
+                      <span className="text-autumn-bark/80 font-bold">₹{selectedTrek.price}</span>
+                    </div>
+                    <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
+                      <span className="text-autumn-bark/50">Decathlon Gear Kit</span>
+                      <span className="text-autumn-maple font-semibold flex items-center gap-1">
+                        Included <Info className="h-3 w-3 text-autumn-bark/50 hover:text-autumn-maple cursor-help" />
                       </span>
                     </div>
-                    {useWalletCredit && (
-                      <div className="text-xxs text-emerald-700 font-bold flex items-center justify-between pt-1 border-t border-[#C1571F]/10">
-                        <span>Discount Applied:</span>
-                        <span>-₹{appliedWalletDiscount.toLocaleString('en-IN')}</span>
+                  </div>
+
+                  {/* Real-time Vacancy Warning */}
+                  <div className={`mt-6 rounded-lg border p-4 ${
+                    currentSlotsLeft <= 5 
+                      ? 'border-red-500/20 bg-red-500/5' 
+                      : 'border-autumn-maple/10 bg-autumn-maple/5'
+                  }`}>
+                    <div className="flex gap-3">
+                      {currentSlotsLeft <= 5 ? (
+                        <Flame className="h-5 w-5 text-red-400 shrink-0" />
+                      ) : (
+                        <CheckCircle2 className="h-5 w-5 text-autumn-maple shrink-0" />
+                      )}
+                      <div>
+                        <h4 className={`text-xs font-bold uppercase tracking-wider ${currentSlotsLeft <= 5 ? 'text-red-400' : 'text-autumn-maple'}`}>
+                          {currentSlotsLeft <= 5 ? 'High Demand!' : 'Slots Available'}
+                        </h4>
+                        <p className="text-xxs text-autumn-bark/70 mt-1">
+                          {currentSlotsLeft <= 5 
+                            ? `Only ${currentSlotsLeft} vacancies left. Prices may rise shortly for this batch.` 
+                            : `${currentSlotsLeft} slots remaining on selected dates.`}
+                        </p>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Dynamic Price Display */}
-              <div className="mt-8 border-t border-autumn-bark/10 pt-6">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Total Price</span>
-                    <div className="text-xxs text-autumn-bark/50 mt-0.5">
-                      ₹{selectedTrek.price} x {numTrekkers} {numTrekkers === 1 ? 'Trekker' : 'Trekkers'}
                     </div>
                   </div>
-                  <div className="text-right">
-                    {appliedWalletDiscount > 0 && (
-                      <span className="text-xs text-emerald-700 font-bold block line-through opacity-75">
-                        ₹{totalPrice.toLocaleString('en-IN')}
+
+                  {/* Trail Wallet Credit Checkout Auto-Redemption */}
+                  {walletBalance > 0 && (
+                    <div className="mt-4 p-3.5 rounded-xl border border-[#C1571F]/30 bg-[#C1571F]/5 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input 
+                            type="checkbox"
+                            checked={useWalletCredit}
+                            onChange={(e) => setUseWalletCredit(e.target.checked)}
+                            className="h-4 w-4 rounded border-[#3A2A1E]/20 text-[#C1571F] focus:ring-[#C1571F] accent-[#C1571F]"
+                          />
+                          <span className="text-xs font-bold text-autumn-bark flex items-center gap-1.5">
+                            <Wallet className="h-3.5 w-3.5 text-[#C1571F]" />
+                            Apply Trail Wallet Credit
+                          </span>
+                        </label>
+                        <span className="text-xs font-extrabold text-[#C1571F]">
+                          ₹{walletBalance.toLocaleString('en-IN')} Available
+                        </span>
+                      </div>
+                      {useWalletCredit && (
+                        <div className="text-xxs text-emerald-700 font-bold flex items-center justify-between pt-1 border-t border-[#C1571F]/10">
+                          <span>Discount Applied:</span>
+                          <span>-₹{appliedWalletDiscount.toLocaleString('en-IN')}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Dynamic Price Display */}
+                <div className="mt-8 border-t border-autumn-bark/10 pt-6">
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Total Price</span>
+                      <div className="text-xxs text-autumn-bark/50 mt-0.5">
+                        ₹{selectedTrek.price} x {numTrekkers} {numTrekkers === 1 ? 'Trekker' : 'Trekkers'}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {appliedWalletDiscount > 0 && (
+                        <span className="text-xs text-emerald-700 font-bold block line-through opacity-75">
+                          ₹{totalPrice.toLocaleString('en-IN')}
+                        </span>
+                      )}
+                      <span className="font-outfit text-3xl font-black text-autumn-bark block">
+                        ₹{finalPayablePrice.toLocaleString('en-IN')}
                       </span>
-                    )}
-                    <span className="font-outfit text-3xl font-black text-autumn-bark block">
-                      ₹{finalPayablePrice.toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block mt-0.5">
-                      + Inclusive of Taxes
-                    </span>
+                      <span className="text-xxs text-autumn-bark/50 uppercase tracking-widest block mt-0.5">
+                        + Inclusive of Taxes
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-
-            </div>
+            )}
 
           </div>
         </div>
