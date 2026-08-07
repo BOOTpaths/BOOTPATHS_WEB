@@ -134,6 +134,7 @@ export default function App() {
   const [isRefundRoute, setIsRefundRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/refund') : false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
+  const [expeditionViews, setExpeditionViews] = useState([]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -224,8 +225,6 @@ export default function App() {
     });
     return () => unsub();
   }, []);
-
-  const [expeditionViews, setExpeditionViews] = useState([]);
 
   // Subscribe to live expeditionViews collection in Firestore
   useEffect(() => {
