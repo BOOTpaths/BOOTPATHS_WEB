@@ -86,6 +86,45 @@ const HERO_MEDIA = [
 
 const EXPEDITION_RECORDS = [];
 
+const INSTAGRAM_POSTS = [
+  {
+    id: 1,
+    imageUrl: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=400&q=80',
+    likes: '1,248',
+    comments: '42'
+  },
+  {
+    id: 2,
+    imageUrl: 'https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?auto=format&fit=crop&w=400&q=80',
+    likes: '932',
+    comments: '18'
+  },
+  {
+    id: 3,
+    imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80',
+    likes: '2,105',
+    comments: '88'
+  },
+  {
+    id: 4,
+    imageUrl: 'https://images.unsplash.com/photo-1533240332313-0db49b439ad3?auto=format&fit=crop&w=400&q=80',
+    likes: '1,504',
+    comments: '31'
+  },
+  {
+    id: 5,
+    imageUrl: 'https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=400&q=80',
+    likes: '1,822',
+    comments: '56'
+  },
+  {
+    id: 6,
+    imageUrl: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=400&q=80',
+    likes: '2,401',
+    comments: '94'
+  }
+];
+
 export default function App() {
   const [treks, setTreks] = useState([]);
   const [loadingPackages, setLoadingPackages] = useState(true);
@@ -1519,7 +1558,7 @@ export default function App() {
 
           {/* Grid Layout Placeholder for UGC Feed */}
           <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {INSTAGRAM_POSTS.map((post) => (
+            {(INSTAGRAM_POSTS || []).map((post) => (
               <div 
                 key={post.id}
                 className="group relative aspect-square overflow-hidden rounded-lg bg-autumn-mist border border-autumn-bark/10 cursor-pointer"
