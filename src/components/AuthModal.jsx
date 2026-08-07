@@ -71,7 +71,11 @@ export default function AuthModal({
       onClose();
     } catch (err) {
       console.warn('Auth action error:', err.message);
-      setAuthErrors({ form: err.message });
+      if (err.code === 'auth/api-key-not-valid' || (err.message && err.message.includes('api-key-not-valid'))) {
+        setAuthErrors({ form: 'Database connection configuration is updating. Please try again shortly.' });
+      } else {
+        setAuthErrors({ form: err.message });
+      }
     } finally {
       setIsAuthenticating(false);
     }
