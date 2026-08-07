@@ -14,7 +14,7 @@ export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenA
   const [formError, setFormError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [liveBlogs, setLiveBlogs] = useState(propBlogs || []);
+  const [liveBlogs, setLiveBlogs] = useState([]);
   
   const fileInputRef = useRef(null);
 
@@ -23,10 +23,11 @@ export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenA
     try {
       const q = query(collection(db, 'blogs'), where('status', '==', 'published'));
       const unsub = onSnapshot(q, (snapshot) => {
-        if (!snapshot.empty) {
-          const fetched = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-          setLiveBlogs(fetched);
-        }
+        const fetched = [];
+        snapshot.forEach(d => {
+          fetched.push({ id: d.id, ...d.data() });
+        });
+        setLiveBlogs(fetched);
       }, (err) => {
         console.warn('Blogs Firestore Notice:', err.message);
       });
@@ -37,8 +38,7 @@ export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenA
   }, []);
 
   // Filter published blogs for public view
-  const displayBlogs = liveBlogs.length > 0 ? liveBlogs : propBlogs;
-  const publishedBlogs = displayBlogs.filter(b => b.status === 'published' || !b.status);
+  const publishedBlogs = liveBlogs.filter(b => b.status === 'published');
 
   const showToast = (msg) => {
     setToastMessage(msg);

@@ -439,7 +439,7 @@ export default function UserDashboard({
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {walletTransactions.map((txn) => (
+                    {(walletTransactions || []).map((txn) => (
                       <div 
                         key={txn.id}
                         className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-[#3A2A1E]/10 bg-[#EBE3D3] hover:border-[#C1571F]/30 transition-all text-xs"

@@ -148,7 +148,9 @@ export default function LeadCareers({ isCareersEnabled: propCareersEnabled, lead
         newApplication.id = `lead-${Date.now()}`;
       }
 
-      setLeadApplications(prev => [newApplication, ...prev]);
+      if (setLeadApplications) {
+        setLeadApplications(prev => [newApplication, ...prev]);
+      }
       setIsModalOpen(false);
 
       // Reset Form
