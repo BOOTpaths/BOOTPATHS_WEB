@@ -1675,8 +1675,10 @@ export default function App() {
                     {/* Bill summary */}
                     <div className="rounded-lg bg-stone-955 p-4 mb-6">
                       <span className="text-xxs uppercase tracking-wider text-autumn-bark/50 block">Secure Payment Request For</span>
-                      <span className="text-xs font-bold text-autumn-bark/80 block mt-1">{selectedTrek.title}</span>
-                      <span className="text-xxs text-autumn-bark5 mt-0.5 block">Batch Date: {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      <span className="text-xs font-bold text-autumn-bark/80 block mt-1">{selectedTrek ? selectedTrek.title : ''}</span>
+                      <span className="text-xxs text-autumn-bark5 mt-0.5 block">
+                        Batch Date: {selectedDate && !isNaN(new Date(selectedDate).getTime()) ? new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                      </span>
                       <span className="text-xxs text-autumn-bark5 block">Trekkers: {numTrekkers}</span>
                       
                       <div className="mt-4 pt-3 border-t border-autumn-bark/10 flex items-center justify-between">
@@ -1728,8 +1730,10 @@ export default function App() {
                 </p>
 
                 <div className="rounded-lg bg-stone-955 p-4 my-6 text-left space-y-2">
-                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Destination:</span> {selectedTrek.title}</div>
-                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Date:</span> {new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                  <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Destination:</span> {selectedTrek ? selectedTrek.title : ''}</div>
+                  <div className="text-xxs text-autumn-bark/70">
+                    <span className="font-bold text-autumn-bark/80">Date:</span> {selectedDate && !isNaN(new Date(selectedDate).getTime()) ? new Date(selectedDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                  </div>
                   <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Trekkers:</span> {numTrekkers}</div>
                   <div className="text-xxs text-autumn-bark/70"><span className="font-bold text-autumn-bark/80">Total Paid:</span> ₹{totalPrice.toLocaleString('en-IN')}</div>
                 </div>
