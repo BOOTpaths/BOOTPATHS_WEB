@@ -5,9 +5,9 @@ import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDemoKeyForBOOTpathsEnvironmentVar01",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "bootpaths-app.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "bootpaths-app",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "bootpaths-app.appspot.com",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "bootpaths-4b877.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "bootpaths-4b877",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "bootpaths-4b877.appspot.com",
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "109283746501",
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:109283746501:web:a1b2c3d4e5f6g7h8i9j0"
 };

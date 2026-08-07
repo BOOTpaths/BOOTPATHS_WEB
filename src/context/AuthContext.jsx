@@ -38,7 +38,14 @@ export function AuthProvider({ children }) {
             const data = snapshot.data();
             setUserData(data);
             setWalletBalance(data.walletBalance || 0);
-            if (data.role === 'admin') setIsAdmin(true);
+            if (data.role === 'admin') {
+              setIsAdmin(true);
+            } else if (adminFlag) {
+              setIsAdmin(true);
+              setDoc(userDocRef, { role: 'admin' }, { merge: true }).catch((err) => {
+                console.warn('Auto-grant Admin role failed:', err.message);
+              });
+            }
           } else {
             // Create user document if it doesn't exist yet
             const initials = user.displayName
