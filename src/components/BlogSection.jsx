@@ -170,14 +170,13 @@ export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenA
           </div>
         </div>
 
-        {/* Blog Posts Grid */}
-        {publishedBlogs.length === 0 ? (
+        {(publishedBlogs || []).length === 0 ? (
           <div className="text-center py-16 bg-[#EBE3D3] border border-[#3A2A1E]/10 rounded-2xl">
-            <p className="text-stone-700">No published articles yet. Be the first to share your story!</p>
+            <p className="text-stone-700 font-bold">Be the first to share a trail story!</p>
           </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {publishedBlogs.map((post) => (
+            {(publishedBlogs || []).map((post) => (
               <article 
                 key={post.id}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] shadow-sm transition-all duration-300 hover:border-[#C1571F]/30 hover:shadow-md flex-1"

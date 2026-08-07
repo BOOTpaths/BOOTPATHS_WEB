@@ -7,6 +7,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import RefundPolicy from './components/RefundPolicy';
 import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
+import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { collection, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
@@ -205,6 +206,7 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
+  const { currentUser, userData, logout, walletBalance: contextWalletBalance } = useAuth();
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -224,6 +226,46 @@ export default function App() {
     emergencyContact: '',
     medicalConditions: ''
   });
+
+  // Synchronize local user session and profileData with Firestore userData
+  useEffect(() => {
+    if (userData) {
+      setUser({
+        uid: userData.uid,
+        name: userData.name,
+        email: userData.email,
+        initials: userData.initials,
+        photo: userData.photoURL || null,
+        role: userData.role || 'hiker'
+      });
+      if (userData.profile) {
+        setProfileData({
+          fullName: userData.profile.fullName || '',
+          mobile: userData.profile.mobile || '',
+          bloodGroup: userData.profile.bloodGroup || '',
+          emergencyContact: userData.profile.emergencyContact || '',
+          medicalConditions: userData.profile.medicalConditions || ''
+        });
+      } else {
+        setProfileData({
+          fullName: userData.name || '',
+          mobile: '',
+          bloodGroup: '',
+          emergencyContact: '',
+          medicalConditions: ''
+        });
+      }
+    } else if (!currentUser) {
+      setUser(prev => (prev && prev.uid.startsWith('guest-')) ? prev : null);
+    }
+  }, [currentUser, userData]);
+
+  // Synchronize wallet balance with Firestore for logged-in users
+  useEffect(() => {
+    if (user && !user.uid.startsWith('guest-')) {
+      setWalletBalance(contextWalletBalance || 0);
+    }
+  }, [user, contextWalletBalance]);
 
   // Handle Cancellation Confirmation from Dashboard
   const handleConfirmCancellation = async ({ booking, refundOption, cancelDetails }) => {
@@ -358,7 +400,12 @@ export default function App() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.warn('Logout error:', err.message);
+    }
     setUser(null);
   };
 
@@ -1145,10 +1192,10 @@ export default function App() {
                     onChange={(e) => handleTrekChange(e.target.value)}
                     disabled={treks.length === 0}
                   >
-                    {treks.length === 0 ? (
+                    {(treks || []).length === 0 ? (
                       <option value="" disabled>No active treks available</option>
                     ) : (
-                      treks.map(t => (
+                      (treks || []).map(t => (
                         <option key={t.id} value={t.id}>{t.title} (₹{t.price})</option>
                       ))
                     )}
@@ -1170,10 +1217,10 @@ export default function App() {
                       onChange={(e) => setSelectedDate(e.target.value)}
                       disabled={availableBatchDates.length === 0}
                     >
-                      {availableBatchDates.length === 0 ? (
+                      {(availableBatchDates || []).length === 0 ? (
                         <option value="" disabled>No active batches available</option>
                       ) : (
-                        availableBatchDates.map((dateStr, idx) => {
+                        (availableBatchDates || []).map((dateStr, idx) => {
                           let formattedDate = dateStr;
                           if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
                             const parsedDate = new Date(dateStr + 'T00:00:00');
@@ -1835,7 +1882,7 @@ export default function App() {
                   <CheckCircle2 className="h-4 w-4" /> Inclusions
                 </h4>
                 <div className="grid grid-cols-2 gap-2.5">
-                  {detailedTrek.inclusion.map((inc, i) => (
+                  {((detailedTrek && detailedTrek.inclusion) || []).map((inc, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-autumn-bark/90">
                       <Check className="h-4.5 w-4.5 text-autumn-maple shrink-0" />
                       <span>{inc}</span>
@@ -1917,13 +1964,25 @@ export default function App() {
         profileData={profileData}
         setProfileData={setProfileData}
         isSavingProfile={isSavingProfile}
-        onSaveProfile={(e) => {
+        onSaveProfile={async (e) => {
           e.preventDefault();
+          if (!user || !user.uid) return;
           setIsSavingProfile(true);
-          setTimeout(() => {
+          try {
+            await setDoc(doc(db, 'users', user.uid), {
+              profile: {
+                fullName: profileData.fullName || '',
+                mobile: profileData.mobile || '',
+                bloodGroup: profileData.bloodGroup || '',
+                emergencyContact: profileData.emergencyContact || '',
+                medicalConditions: profileData.medicalConditions || ''
+              }
+            }, { merge: true });
+          } catch (err) {
+            console.warn('Profile save error:', err.message);
+          } finally {
             setIsSavingProfile(false);
-            alert("Database Mutation Hook: Profile synchronized to Firestore successfully!");
-          }, 1000);
+          }
         }}
       />
 

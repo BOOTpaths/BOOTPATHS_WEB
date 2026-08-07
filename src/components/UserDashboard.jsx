@@ -231,7 +231,7 @@ export default function UserDashboard({
                     </button>
                   </div>
                 ) : (
-                  userBookings.map((record) => {
+                  (userBookings || []).map((record) => {
                     const isConfirmed = record.status === 'Confirmed';
                     const isCancelled = record.status === 'Cancelled';
                     const isCompleted = record.status === 'Completed';

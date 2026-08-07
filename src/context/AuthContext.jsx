@@ -80,45 +80,24 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    try {
-      return await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.warn('Firebase Login Fallback:', err.message);
-      // Fallback for demo mode
-      const isDemoAdmin = email.toLowerCase() === 'admin@bootpaths.com';
-      const mockUser = {
-        uid: isDemoAdmin ? 'admin-101' : 'hiker-202',
-        email: email,
-        displayName: isDemoAdmin ? 'Admin Lead' : email.split('@')[0],
-      };
-      setCurrentUser(mockUser);
-      setIsAdmin(isDemoAdmin);
-      return { user: mockUser };
-    }
+    return await signInWithEmailAndPassword(auth, email, password);
   };
 
   const signup = async (email, password, name) => {
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      if (res.user) {
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-        await setDoc(doc(db, 'users', res.user.uid), {
-          uid: res.user.uid,
-          name: name,
-          email: email,
-          initials: initials,
-          walletBalance: 0,
-          role: 'hiker',
-          createdAt: new Date().toISOString()
-        });
-      }
-      return res;
-    } catch (err) {
-      console.warn('Firebase Signup Fallback:', err.message);
-      const mockUser = { uid: `user-${Date.now()}`, email, displayName: name };
-      setCurrentUser(mockUser);
-      return { user: mockUser };
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    if (res.user) {
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      await setDoc(doc(db, 'users', res.user.uid), {
+        uid: res.user.uid,
+        name: name,
+        email: email,
+        initials: initials,
+        walletBalance: 0,
+        role: 'hiker',
+        createdAt: new Date().toISOString()
+      });
     }
+    return res;
   };
 
   const loginWithGoogle = async () => {

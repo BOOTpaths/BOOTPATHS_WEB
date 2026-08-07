@@ -398,9 +398,9 @@ export default function AdminConsole({
   };
 
   // Filtered Treks
-  const filteredTreks = treks.filter(t => 
-    t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.location.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTreks = (treks || []).filter(t => 
+    (t.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (t.location || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // UNAUTHENTICATED: LOGIN / RESET SCREEN
@@ -771,7 +771,7 @@ export default function AdminConsole({
                     </td>
                   </tr>
                 ) : (
-                  filteredTreks.map((trek) => (
+                  (filteredTreks || []).map((trek) => (
                     <tr key={trek.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
                       {/* Title & Image */}
                       <td className="py-4 px-6">
@@ -899,14 +899,14 @@ export default function AdminConsole({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-autumn-bark/10">
-                    {blogs.length === 0 ? (
+                    {(blogs || []).length === 0 ? (
                       <tr>
                         <td colSpan="6" className="py-12 text-center text-autumn-bark/50">
                           No blog posts found in database.
                         </td>
                       </tr>
                     ) : (
-                      blogs.map((post) => (
+                      (blogs || []).map((post) => (
                         <tr key={post.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
                           <td className="py-4 px-5 font-medium">
                             <div className="flex items-center gap-3">
@@ -1010,7 +1010,7 @@ export default function AdminConsole({
                 </span>
                 <button
                   type="button"
-                  onClick={() => setIsCareersEnabled(!isCareersEnabled)}
+                  onClick={handleToggleCareersEnabled}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
                     isCareersEnabled ? 'bg-[#C1571F]' : 'bg-stone-500'
                   }`}
@@ -1063,14 +1063,14 @@ export default function AdminConsole({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-autumn-bark/10">
-                    {leadApplications.length === 0 ? (
+                    {(leadApplications || []).length === 0 ? (
                       <tr>
                         <td colSpan="7" className="py-12 text-center text-autumn-bark/50">
                           No expedition lead applications received yet.
                         </td>
                       </tr>
                     ) : (
-                      leadApplications.map((app) => (
+                      (leadApplications || []).map((app) => (
                         <tr key={app.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
                           {/* Full Name & Resume */}
                           <td className="py-4 px-5 font-semibold">
@@ -1502,10 +1502,10 @@ export default function AdminConsole({
 
                 {/* Active Dates List (Pill Tags) */}
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {formData.batchDates.length === 0 ? (
+                  {(formData.batchDates || []).length === 0 ? (
                     <span className="text-xxs text-autumn-bark/40 italic">No batch dates added yet. Select a date above.</span>
                   ) : (
-                    formData.batchDates.map((dateStr, index) => (
+                    (formData.batchDates || []).map((dateStr, index) => (
                       <span 
                         key={index} 
                         className="bg-[#3A2A1E] text-[#F3ECDD] rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-[#C1571F]/30"
