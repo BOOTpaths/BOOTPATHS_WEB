@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
 export default function AuthModal({
   isOpen,
@@ -14,6 +16,34 @@ export default function AuthModal({
   const [authName, setAuthName] = useState('');
   const [authErrors, setAuthErrors] = useState({});
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [resetSuccessMessage, setResetSuccessMessage] = useState('');
+  const [resetErrorMessage, setResetErrorMessage] = useState('');
+
+  const handleForgotPassword = async () => {
+    if (!authEmail.trim()) {
+      setResetErrorMessage("Please enter your email address in the field above first.");
+      setResetSuccessMessage("");
+      return;
+    }
+    try {
+      setIsAuthenticating(true);
+      await sendPasswordResetEmail(auth, authEmail.trim());
+      setResetSuccessMessage(`Password reset link sent to ${authEmail}! Check your inbox and spam folder.`);
+      setResetErrorMessage("");
+    } catch (error) {
+      console.warn("Reset password error:", error);
+      if (error.code === 'auth/user-not-found' || (error.message && error.message.includes('user-not-found'))) {
+        setResetErrorMessage("No registered account found with this email address.");
+      } else if (error.code === 'auth/invalid-email' || (error.message && error.message.includes('invalid-email'))) {
+        setResetErrorMessage("Please enter a valid email address.");
+      } else {
+        setResetErrorMessage("Failed to send reset email. Please try again.");
+      }
+      setResetSuccessMessage("");
+    } finally {
+      setIsAuthenticating(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -139,14 +169,14 @@ export default function AuthModal({
             <div className="flex border-b border-autumn-bark/10 bg-autumn-mist/20">
               <button 
                 type="button"
-                onClick={() => { setAuthMode('login'); setAuthErrors({}); }}
+                onClick={() => { setAuthMode('login'); setAuthErrors({}); setResetSuccessMessage(''); setResetErrorMessage(''); }}
                 className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'login' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
               >
                 Sign In
               </button>
               <button 
                 type="button"
-                onClick={() => { setAuthMode('register'); setAuthErrors({}); }}
+                onClick={() => { setAuthMode('register'); setAuthErrors({}); setResetSuccessMessage(''); setResetErrorMessage(''); }}
                 className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'register' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
               >
                 Create Account
@@ -208,7 +238,7 @@ export default function AuthModal({
                   <div className="flex justify-end mt-1.5">
                     <button 
                       type="button" 
-                      onClick={() => alert("Password reset link sent (simulated).")}
+                      onClick={handleForgotPassword}
                       className="text-[10px] font-bold uppercase tracking-wider text-autumn-maple hover:text-autumn-amber transition-colors focus:outline-none"
                     >
                       Forgot Password?
@@ -216,6 +246,12 @@ export default function AuthModal({
                   </div>
                   {authErrors.password && (
                     <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.password}</span>
+                  )}
+                  {resetErrorMessage && (
+                    <span className="block text-[10px] text-[#C1571F] font-bold mt-2 text-center">{resetErrorMessage}</span>
+                  )}
+                  {resetSuccessMessage && (
+                    <span className="block text-[10px] text-emerald-700 font-bold mt-2 text-center">{resetSuccessMessage}</span>
                   )}
                 </div>
 
