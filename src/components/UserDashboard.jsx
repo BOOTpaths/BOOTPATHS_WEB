@@ -16,7 +16,7 @@ import {
   Compass
 } from 'lucide-react';
 import { db, auth } from '../config/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, setDoc } from 'firebase/firestore';
 
 export default function UserDashboard({
   isOpen,
@@ -38,6 +38,51 @@ export default function UserDashboard({
   const [userBookings, setUserBookings] = useState([]);
   const [selectedBookingForCancel, setSelectedBookingForCancel] = useState(null);
   const [selectedRefundOption, setSelectedRefundOption] = useState('bonus_credit'); // 'cash' or 'bonus_credit'
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    if (!auth.currentUser) return;
+    
+    setIsSaving(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    try {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      
+      const updatedProfile = {
+        profile: {
+          fullName: profileData.fullName?.trim() || "",
+          mobile: profileData.mobile?.trim() || "",
+          bloodGroup: profileData.bloodGroup || "",
+          emergencyContact: profileData.emergencyContact?.trim() || "",
+          medicalConditions: profileData.medicalConditions?.trim() || ""
+        },
+        name: profileData.fullName?.trim() || auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+        updatedAt: new Date().toISOString()
+      };
+
+      // Merge update into Firestore
+      await setDoc(userRef, updatedProfile, { merge: true });
+
+      // Visual Feedback
+      setSuccessMessage("Hiker Vital Credentials saved successfully!");
+      setIsSaved(true);
+      setTimeout(() => {
+        setIsSaved(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error updating profile credentials:", error);
+      setErrorMessage("Failed to save credentials. Please check your network or try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   useEffect(() => {
     if (!isOpen || !auth.currentUser) return;
@@ -302,7 +347,7 @@ export default function UserDashboard({
                 <p className="text-xs text-[#3A2A1E]/70 mt-0.5">Manage your wilderness credentials and emergency medical protocols.</p>
               </div>
 
-              <form onSubmit={onSaveProfile} className="space-y-6">
+              <form onSubmit={handleSaveProfile} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Legal Full Name</label>
@@ -368,14 +413,24 @@ export default function UserDashboard({
                   ></textarea>
                 </div>
 
-                <div className="pt-2 flex justify-end">
+                <div className="pt-2 flex flex-col items-end gap-2">
                   <button
                     type="submit"
-                    disabled={isSavingProfile}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#C1571F] px-6 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-[#a44717] disabled:opacity-50 shadow-md"
+                    disabled={isSaving}
+                    className={`flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-md disabled:opacity-50 ${
+                      isSaved 
+                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        : 'bg-[#C1571F] hover:bg-[#a44717]'
+                    }`}
                   >
-                    {isSavingProfile ? 'Synchronizing...' : 'Save Hiker Credentials'}
+                    {isSaved ? 'SAVED ✓' : isSaving ? 'Synchronizing...' : 'Save Hiker Credentials'}
                   </button>
+                  {successMessage && (
+                    <p className="text-xxs font-bold text-emerald-700 mt-2">{successMessage}</p>
+                  )}
+                  {errorMessage && (
+                    <p className="text-xxs font-bold text-[#C1571F] mt-2">{errorMessage}</p>
+                  )}
                 </div>
               </form>
             </div>
