@@ -316,6 +316,16 @@ export default function App() {
         e.preventDefault();
         return;
       }
+      // Ctrl + Shift + A (Emergency Admin Access Shortcut)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        if (user && user.role === 'admin') {
+          window.location.hash = '#admin';
+        } else {
+          alert('Access Denied: Administrative privileges required.');
+        }
+        return;
+      }
     };
 
     document.addEventListener('contextmenu', handleContextMenu);
@@ -325,7 +335,7 @@ export default function App() {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [user]);
 
   // Synchronize local user session and profileData with Firestore userData
   useEffect(() => {
@@ -657,6 +667,10 @@ export default function App() {
   }
 
   if (currentHash === '#admin') {
+    if (!user || user.role !== 'admin') {
+      window.location.hash = '';
+      return null;
+    }
     return (
       <AdminConsole 
         treks={treks} 
@@ -728,6 +742,14 @@ export default function App() {
                   <div className="px-3 py-1.5 border-b border-autumn-bark/10 text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
                     {user.email}
                   </div>
+                  {user && user.role === 'admin' && (
+                    <button 
+                      onClick={() => { window.location.hash = '#admin'; }}
+                      className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider bg-[#C1571F] text-white hover:bg-[#a34718] transition-colors flex items-center gap-1.5"
+                    >
+                      ⚙️ ADMIN PORTAL
+                    </button>
+                  )}
                   <button 
                     onClick={() => setIsDashboardOpen(true)}
                     className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider text-autumn-maple hover:bg-autumn-maple/10 transition-colors"
@@ -1792,7 +1814,6 @@ export default function App() {
             >
               Cancellation & Refund Policy
             </a>
-            <a href="#admin" className="hover:text-autumn-maple font-bold transition-colors">Admin Console</a>
           </div>
         </div>
       </footer>
