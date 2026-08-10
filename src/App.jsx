@@ -554,20 +554,10 @@ export default function App() {
     }, 1800);
   };
 
-  // Confirm simulated success payment
-  const handleConfirmPayment = () => {
+  // Handle successful payment: register booking and sync to database
+  const handleBookingSuccess = async ({ paymentId, amount }) => {
     setIsProcessingPayment(true);
-    setTimeout(() => {
-      setIsProcessingPayment(false);
-      setPaymentSuccess(true);
-    }, 1500);
-  };
-
-  // Reset checkout flow
-  const handleCloseSuccess = () => {
-    setIsRazorpayModalOpen(false);
-    setPaymentSuccess(false);
-
+    
     // Register new confirmed booking record
     const newBookingId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
     const newRecord = {
@@ -575,23 +565,25 @@ export default function App() {
       title: selectedTrek.title,
       date: selectedDate || (selectedTrek.batchDates ? selectedTrek.batchDates[0] : (selectedTrek.dates ? selectedTrek.dates[0] : '')),
       trekkers: numTrekkers,
-      price: finalPayablePrice,
-      status: 'Confirmed'
+      price: amount,
+      status: 'Confirmed',
+      paymentId: paymentId || 'Simulated'
     };
+    
     setExpeditionRecords(prev => [newRecord, ...prev]);
 
     // Save booking to Firestore bookings collection
     if (user && user.uid) {
       try {
-        setDoc(doc(db, 'bookings', newBookingId), {
+        await setDoc(doc(db, 'bookings', newBookingId), {
           ...newRecord,
           userId: user.uid,
           createdAt: new Date().toISOString()
-        }).catch((err) => {
-          console.warn('Firestore booking sync notice:', err.message);
         });
       } catch (err) {
-        console.warn('Firestore booking sync error:', err.message);
+        if (!import.meta.env.PROD) {
+          console.warn('Firestore booking sync error:', err.message);
+        }
       }
     }
 
@@ -616,6 +608,47 @@ export default function App() {
     setPhone('');
     setHasAgreedToTerms(false);
     setNumTrekkers(1);
+    
+    setIsProcessingPayment(false);
+    setPaymentSuccess(true);
+  };
+
+  // Launch Razorpay Checkout standard iframe modal overlay
+  const handleProceedToPay = () => {
+    const payableAmount = finalPayablePrice;
+    
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YOUR_KEY',
+      amount: payableAmount * 100,
+      currency: 'INR',
+      name: 'BOOTpaths Expeditions',
+      description: `${selectedTrek?.title || 'Trek Booking'} (${selectedDate || 'Select Date'})`,
+      handler: async function (response) {
+        await handleBookingSuccess({
+          paymentId: response.razorpay_payment_id,
+          amount: payableAmount
+        });
+      },
+      prefill: {
+        name: name || (user?.name || ''),
+        email: email || (user?.email || ''),
+        contact: phone || ''
+      },
+      theme: { color: '#C1571F' }
+    };
+    
+    try {
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      alert('Razorpay Checkout failed to initialize. Please check your network connection.');
+    }
+  };
+
+  // Reset checkout flow
+  const handleCloseSuccess = () => {
+    setIsRazorpayModalOpen(false);
+    setPaymentSuccess(false);
     setDashboardTab('bookings');
     setIsDashboardOpen(true); // Open dashboard to view the confirmed booking
   };
@@ -1880,17 +1913,6 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Simulation alert */}
-                    <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-4 mb-6">
-                      <div className="flex gap-2">
-                        <Info className="h-4.5 w-4.5 text-amber-400 shrink-0 mt-0.5" />
-                        <div>
-                          <h5 className="text-xxs font-bold uppercase tracking-wider text-amber-400">Sandbox Environment</h5>
-                          <p className="text-xxs text-autumn-bark/70 mt-1">This Razorpay window is simulated. No real currency is exchanged. Click below to mimic a successful transaction.</p>
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Payer details review */}
                     <div className="text-xxs text-autumn-bark/50 space-y-1 mb-6 border-b border-autumn-bark/10 pb-4">
                       <div><span className="font-bold text-autumn-bark/70">Payer Name:</span> {name}</div>
@@ -1900,11 +1922,24 @@ export default function App() {
 
                     {/* Pay Button */}
                     <button
-                      onClick={handleConfirmPayment}
-                      className="w-full flex h-11 items-center justify-center gap-2 rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-colors hover:bg-[#a44717]"
+                      onClick={handleProceedToPay}
+                      className="w-full flex h-11 items-center justify-center gap-2 rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-colors hover:bg-[#a44717] cursor-pointer"
                     >
-                      Simulate Success Payment
+                      PROCEED TO PAY ₹{finalPayablePrice.toLocaleString('en-IN')}
                     </button>
+
+                    {/* Direct Fallback Link */}
+                    <div className="mt-4 text-center">
+                      <span className="text-xxs text-autumn-bark/40 block mb-2">— OR USE BACKUP DIRECT LINK —</span>
+                      <a
+                        href={`https://razorpay.me/@bootpaths?amount=${finalPayablePrice}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex w-full h-11 items-center justify-center rounded border border-[#C1571F] text-[#C1571F] font-outfit text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[#C1571F] hover:text-[#3A2A1E]"
+                      >
+                        🔗 Pay Direct via Razorpay.me ↗
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
