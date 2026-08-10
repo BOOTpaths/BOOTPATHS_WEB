@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 BOOTpaths. All Rights Reserved.
+ *
+ * This software and its source code are the confidential and proprietary property of BOOTpaths. 
+ * Unauthorized copying, modifying, cloning, distribution, or downloading of this file, via any medium, 
+ * is strictly prohibited without express written permission from BOOTpaths.
+ */
 import { useEffect, useState } from 'react';
 import { 
   X, 
