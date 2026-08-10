@@ -31,7 +31,9 @@ export default function AuthModal({
       setResetSuccessMessage(`Password reset link sent to ${authEmail}! Check your inbox and spam folder.`);
       setResetErrorMessage("");
     } catch (error) {
-      console.warn("Reset password error:", error);
+      if (!import.meta.env.PROD) {
+        console.warn("Reset password error:", error);
+      }
       if (error.code === 'auth/user-not-found' || (error.message && error.message.includes('user-not-found'))) {
         setResetErrorMessage("No registered account found with this email address.");
       } else if (error.code === 'auth/invalid-email' || (error.message && error.message.includes('invalid-email'))) {
@@ -100,7 +102,9 @@ export default function AuthModal({
       setAuthName('');
       onClose();
     } catch (err) {
-      console.warn('Auth action error:', err.message);
+      if (!import.meta.env.PROD) {
+        console.warn('Auth action error:', err.message);
+      }
       if (err.code === 'auth/api-key-not-valid' || (err.message && err.message.includes('api-key-not-valid'))) {
         setAuthErrors({ form: 'Database connection configuration is updating. Please try again shortly.' });
       } else {

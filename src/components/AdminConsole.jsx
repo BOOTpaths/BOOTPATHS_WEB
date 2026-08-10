@@ -304,7 +304,9 @@ export default function AdminConsole({
           dates: updatedDates
         });
       } catch (err) {
-        console.warn('Live Firestore update notice:', err.message);
+        if (!import.meta.env.PROD) {
+          console.warn('Live Firestore update notice:', err.message);
+        }
       }
     }
   };
@@ -316,6 +318,23 @@ export default function AdminConsole({
       alert('Please upload a banner image for the trek package.');
       return;
     }
+
+    // Link URL Sanitization: Enforce strict HTTP/HTTPS validation
+    if (formData.itineraryDocUrl && formData.itineraryDocUrl.trim() !== '') {
+      const trimmedUrl = formData.itineraryDocUrl.trim();
+      const lowerUrl = trimmedUrl.toLowerCase();
+      
+      if (!lowerUrl.startsWith('http://') && !lowerUrl.startsWith('https://')) {
+        alert('Invalid Document Link. The URL must start strictly with http:// or https://.');
+        return;
+      }
+      
+      if (lowerUrl.includes('javascript:') || lowerUrl.includes('data:') || lowerUrl.includes('<script')) {
+        alert('Security Warning: Disallowed protocol or script detected in Document URL.');
+        return;
+      }
+    }
+
     const tagMatch = BADGE_OPTIONS.find(b => b.label === formData.tag);
     const tagColor = tagMatch ? tagMatch.color : 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40';
 
@@ -335,7 +354,9 @@ export default function AdminConsole({
       try {
         await setDoc(doc(db, 'packages', editingTrek.id), payload, { merge: true });
       } catch (err) {
-        console.warn('Firestore package update notice:', err.message);
+        if (!import.meta.env.PROD) {
+          console.warn('Firestore package update notice:', err.message);
+        }
       }
     } else {
       // CREATE
@@ -345,7 +366,9 @@ export default function AdminConsole({
       try {
         await setDoc(doc(db, 'packages', newId), payload);
       } catch (err) {
-        console.warn('Firestore package create notice:', err.message);
+        if (!import.meta.env.PROD) {
+          console.warn('Firestore package create notice:', err.message);
+        }
       }
     }
     setIsModalOpen(false);

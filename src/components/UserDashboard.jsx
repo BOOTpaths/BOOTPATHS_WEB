@@ -67,6 +67,14 @@ export default function UserDashboard({
         updatedAt: new Date().toISOString()
       };
 
+      // Security Guard: Prevent any local role escalation attempts
+      if ('role' in updatedProfile) {
+        delete updatedProfile.role;
+      }
+      if (updatedProfile.profile && 'role' in updatedProfile.profile) {
+        delete updatedProfile.profile.role;
+      }
+
       // Merge update into Firestore
       await setDoc(userRef, updatedProfile, { merge: true });
 
@@ -77,7 +85,9 @@ export default function UserDashboard({
         setIsSaved(false);
       }, 2000);
     } catch (error) {
-      console.error("Error updating profile credentials:", error);
+      if (!import.meta.env.PROD) {
+        console.error("Error updating profile credentials:", error);
+      }
       setErrorMessage("Failed to save credentials. Please check your network or try again.");
     } finally {
       setIsSaving(false);
