@@ -182,6 +182,20 @@ export default function AdminConsole({
   };
 
   const [newBatchDateInput, setNewBatchDateInput] = useState('');
+  const [newInclusion, setNewInclusion] = useState('');
+
+  const handleAddInclusion = () => {
+    if (!newInclusion.trim()) return;
+    const inclusionText = newInclusion.trim();
+    if (!formData.inclusion.includes(inclusionText)) {
+      setFormData(prev => ({
+        ...prev,
+        inclusion: [...prev.inclusion, inclusionText]
+      }));
+    }
+    setNewInclusion('');
+  };
+
   const [formData, setFormData] = useState({
     title: '',
     location: '',
@@ -195,7 +209,8 @@ export default function AdminConsole({
     description: '',
     image: '',
     inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
-    batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
+    itineraryDocUrl: ''
   });
 
   // Open Create Modal
@@ -214,9 +229,11 @@ export default function AdminConsole({
       description: '',
       image: '',
       inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
-      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
+      itineraryDocUrl: ''
     });
     setNewBatchDateInput('');
+    setNewInclusion('');
     setIsModalOpen(true);
   };
 
@@ -237,9 +254,11 @@ export default function AdminConsole({
       description: trek.description || '',
       image: trek.image || '',
       inclusion: trek.inclusion || [],
-      batchDates: existingDates
+      batchDates: existingDates,
+      itineraryDocUrl: trek.itineraryDocUrl || ''
     });
     setNewBatchDateInput('');
+    setNewInclusion('');
     setIsModalOpen(true);
   };
 
@@ -1771,7 +1790,7 @@ export default function AdminConsole({
                 )}
               </div>
 
-              <div>
+               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1">
                   Package Summary Description
                 </label>
@@ -1785,12 +1804,52 @@ export default function AdminConsole({
                 />
               </div>
 
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1">
+                  Expedition Document Link (PDF / Google Doc / Drive)
+                </label>
+                <input 
+                  type="url" 
+                  placeholder="https://drive.google.com/file/d/... or PDF URL"
+                  value={formData.itineraryDocUrl}
+                  onChange={(e) => setFormData({ ...formData, itineraryDocUrl: e.target.value })}
+                  className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                />
+              </div>
+
               {/* Inclusions checklist */}
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">
                   Package Inclusions
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+
+                {/* Custom Inclusion Input */}
+                <div className="flex items-stretch gap-2 mb-3">
+                  <input 
+                    type="text"
+                    placeholder="Type custom inclusion (e.g. Quechua Gear)..."
+                    value={newInclusion}
+                    onChange={(e) => setNewInclusion(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddInclusion();
+                      }
+                    }}
+                    className="flex-1 h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddInclusion}
+                    className="px-4 py-2 bg-autumn-maple hover:bg-[#a44717] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center shrink-0"
+                  >
+                    + Add Inclusion
+                  </button>
+                </div>
+
+                {/* Standard Inclusion Options (Grid) */}
+                <div className="text-[9px] uppercase tracking-wider text-autumn-bark/50 font-bold mb-1.5">Standard Options</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
                   {INCLUSION_OPTIONS.map(item => {
                     const isChecked = formData.inclusion.includes(item);
                     return (
@@ -1810,7 +1869,37 @@ export default function AdminConsole({
                     );
                   })}
                 </div>
-              </div>
+
+                {/* Active Inclusions Chips */}
+                <div className="text-[9px] uppercase tracking-wider text-autumn-bark/50 font-bold mb-1.5">Active Inclusions ({formData.inclusion.length})</div>
+                <div className="flex flex-wrap gap-2 p-2 bg-[#3A2A1E]/5 rounded-xl border border-autumn-bark/5 min-h-[40px]">
+                  {formData.inclusion.length === 0 ? (
+                    <span className="text-xxs text-autumn-bark/40 italic pl-1 self-center">No inclusions added yet.</span>
+                  ) : (
+                    formData.inclusion.map((item, idx) => (
+                      <span 
+                        key={idx}
+                        className="inline-flex items-center gap-1 bg-[#F3ECDD] border border-autumn-maple/35 text-autumn-maple px-2.5 py-1 rounded-full text-xxs font-bold uppercase tracking-wider shadow-sm"
+                      >
+                        {item}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              inclusion: prev.inclusion.filter((_, i) => i !== idx)
+                            }));
+                          }}
+                          className="hover:text-autumn-amber font-extrabold focus:outline-none ml-1 cursor-pointer"
+                          title="Remove inclusion"
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>             
 
               {/* AVAILABLE BATCH DATES MANAGER */}
               <div>

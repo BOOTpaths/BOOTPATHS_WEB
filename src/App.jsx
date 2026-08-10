@@ -1945,7 +1945,7 @@ export default function App() {
                 <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-maple mb-3 flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" /> Day-by-Day Plan
                 </h4>
-                <div className="space-y-4 border-l-2 border-[#6E7042]/20 pl-4 ml-2">
+                <div className="space-y-4 border-l-2 border-[#6E7042]/20 pl-4 ml-2 animate-in fade-in duration-200">
                   <div className="relative">
                     <span className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-[#6E7042] border-2 border-autumn-mist"></span>
                     <span className="font-outfit text-xs font-bold uppercase text-[#6E7042]">Day 1: Base Camp Ascent</span>
@@ -1961,6 +1961,17 @@ export default function App() {
                     </p>
                   </div>
                 </div>
+
+                {detailedTrek && detailedTrek.itineraryDocUrl && (
+                  <a 
+                    href={detailedTrek.itineraryDocUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-3 px-4 my-3 bg-autumn-bark/10 hover:bg-autumn-bark/20 text-autumn-bark font-semibold rounded-xl text-sm transition-colors border border-autumn-bark/20"
+                  >
+                    <span>📄</span> View / Download Full Itinerary (PDF / Doc) ↗
+                  </a>
+                )}
               </div>
 
               {/* Inclusions */}
