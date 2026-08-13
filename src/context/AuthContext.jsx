@@ -25,6 +25,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,7 @@ export function AuthProvider({ children }) {
             const data = snapshot.data();
             setUserData(data);
             setWalletBalance(data.walletBalance || 0);
+            setUserRole(data.role || 'hiker');
             if (data.role === 'admin') {
               setIsAdmin(true);
             } else if (adminFlag) {
@@ -72,6 +74,7 @@ export function AuthProvider({ children }) {
               console.warn('Firestore User Sync Notice:', err.message);
             });
             setUserData(initialUserData);
+            setUserRole(initialUserData.role);
           }
           setLoading(false);
         }, (err) => {
@@ -82,6 +85,7 @@ export function AuthProvider({ children }) {
       } else {
         setCurrentUser(null);
         setUserData(null);
+        setUserRole(null);
         setWalletBalance(0);
         setIsAdmin(false);
         if (unsubscribeUserDoc) unsubscribeUserDoc();
@@ -158,10 +162,13 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     userData,
+    userRole,
+    setUserRole,
     walletBalance,
     setWalletBalance,
     isAdmin,
     loading,
+    authLoading: loading,
     login,
     signup,
     loginWithGoogle,

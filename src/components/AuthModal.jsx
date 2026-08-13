@@ -9,7 +9,8 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function AuthModal({
   isOpen,
@@ -81,6 +82,19 @@ export default function AuthModal({
       if (authMode === 'login') {
         const res = await login(authEmail, authPassword);
         const user = res.user;
+        
+        let role = 'hiker';
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            role = userDoc.data().role || 'hiker';
+          } else if (user.email?.toLowerCase() === 'admin@bootpaths.com') {
+            role = 'admin';
+          }
+        } catch (err) {
+          console.warn('Failed to retrieve role on sign in:', err);
+        }
+
         const displayName = user.displayName || user.email.split('@')[0];
         const initials = displayName.substring(0, 2).toUpperCase();
         onAuthSuccess({
@@ -88,18 +102,22 @@ export default function AuthModal({
           name: displayName,
           email: user.email,
           initials: initials,
-          photo: user.photoURL || null
+          photo: user.photoURL || null,
+          role: role
         });
       } else {
         const res = await signup(authEmail, authPassword, authName);
         const user = res.user;
         const initials = authName.substring(0, 2).toUpperCase();
+        const role = user.email?.toLowerCase() === 'admin@bootpaths.com' ? 'admin' : 'hiker';
+        
         onAuthSuccess({
           uid: user.uid,
           name: authName,
           email: user.email,
           initials: initials,
-          photo: null
+          photo: null,
+          role: role
         });
       }
       

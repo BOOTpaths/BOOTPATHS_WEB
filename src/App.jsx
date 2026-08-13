@@ -322,8 +322,9 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
-  const { currentUser, userData, loading: loadingProfile, logout, walletBalance: contextWalletBalance } = useAuth();
+  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance } = useAuth();
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
+  const [userRole, setUserRole] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
@@ -402,6 +403,7 @@ export default function App() {
         photo: userData.photoURL || null,
         role: userData.role || 'hiker'
       });
+      setUserRole(userData.role || 'hiker');
       if (userData.profile) {
         setProfileData({
           fullName: userData.profile.fullName || '',
@@ -421,6 +423,7 @@ export default function App() {
       }
     } else if (!currentUser) {
       setUser(prev => (prev && prev.uid.startsWith('guest-')) ? prev : null);
+      setUserRole(null);
     }
   }, [currentUser, userData]);
 
@@ -571,6 +574,7 @@ export default function App() {
       console.warn('Logout error:', err.message);
     }
     setUser(null);
+    setUserRole(null);
   };
 
 
@@ -755,17 +759,17 @@ export default function App() {
 
   if (currentHash === '#admin') {
     if (!import.meta.env.PROD) {
-      console.log('Current User Role:', userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
+      console.log('Current User Role:', userRole || userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
     }
-    if (loadingProfile || (currentUser && !userData)) {
+    if (authLoading || (currentUser && !userData)) {
       return (
         <div className="min-h-screen bg-[#F3ECDD] flex flex-col items-center justify-center gap-4 text-autumn-bark font-sans">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#C1571F]/20 border-t-[#C1571F]"></div>
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C1571F]">Verifying Admin Credentials...</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#C1571F]">Verifying Admin Authorization...</span>
         </div>
       );
     }
-    const isAdminUser = userData?.role === 'admin' || user?.role === 'admin';
+    const isAdminUser = userRole === 'admin' || userData?.role === 'admin' || user?.role === 'admin';
     if (!currentUser || !isAdminUser) {
       window.location.hash = '';
       return null;
@@ -2292,6 +2296,8 @@ export default function App() {
         onClose={() => setIsAuthModalOpen(false)}
         onAuthSuccess={(newUser) => {
           setUser(newUser);
+          setUserRole(newUser.role);
+          setContextUserRole(newUser.role);
           setName(newUser.name);
           setEmail(newUser.email);
           if (pendingAction) {
