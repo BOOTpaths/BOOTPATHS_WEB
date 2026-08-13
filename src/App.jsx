@@ -755,9 +755,9 @@ export default function App() {
 
   if (currentHash === '#admin') {
     if (!import.meta.env.PROD) {
-      console.log('Current User Role:', user?.role, 'UID:', user?.uid);
+      console.log('Current User Role:', userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
     }
-    if (loadingProfile) {
+    if (loadingProfile || (currentUser && !userData)) {
       return (
         <div className="min-h-screen bg-[#F3ECDD] flex flex-col items-center justify-center gap-4 text-autumn-bark font-sans">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#C1571F]/20 border-t-[#C1571F]"></div>
@@ -765,7 +765,8 @@ export default function App() {
         </div>
       );
     }
-    if (!user || user.role !== 'admin') {
+    const isAdminUser = userData?.role === 'admin' || user?.role === 'admin';
+    if (!currentUser || !isAdminUser) {
       window.location.hash = '';
       return null;
     }

@@ -73,8 +73,10 @@ export function AuthProvider({ children }) {
             });
             setUserData(initialUserData);
           }
+          setLoading(false);
         }, (err) => {
           console.warn('Firestore Snapshot Notice:', err.message);
+          setLoading(false);
         });
 
       } else {
@@ -83,8 +85,8 @@ export function AuthProvider({ children }) {
         setWalletBalance(0);
         setIsAdmin(false);
         if (unsubscribeUserDoc) unsubscribeUserDoc();
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => {
