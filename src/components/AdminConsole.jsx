@@ -7,7 +7,7 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { db, storage } from '../config/firebase';
-import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { 
   Plus, 
