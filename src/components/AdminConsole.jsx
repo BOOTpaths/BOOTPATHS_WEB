@@ -83,6 +83,95 @@ export default function AdminConsole({
   const [activeTab, setActiveTab] = useState('inventory');
   const [viewingBlog, setViewingBlog] = useState(null);
 
+  // Social Feeds State & Effects
+  const [socialFeeds, setSocialFeeds] = useState([]);
+  const [socialType, setSocialType] = useState('instagram'); // 'instagram' | 'youtube'
+  const [socialTitle, setSocialTitle] = useState('');
+  const [socialUrl, setSocialUrl] = useState('');
+  const [socialImageUrl, setSocialImageUrl] = useState('');
+  const [isSavingFeed, setIsSavingFeed] = useState(false);
+  const [feedError, setFeedError] = useState('');
+
+  useEffect(() => {
+    if (!isAdminLoggedIn) return;
+    const unsub = onSnapshot(collection(db, 'socialFeeds'), (snapshot) => {
+      const docs = [];
+      snapshot.forEach((doc) => {
+        docs.push({ id: doc.id, ...doc.data() });
+      });
+      docs.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+      setSocialFeeds(docs);
+    }, (err) => {
+      if (!import.meta.env.PROD) {
+        console.warn('socialFeeds snapshot error:', err);
+      }
+    });
+    return () => unsub();
+  }, [isAdminLoggedIn]);
+
+  const getYouTubeId = (url) => {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : '';
+  };
+
+  const handleSaveSocialFeed = async (e) => {
+    e.preventDefault();
+    setFeedError('');
+    setIsSavingFeed(true);
+
+    const trimmedUrl = socialUrl.trim();
+    if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+      setFeedError('The media URL must start with http:// or https://.');
+      setIsSavingFeed(false);
+      return;
+    }
+
+    try {
+      const docId = `feed-${Date.now()}`;
+      let finalImg = socialImageUrl.trim();
+      
+      if (socialType === 'youtube' && !finalImg) {
+        const ytId = getYouTubeId(trimmedUrl);
+        if (ytId) {
+          finalImg = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+        }
+      }
+
+      if (socialType === 'instagram' && !finalImg) {
+        finalImg = 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=400&q=80';
+      }
+
+      const payload = {
+        type: socialType,
+        title: socialTitle.trim(),
+        url: trimmedUrl,
+        imageUrl: finalImg || 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=400&q=80',
+        submittedAt: new Date().toISOString()
+      };
+
+      await setDoc(doc(db, 'socialFeeds', docId), payload);
+
+      setSocialTitle('');
+      setSocialUrl('');
+      setSocialImageUrl('');
+    } catch (err) {
+      setFeedError(`Save failed: ${err.message}`);
+    } finally {
+      setIsSavingFeed(false);
+    }
+  };
+
+  const handleDeleteSocialFeed = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this social feed item?')) return;
+    try {
+      await deleteDoc(doc(db, 'socialFeeds', id));
+    } catch (err) {
+      alert(`Delete failed: ${err.message}`);
+    }
+  };
+
   // Trek image local upload selectors
   const [isAdminDragOver, setIsAdminDragOver] = useState(false);
 
@@ -841,6 +930,16 @@ export default function AdminConsole({
           >
             Expedition Views ({(expeditionViews || []).length})
           </button>
+          <button
+            onClick={() => setActiveTab('social')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'social' 
+                ? 'border-autumn-maple text-autumn-maple' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Social Feeds
+          </button>
         </div>
 
         {activeTab === 'inventory' && (
@@ -1553,6 +1652,175 @@ export default function AdminConsole({
                 </div>
               </div>
 
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'social' && (
+          <div className="space-y-6">
+            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+              <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
+                SOCIAL MEDIA FEEDS MANAGER
+              </h1>
+              <p className="text-xs text-autumn-bark/70 mt-1">
+                Add or delete Instagram posts and YouTube video links featured on the community vibe feed.
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-3">
+              {/* Form panel */}
+              <div className="lg:col-span-1 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md h-fit">
+                <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark/80 mb-4">
+                  Add New Feed Item
+                </h3>
+
+                {feedError && (
+                  <div className="mb-4 rounded-xl border border-autumn-rhodo/40 bg-autumn-rhodo/10 p-3.5 text-xs text-autumn-rhodo flex items-center gap-2.5">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span>{feedError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleSaveSocialFeed} className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                      Media Type
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSocialType('instagram')}
+                        className={`h-10 rounded-xl border font-outfit text-xs font-bold uppercase tracking-wider transition-colors ${
+                          socialType === 'instagram'
+                            ? 'bg-[#C1571F] text-white border-[#C1571F]'
+                            : 'border-autumn-bark/10 bg-[#EFE8D6]/40 text-autumn-bark/70 hover:bg-[#EFE8D6]'
+                        }`}
+                      >
+                        Instagram
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSocialType('youtube')}
+                        className={`h-10 rounded-xl border font-outfit text-xs font-bold uppercase tracking-wider transition-colors ${
+                          socialType === 'youtube'
+                            ? 'bg-[#C1571F] text-white border-[#C1571F]'
+                            : 'border-autumn-bark/10 bg-[#EFE8D6]/40 text-autumn-bark/70 hover:bg-[#EFE8D6]'
+                        }`}
+                      >
+                        YouTube
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="feed-title" className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                      Label / Title (e.g. Malayali Trekking Guide)
+                    </label>
+                    <input
+                      type="text"
+                      id="feed-title"
+                      required
+                      placeholder="Enter a description label"
+                      value={socialTitle}
+                      onChange={(e) => setSocialTitle(e.target.value)}
+                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="feed-url" className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                      Post / Video URL
+                    </label>
+                    <input
+                      type="url"
+                      id="feed-url"
+                      required
+                      placeholder={socialType === 'instagram' ? 'https://instagram.com/p/...' : 'https://youtube.com/watch?v=...'}
+                      value={socialUrl}
+                      onChange={(e) => setSocialUrl(e.target.value)}
+                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="feed-image-url" className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                      Custom Thumbnail Image URL (Optional)
+                    </label>
+                    <input
+                      type="url"
+                      id="feed-image-url"
+                      placeholder="https://images.unsplash.com/photo-..."
+                      value={socialImageUrl}
+                      onChange={(e) => setSocialImageUrl(e.target.value)}
+                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                    />
+                    <p className="text-[10px] text-autumn-bark/50 mt-1 leading-normal">
+                      If left empty, YouTube items auto-generate thumbnails. Instagram items will use Unsplash presets.
+                    </p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSavingFeed}
+                    className="w-full h-11 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] hover:bg-[#a44717] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isSavingFeed ? 'Saving...' : 'Add to Feed'}
+                  </button>
+                </form>
+              </div>
+
+              {/* List panel */}
+              <div className="lg:col-span-2 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+                <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark/80 mb-4">
+                  Active Social Feed Items ({socialFeeds.length})
+                </h3>
+
+                {socialFeeds.length === 0 ? (
+                  <div className="text-center py-12 text-xs text-autumn-bark/50">
+                    No custom items added. Live site is showing default fallback posts.
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {socialFeeds.map((item) => (
+                      <div
+                        key={item.id}
+                        className="rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/40 p-4 flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                              item.type === 'instagram'
+                                ? 'bg-pink-100 text-pink-700 border border-pink-200'
+                                : 'bg-red-100 text-red-700 border border-red-200'
+                            }`}>
+                              {item.type}
+                            </span>
+                            <span className="text-[10px] text-autumn-bark/40 font-mono">
+                              {new Date(item.submittedAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <h4 className="mt-2 font-outfit text-xs font-extrabold text-autumn-bark leading-normal line-clamp-1">
+                            {item.title}
+                          </h4>
+                          <p className="mt-1 text-[10px] text-autumn-bark/60 break-all line-clamp-1 font-mono">
+                            {item.url}
+                          </p>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t border-autumn-bark/5 flex justify-end">
+                          <button
+                            onClick={() => handleDeleteSocialFeed(item.id)}
+                            className="h-8 w-8 rounded bg-autumn-rhodo/10 hover:bg-autumn-rhodo/20 text-autumn-rhodo flex items-center justify-center transition-colors cursor-pointer"
+                            title="Delete Item"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

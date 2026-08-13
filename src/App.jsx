@@ -64,6 +64,24 @@ const Instagram = (props) => (
   </svg>
 );
 
+const YoutubeIcon = (props) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+  </svg>
+);
+
 const HERO_MEDIA = [
   {
     type: 'video',
@@ -93,47 +111,57 @@ const HERO_MEDIA = [
 
 const EXPEDITION_RECORDS = [];
 
-const INSTAGRAM_POSTS = [
+const DEFAULT_INSTAGRAM_POSTS = [
   {
-    id: 1,
-    imageUrl: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=400&q=80',
-    likes: '1,248',
+    id: 'ig-1',
+    title: 'Malayali Trekking Guide',
+    url: 'https://instagram.com/bootpaths',
+    imageUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=400&q=80',
+    likes: '1.2k',
     comments: '42'
   },
   {
-    id: 2,
-    imageUrl: 'https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?auto=format&fit=crop&w=400&q=80',
+    id: 'ig-2',
+    title: 'Lock Your Heel In - Boot Guide',
+    url: 'https://instagram.com/bootpaths',
+    imageUrl: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=400&q=80',
     likes: '932',
     comments: '18'
   },
   {
-    id: 3,
-    imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80',
-    likes: '2,105',
+    id: 'ig-3',
+    title: 'Pre-Booking Started @ Decathlon',
+    url: 'https://instagram.com/bootpaths',
+    imageUrl: 'https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?auto=format&fit=crop&w=400&q=80',
+    likes: '2.1k',
     comments: '88'
+  }
+];
+
+const DEFAULT_YOUTUBE_POSTS = [
+  {
+    id: 'yt-1',
+    title: 'Silent Valley Camping Interactive Session',
+    url: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+    imageUrl: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=400&q=80'
   },
   {
-    id: 4,
-    imageUrl: 'https://images.unsplash.com/photo-1533240332313-0db49b439ad3?auto=format&fit=crop&w=400&q=80',
-    likes: '1,504',
-    comments: '31'
+    id: 'yt-2',
+    title: 'Kudremuk National Park Trek',
+    url: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+    imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80'
   },
   {
-    id: 5,
-    imageUrl: 'https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=400&q=80',
-    likes: '1,822',
-    comments: '56'
-  },
-  {
-    id: 6,
-    imageUrl: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=400&q=80',
-    likes: '2,401',
-    comments: '94'
+    id: 'yt-3',
+    title: 'Look Deep Into Nature',
+    url: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+    imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80'
   }
 ];
 
 export default function App() {
   const [treks, setTreks] = useState([]);
+  const [socialFeeds, setSocialFeeds] = useState([]);
   const [loadingPackages, setLoadingPackages] = useState(true);
   const [currentHash, setCurrentHash] = useState(typeof window !== 'undefined' ? window.location.hash : '');
   const [isTermsRoute, setIsTermsRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/terms') : false);
@@ -249,6 +277,25 @@ export default function App() {
       return () => unsub();
     } catch (e) {
       console.warn('Failed to listen to expeditionViews:', e.message);
+    }
+  }, []);
+
+  // Subscribe to live socialFeeds collection in Firestore
+  useEffect(() => {
+    try {
+      const unsub = onSnapshot(collection(db, 'socialFeeds'), (snapshot) => {
+        const docs = [];
+        snapshot.forEach((doc) => {
+          docs.push({ id: doc.id, ...doc.data() });
+        });
+        docs.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+        setSocialFeeds(docs);
+      }, (err) => {
+        console.warn('socialFeeds snapshot error:', err);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn('Failed to listen to socialFeeds:', e.message);
     }
   }, []);
 
@@ -1680,56 +1727,153 @@ export default function App() {
         </div>
       </section>
 
-
-      {/* 6. INSTAGRAM COMMUNITY FEED */}
-      <section id="community" className="relative border-t border-autumn-bark/10 bg-autumn-mist py-24 px-6 md:px-12">
-        <div className="mx-auto max-w-7xl">
+      {/* 6. SOCIAL MEDIA COMMUNITY FEED */}
+      <section id="community" className="relative border-t border-autumn-bark/10 bg-[#F3ECDD] py-24 px-6 md:px-12">
+        <div className="mx-auto max-w-7xl font-sans">
           
-          <div className="text-center">
-            <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
-              Community Vibes
-            </span>
-            <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
-              Catch the Vibe on Instagram
-            </h2>
-            <a 
-              href="https://instagram.com/bootpaths" 
-              target="_blank" 
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 mt-4 text-autumn-maple font-outfit text-lg font-bold hover:underline"
-            >
-              <Instagram className="h-5 w-5" />
-              @bootpaths
-              <ExternalLink className="h-3.5 w-3.5 text-autumn-bark/50" />
-            </a>
+          {/* Instagram Feed Section */}
+          <div className="space-y-12">
+            <div className="text-center">
+              <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
+                Community Vibes
+              </span>
+              <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
+                Catch the Vibe on Instagram
+              </h2>
+              <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a 
+                  href="https://instagram.com/bootpaths" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-autumn-maple font-outfit text-lg font-bold hover:underline"
+                >
+                  <Instagram className="h-5 w-5" />
+                  @bootpaths
+                  <ExternalLink className="h-3.5 w-3.5 text-autumn-bark/50" />
+                </a>
+                <a 
+                  href="https://instagram.com/bootpaths" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C1571F] text-[#F3ECDD] font-outfit text-xs font-bold uppercase tracking-wider hover:bg-[#a44717] transition-colors"
+                >
+                  Follow @bootpaths
+                </a>
+              </div>
+            </div>
+
+            {/* Instagram Grid */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+              {(socialFeeds.filter(item => item.type === 'instagram').length > 0 
+                ? socialFeeds.filter(item => item.type === 'instagram')
+                : DEFAULT_INSTAGRAM_POSTS
+              ).map((post) => (
+                <a 
+                  key={post.id}
+                  href={post.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative block aspect-square overflow-hidden rounded-2xl bg-autumn-mist border border-autumn-bark/10 cursor-pointer shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  <img 
+                    src={post.imageUrl} 
+                    alt={post.title} 
+                    className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
+                  />
+                  {/* Grid Overlay on Hover */}
+                  <div className="absolute inset-0 bg-[#3A2A1E]/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center p-6 text-center z-10 gap-3">
+                    <Instagram className="h-8 w-8 text-[#C1571F]" />
+                    <h4 className="font-outfit text-sm font-extrabold text-[#F3ECDD] leading-snug">
+                      {post.title}
+                    </h4>
+                    <div className="flex items-center gap-4 text-xs font-bold text-[#F3ECDD]/80">
+                      <span>♥ {post.likes || '1.1k'}</span>
+                      <span>💬 {post.comments || '24'}</span>
+                    </div>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-[#C1571F] bg-[#F3ECDD] px-3 py-1 rounded-full mt-2">
+                      View Post
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Grid Layout Placeholder for UGC Feed */}
-          <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {(INSTAGRAM_POSTS || []).map((post) => (
-              <div 
-                key={post.id}
-                className="group relative aspect-square overflow-hidden rounded-lg bg-autumn-mist border border-autumn-bark/10 cursor-pointer"
-              >
-                <img 
-                  src={post.imageUrl} 
-                  alt="UGC Story Highlight" 
-                  className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
-                />
-                {/* Grid Overlay on Hover */}
-                <div className="absolute inset-0 bg-stone-955/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center z-10 gap-2">
-                  <Instagram className="h-6 w-6 text-autumn-maple" />
-                  <div className="text-center">
-                    <span className="text-xs font-bold text-autumn-bark block">♥ {post.likes}</span>
-                    <span className="text-xxs text-autumn-bark/70 block mt-0.5">💬 {post.comments}</span>
-                  </div>
-                </div>
+          {/* YouTube Section */}
+          <div className="mt-24 space-y-12 pt-24 border-t border-autumn-bark/10">
+            <div className="text-center">
+              <span className="font-outfit text-xs font-bold tracking-widest uppercase text-autumn-maple">
+                Trail Stories
+              </span>
+              <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl">
+                Trail Stories on YouTube
+              </h2>
+              <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a 
+                  href="https://youtube.com/@BOOTpaths2025" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-autumn-maple font-outfit text-lg font-bold hover:underline"
+                >
+                  <YoutubeIcon className="h-5 w-5 text-red-600" />
+                  @BOOTpaths2025
+                  <ExternalLink className="h-3.5 w-3.5 text-autumn-bark/50" />
+                </a>
+                <a 
+                  href="https://youtube.com/@BOOTpaths2025?sub_confirmation=1" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-600 text-white font-outfit text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors"
+                >
+                  Subscribe @BOOTpaths2025
+                </a>
               </div>
-            ))}
+            </div>
+
+            {/* YouTube Grid */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+              {(socialFeeds.filter(item => item.type === 'youtube').length > 0 
+                ? socialFeeds.filter(item => item.type === 'youtube')
+                : DEFAULT_YOUTUBE_POSTS
+              ).map((video) => (
+                <a 
+                  key={video.id}
+                  href={video.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative block overflow-hidden rounded-2xl bg-autumn-mist border border-autumn-bark/10 cursor-pointer shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="aspect-video relative overflow-hidden">
+                    <img 
+                      src={video.imageUrl} 
+                      alt={video.title} 
+                      className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
+                    />
+                    {/* Play Button Overlay */}
+                    <div className="absolute inset-0 bg-[#3A2A1E]/30 flex items-center justify-center group-hover:bg-[#3A2A1E]/60 transition-all duration-300">
+                      <div className="h-14 w-14 rounded-full bg-[#F3ECDD] text-[#C1571F] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <svg className="h-6 w-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-autumn-mist">
+                    <h4 className="font-outfit text-sm font-extrabold text-autumn-bark line-clamp-2 leading-snug group-hover:text-autumn-maple transition-colors">
+                      {video.title}
+                    </h4>
+                    <span className="inline-flex items-center gap-1 mt-3 text-[10px] font-bold text-autumn-bark/50 uppercase tracking-widest">
+                      <YoutubeIcon className="h-3.5 w-3.5 text-red-600" />
+                      Watch on YouTube
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Decathlon Partner Spotlight */}
-          <div className="mt-16 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 text-center max-w-4xl mx-auto backdrop-blur-sm">
+          <div className="mt-24 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 text-center max-w-4xl mx-auto backdrop-blur-sm">
             <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
               <div className="font-outfit text-2xl font-black uppercase tracking-wider text-autumn-bark/80">
                 BOOT<span className="text-autumn-maple">paths</span>
