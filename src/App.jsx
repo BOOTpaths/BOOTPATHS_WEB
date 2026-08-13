@@ -322,7 +322,7 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
-  const { currentUser, userData, logout, walletBalance: contextWalletBalance } = useAuth();
+  const { currentUser, userData, loading: loadingProfile, logout, walletBalance: contextWalletBalance } = useAuth();
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -754,6 +754,17 @@ export default function App() {
   }
 
   if (currentHash === '#admin') {
+    if (!import.meta.env.PROD) {
+      console.log('Current User Role:', user?.role, 'UID:', user?.uid);
+    }
+    if (loadingProfile) {
+      return (
+        <div className="min-h-screen bg-[#F3ECDD] flex flex-col items-center justify-center gap-4 text-autumn-bark font-sans">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#C1571F]/20 border-t-[#C1571F]"></div>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#C1571F]">Verifying Admin Credentials...</span>
+        </div>
+      );
+    }
     if (!user || user.role !== 'admin') {
       window.location.hash = '';
       return null;
