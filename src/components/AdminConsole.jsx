@@ -88,7 +88,8 @@ export default function AdminConsole({
   const [socialType, setSocialType] = useState('instagram'); // 'instagram' | 'youtube'
   const [socialTitle, setSocialTitle] = useState('');
   const [socialUrl, setSocialUrl] = useState('');
-  const [socialImageUrl, setSocialImageUrl] = useState('');
+  const [socialThumbnailUrl, setSocialThumbnailUrl] = useState('');
+  const [socialDragOver, setSocialDragOver] = useState(false);
   const [isSavingFeed, setIsSavingFeed] = useState(false);
   const [feedError, setFeedError] = useState('');
 
@@ -108,6 +109,19 @@ export default function AdminConsole({
     });
     return () => unsub();
   }, [isAdminLoggedIn]);
+
+  const handleThumbnailFileChange = (file) => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setSocialThumbnailUrl(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const getYouTubeId = (url) => {
     if (!url) return '';
@@ -130,7 +144,7 @@ export default function AdminConsole({
 
     try {
       const docId = `feed-${Date.now()}`;
-      let finalImg = socialImageUrl.trim();
+      let finalImg = socialThumbnailUrl;
       
       if (socialType === 'youtube' && !finalImg) {
         const ytId = getYouTubeId(trimmedUrl);
@@ -139,15 +153,11 @@ export default function AdminConsole({
         }
       }
 
-      if (socialType === 'instagram' && !finalImg) {
-        finalImg = 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=400&q=80';
-      }
-
       const payload = {
         type: socialType,
         title: socialTitle.trim(),
         url: trimmedUrl,
-        imageUrl: finalImg || 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=400&q=80',
+        thumbnailUrl: finalImg || '',
         submittedAt: new Date().toISOString()
       };
 
@@ -155,7 +165,7 @@ export default function AdminConsole({
 
       setSocialTitle('');
       setSocialUrl('');
-      setSocialImageUrl('');
+      setSocialThumbnailUrl('');
     } catch (err) {
       setFeedError(`Save failed: ${err.message}`);
     } finally {
@@ -1742,21 +1752,75 @@ export default function AdminConsole({
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="feed-image-url" className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
-                      Custom Thumbnail Image URL (Optional)
+                   <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+                      UPLOAD THUMBNAIL IMAGE (FROM DEVICE)
                     </label>
-                    <input
-                      type="url"
-                      id="feed-image-url"
-                      placeholder="https://images.unsplash.com/photo-..."
-                      value={socialImageUrl}
-                      onChange={(e) => setSocialImageUrl(e.target.value)}
-                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
-                    />
-                    <p className="text-[10px] text-autumn-bark/50 mt-1 leading-normal">
-                      If left empty, YouTube items auto-generate thumbnails. Instagram items will use Unsplash presets.
-                    </p>
+                    
+                    {!socialThumbnailUrl ? (
+                      <div
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          setSocialDragOver(true);
+                        }}
+                        onDragLeave={() => setSocialDragOver(false)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setSocialDragOver(false);
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            const file = e.dataTransfer.files[0];
+                            handleThumbnailFileChange(file);
+                          }
+                        }}
+                        className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer ${
+                          socialDragOver
+                            ? 'border-autumn-maple bg-[#EFE8D6]'
+                            : 'border-autumn-bark/20 bg-[#EFE8D6]/40 hover:bg-[#EFE8D6]/70'
+                        }`}
+                      >
+                        <input
+                          type="file"
+                          id="thumbnail-upload"
+                          accept="image/png, image/jpeg, image/webp"
+                          className="hidden"
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              handleThumbnailFileChange(e.target.files[0]);
+                            }
+                          }}
+                        />
+                        <label htmlFor="thumbnail-upload" className="cursor-pointer block">
+                          <span className="block text-2xl mb-1.5">📁</span>
+                          <span className="block text-[11px] font-medium text-autumn-bark/80">
+                            Drag & drop an image, or <span className="text-autumn-maple underline font-bold">browse</span>
+                          </span>
+                          <span className="block text-[9px] text-autumn-bark/40 mt-1 uppercase tracking-wider">
+                            PNG, JPEG, WEBP ONLY
+                          </span>
+                        </label>
+                      </div>
+                    ) : (
+                      <div className="relative rounded-xl overflow-hidden border border-autumn-bark/15 bg-[#EFE8D6]/70 p-3 flex items-center gap-3">
+                        <img
+                          src={socialThumbnailUrl}
+                          alt="Thumbnail Preview"
+                          className="w-16 h-16 object-cover rounded-lg border border-autumn-bark/10"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[10px] font-bold text-autumn-bark/70 truncate">Thumbnail Loaded</div>
+                          <div className="text-[9px] text-autumn-bark/40 uppercase tracking-widest mt-0.5">Base64 Source Ready</div>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setSocialThumbnailUrl('')}
+                            className="px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-rose-500 hover:bg-rose-50 rounded bg-rose-50/50 border border-rose-100 transition-colors"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <button
@@ -1799,12 +1863,27 @@ export default function AdminConsole({
                               {new Date(item.submittedAt).toLocaleDateString()}
                             </span>
                           </div>
-                          <h4 className="mt-2 font-outfit text-xs font-extrabold text-autumn-bark leading-normal line-clamp-1">
-                            {item.title}
-                          </h4>
-                          <p className="mt-1 text-[10px] text-autumn-bark/60 break-all line-clamp-1 font-mono">
-                            {item.url}
-                          </p>
+                          <div className="flex items-center gap-3 mt-3">
+                            {(item.thumbnailUrl || item.imageUrl) ? (
+                              <img
+                                src={item.thumbnailUrl || item.imageUrl}
+                                alt="Feed preview"
+                                className="w-12 h-12 object-cover rounded border border-autumn-bark/10 shrink-0 bg-autumn-mist"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded border border-autumn-bark/10 shrink-0 bg-gradient-to-tr from-autumn-moss/40 to-autumn-maple/40 flex items-center justify-center text-[10px] font-bold text-autumn-bark/65">
+                                Logo
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-outfit text-xs font-extrabold text-autumn-bark leading-normal line-clamp-1">
+                                {item.title}
+                              </h4>
+                              <p className="text-[9px] text-autumn-bark/60 break-all line-clamp-1 font-mono">
+                                {item.url}
+                              </p>
+                            </div>
+                          </div>
                         </div>
 
                         <div className="mt-4 pt-3 border-t border-autumn-bark/5 flex justify-end">

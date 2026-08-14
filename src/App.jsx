@@ -1791,11 +1791,26 @@ export default function App() {
                   rel="noreferrer"
                   className="group relative block aspect-square overflow-hidden rounded-2xl bg-autumn-mist border border-autumn-bark/10 cursor-pointer shadow-md hover:shadow-lg transition-all duration-300"
                 >
-                  <img 
-                    src={post.imageUrl} 
-                    alt={post.title} 
-                    className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
-                  />
+                  {post.thumbnailUrl || post.imageUrl ? (
+                    <img 
+                      src={post.thumbnailUrl || post.imageUrl} 
+                      alt={post.title} 
+                      className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#3A2A1E] to-[#C1571F] flex flex-col items-center justify-center gap-3 p-4 transition-all duration-505 group-hover:scale-105">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-[#2A1D14] flex items-center justify-center shadow-lg border border-[#C1571F]/30">
+                        <img 
+                          src="assets/logo-dark.png" 
+                          alt="BOOTpaths Logo" 
+                          className="w-full h-full object-cover scale-105" 
+                        />
+                      </div>
+                      <span className="font-outfit text-sm font-extrabold tracking-tight text-[#F3ECDD]">
+                        BOOT<span className="text-[#C1571F]">paths</span>
+                      </span>
+                    </div>
+                  )}
                   {/* Grid Overlay on Hover */}
                   <div className="absolute inset-0 bg-[#3A2A1E]/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center p-6 text-center z-10 gap-3">
                     <Instagram className="h-8 w-8 text-[#C1571F]" />
@@ -1860,11 +1875,26 @@ export default function App() {
                   className="group relative block overflow-hidden rounded-2xl bg-autumn-mist border border-autumn-bark/10 cursor-pointer shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <div className="aspect-video relative overflow-hidden">
-                    <img 
-                      src={video.imageUrl} 
-                      alt={video.title} 
-                      className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
-                    />
+                    {video.thumbnailUrl || video.imageUrl ? (
+                      <img 
+                        src={video.thumbnailUrl || video.imageUrl} 
+                        alt={video.title} 
+                        className="h-full w-full object-cover object-center transition-transform duration-505 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#3A2A1E] to-[#C1571F] flex flex-col items-center justify-center gap-3 p-4 transition-all duration-505 group-hover:scale-105">
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-[#2A1D14] flex items-center justify-center shadow-lg border border-[#C1571F]/30">
+                          <img 
+                            src="assets/logo-dark.png" 
+                            alt="BOOTpaths Logo" 
+                            className="w-full h-full object-cover scale-105" 
+                          />
+                        </div>
+                        <span className="font-outfit text-xs font-extrabold tracking-tight text-[#F3ECDD]">
+                          BOOT<span className="text-[#C1571F]">paths</span>
+                        </span>
+                      </div>
+                    )}
                     {/* Play Button Overlay */}
                     <div className="absolute inset-0 bg-[#3A2A1E]/30 flex items-center justify-center group-hover:bg-[#3A2A1E]/60 transition-all duration-300">
                       <div className="h-14 w-14 rounded-full bg-[#F3ECDD] text-[#C1571F] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
