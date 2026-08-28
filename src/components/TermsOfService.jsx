@@ -298,7 +298,7 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
         <header className="sticky top-0 z-40 w-full border-b border-[#E7E7E4] bg-[#F8F8F6]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-[#1A1A18] flex items-center justify-center shadow-sm border border-[#E7E7E4]">
-              <img src="/assets/logo-dark.png" alt="BOOTpaths Logo" className="w-full h-full object-cover scale-105" />
+              <img src="/logo.png" alt="BOOTpaths Logo" className="w-full h-full object-cover scale-105" />
             </div>
             <div className="flex items-baseline">
               <span className="text-[#1A1A18] font-extrabold text-xl tracking-tight">BOOT</span>

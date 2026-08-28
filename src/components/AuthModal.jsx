@@ -166,7 +166,7 @@ export default function AuthModal({
         <div className="bg-[#F8F8F6] p-5 flex justify-between items-center border-b border-[#E7E7E4]">
           <div className="flex items-center gap-3">
             <img 
-              src="assets/logo-light.png" 
+              src="/logo.png" 
               alt="BOOTpaths" 
               className="h-8 w-auto object-contain"
             />

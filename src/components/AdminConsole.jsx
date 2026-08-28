@@ -677,11 +677,15 @@ export default function AdminConsole({
           {/* Header */}
           <div className="bg-[#F8F8F6] p-6 border-b border-[#E7E7E4] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src="assets/logo-dark.png" 
-                alt="BOOTpaths" 
-                className="h-8 w-auto object-contain"
-              />
+              <a href="/#" className="flex items-center gap-2.5 select-none hover:opacity-95 transition-opacity">
+                <div className="w-10 h-10 rounded-full bg-white border border-[#3E2723]/30 shadow-sm flex items-center justify-center overflow-hidden p-1">
+                  <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
+                </div>
+                <span className="text-2xl font-black tracking-tight select-none">
+                  <span className="text-[#FF6B00]">BOOT</span>
+                  <span className="text-[#8B2626]">paths</span>
+                </span>
+              </a>
               <div className="h-px w-4 bg-autumn-bark/20 rotate-90"></div>
               <div>
                 <span className="text-[10px] text-autumn-bark/60 block font-mono uppercase font-bold tracking-wider">Console Login</span>
@@ -877,11 +881,15 @@ export default function AdminConsole({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <img 
-                src="assets/logo-dark.png" 
-                alt="BOOTpaths" 
-                className="h-7 w-auto object-contain"
-              />
+              <a href="/#" className="flex items-center gap-2.5 select-none hover:opacity-95 transition-opacity">
+                <div className="w-10 h-10 rounded-full bg-white border border-[#3E2723]/30 shadow-sm flex items-center justify-center overflow-hidden p-1">
+                  <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
+                </div>
+                <span className="text-2xl font-black tracking-tight select-none">
+                  <span className="text-[#FF6B00]">BOOT</span>
+                  <span className="text-[#8B2626]">paths</span>
+                </span>
+              </a>
               <span className="text-[10px] text-autumn-bark/60 font-mono uppercase font-bold tracking-wider hidden sm:inline">Console</span>
             </div>
             

@@ -120,11 +120,18 @@ export default function DeveloperConsole() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] border border-[#E7E7E4] p-8 rounded-3xl shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="h-14 w-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-600 border border-amber-500/20">
-              <Cpu className="h-7 w-7" />
-            </div>
+            <a href="/#" className="flex items-center gap-2.5 select-none hover:opacity-95 transition-opacity">
+              <div className="w-10 h-10 rounded-full bg-white border border-[#3E2723]/30 shadow-sm flex items-center justify-center overflow-hidden p-1">
+                <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
+              </div>
+              <span className="text-2xl font-black tracking-tight select-none">
+                <span className="text-[#FF6B00]">BOOT</span>
+                <span className="text-[#8B2626]">paths</span>
+              </span>
+            </a>
+            <div className="h-px w-4 bg-autumn-bark/20 rotate-90 hidden sm:block"></div>
             <div>
-              <h1 className="font-outfit text-xl font-black uppercase tracking-wider text-[#1A1A18] flex items-center gap-2">
+              <h1 className="font-outfit text-lg font-black uppercase tracking-wider text-[#1A1A18]">
                 Ops / Developer Control Panel
               </h1>
               <span className="text-[10px] uppercase font-bold tracking-widest text-[#C1571F] flex items-center gap-1.5 mt-0.5">
