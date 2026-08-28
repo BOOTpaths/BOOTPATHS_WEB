@@ -7,6 +7,7 @@
  */
 import { useState, useEffect } from 'react';
 import AdminConsole from './components/AdminConsole';
+import DeveloperConsole from './components/DeveloperConsole';
 import BlogSection from './components/BlogSection';
 import LeadCareers from './components/LeadCareers';
 import TermsOfService from './components/TermsOfService';
@@ -200,7 +201,6 @@ export default function App() {
 
   const [showAllTreks, setShowAllTreks] = useState(false);
   const [blogs, setBlogs] = useState([]);
-  const [isCareersEnabled, setIsCareersEnabled] = useState(true);
   const [leadApplications, setLeadApplications] = useState([]);
 
   // Subscribe to live packages collection in Firestore
@@ -249,17 +249,6 @@ export default function App() {
     return () => unsub();
   }, []);
 
-  // Subscribe to live appSettings for careers toggle
-  useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'appSettings', 'global'), (docSnap) => {
-      if (docSnap.exists()) {
-        setIsCareersEnabled(docSnap.data().careersEnabled ?? true);
-      }
-    }, (err) => {
-      console.warn('AppSettings snapshot error:', err);
-    });
-    return () => unsub();
-  }, []);
 
   // Subscribe to live expeditionViews collection in Firestore
   useEffect(() => {
@@ -322,7 +311,8 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
-  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance } = useAuth();
+  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance, featureFlags } = useAuth();
+  const isCareersEnabled = !!(featureFlags?.enableLeadApplications);
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
   const [userRole, setUserRole] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -374,23 +364,34 @@ export default function App() {
       // Ctrl + Shift + A (Emergency Admin Access Shortcut)
       if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
-        if (user && user.role === 'admin') {
+        if (userRole === 'admin' || userRole === 'developer') {
           window.location.hash = '#admin';
         } else {
           alert('Access Denied: Administrative privileges required.');
         }
         return;
       }
+      // Ctrl + Shift + D (Developer Access Shortcut)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
+        e.preventDefault();
+        const isDev = userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com' || currentUser?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
+        if (isDev) {
+          window.location.hash = '#dev-ops';
+        } else {
+          alert('Access Denied: Developer privileges required.');
+        }
+        return;
+      }
     };
-
+ 
     document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('keydown', handleKeyDown);
-
+ 
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [user]);
+  }, [user, userRole]);
 
   // Synchronize local user session and profileData with Firestore userData
   useEffect(() => {
@@ -757,6 +758,27 @@ export default function App() {
     );
   }
 
+  if (currentHash === '#dev-ops') {
+    if (!import.meta.env.PROD) {
+      console.log('DevOps Current User Role:', userRole || userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
+    }
+    if (authLoading || (currentUser && !userData)) {
+      return (
+        <div className="min-h-screen bg-[#F3ECDD] flex flex-col items-center justify-center gap-4 text-autumn-bark font-sans">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#C1571F]/20 border-t-[#C1571F]"></div>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#C1571F]">Verifying Developer Authorization...</span>
+        </div>
+      );
+    }
+    const isDev = userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com' || currentUser?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
+    if (isDev) {
+      return <DeveloperConsole user={user} />;
+    } else {
+      window.location.hash = '#';
+      return null;
+    }
+  }
+
   if (currentHash === '#admin') {
     if (!import.meta.env.PROD) {
       console.log('Current User Role:', userRole || userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
@@ -769,9 +791,10 @@ export default function App() {
         </div>
       );
     }
-    const isAdminUser = userRole === 'admin' || userData?.role === 'admin' || user?.role === 'admin';
-    if (!currentUser || !isAdminUser) {
-      window.location.hash = '';
+    const isVzentura = currentUser?.email === 'vzentura2026@gmail.com' || user?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
+    const isAdminOrDev = (userRole === 'admin' || userData?.role === 'admin' || user?.role === 'admin' || userRole === 'developer' || userData?.role === 'developer') && !isVzentura;
+    if (!currentUser || !isAdminOrDev) {
+      window.location.hash = '#';
       return null;
     }
     return (
@@ -781,7 +804,6 @@ export default function App() {
         blogs={blogs}
         setBlogs={setBlogs}
         isCareersEnabled={isCareersEnabled}
-        setIsCareersEnabled={setIsCareersEnabled}
         leadApplications={leadApplications}
         setLeadApplications={setLeadApplications}
         expeditionViews={expeditionViews}
@@ -845,7 +867,15 @@ export default function App() {
                   <div className="px-3 py-1.5 border-b border-autumn-bark/10 text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
                     {user.email}
                   </div>
-                  {user && user.role === 'admin' && (
+                  {user && (userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com') && (
+                    <button 
+                      onClick={() => { window.location.hash = '#dev-ops'; }} 
+                      className="w-full text-left px-4 py-2 text-xs font-bold text-amber-600 hover:bg-amber-500/10 transition-colors flex items-center gap-2"
+                    >
+                      🛠️ DEVELOPER CONSOLE
+                    </button>
+                  )}
+                  {user && userRole === 'admin' && (
                     <button 
                       onClick={() => { window.location.hash = '#admin'; }}
                       className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider bg-[#C1571F] text-white hover:bg-[#a34718] transition-colors flex items-center gap-1.5"
@@ -1744,8 +1774,9 @@ export default function App() {
       </section>
 
       {/* 6. SOCIAL MEDIA COMMUNITY FEED */}
-      <section id="community" className="relative border-t border-autumn-bark/10 bg-[#F3ECDD] py-24 px-6 md:px-12">
-        <div className="mx-auto max-w-7xl font-sans">
+      {featureFlags.enableSocialFeeds && (
+        <section id="community" className="relative border-t border-autumn-bark/10 bg-[#F3ECDD] py-24 px-6 md:px-12">
+          <div className="mx-auto max-w-7xl font-sans">
           
           {/* Instagram Feed Section */}
           <div className="space-y-12">
@@ -1937,20 +1968,23 @@ export default function App() {
 
         </div>
       </section>
+      )}
 
       <LeadCareers 
         isCareersEnabled={isCareersEnabled}
       />
 
-      <BlogSection 
-        blogs={blogs} 
-        onAddBlog={(newBlog) => setBlogs(prev => [newBlog, ...prev])} 
-        user={user} 
-        onOpenAuth={(action) => {
-          setPendingAction(action);
-          setIsAuthModalOpen(true);
-        }}
-      />
+      {featureFlags.enableCommunityBlogs && (
+        <BlogSection 
+          blogs={blogs} 
+          onAddBlog={(newBlog) => setBlogs(prev => [newBlog, ...prev])} 
+          user={user} 
+          onOpenAuth={(action) => {
+            setPendingAction(action);
+            setIsAuthModalOpen(true);
+          }}
+        />
+      )}
 
       {/* FOOTER */}
       <footer className="border-t border-autumn-bark/10 bg-autumn-mist py-16 px-6 md:px-12 text-autumn-bark/70 text-xs">
@@ -2330,11 +2364,19 @@ export default function App() {
           setContextUserRole(newUser.role);
           setName(newUser.name);
           setEmail(newUser.email);
-          if (pendingAction) {
-            executeAction(pendingAction);
-            setPendingAction(null);
+          setIsAuthModalOpen(false);
+          
+          if (newUser.role === 'developer') {
+            window.location.hash = '#dev-ops';
+          } else if (newUser.role === 'admin') {
+            window.location.hash = '#admin';
           } else {
-            setIsDashboardOpen(true);
+            if (pendingAction) {
+              executeAction(pendingAction);
+              setPendingAction(null);
+            } else {
+              setIsDashboardOpen(true);
+            }
           }
         }}
       />

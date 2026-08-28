@@ -98,37 +98,37 @@ export default function PrivacyPolicy({ onClose }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3ECDD] text-[#3A2A1E] font-outfit pb-20 relative">
+    <div className="min-h-screen bg-[#F8F8F6] text-[#52524E] font-outfit pb-20 relative">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-[#3A2A1E]/10 bg-[#F3ECDD]/90 backdrop-blur-md px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <header className="sticky top-0 z-40 w-full border-b border-[#E7E7E4] bg-[#F8F8F6]/90 backdrop-blur-md px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#2A1D14] flex items-center justify-center shadow-md border border-[#C1571F]/30">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#1A1A18] flex items-center justify-center shadow-sm border border-[#E7E7E4]">
             <img src="/assets/logo-dark.png" alt="BOOTpaths Logo" className="w-full h-full object-cover scale-105" />
           </div>
           <div>
-            <h1 className="font-outfit text-xl font-bold tracking-tight text-[#3A2A1E] flex items-center gap-1.5">
+            <h1 className="font-outfit text-xl font-bold tracking-tight text-[#1A1A18] flex items-center gap-1.5">
               <span>Privacy Policy</span>
-              <span className="text-xs font-semibold text-[#3A2A1E]/55">— BOOTpaths</span>
+              <span className="text-xs font-semibold text-[#52524E]/70">— BOOTpaths</span>
             </h1>
-            <p className="text-[10px] text-[#3A2A1E]/50">Last Updated: August 3, 2026</p>
+            <p className="text-[10px] text-[#52524E]/50">Last Updated: August 3, 2026</p>
           </div>
         </div>
 
         {/* Search and Close Buttons */}
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-initial">
-            <Search className="absolute left-3 top-3.5 h-4 w-4 text-[#3A2A1E]/40" />
+            <Search className="absolute left-3 top-3.5 h-4 w-4 text-[#52524E]/40" />
             <input
               type="text"
               placeholder="Search privacy terms..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full sm:w-64 h-11 pl-9 pr-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3]/40 text-xs text-[#3A2A1E] placeholder-[#3A2A1E]/40 focus:border-[#C1571F] focus:outline-none transition-colors"
+              className="w-full sm:w-64 h-11 pl-9 pr-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:border-[#C1571F]/60 focus:outline-none transition-colors"
             />
             {searchQuery && (
               <button 
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-3 h-5 w-5 rounded-full bg-[#3A2A1E]/5 text-xs flex items-center justify-center hover:bg-[#3A2A1E]/10"
+                className="absolute right-3 top-3 h-5 w-5 rounded-full bg-[#E7E7E4]/50 text-xs flex items-center justify-center hover:bg-[#E7E7E4]"
               >
                 ✕
               </button>
@@ -136,7 +136,7 @@ export default function PrivacyPolicy({ onClose }) {
           </div>
           <button 
             onClick={onClose}
-            className="h-11 px-5 rounded-xl bg-[#C1571F] text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a44717] transition-all flex items-center gap-1.5"
+            className="h-11 px-5 rounded-xl bg-[#C1571F] text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all flex items-center gap-1.5 shadow-sm"
           >
             <X className="h-4 w-4" />
             Close
@@ -149,8 +149,8 @@ export default function PrivacyPolicy({ onClose }) {
         
         {/* Quick Nav Sidebar (Desktop Only) */}
         <aside className="hidden lg:block lg:col-span-3 sticky top-28 self-start space-y-4">
-          <div className="rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-5 shadow-sm">
-            <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/50 mb-4">
+          <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-5 shadow-sm">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#52524E]/55 mb-4">
               Policy Sections
             </h3>
             <nav className="flex flex-col gap-1.5">
@@ -163,8 +163,8 @@ export default function PrivacyPolicy({ onClose }) {
                     onClick={() => scrollToSection(sec.id)}
                     className={`flex items-center gap-2.5 w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                       isActive 
-                        ? 'bg-[#C1571F] text-white shadow-[0_4px_12px_rgba(193,87,31,0.25)]'
-                        : 'text-[#3A2A1E]/70 hover:bg-[#3A2A1E]/5 hover:text-[#3A2A1E]'
+                        ? 'bg-[#C1571F] text-white shadow-sm'
+                        : 'text-[#52524E]/80 hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
                     }`}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
@@ -174,12 +174,12 @@ export default function PrivacyPolicy({ onClose }) {
               })}
             </nav>
           </div>
-          <div className="rounded-2xl border border-[#C1571F]/20 bg-[#C1571F]/5 p-5">
+          <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-5 shadow-sm">
             <h4 className="text-xs font-bold text-[#C1571F] uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Shield className="h-4 w-4" />
               Trekker Guarantee
             </h4>
-            <p className="text-[11px] leading-relaxed text-[#3A2A1E]/70">
+            <p className="text-[11px] leading-relaxed text-[#52524E]">
               We secure your vital parameters, emergency routes, and identification data using standard database encryption models.
             </p>
           </div>
@@ -189,12 +189,12 @@ export default function PrivacyPolicy({ onClose }) {
         <div className="lg:col-span-9 space-y-8">
           
           {/* Mobile quick links pill container */}
-          <div className="lg:hidden bg-[#EBE3D3] p-3 rounded-2xl border border-[#3A2A1E]/10 flex gap-2 overflow-x-auto no-scrollbar scroll-smooth mb-4">
+          <div className="lg:hidden bg-[#FFFFFF] p-3 rounded-2xl border border-[#E7E7E4] flex gap-2 overflow-x-auto no-scrollbar scroll-smooth mb-4 shadow-sm">
             {SECTIONS.map((sec) => (
               <button
                 key={sec.id}
                 onClick={() => scrollToSection(sec.id)}
-                className="flex items-center gap-1 shrink-0 px-3 py-1.5 rounded-full bg-[#F3ECDD] border border-[#3A2A1E]/10 text-[10px] font-bold uppercase tracking-wider text-[#3A2A1E]/70 hover:text-[#C1571F]"
+                className="flex items-center gap-1 shrink-0 px-3 py-1.5 rounded-full bg-[#F8F8F6] border border-[#E7E7E4] text-[10px] font-bold uppercase tracking-wider text-[#52524E]/70 hover:text-[#C1571F]"
               >
                 <ChevronRight className="h-3 w-3 text-[#C1571F]" />
                 {sec.label.replace(/^\d+\.\s+/, '')}
@@ -202,28 +202,28 @@ export default function PrivacyPolicy({ onClose }) {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-6 sm:p-8 shadow-sm space-y-10">
+          <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-6 sm:p-8 shadow-sm space-y-10">
             {/* Intro */}
             <div className="space-y-4">
-              <h2 className="font-outfit text-2xl font-black text-[#3A2A1E]">Privacy & Data Policy Declaration</h2>
-              <p className="text-xs leading-relaxed text-[#3A2A1E]/80">
+              <h2 className="font-outfit text-2xl font-black text-[#1A1A18]">Privacy & Data Policy Declaration</h2>
+              <p className="text-xs leading-relaxed text-[#52524E]">
                 <Highlight text="At BOOTpaths, accessible from our website and mobile platforms, one of our main priorities is the privacy and safety of our trekkers and participants. This Privacy Policy outlines the types of information we collect, how we use it, how we protect it, and your rights regarding your personal data." />
               </p>
-              <p className="text-xs leading-relaxed text-[#3A2A1E]/80 font-semibold bg-[#3A2A1E]/5 p-4 rounded-xl border-l-4 border-[#C1571F]">
+              <p className="text-xs leading-relaxed text-[#52524E] font-semibold bg-[#F8F8F6] p-4 rounded-xl border-l-4 border-[#C1571F] border-t border-r border-b border-[#E7E7E4]/50">
                 <Highlight text="By registering for, booking, or participating in any trek, expedition, or outdoor activity organized by BOOTpaths, you consent to the practices described in this policy." />
               </p>
             </div>
 
             {/* Section 1 */}
             <section id="section-1" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <Database className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[0].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[0].title}</h3>
               </div>
-              <p className="text-xs leading-relaxed text-[#3A2A1E]/80">
+              <p className="text-xs leading-relaxed text-[#52524E]">
                 <Highlight text="We collect information to provide safe, organized, and seamless trekking experiences. The types of data gathered include:" />
               </p>
-              <ul className="space-y-3 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-3 text-xs text-[#52524E] list-disc pl-5">
                 <li>
                   <strong>Personal Identification & Contact Details:</strong> <Highlight text="Full Name, Age, Gender, Date of Birth, email address, phone number, physical address, and Emergency contact details." />
                 </li>
@@ -244,11 +244,11 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 2 */}
             <section id="section-2" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <Compass className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[1].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[1].title}</h3>
               </div>
-              <ul className="space-y-3 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-3 text-xs text-[#52524E] list-disc pl-5">
                 <li>
                   <strong>Safety & Medical Screening:</strong> <Highlight text="Evaluating physical fitness suitability, identifying medical risks, and providing assistance during medical emergencies or evacuations." />
                 </li>
@@ -272,14 +272,14 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 3 */}
             <section id="section-3" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <Eye className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[2].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[2].title}</h3>
               </div>
-              <p className="text-xs leading-relaxed text-[#3A2A1E]/80">
+              <p className="text-xs leading-relaxed text-[#52524E]">
                 <Highlight text="We do not sell, rent, or trade personal information. We share data only with:" />
               </p>
-              <ul className="space-y-2 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-2 text-xs text-[#52524E] list-disc pl-5">
                 <li><Highlight text="Forest Departments & Local Authorities for entry passes and adventure permits." /></li>
                 <li><Highlight text="Emergency Services & Medical Providers to facilitate rescue operations and medical treatment." /></li>
                 <li><Highlight text="Insurance Companies for processing medical or evacuation claims." /></li>
@@ -290,11 +290,11 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 4 */}
             <section id="section-4" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <FileText className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[3].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[3].title}</h3>
               </div>
-              <ul className="space-y-3 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-3 text-xs text-[#52524E] list-disc pl-5">
                 <li>
                   <strong>Grant of Permission:</strong> <Highlight text="Unless explicitly declined in writing prior to the trek, participants grant BOOTpaths permission to use photographs and videos for promotional and documentation purposes." />
                 </li>
@@ -306,11 +306,11 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 5 */}
             <section id="section-5" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <Lock className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[4].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[4].title}</h3>
               </div>
-              <ul className="space-y-2.5 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-2.5 text-xs text-[#52524E] list-disc pl-5">
                 <li><Highlight text="We implement administrative, physical, and electronic security measures to safeguard personal and health data." /></li>
                 <li><Highlight text="Health declarations and IDs are retained only as long as necessary to complete the trek, fulfill legal obligations, and process claims." /></li>
               </ul>
@@ -318,11 +318,11 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 6 */}
             <section id="section-6" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#3A2A1E]/10 pb-2">
+              <div className="flex items-center gap-2 border-b border-[#E7E7E4] pb-2">
                 <UserCheck className="h-4.5 w-4.5 text-[#C1571F]" />
-                <h3 className="font-outfit text-lg font-bold text-[#3A2A1E]">{SECTIONS[5].title}</h3>
+                <h3 className="font-outfit text-lg font-bold text-[#1A1A18]">{SECTIONS[5].title}</h3>
               </div>
-              <ul className="space-y-3 text-xs text-[#3A2A1E]/80 list-disc pl-5">
+              <ul className="space-y-3 text-xs text-[#52524E] list-disc pl-5">
                 <li>
                   <strong>Access & Correction:</strong> <Highlight text="Request access to or correction of personal details or health declarations." />
                 </li>
@@ -337,16 +337,16 @@ export default function PrivacyPolicy({ onClose }) {
 
             {/* Section 7 / Contact Card */}
             <section id="section-7" className="scroll-mt-24">
-              <div className="rounded-2xl border-2 border-dashed border-[#C1571F]/30 bg-[#C1571F]/5 p-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
+              <div className="rounded-2xl border-2 border-dashed border-[#E7E7E4] bg-[#F8F8F6] p-6 flex flex-col sm:flex-row items-center gap-6 justify-between shadow-sm">
                 <div className="space-y-2 text-center sm:text-left">
-                  <h4 className="font-outfit text-base font-bold text-[#3A2A1E]">Need to discuss your data?</h4>
-                  <p className="text-xs text-[#3A2A1E]/75 leading-relaxed max-w-md">
+                  <h4 className="font-outfit text-base font-bold text-[#1A1A18]">Need to discuss your data?</h4>
+                  <p className="text-xs text-[#52524E] leading-relaxed max-w-md">
                     If you want to request data deletion, withdraw media permission, or have questions regarding medical declarations, contact our compliance officer.
                   </p>
                 </div>
                 <a
                   href="mailto:support@bootpaths.com"
-                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#C1571F] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a44717] transition-all shrink-0"
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#C1571F] px-6 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all shrink-0 shadow-sm"
                 >
                   <Mail className="h-4 w-4" />
                   Email Support
@@ -363,7 +363,7 @@ export default function PrivacyPolicy({ onClose }) {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-[#C1571F] text-white shadow-xl hover:bg-[#a44717] flex items-center justify-center transition-all animate-in fade-in duration-300 scale-100 hover:scale-105 active:scale-95"
+          className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-[#C1571F] text-white shadow-xl hover:bg-[#A84310] flex items-center justify-center transition-all animate-in fade-in duration-300 scale-100 hover:scale-105 active:scale-95"
           title="Back to Top"
         >
           <ArrowUp className="h-5 w-5" />

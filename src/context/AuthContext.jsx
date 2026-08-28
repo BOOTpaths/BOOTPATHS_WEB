@@ -29,6 +29,41 @@ export function AuthProvider({ children }) {
   const [walletBalance, setWalletBalance] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [featureFlags, setFeatureFlags] = useState({
+    enableLeadApplications: false,
+    enableExpeditionViews: false,
+    enableSocialFeeds: false,
+    enableCommunityBlogs: false
+  });
+
+  useEffect(() => {
+    const unsubFeatureFlags = onSnapshot(doc(db, 'app_settings', 'feature_flags'), (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        setFeatureFlags({
+          enableLeadApplications: !!data.enableLeadApplications,
+          enableExpeditionViews: !!data.enableExpeditionViews,
+          enableSocialFeeds: !!data.enableSocialFeeds,
+          enableCommunityBlogs: !!data.enableCommunityBlogs
+        });
+      } else {
+        // Create the document if it doesn't exist
+        const defaultFlags = {
+          enableLeadApplications: false,
+          enableExpeditionViews: false,
+          enableSocialFeeds: false,
+          enableCommunityBlogs: false
+        };
+        setDoc(doc(db, 'app_settings', 'feature_flags'), defaultFlags).catch((err) => {
+          console.warn('Failed to initialize feature flags doc:', err);
+        });
+        setFeatureFlags(defaultFlags);
+      }
+    }, (err) => {
+      console.warn('Feature Flags subscription notice:', err.message);
+    });
+    return () => unsubFeatureFlags();
+  }, []);
 
   useEffect(() => {
     let unsubscribeUserDoc = null;
@@ -37,6 +72,7 @@ export function AuthProvider({ children }) {
       if (user) {
         setCurrentUser(user);
         const adminFlag = user.email?.toLowerCase() === 'admin@bootpaths.com';
+        const developerFlag = user.email?.toLowerCase() === 'developer@bootpaths.com' || user.email?.toLowerCase() === 'dev@bootpaths.com';
         setIsAdmin(adminFlag);
 
         // Listen to live user document in Firestore
@@ -54,6 +90,10 @@ export function AuthProvider({ children }) {
               setDoc(userDocRef, { role: 'admin' }, { merge: true }).catch((err) => {
                 console.warn('Auto-grant Admin role failed:', err.message);
               });
+            } else if (developerFlag && data.role !== 'developer') {
+              setDoc(userDocRef, { role: 'developer' }, { merge: true }).catch((err) => {
+                console.warn('Auto-grant Developer role failed:', err.message);
+              });
             }
           } else {
             // Create user document if it doesn't exist yet
@@ -67,7 +107,7 @@ export function AuthProvider({ children }) {
               photoURL: user.photoURL || null,
               initials: initials,
               walletBalance: 0,
-              role: adminFlag ? 'admin' : 'hiker',
+              role: adminFlag ? 'admin' : (developerFlag ? 'developer' : 'hiker'),
               createdAt: new Date().toISOString()
             };
             setDoc(userDocRef, initialUserData).catch((err) => {
@@ -169,6 +209,8 @@ export function AuthProvider({ children }) {
     isAdmin,
     loading,
     authLoading: loading,
+    featureFlags,
+    setFeatureFlags,
     login,
     signup,
     loginWithGoogle,

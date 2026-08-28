@@ -157,14 +157,13 @@ export default function AuthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-955/40 p-4 backdrop-blur-[20px] animate-in fade-in duration-[350ms] ease-out">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/20 p-4 backdrop-blur-[20px] animate-in fade-in duration-[350ms] ease-out">
       <div 
-        className="relative w-full max-w-md overflow-hidden rounded-xl border border-autumn-maple/20 shadow-[inset_0_1px_2px_rgba(52,211,153,0.15),0_15px_35px_rgba(0,0,0,0.6)] animate-in zoom-in-95 duration-[350ms] ease-out"
-        style={{ background: 'rgba(18, 30, 26, 0.45)' }}
+        className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm animate-in zoom-in-95 duration-[350ms] ease-out text-[#1A1A18]"
       >
         
         {/* Auth Top Header */}
-        <div className="bg-autumn-mist/30 p-5 flex justify-between items-center border-b border-autumn-bark/10">
+        <div className="bg-[#F8F8F6] p-5 flex justify-between items-center border-b border-[#E7E7E4]">
           <div className="flex items-center gap-3">
             <img 
               src="assets/logo-light.png" 
@@ -177,7 +176,7 @@ export default function AuthModal({
           </div>
           <button 
             onClick={onClose}
-            className="h-8 w-8 rounded-full bg-[#EFE8D6]/40 flex items-center justify-center text-autumn-bark/70 hover:text-white transition-colors"
+            className="h-8 w-8 rounded-full bg-[#F8F8F6] flex items-center justify-center text-[#52524E] hover:bg-[#E7E7E4] hover:text-[#1A1A18] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -186,27 +185,27 @@ export default function AuthModal({
         {/* Auth Content */}
         {isAuthenticating ? (
           <div className="p-8 py-16 flex flex-col items-center justify-center gap-4 text-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-bark/10 border-t-emerald-500"></div>
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#E7E7E4] border-t-emerald-500"></div>
             <div>
-              <h4 className="text-sm font-bold text-autumn-bark/80 uppercase tracking-widest drop-shadow-sm">Securing Session</h4>
-              <p className="text-xxs text-autumn-bark/50 mt-1">Setting up mountaineering client profile...</p>
+              <h4 className="text-sm font-bold text-[#1A1A18] uppercase tracking-widest drop-shadow-sm">Securing Session</h4>
+              <p className="text-xxs text-[#52524E] mt-1">Setting up mountaineering client profile...</p>
             </div>
           </div>
         ) : (
           <div>
             {/* Tab Switcher */}
-            <div className="flex border-b border-autumn-bark/10 bg-autumn-mist/20">
+            <div className="flex border-b border-[#E7E7E4] bg-[#F8F8F6]">
               <button 
                 type="button"
                 onClick={() => { setAuthMode('login'); setAuthErrors({}); setResetSuccessMessage(''); setResetErrorMessage(''); }}
-                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'login' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
+                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'login' ? 'text-autumn-maple border-autumn-maple bg-[#FFFFFF]' : 'text-[#52524E] border-transparent hover:text-[#1A1A18]'}`}
               >
                 Sign In
               </button>
               <button 
                 type="button"
                 onClick={() => { setAuthMode('register'); setAuthErrors({}); setResetSuccessMessage(''); setResetErrorMessage(''); }}
-                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'register' ? 'text-autumn-maple border-autumn-maple bg-[#EFE8D6]/10' : 'text-autumn-bark/50 border-transparent hover:text-autumn-bark/80'}`}
+                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-outfit transition-all duration-200 border-b-2 ${authMode === 'register' ? 'text-autumn-maple border-autumn-maple bg-[#FFFFFF]' : 'text-[#52524E] border-transparent hover:text-[#1A1A18]'}`}
               >
                 Create Account
               </button>
@@ -221,7 +220,7 @@ export default function AuthModal({
               <form onSubmit={handleAuthSubmit} className="space-y-4">
                 {authMode === 'register' && (
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#52524E] mb-1.5">
                       Full Name
                     </label>
                     <input 
@@ -229,7 +228,7 @@ export default function AuthModal({
                       value={authName}
                       onChange={(e) => setAuthName(e.target.value)}
                       placeholder="Decathlon Hiker"
-                      className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                      className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                     />
                     {authErrors.name && (
                       <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.name}</span>
@@ -238,7 +237,7 @@ export default function AuthModal({
                 )}
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#52524E] mb-1.5">
                     Email Address
                   </label>
                   <input 
@@ -246,7 +245,7 @@ export default function AuthModal({
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
                     placeholder="hiker@decathlon.com"
-                    className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                   />
                   {authErrors.email && (
                     <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.email}</span>
@@ -254,7 +253,7 @@ export default function AuthModal({
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-autumn-bark/70 mb-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#52524E] mb-1.5">
                     Password
                   </label>
                   <input 
@@ -262,7 +261,7 @@ export default function AuthModal({
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full h-10 px-3 rounded border border-autumn-bark/10 bg-autumn-mist/30 text-xs text-autumn-bark placeholder-autumn-bark/30 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                   />
                   <div className="flex justify-end mt-1.5">
                     <button 
@@ -286,15 +285,15 @@ export default function AuthModal({
 
                 <button 
                   type="submit"
-                  className="w-full flex h-11 items-center justify-center rounded bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] transition-colors hover:bg-[#a44717] focus:outline-none focus:ring-2 focus:ring-autumn-maple shadow-[0_4px_12px_rgba(193,87,31,0.35)]"
+                  className="w-full flex h-11 items-center justify-center rounded-xl bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F8F8F6] transition-colors hover:bg-[#A84310] focus:outline-none focus:ring-2 focus:ring-autumn-maple"
                 >
                   {authMode === 'login' ? 'Sign In' : 'Create Account'}
                 </button>
               </form>
 
               {/* Guest selection & footer */}
-              <div className="mt-6 pt-4 border-t border-autumn-bark/10 flex items-center justify-between text-xxs">
-                <span className="text-autumn-bark/50">Unsure about booking?</span>
+              <div className="mt-6 pt-4 border-t border-[#E7E7E4] flex items-center justify-between text-xxs">
+                <span className="text-[#52524E]">Unsure about booking?</span>
                 <button 
                   type="button"
                   onClick={handleContinueAsGuest}

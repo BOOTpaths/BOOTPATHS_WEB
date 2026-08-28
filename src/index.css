@@ -8,8 +8,9 @@
   --color-autumn-rhodo: #8C2B2A;
   --color-autumn-amber: #E3A21E;
   --color-autumn-moss: #6E7042;
-  --color-autumn-bark: #3A2A1E;
-  --color-autumn-mist: #F3ECDD;
+  --color-autumn-bark: #1A1A18;
+  --color-autumn-mist: #F8F8F6;
+  --color-autumn-stone-body: #52524E;
 }
 
 @layer base {
@@ -18,18 +19,18 @@
   }
 }
 
-/* Custom Scrollbar for premium light-theme organic feel */
+/* Custom Scrollbar for premium light-theme natural stone feel */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F3ECDD; /* autumn-mist */
+  background: #F8F8F6; /* autumn-mist */
 }
 ::-webkit-scrollbar-thumb {
-  background: #E0D7C5; /* elevated mist tone */
+  background: #E7E7E4; /* stone gray thumb */
   border-radius: 4px;
-  border: 2px solid #F3ECDD;
+  border: 2px solid #F8F8F6;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #C1571F; /* autumn-maple */

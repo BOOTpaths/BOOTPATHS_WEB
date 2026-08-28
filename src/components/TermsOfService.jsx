@@ -74,21 +74,21 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
     <div className="space-y-12 pr-2">
       {/* Section 1 */}
       <section id="sec-1" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <AlertTriangle className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             1. Nature of Adventure Activities & Assumption of Risk
           </h2>
         </div>
         
-        <div className="bg-[#C1571F]/5 border border-[#C1571F]/20 rounded-xl p-4 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="bg-[#F8F8F6] border border-[#E7E7E4] rounded-xl p-4 text-xs leading-relaxed text-[#52524E]">
           <p className="font-bold text-[#C1571F] uppercase mb-1">Warning: Inherent Wilderness Risks</p>
           Trekking, climbing, camping, and expedition activities organized by BOOTpaths occur in rugged, remote, and unpredictable environments. By registering, you explicitly acknowledge and assume all inherent hazards.
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>1.1 Inherent Hazards:</strong> These include, but are not limited to, slips, trips, falls on slick rocks or scree, extreme temperature fluctuations, torrential monsoons, sudden lightning strikes, flash floods, attacks by wild animals, and insect bites.
           </p>
@@ -103,24 +103,24 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 2 */}
       <section id="sec-2" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <Heart className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             2. Medical Fitness & Health Declaration
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
-            <strong>2.1 Physical Conditioning:</strong> Participants are required to maintain a physical conditioning standard appropriate to their selected trek\'s difficulty rating. You declare that you are in good physical and mental health.
+            <strong>2.1 Physical Conditioning:</strong> Participants are required to maintain a physical conditioning standard appropriate to their selected trek's difficulty rating. You declare that you are in good physical and mental health.
           </p>
           <p>
-            <strong>2.2 Mandatory Vitals Check:</strong> BOOTpaths guides will perform periodic blood pressure and pulse oximeter oxygen saturation (SpO2) readings. If a participant\'s SpO2 level falls below standard safety levels, the guide reserves complete authority to order an immediate descent.
+            <strong>2.2 Mandatory Vitals Check:</strong> BOOTpaths guides will perform periodic blood pressure and pulse oximeter oxygen saturation (SpO2) readings. If a participant's SpO2 level falls below standard safety levels, the guide reserves complete authority to order an immediate descent.
           </p>
           <p>
-            <strong>2.3 Safety Turn-Backs:</strong> The lead guide\'s decision to order a participant to return is final. Any participant who refuses a safety turn-back order operates at their own personal liability, and BOOTpaths support systems are legally terminated for that individual.
+            <strong>2.3 Safety Turn-Backs:</strong> The lead guide's decision to order a participant to return is final. Any participant who refuses a safety turn-back order operates at their own personal liability, and BOOTpaths support systems are legally terminated for that individual.
           </p>
           <p>
             <strong>2.4 Pre-existing Conditions:</strong> You must disclose all pre-existing medical conditions, including asthma, cardiac conditions, diabetes, epilepsy, and severe allergies (especially to insect bites or medications) in your participant profile before departure.
@@ -130,16 +130,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 3 */}
       <section id="sec-3" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <ShieldAlert className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             3. Travel Insurance & Emergency Evacuation
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>3.1 Mandatory Coverage:</strong> Trekkers must hold a valid personal accident and wilderness travel insurance policy covering high-altitude trekking, search and rescue operations, and emergency medical repatriation.
           </p>
@@ -154,16 +154,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 4 */}
       <section id="sec-4" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <Compass className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             4. Itinerary Changes & Operational Authority
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>4.1 Route Flexibility:</strong> Wild trails are subject to unpredictable conditions. Forest fires, landslide warnings, sudden bridge collapses, or permit cancellations by regional forest officers can necessitate dynamic route adjustments.
           </p>
@@ -181,16 +181,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 5 */}
       <section id="sec-5" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <Users className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             5. Participant Code of Conduct
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>5.1 Safety & Leadership:</strong> Participants must strictly follow all instructions issued by the designated guide. Deviating from the marked trail without explicit approval is strictly prohibited.
           </p>
@@ -205,21 +205,21 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 6 */}
       <section id="sec-6" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <Leaf className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             6. Environmental Commitment & Sustainable Trekking Policy
           </h2>
         </div>
 
-        <div className="bg-[#6E7042]/10 border border-[#6E7042]/20 rounded-xl p-4 text-xs leading-relaxed text-[#3A2A1E]/80">
-          <p className="font-bold text-[#6E7042] uppercase mb-1">Leave No Trace (LNT) Mandate</p>
+        <div className="bg-[#F8F8F6] border border-[#E7E7E4] rounded-xl p-4 text-xs leading-relaxed text-[#52524E]">
+          <p className="font-bold text-[#C1571F] uppercase mb-1">Leave No Trace (LNT) Mandate</p>
           BOOTpaths is a zero-waste adventure organization. Littering, collecting wild plants or stones, feeding wildlife, or washing utensils inside natural water bodies is strictly prohibited. Violations will result in a penalty fee matching local forest authority fines.
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>6.1 Waste Management:</strong> All non-biodegradable waste generated by participants (wrappers, plastics, wet wipes) must be packed in personal waste bags and carried back to base camps.
           </p>
@@ -231,16 +231,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 7 */}
       <section id="sec-7" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <CloudLightning className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             7. Force Majeure & Unforeseen Events
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             BOOTpaths is not liable for itinerary modifications, delays, cancellations, or failure to perform obligations caused by acts of God, war, hostilities, strikes, government regulations, landslide warnings, sudden trail blockages, floods, pandemics, or other severe forces beyond our control. In Force Majeure situations, bookings will be converted to a future trek credit voucher valid for 1 year, subject to operational availability.
           </p>
@@ -249,16 +249,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 8 */}
       <section id="sec-8" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <Scale className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             8. Limitation of Liability & Indemnity
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             <strong>8.1 Indemnification:</strong> You agree to indemnify, defend, and hold harmless BOOTpaths, its directors, employees, expedition leads, and local guiding crew against any claims, losses, or expenses resulting from personal injury, illness, AMS, death, property damage, or delays.
           </p>
@@ -273,16 +273,16 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
       {/* Section 9 */}
       <section id="sec-9" className="scroll-mt-24 space-y-4">
-        <div className="flex items-center gap-3 border-b border-[#3A2A1E]/10 pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C1571F]/10 text-[#C1571F]">
+        <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F8F6] text-[#C1571F] border border-[#E7E7E4]">
             <CheckCircle className="h-5 w-5" />
           </div>
-          <h2 className="font-outfit text-xl font-bold text-[#3A2A1E]">
+          <h2 className="font-outfit text-xl font-bold text-[#1A1A18]">
             9. Declaration & Acceptance of Terms
           </h2>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-[#3A2A1E]/80">
+        <div className="space-y-3 text-xs leading-relaxed text-[#52524E]">
           <p>
             By ticking the check-box during reservation, registering, or submitting a deposit payment, you confirm that you have read, understood, and voluntarily agree to all conditions outlined in this contract. You certify that all medical declarations are true, and you proceed on this wilderness expedition entirely at your own risk.
           </p>
@@ -293,15 +293,15 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
   if (isFullPage) {
     return (
-      <div className="min-h-screen bg-[#F3ECDD] text-[#3A2A1E] font-outfit pb-16">
+      <div className="min-h-screen bg-[#F8F8F6] text-[#52524E] font-outfit pb-16">
         {/* Navigation bar header */}
-        <header className="sticky top-0 z-40 w-full border-b border-[#3A2A1E]/10 bg-[#F3ECDD]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-40 w-full border-b border-[#E7E7E4] bg-[#F8F8F6]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-[#2A1D14] flex items-center justify-center shadow-md border border-[#C1571F]/30">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-[#1A1A18] flex items-center justify-center shadow-sm border border-[#E7E7E4]">
               <img src="/assets/logo-dark.png" alt="BOOTpaths Logo" className="w-full h-full object-cover scale-105" />
             </div>
             <div className="flex items-baseline">
-              <span className="text-[#3A2A1E] font-extrabold text-xl tracking-tight">BOOT</span>
+              <span className="text-[#1A1A18] font-extrabold text-xl tracking-tight">BOOT</span>
               <span className="text-[#C1571F] font-extrabold text-xl tracking-tight">paths</span>
             </div>
           </div>
@@ -309,14 +309,14 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
           <div className="flex items-center gap-4">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#3A2A1E]/10 bg-[#EBE3D3] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#3A2A1E] hover:bg-[#3A2A1E] hover:text-[#F3ECDD] transition-all"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#E7E7E4] bg-[#FFFFFF] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#52524E] hover:bg-[#F8F8F6] transition-all"
             >
               <Printer className="h-4 w-4" />
               Print / Save PDF
             </button>
             <button 
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#C1571F] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a44717] transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#C1571F] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all shadow-sm"
             >
               Close / Return
             </button>
@@ -326,8 +326,8 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
         <main className="mx-auto max-w-7xl px-6 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Quick-Nav sidebar */}
           <aside className="lg:col-span-3 sticky top-24 self-start space-y-4">
-            <div className="rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-5 shadow-sm">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-4">
+            <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-5 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-[#52524E]/70 mb-4">
                 Jump to Policy
               </h3>
               <nav className="flex flex-col gap-1.5">
@@ -340,8 +340,8 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
                       onClick={() => scrollToSection(sec.id)}
                       className={`flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
                         isActive 
-                          ? 'bg-[#C1571F] text-white shadow-[0_4px_12px_rgba(193,87,31,0.2)]'
-                          : 'text-[#3A2A1E]/70 hover:bg-[#3A2A1E]/5 hover:text-[#3A2A1E]'
+                          ? 'bg-[#C1571F] text-white shadow-sm'
+                          : 'text-[#52524E]/70 hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
                       }`}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -351,20 +351,20 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
                 })}
               </nav>
             </div>
-            <div className="rounded-2xl border border-[#C1571F]/20 bg-[#C1571F]/5 p-5">
+            <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-5 shadow-sm">
               <h4 className="text-xs font-bold text-[#C1571F] uppercase tracking-wider mb-2">Need Clarification?</h4>
-              <p className="text-[11px] leading-relaxed text-[#3A2A1E]/70">
+              <p className="text-[11px] leading-relaxed text-[#52524E]">
                 For custom corporate adventure contracts or queries regarding specific medical clearance terms, reach out at info@bootpaths.com.
               </p>
             </div>
           </aside>
 
           {/* Detailed Content */}
-          <div className="lg:col-span-9 rounded-2xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-8 shadow-sm print:shadow-none print:border-none print:bg-white print:p-0">
-            <div className="border-b border-[#3A2A1E]/10 pb-6 mb-8 text-center lg:text-left">
+          <div className="lg:col-span-9 rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] p-8 shadow-sm print:shadow-none print:border-none print:bg-white print:p-0">
+            <div className="border-b border-[#E7E7E4] pb-6 mb-8 text-center lg:text-left">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Official Contract</span>
-              <h1 className="font-outfit text-3xl font-black text-[#3A2A1E] mt-1">Participant Terms of Service</h1>
-              <p className="text-xs text-[#3A2A1E]/50 mt-1">Last Updated: August 2026</p>
+              <h1 className="font-outfit text-3xl font-black text-[#1A1A18] mt-1">Participant Terms of Service</h1>
+              <p className="text-xs text-[#52524E]/50 mt-1">Last Updated: August 2026</p>
             </div>
 
             {contentMarkup}
@@ -376,29 +376,29 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
 
   // Slide-over Modal Layout
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-[#3A2A1E]/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-end bg-stone-955/20 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="w-full md:w-3/5 lg:w-1/2 h-full bg-[#F3ECDD] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300"
+        className="w-full md:w-3/5 lg:w-1/2 h-full bg-[#F8F8F6] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300"
         role="dialog"
         aria-labelledby="tos-title"
       >
         {/* Modal Header */}
-        <div className="sticky top-0 z-10 bg-[#F3ECDD] border-b border-[#3A2A1E]/10 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-10 bg-[#F8F8F6] border-b border-[#E7E7E4] px-6 py-4 flex items-center justify-between">
           <div>
             <span className="text-[9px] font-bold uppercase tracking-widest text-[#C1571F] block">Registration Waiver</span>
-            <h2 id="tos-title" className="font-outfit text-lg font-bold text-[#3A2A1E]">Terms of Service</h2>
+            <h2 id="tos-title" className="font-outfit text-lg font-bold text-[#1A1A18]">Terms of Service</h2>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
               title="Print Policy"
-              className="p-2 rounded-lg border border-[#3A2A1E]/10 bg-[#EBE3D3] hover:bg-[#3A2A1E] hover:text-[#F3ECDD] text-[#3A2A1E] transition-all"
+              className="p-2 rounded-lg border border-[#E7E7E4] bg-[#FFFFFF] hover:bg-[#F8F8F6] text-[#52524E] transition-all"
             >
               <Printer className="h-4.5 w-4.5" />
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg bg-[#3A2A1E]/5 text-[#3A2A1E]/70 hover:bg-[#3A2A1E]/10 hover:text-[#3A2A1E] transition-all"
+              className="p-2 rounded-lg bg-[#E7E7E4]/50 text-[#52524E]/70 hover:bg-[#E7E7E4] hover:text-[#1A1A18] transition-all border border-[#E7E7E4]"
             >
               <X className="h-5 w-5" />
             </button>
@@ -406,12 +406,12 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
         </div>
 
         {/* Quick Nav Slider */}
-        <div className="bg-[#EBE3D3] px-6 py-2.5 border-b border-[#3A2A1E]/10 flex gap-2 overflow-x-auto no-scrollbar scroll-smooth">
+        <div className="bg-[#FFFFFF] px-6 py-2.5 border-b border-[#E7E7E4] flex gap-2 overflow-x-auto no-scrollbar scroll-smooth">
           {SECTIONS.map((sec) => (
             <button
               key={sec.id}
               onClick={() => scrollToSection(sec.id)}
-              className="flex items-center gap-1.5 shrink-0 px-2.5 py-1 rounded-full bg-[#F3ECDD] border border-[#3A2A1E]/10 text-[10px] font-bold uppercase tracking-wider text-[#3A2A1E]/70 hover:border-[#C1571F]/50 hover:text-[#C1571F] transition-all"
+              className="flex items-center gap-1.5 shrink-0 px-2.5 py-1 rounded-full bg-[#F8F8F6] border border-[#E7E7E4] text-[10px] font-bold uppercase tracking-wider text-[#52524E]/70 hover:border-[#C1571F]/50 hover:text-[#C1571F] transition-all"
             >
               <ChevronRight className="h-3 w-3 text-[#C1571F]" />
               {sec.label.replace(/^\d+\.\s+/, '')}
@@ -425,13 +425,13 @@ export default function TermsOfService({ onClose, isFullPage = false }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="sticky bottom-0 z-10 bg-[#EBE3D3] border-t border-[#3A2A1E]/10 px-6 py-4 flex items-center justify-between">
-          <p className="text-[10px] text-[#3A2A1E]/50">
+        <div className="sticky bottom-0 z-10 bg-[#FFFFFF] border-t border-[#E7E7E4] px-6 py-4 flex items-center justify-between">
+          <p className="text-[10px] text-[#52524E]/50">
             Please print/save a copy for your records.
           </p>
           <button
             onClick={onClose}
-            className="rounded-lg bg-[#C1571F] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a44717] transition-all"
+            className="rounded-lg bg-[#C1571F] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all shadow-sm"
           >
             Acknowledge & Close
           </button>

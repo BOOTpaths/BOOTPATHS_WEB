@@ -179,19 +179,19 @@ export default function UserDashboard({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3A2A1E]/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl h-[85vh] flex flex-col md:flex-row overflow-hidden rounded-3xl border border-[#3A2A1E]/10 bg-[#F3ECDD] backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-250">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/20 p-4 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl h-[85vh] flex flex-col md:flex-row overflow-hidden rounded-3xl border border-[#E7E7E4] bg-[#F8F8F6] backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-250">
         
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-[#EBE3D3] flex items-center justify-center text-[#3A2A1E]/70 hover:text-[#C1571F] hover:bg-[#EBE3D3]/80 transition-colors focus:outline-none shadow-sm"
+          className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-[#FFFFFF] border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1A1A18] hover:bg-[#F8F8F6] transition-colors focus:outline-none shadow-sm"
         >
           <X className="h-5 w-5" />
         </button>
 
         {/* Sidebar / Navigation Tabs */}
-        <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#3A2A1E]/10 bg-[#EBE3D3]/60 p-6 flex flex-col">
+        <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#E7E7E4] bg-[#FFFFFF] p-6 flex flex-col">
           <div className="flex items-center gap-3 mb-8">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#C1571F]/20 text-[#C1571F] font-outfit text-xl font-bold border border-[#C1571F]/30 shadow-[0_0_15px_rgba(193,87,31,0.2)] shrink-0 overflow-hidden">
               {user.photo ? (
@@ -201,8 +201,8 @@ export default function UserDashboard({
               )}
             </div>
             <div className="min-w-0">
-              <h3 className="font-outfit text-sm font-bold text-[#3A2A1E] truncate">{user.name}</h3>
-              <span className="text-[10px] text-[#3A2A1E]/50 uppercase tracking-widest block truncate">{user.email}</span>
+              <h3 className="font-outfit text-sm font-bold text-[#1A1A18] truncate">{user.name}</h3>
+              <span className="text-[10px] text-[#52524E]/70 uppercase tracking-widest block truncate">{user.email}</span>
             </div>
           </div>
 
@@ -213,7 +213,7 @@ export default function UserDashboard({
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
                 dashboardTab === 'bookings' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
-                  : 'text-[#3A2A1E]/70 hover:bg-[#EBE3D3] hover:text-[#3A2A1E]'
+                  : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
               }`}
             >
               <Calendar className="h-4 w-4" />
@@ -224,7 +224,7 @@ export default function UserDashboard({
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
                 dashboardTab === 'profile' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
-                  : 'text-[#3A2A1E]/70 hover:bg-[#EBE3D3] hover:text-[#3A2A1E]'
+                  : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
               }`}
             >
               <User className="h-4 w-4" />
@@ -235,23 +235,23 @@ export default function UserDashboard({
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 relative ${
                 dashboardTab === 'wallet' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
-                  : 'text-[#3A2A1E]/70 hover:bg-[#EBE3D3] hover:text-[#3A2A1E]'
+                  : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
               }`}
             >
               <Wallet className="h-4 w-4" />
               <span>Trail Wallet</span>
               {walletBalance > 0 && (
-                <span className="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#E3A21E] text-[#2A1D14]">
+                <span className="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#C1571F] text-white">
                   ₹{walletBalance.toLocaleString('en-IN')}
                 </span>
               )}
             </button>
           </div>
 
-          <div className="mt-auto hidden md:block pt-6 border-t border-[#3A2A1E]/10">
+          <div className="mt-auto hidden md:block pt-6 border-t border-[#E7E7E4]">
             <button 
               onClick={() => { onClose(); handleLogout(); }}
-              className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#3A2A1E]/50 hover:text-[#8C2B2A] transition-colors focus:outline-none"
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#52524E]/70 hover:text-rose-600 transition-colors focus:outline-none"
             >
               <LogOut className="h-4 w-4" />
               Sign Out Securely
@@ -260,23 +260,23 @@ export default function UserDashboard({
         </div>
 
         {/* Main Dashboard Content Area */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#F3ECDD]">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#F8F8F6]">
           
           {/* TAB 1: EXPEDITION RECORDS */}
           {dashboardTab === 'bookings' && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Passes & History</span>
-                <h2 className="font-outfit text-2xl font-black text-[#3A2A1E] tracking-tight">Expedition Records</h2>
-                <p className="text-xs text-[#3A2A1E]/70 mt-0.5">Your confirmed wilderness passes and historical trail records.</p>
+                <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Expedition Records</h2>
+                <p className="text-xs text-[#52524E] mt-0.5">Your confirmed wilderness passes and historical trail records.</p>
               </div>
 
               <div className="space-y-4">
                 {userBookings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#EBE3D3]/40 rounded-3xl border border-[#3A2A1E]/10 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#FFFFFF] border border-[#E7E7E4] rounded-3xl shadow-sm animate-in fade-in zoom-in-95 duration-200">
                     <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
-                    <h3 className="font-outfit text-lg font-black text-[#3A2A1E] uppercase tracking-wider">No Active Expeditions Found</h3>
-                    <p className="text-xs text-[#3A2A1E]/60 max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
+                    <h3 className="font-outfit text-lg font-black text-[#1A1A18] uppercase tracking-wider">No Active Expeditions Found</h3>
+                    <p className="text-xs text-[#52524E] max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
                     <button
                       onClick={() => {
                         onClose();
@@ -287,7 +287,7 @@ export default function UserDashboard({
                           }
                         }, 150);
                       }}
-                      className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#a44717] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-[#C1571F]/20"
+                      className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
                     >
                       Explore Upcoming Treks
                     </button>
@@ -303,13 +303,13 @@ export default function UserDashboard({
                         key={record.id} 
                         className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all ${
                           isCancelled 
-                            ? 'border-[#3A2A1E]/10 bg-[#EBE3D3]/40 opacity-75' 
-                            : 'border-[#3A2A1E]/15 bg-[#EBE3D3] hover:border-[#C1571F]/40 shadow-sm'
+                            ? 'border-[#E7E7E4] bg-[#FFFFFF] opacity-75 shadow-sm' 
+                            : 'border-[#E7E7E4] bg-[#FFFFFF] hover:border-[#C1571F]/40 shadow-sm'
                         }`}
                       >
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-3">
-                            <span className="text-xxs font-mono text-[#3A2A1E]/60 bg-[#F3ECDD] px-2 py-0.5 rounded border border-[#3A2A1E]/10 font-bold">
+                            <span className="text-xxs font-mono text-[#52524E] bg-[#F8F8F6] px-2 py-0.5 rounded border border-[#E7E7E4] font-bold">
                               {record.id}
                             </span>
                             <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${
@@ -319,16 +319,16 @@ export default function UserDashboard({
                               {record.status}
                             </span>
                           </div>
-                          <h4 className="font-outfit text-lg font-bold text-[#3A2A1E] mt-1">{record.title}</h4>
-                          <span className="text-xs text-[#3A2A1E]/70 flex items-center gap-2 mt-0.5">
+                          <h4 className="font-outfit text-lg font-bold text-[#1A1A18] mt-1">{record.title}</h4>
+                          <span className="text-xs text-[#52524E] flex items-center gap-2 mt-0.5">
                             <Calendar className="h-3.5 w-3.5 text-[#C1571F]" />
                             {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </span>
                         </div>
 
-                        <div className="mt-4 sm:mt-0 flex flex-col items-start sm:items-end justify-between border-t sm:border-t-0 border-[#3A2A1E]/10 pt-3 sm:pt-0 gap-2">
+                        <div className="mt-4 sm:mt-0 flex flex-col items-start sm:items-end justify-between border-t sm:border-t-0 border-[#E7E7E4] pt-3 sm:pt-0 gap-2">
                           <div className="text-right">
-                            <span className="text-xs text-[#3A2A1E]/60 block">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
+                            <span className="text-xs text-[#52524E] block">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
                             <span className="font-outfit text-xl font-black text-[#C1571F]">₹{record.price.toLocaleString('en-IN')}</span>
                           </div>
 
@@ -360,39 +360,39 @@ export default function UserDashboard({
             <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Safety Credentials</span>
-                <h2 className="font-outfit text-2xl font-black text-[#3A2A1E] tracking-tight">Hiker Vital Profile</h2>
-                <p className="text-xs text-[#3A2A1E]/70 mt-0.5">Manage your wilderness credentials and emergency medical protocols.</p>
+                <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Hiker Vital Profile</h2>
+                <p className="text-xs text-[#52524E] mt-0.5">Manage your wilderness credentials and emergency medical protocols.</p>
               </div>
 
               <form onSubmit={handleSaveProfile} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Legal Full Name</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Legal Full Name</label>
                     <input 
                       type="text"
                       value={profileData.fullName || user.name}
                       onChange={(e) => setProfileData({...profileData, fullName: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3] text-xs text-[#3A2A1E] placeholder-[#3A2A1E]/40 focus:outline-none focus:border-[#C1571F] transition-all"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
                       placeholder="As per Government ID"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Contact Mobile</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Contact Mobile</label>
                     <input 
                       type="tel"
                       value={profileData.mobile}
                       onChange={(e) => setProfileData({...profileData, mobile: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3] text-xs text-[#3A2A1E] placeholder-[#3A2A1E]/40 focus:outline-none focus:border-[#C1571F] transition-all"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
                       placeholder="+91 98765 43210"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Blood Group</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Blood Group</label>
                     <div className="relative">
                       <select 
                         value={profileData.bloodGroup}
                         onChange={(e) => setProfileData({...profileData, bloodGroup: e.target.value})}
-                        className="w-full h-11 px-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3] text-xs text-[#3A2A1E] focus:outline-none focus:border-[#C1571F] transition-all appearance-none"
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] focus:outline-none focus:border-autumn-maple transition-all appearance-none"
                       >
                         <option value="" disabled>Select Blood Type</option>
                         <option value="A+">A+</option>
@@ -404,28 +404,28 @@ export default function UserDashboard({
                         <option value="O+">O+</option>
                         <option value="O-">O-</option>
                       </select>
-                      <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#3A2A1E]/50 pointer-events-none" />
+                      <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Emergency Contact</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Emergency Contact</label>
                     <input 
                       type="tel"
                       value={profileData.emergencyContact}
                       onChange={(e) => setProfileData({...profileData, emergencyContact: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3] text-xs text-[#3A2A1E] placeholder-[#3A2A1E]/40 focus:outline-none focus:border-[#C1571F] transition-all"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
                       placeholder="Family or Guardian Mobile"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60 mb-2">Medical Conditions / Allergies</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Medical Conditions / Allergies</label>
                   <textarea 
                     rows="3"
                     value={profileData.medicalConditions}
                     onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
-                    className="w-full p-4 rounded-xl border border-[#3A2A1E]/15 bg-[#EBE3D3] text-xs text-[#3A2A1E] placeholder-[#3A2A1E]/40 focus:outline-none focus:border-[#C1571F] transition-all resize-none"
+                    className="w-full p-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all resize-none"
                     placeholder="List any history of AMS, asthma, heart conditions, or severe insect/drug allergies."
                   ></textarea>
                 </div>
@@ -434,10 +434,10 @@ export default function UserDashboard({
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className={`flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-md disabled:opacity-50 ${
+                    className={`flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-sm disabled:opacity-50 ${
                       isSaved 
                         ? 'bg-emerald-600 hover:bg-emerald-700' 
-                        : 'bg-[#C1571F] hover:bg-[#a44717]'
+                        : 'bg-[#C1571F] hover:bg-[#A84310]'
                     }`}
                   >
                     {isSaved ? 'SAVED ✓' : isSaving ? 'Synchronizing...' : 'Save Hiker Credentials'}
@@ -458,54 +458,54 @@ export default function UserDashboard({
             <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Future Trek Credits</span>
-                <h2 className="font-outfit text-2xl font-black text-[#3A2A1E] tracking-tight">Trail Wallet</h2>
-                <p className="text-xs text-[#3A2A1E]/70 mt-0.5">Manage your bonus cancellation credits and auto-redeem them during checkout.</p>
+                <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Trail Wallet</h2>
+                <p className="text-xs text-[#52524E] mt-0.5">Manage your bonus cancellation credits and auto-redeem them during checkout.</p>
               </div>
 
               {/* Main Balance Display Card */}
-              <div className="bg-[#3A2A1E] text-[#F3ECDD] border border-[#C1571F]/40 p-6 rounded-2xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+              <div className="bg-[#FFFFFF] text-[#1A1A18] border border-[#E7E7E4] p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
                 {/* Background ambient glow */}
-                <div className="absolute -right-12 -bottom-12 h-40 w-40 rounded-full bg-[#C1571F]/20 blur-2xl pointer-events-none"></div>
+                <div className="absolute -right-12 -bottom-12 h-40 w-40 rounded-full bg-[#C1571F]/5 blur-2xl pointer-events-none"></div>
 
                 <div className="space-y-2 relative z-10">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#F3ECDD]/60">Active Credit Balance</span>
-                    <span className="bg-[#E3A21E]/20 text-[#E3A21E] border border-[#E3A21E]/30 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#52524E]">Active Credit Balance</span>
+                    <span className="bg-autumn-maple/10 text-autumn-maple border border-autumn-maple/20 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
                       <Gift className="h-3 w-3" />
                       +50% BONUS
                     </span>
                   </div>
-                  <div className="font-outfit text-4xl font-black text-white tracking-tight">
+                  <div className="font-outfit text-4xl font-black text-[#1A1A18] tracking-tight">
                     ₹{walletBalance.toLocaleString('en-IN')}
                   </div>
-                  <p className="text-xs text-[#F3ECDD]/75 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                  <p className="text-xs text-[#52524E] flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                     Available for instant checkout redemption on all Western Ghats & Himalayan treks.
                   </p>
                 </div>
 
-                <div className="w-full md:w-auto bg-[#2A1D14]/60 p-4 rounded-xl border border-[#F3ECDD]/10 space-y-1.5 text-xs relative z-10">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3ECDD]/50">Validity & Transferability</div>
-                  <div className="font-bold text-[#E3A21E] flex items-center gap-1">
+                <div className="w-full md:w-auto bg-[#F8F8F6] p-4 rounded-xl border border-[#E7E7E4] space-y-1.5 text-xs relative z-10">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#52524E]/75">Validity & Transferability</div>
+                  <div className="font-bold text-[#C1571F] flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5" />
                     12 Months Validity
                   </div>
-                  <div className="text-[11px] text-[#F3ECDD]/70">Redeemable by trekker or immediate family.</div>
+                  <div className="text-[11px] text-[#52524E]">Redeemable by trekker or immediate family.</div>
                 </div>
               </div>
 
               {/* Transaction Ledger */}
               <div className="space-y-3">
-                <h3 className="font-outfit text-sm font-bold text-[#3A2A1E] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="font-outfit text-sm font-bold text-[#1A1A18] uppercase tracking-wider flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-[#C1571F]" />
                   Credit Transaction History
                 </h3>
 
                 {walletTransactions.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#3A2A1E]/20 bg-[#EBE3D3]/40 p-8 text-center space-y-2">
-                    <Wallet className="h-8 w-8 text-[#3A2A1E]/30 mx-auto" />
-                    <h4 className="font-outfit text-sm font-bold text-[#3A2A1E]/70">No Wallet Transactions Yet</h4>
-                    <p className="text-xs text-[#3A2A1E]/50 max-w-sm mx-auto">
+                  <div className="rounded-2xl border border-dashed border-[#E7E7E4] bg-[#FFFFFF] p-8 text-center space-y-2 shadow-sm">
+                    <Wallet className="h-8 w-8 text-[#52524E]/30 mx-auto" />
+                    <h4 className="font-outfit text-sm font-bold text-[#1A1A18]">No Wallet Transactions Yet</h4>
+                    <p className="text-xs text-[#52524E] max-w-sm mx-auto">
                       When you cancel a trek booking and choose the Future Trek Credit option, your refund amount + 50% bonus credit will instantly appear here!
                     </p>
                   </div>
@@ -514,7 +514,7 @@ export default function UserDashboard({
                     {(walletTransactions || []).map((txn) => (
                       <div 
                         key={txn.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-[#3A2A1E]/10 bg-[#EBE3D3] hover:border-[#C1571F]/30 transition-all text-xs"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] hover:border-[#C1571F]/30 transition-all text-xs shadow-sm"
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
@@ -523,10 +523,10 @@ export default function UserDashboard({
                             }`}>
                               {txn.type === 'credit' ? '+ CREDIT' : '- REDEEMED'}
                             </span>
-                            <span className="text-[10px] font-mono text-[#3A2A1E]/50">{txn.id}</span>
-                            <span className="text-[10px] text-[#3A2A1E]/50">• {txn.date}</span>
+                            <span className="text-[10px] font-mono text-[#52524E]">{txn.id}</span>
+                            <span className="text-[10px] text-[#52524E]">• {txn.date}</span>
                           </div>
-                          <p className="font-semibold text-[#3A2A1E]">{txn.desc}</p>
+                          <p className="font-semibold text-[#1A1A18]">{txn.desc}</p>
                           {txn.expiry && txn.expiry !== 'N/A' && (
                             <p className="text-[10px] text-[#C1571F] font-medium">Valid until: {txn.expiry}</p>
                           )}
@@ -550,30 +550,30 @@ export default function UserDashboard({
 
       {/* INTERACTIVE CANCELLATION MODAL & POLICY CALCULATOR */}
       {selectedBookingForCancel && cancelDetails && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-[#2A1D14]/70 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-[#3A2A1E]/20 bg-[#F3ECDD] shadow-2xl p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-250 text-[#3A2A1E]">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-stone-950/20 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-xl p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-250 text-[#1A1A18]">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-[#3A2A1E]/10 pb-4">
+            <div className="flex items-center justify-between border-b border-[#E7E7E4] pb-4">
               <div className="flex items-center gap-2.5 text-[#8C2B2A]">
                 <AlertCircle className="h-5 w-5 shrink-0" />
-                <h3 className="font-outfit text-lg font-extrabold text-[#3A2A1E]">Cancel Expedition Booking</h3>
+                <h3 className="font-outfit text-lg font-extrabold text-[#1A1A18]">Cancel Expedition Booking</h3>
               </div>
               <button
                 onClick={() => setSelectedBookingForCancel(null)}
-                className="p-1 rounded-full bg-[#EBE3D3] text-[#3A2A1E]/60 hover:text-[#3A2A1E]"
+                className="p-1 rounded-full bg-[#F8F8F6] border border-[#E7E7E4] text-[#52524E] hover:text-[#1A1A18]"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Target Booking Info Card */}
-            <div className="rounded-xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-4 text-xs space-y-1.5">
+            <div className="rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] p-4 text-xs space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-[#3A2A1E]">{selectedBookingForCancel.title}</span>
-                <span className="font-mono text-[10px] bg-[#F3ECDD] px-2 py-0.5 rounded font-bold">{selectedBookingForCancel.id}</span>
+                <span className="font-bold text-[#1A1A18]">{selectedBookingForCancel.title}</span>
+                <span className="font-mono text-[10px] bg-[#FFFFFF] border border-[#E7E7E4] px-2 py-0.5 rounded font-bold">{selectedBookingForCancel.id}</span>
               </div>
-              <div className="flex items-center justify-between text-[#3A2A1E]/70 text-[11px]">
+              <div className="flex items-center justify-between text-[#52524E] text-[11px]">
                 <span>Trek Date: {selectedBookingForCancel.date}</span>
                 <span className="font-bold text-[#C1571F]">Paid: ₹{selectedBookingForCancel.price.toLocaleString('en-IN')}</span>
               </div>
@@ -585,22 +585,22 @@ export default function UserDashboard({
                 <span>Policy Calculator Status</span>
                 <span className="bg-[#C1571F] text-white px-2 py-0.5 rounded text-[10px] uppercase">{cancelDetails.tierLabel}</span>
               </div>
-              <p className="text-[11px] text-[#3A2A1E]/80">
+              <p className="text-[11px] text-[#52524E]">
                 Based on your cancellation window ({cancelDetails.daysRemaining} days prior to departure).
               </p>
             </div>
 
             {/* Dual Refund Options Selection */}
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/60">Select Refund Option</label>
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E]">Select Refund Option</label>
 
               {/* Option A: Standard Cash Refund */}
               <div 
                 onClick={() => setSelectedRefundOption('cash')}
                 className={`p-4 rounded-xl border cursor-pointer transition-all ${
                   selectedRefundOption === 'cash' 
-                    ? 'border-[#3A2A1E] bg-[#EBE3D3] ring-1 ring-[#3A2A1E]' 
-                    : 'border-[#3A2A1E]/10 bg-[#EBE3D3]/40 hover:border-[#3A2A1E]/30'
+                    ? 'border-[#1A1A18] bg-[#F8F8F6] ring-1 ring-[#1A1A18]' 
+                    : 'border-[#E7E7E4] bg-[#FFFFFF] hover:border-[#52524E] shadow-sm'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -610,15 +610,15 @@ export default function UserDashboard({
                       name="refund_choice" 
                       checked={selectedRefundOption === 'cash'} 
                       onChange={() => setSelectedRefundOption('cash')}
-                      className="accent-[#3A2A1E]" 
+                      className="accent-[#1A1A18]" 
                     />
                     <span className="font-bold text-xs">Option A: Standard Cash Refund</span>
                   </div>
-                  <span className="font-outfit font-extrabold text-sm text-[#3A2A1E]">
+                  <span className="font-outfit font-extrabold text-sm text-[#1A1A18]">
                     ₹{cancelDetails.baseRefundAmount.toLocaleString('en-IN')}
                   </span>
                 </div>
-                <p className="text-[11px] text-[#3A2A1E]/70 mt-1.5 pl-5">
+                <p className="text-[11px] text-[#52524E] mt-1.5 pl-5">
                   Reimburses {cancelDetails.refundPercentage}% base refund amount back to your original payment method (Bank/UPI) within 5–7 business days.
                 </p>
               </div>
@@ -643,7 +643,7 @@ export default function UserDashboard({
                     />
                     <div>
                       <span className="font-extrabold text-xs text-[#C1571F] block">Option B: 50% Bonus Trail Wallet Credit</span>
-                      <span className="bg-[#E3A21E] text-[#2A1D14] text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider inline-block mt-0.5">
+                      <span className="bg-[#C1571F] text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider inline-block mt-0.5">
                         RECOMMENDED +50% BONUS
                       </span>
                     </div>
@@ -655,14 +655,14 @@ export default function UserDashboard({
                     <span className="text-[10px] block text-emerald-700 font-bold">+₹{cancelDetails.extraBonusValue.toLocaleString('en-IN')} extra credit!</span>
                   </div>
                 </div>
-                <p className="text-[11px] text-[#3A2A1E]/80 mt-2 pl-5 leading-relaxed">
+                <p className="text-[11px] text-[#52524E] mt-2 pl-5 leading-relaxed">
                   Applies base refund + <strong>50% extra bonus credit</strong> directly to your Trail Wallet. Available instantly for checkout redemption.
                 </p>
               </div>
             </div>
 
             {/* Policy Summary Box */}
-            <div className="rounded-xl border border-[#3A2A1E]/10 bg-[#EBE3D3] p-3.5 text-[11px] text-[#3A2A1E]/75 leading-relaxed flex items-start gap-2">
+            <div className="rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] p-3.5 text-[11px] text-[#52524E] leading-relaxed flex items-start gap-2">
               <Info className="h-4 w-4 text-[#C1571F] shrink-0 mt-0.5" />
               <span>
                 Credits remain valid for 12 months from original cancelled trek date ({cancelDetails.formattedExpiry}) and can be redeemed for future treks or transferred to immediate family members.
@@ -673,7 +673,7 @@ export default function UserDashboard({
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => setSelectedBookingForCancel(null)}
-                className="h-11 rounded-xl border border-[#3A2A1E]/20 text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider hover:bg-[#EBE3D3] transition-all"
+                className="h-11 rounded-xl border border-[#E7E7E4] text-[#52524E] font-outfit text-xs font-bold uppercase tracking-wider hover:bg-[#F8F8F6] transition-all"
               >
                 Keep Booking
               </button>

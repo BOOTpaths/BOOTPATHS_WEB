@@ -6,6 +6,7 @@
  * is strictly prohibited without express written permission from BOOTpaths.
  */
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { db, storage } from '../config/firebase';
 import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
@@ -58,12 +59,29 @@ export default function AdminConsole({
   blogs = [], 
   setBlogs, 
   isCareersEnabled, 
-  setIsCareersEnabled, 
   leadApplications = [], 
   setLeadApplications, 
   onReturnToSite,
   expeditionViews = []
 }) {
+  const { featureFlags, userRole } = useAuth();
+  
+  const renderLockedModule = () => {
+    return (
+      <div className="min-h-[400px] flex flex-col items-center justify-center gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-12 text-center backdrop-blur-md animate-in fade-in duration-300">
+        <div className="h-14 w-14 rounded-full bg-autumn-maple/10 flex items-center justify-center text-autumn-maple mb-2">
+          <Lock className="h-7 w-7" />
+        </div>
+        <h2 className="font-outfit text-lg font-black uppercase tracking-wider text-autumn-bark">
+          🔒 Module Locked
+        </h2>
+        <p className="text-xs text-autumn-bark/70 max-w-sm leading-relaxed">
+          Maintenance Tier Required. Contact Developer to Activate.
+        </p>
+      </div>
+    );
+  };
+
   // Session State
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [authView, setAuthView] = useState('login'); // 'login' | 'forgot_password'
@@ -649,15 +667,15 @@ export default function AdminConsole({
   // UNAUTHENTICATED: LOGIN / RESET SCREEN
   if (!isAdminLoggedIn) {
     return (
-      <div className="min-h-screen bg-autumn-mist flex items-center justify-center p-4 text-autumn-bark relative overflow-hidden font-sans">
+      <div className="min-h-screen bg-[#F8F8F6] flex items-center justify-center p-4 text-autumn-bark relative overflow-hidden font-sans">
         {/* Background glow graphics */}
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-autumn-maple/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-autumn-rhodo/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-autumn-maple/30 bg-[#F3ECDD]/80 backdrop-blur-xl shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm animate-in zoom-in-95 duration-200">
           
           {/* Header */}
-          <div className="bg-[#EFE8D6]/80 p-6 border-b border-autumn-bark/10 flex items-center justify-between">
+          <div className="bg-[#F8F8F6] p-6 border-b border-[#E7E7E4] flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img 
                 src="assets/logo-dark.png" 
@@ -710,7 +728,7 @@ export default function AdminConsole({
                       value={emailInput}
                       onChange={(e) => setEmailInput(e.target.value)}
                       placeholder="admin@bootpaths.com"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-[#C1571F] focus:border-[#C1571F] transition-all"
                     />
                     <Mail className="absolute left-3.5 top-3 h-4 w-4 text-autumn-bark/40 pointer-events-none" />
                   </div>
@@ -724,7 +742,7 @@ export default function AdminConsole({
                     <button 
                       type="button"
                       onClick={() => { setAuthView('forgot_password'); setAuthError(''); }}
-                      className="text-[10px] font-bold uppercase tracking-wider text-autumn-amber hover:text-autumn-maple transition-colors"
+                      className="text-[10px] font-bold uppercase tracking-wider text-autumn-amber hover:text-[#C1571F] transition-colors"
                     >
                       FORGOT PASSWORD?
                     </button>
@@ -736,7 +754,7 @@ export default function AdminConsole({
                       value={passwordInput}
                       onChange={(e) => setPasswordInput(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-[#C1571F] focus:border-[#C1571F] transition-all"
                     />
                     <Lock className="absolute left-3.5 top-3 h-4 w-4 text-autumn-bark/40 pointer-events-none" />
                   </div>
@@ -745,7 +763,7 @@ export default function AdminConsole({
                 <button
                   type="submit"
                   disabled={isSubmittingAuth}
-                  className="w-full h-11 rounded-xl bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] hover:bg-[#a44717] transition-all focus:outline-none focus:ring-2 focus:ring-autumn-maple flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full h-11 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-widest text-white hover:bg-[#A84310] transition-all focus:outline-none focus:ring-2 focus:ring-[#C1571F] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isSubmittingAuth ? (
                     <>
@@ -781,7 +799,7 @@ export default function AdminConsole({
                     <button
                       type="button"
                       onClick={() => { setAuthView('login'); setResetSuccess(false); setAuthError(''); }}
-                      className="w-full h-10 rounded-xl border border-autumn-bark/20 bg-[#EFE8D6]/60 font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-[#EFE8D6] transition-all flex items-center justify-center gap-2"
+                      className="w-full h-10 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-[#E7E7E4]/50 transition-all flex items-center justify-center gap-2"
                     >
                       <ArrowLeft className="h-4 w-4" />
                       Return to Login
@@ -807,7 +825,7 @@ export default function AdminConsole({
                           value={emailInput}
                           onChange={(e) => setEmailInput(e.target.value)}
                           placeholder="admin@bootpaths.com"
-                          className="w-full h-11 pl-10 pr-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                          className="w-full h-11 pl-10 pr-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:ring-1 focus:ring-[#C1571F] focus:border-[#C1571F] transition-all"
                         />
                         <Mail className="absolute left-3.5 top-3 h-4 w-4 text-autumn-bark/40 pointer-events-none" />
                       </div>
@@ -816,7 +834,7 @@ export default function AdminConsole({
                     <button
                       type="submit"
                       disabled={isSubmittingAuth}
-                      className="w-full h-11 rounded-xl bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] hover:bg-[#a44717] transition-all focus:outline-none focus:ring-2 focus:ring-autumn-maple flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="w-full h-11 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-widest text-white hover:bg-[#A84310] transition-all focus:outline-none focus:ring-2 focus:ring-[#C1571F] flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {isSubmittingAuth ? (
                         <>
@@ -847,10 +865,10 @@ export default function AdminConsole({
 
   // AUTHENTICATED: FULL ADMIN PORTAL
   return (
-    <div className="min-h-screen bg-autumn-mist text-autumn-bark font-sans">
+    <div className="min-h-screen bg-[#F8F8F6] text-autumn-bark font-sans">
       
       {/* 1. PERSISTENT ADMIN STATUS NAVBAR */}
-      <header className="sticky top-0 z-40 border-b border-autumn-bark/10 bg-[#EFE8D6]/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-[#E7E7E4] bg-[#F8F8F6]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-8">
           
           <div className="flex items-center gap-4">
@@ -910,52 +928,60 @@ export default function AdminConsole({
           >
             Trek Inventory
           </button>
-          <button
-            onClick={() => setActiveTab('blogs')}
-            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === 'blogs' 
-                ? 'border-autumn-maple text-autumn-maple' 
-                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
-            }`}
-          >
-            Community Blogs ({blogs.filter(b => b.status === 'pending').length} Pending)
-          </button>
-          <button
-            onClick={() => setActiveTab('leads')}
-            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === 'leads' 
-                ? 'border-autumn-maple text-autumn-maple' 
-                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
-            }`}
-          >
-            Lead Applications ({leadApplications.filter(l => l.status === 'Pending').length} Pending)
-          </button>
-          <button
-            onClick={() => setActiveTab('views')}
-            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === 'views' 
-                ? 'border-autumn-maple text-autumn-maple' 
-                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
-            }`}
-          >
-            Expedition Views ({(expeditionViews || []).length})
-          </button>
-          <button
-            onClick={() => setActiveTab('social')}
-            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === 'social' 
-                ? 'border-autumn-maple text-autumn-maple' 
-                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
-            }`}
-          >
-            Social Feeds
-          </button>
+          {featureFlags.enableCommunityBlogs && (
+            <button
+              onClick={() => setActiveTab('blogs')}
+              className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+                activeTab === 'blogs' 
+                  ? 'border-autumn-maple text-autumn-maple' 
+                  : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+              }`}
+            >
+              Community Blogs ({blogs.filter(b => b.status === 'pending').length} Pending)
+            </button>
+          )}
+          {featureFlags.enableLeadApplications && (
+            <button
+              onClick={() => setActiveTab('leads')}
+              className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+                activeTab === 'leads' 
+                  ? 'border-autumn-maple text-autumn-maple' 
+                  : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+              }`}
+            >
+              Lead Applications ({leadApplications.filter(l => l.status === 'Pending').length} Pending)
+            </button>
+          )}
+          {featureFlags.enableExpeditionViews && (
+            <button
+              onClick={() => setActiveTab('views')}
+              className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+                activeTab === 'views' 
+                  ? 'border-autumn-maple text-autumn-maple' 
+                  : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+              }`}
+            >
+              Expedition Views ({(expeditionViews || []).length})
+            </button>
+          )}
+          {featureFlags.enableSocialFeeds && (
+            <button
+              onClick={() => setActiveTab('social')}
+              className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+                activeTab === 'social' 
+                  ? 'border-autumn-maple text-autumn-maple' 
+                  : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+              }`}
+            >
+              Social Feeds
+            </button>
+          )}
         </div>
 
         {activeTab === 'inventory' && (
           <>
             {/* HEADER & ACTION BAR */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
           <div>
             <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
               Trek Inventory Management
@@ -973,7 +999,7 @@ export default function AdminConsole({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search inventory..."
-                className="w-full sm:w-64 h-11 pl-10 pr-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                className="w-full sm:w-64 h-11 pl-10 pr-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
               />
               <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-autumn-bark/40 pointer-events-none" />
             </div>
@@ -981,7 +1007,7 @@ export default function AdminConsole({
             {/* Add Trek Button */}
             <button
               onClick={handleOpenCreateModal}
-              className="h-11 px-5 rounded-xl bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-wider text-[#F3ECDD] hover:bg-[#a44717] transition-all flex items-center justify-center gap-2 shadow-lg shadow-autumn-maple/20"
+              className="h-11 px-5 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all flex items-center justify-center gap-2 shadow-sm"
             >
               <Plus className="h-4 w-4" />
               Add New Trek
@@ -991,7 +1017,7 @@ export default function AdminConsole({
 
         {/* INVENTORY STATS CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm">
+          <div className="p-5 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm">
             <span className="text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold block">Total Packages</span>
             <span className="font-outfit text-2xl font-black text-autumn-bark mt-1 block">{treks.length}</span>
           </div>
@@ -1012,10 +1038,10 @@ export default function AdminConsole({
         </div>
 
         {/* DATA TABLE */}
-        <div className="overflow-hidden rounded-2xl border border-autumn-bark/10 bg-[#F3ECDD]/70 backdrop-blur-xl shadow-xl">
+        <div className="overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-autumn-bark">
-              <thead className="bg-[#EFE8D6] text-[10px] font-bold uppercase tracking-wider text-autumn-bark/60 border-b border-autumn-bark/10">
+              <thead className="bg-[#F8F8F6] text-[10px] font-bold uppercase tracking-wider text-autumn-bark/60 border-b border-[#E7E7E4]">
                 <tr>
                   <th className="py-4 px-6">Trek Package</th>
                   <th className="py-4 px-4">Location & Alt</th>
@@ -1035,14 +1061,14 @@ export default function AdminConsole({
                   </tr>
                 ) : (
                   (filteredTreks || []).map((trek) => (
-                    <tr key={trek.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                    <tr key={trek.id} className="hover:bg-[#F8F8F6] transition-colors">
                       {/* Title & Image */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
                           <img 
                             src={trek.image} 
                             alt={trek.title}
-                            className="h-10 w-10 rounded-lg object-cover border border-autumn-bark/10 shrink-0" 
+                            className="h-10 w-10 rounded-lg object-cover border border-[#E7E7E4] shrink-0" 
                           />
                           <div>
                             <span className="font-outfit text-sm font-bold text-autumn-bark block">{trek.title}</span>
@@ -1066,7 +1092,7 @@ export default function AdminConsole({
 
                       {/* Difficulty */}
                       <td className="py-4 px-4">
-                        <span className="px-2.5 py-1 rounded-full text-xxs font-bold uppercase tracking-wider bg-autumn-mist/10 border border-autumn-bark/20">
+                        <span className="px-2.5 py-1 rounded-full text-xxs font-bold uppercase tracking-wider bg-[#F8F8F6] border border-[#E7E7E4]">
                           {trek.difficulty}
                         </span>
                       </td>
@@ -1100,7 +1126,7 @@ export default function AdminConsole({
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleOpenEditModal(trek)}
-                            className="h-8 w-8 rounded-lg bg-autumn-mist/10 hover:bg-autumn-maple hover:text-[#F3ECDD] text-autumn-bark transition-all flex items-center justify-center"
+                            className="h-8 w-8 rounded-lg bg-[#F8F8F6] hover:bg-[#C1571F] hover:text-white text-autumn-bark transition-all flex items-center justify-center border border-[#E7E7E4]"
                             title="Edit Package"
                           >
                             <Edit2 className="h-3.5 w-3.5" />
@@ -1125,10 +1151,10 @@ export default function AdminConsole({
       </>
     )}
 
-    {activeTab === 'blogs' && (
+    {activeTab === 'blogs' && (!featureFlags.enableCommunityBlogs ? renderLockedModule() : (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Header & Stats Banner */}
-            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h1 className="font-outfit text-xl sm:text-2xl font-black text-autumn-bark">
                   Community Blogs Moderation
@@ -1148,10 +1174,10 @@ export default function AdminConsole({
             </div>
 
             {/* Moderation Table */}
-            <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/30 overflow-hidden backdrop-blur-md">
+            <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-autumn-bark">
-                  <thead className="bg-[#EFE8D6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-autumn-bark/15">
+                  <thead className="bg-[#F8F8F6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-[#E7E7E4]">
                     <tr>
                       <th className="py-4 px-5">Cover & Title</th>
                       <th className="py-4 px-5">Author</th>
@@ -1170,13 +1196,13 @@ export default function AdminConsole({
                       </tr>
                     ) : (
                       (blogs || []).map((post) => (
-                        <tr key={post.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                        <tr key={post.id} className="hover:bg-[#F8F8F6] transition-colors">
                           <td className="py-4 px-5 font-medium">
                             <div className="flex items-center gap-3">
                               <img 
                                 src={post.coverUrl} 
                                 alt={post.title} 
-                                className="h-10 w-16 object-cover rounded-lg border border-autumn-bark/10 bg-stone-200 shrink-0" 
+                                className="h-10 w-16 object-cover rounded-lg border border-[#E7E7E4] bg-stone-200 shrink-0" 
                               />
                               <div className="max-w-xs sm:max-w-sm">
                                 <span className="font-outfit text-sm font-bold text-autumn-bark block line-clamp-1">
@@ -1191,7 +1217,7 @@ export default function AdminConsole({
                           <td className="py-4 px-5">
                             <div>
                               <span className="font-semibold block text-autumn-bark">{post.author}</span>
-                              <span className="text-[9px] uppercase tracking-wider text-[#E3A21E] font-bold block mt-0.5">
+                              <span className="text-[9px] uppercase tracking-wider text-autumn-amber font-bold block mt-0.5">
                                 {post.authorBadge}
                               </span>
                             </div>
@@ -1206,7 +1232,7 @@ export default function AdminConsole({
                             <span className={`inline-block rounded-full border px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
                               post.status === 'published' 
                                 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600' 
-                                : 'bg-[#E3A21E]/10 border-[#E3A21E]/30 text-[#E3A21E]'
+                                : 'bg-autumn-amber/10 border-autumn-amber/30 text-autumn-maple'
                             }`}>
                               {post.status}
                             </span>
@@ -1216,7 +1242,7 @@ export default function AdminConsole({
                               {/* Preview Action */}
                               <button 
                                 onClick={() => setViewingBlog(post)}
-                                className="h-8 w-8 rounded-full border border-autumn-bark/20 bg-autumn-mist/5 flex items-center justify-center hover:bg-autumn-mist/10 text-autumn-bark transition-all"
+                                className="h-8 w-8 rounded-full border border-[#E7E7E4] bg-[#F8F8F6] flex items-center justify-center hover:bg-[#E7E7E4]/50 text-autumn-bark transition-all"
                                 title="Preview Full Article"
                               >
                                 <Eye className="h-3.5 w-3.5" />
@@ -1226,7 +1252,7 @@ export default function AdminConsole({
                               {post.status === 'pending' && (
                                 <button 
                                   onClick={() => handleApproveBlog(post.id)}
-                                  className="h-8 w-8 rounded-full border border-[#6E7042]/30 bg-[#6E7042]/10 flex items-center justify-center hover:bg-[#6E7042]/20 text-[#6E7042] transition-all"
+                                  className="h-8 w-8 rounded-full border border-emerald-600/30 bg-emerald-600/10 flex items-center justify-center hover:bg-emerald-600/20 text-emerald-700 transition-all"
                                   title="Approve & Publish"
                                 >
                                   <Check className="h-3.5 w-3.5" />
@@ -1236,7 +1262,7 @@ export default function AdminConsole({
                               {/* Reject/Delete Action */}
                               <button 
                                 onClick={() => handleRejectBlog(post.id)}
-                                className="h-8 w-8 rounded-full border border-[#8C2B2A]/30 bg-[#8C2B2A]/10 flex items-center justify-center hover:bg-[#8C2B2A]/20 text-[#8C2B2A] transition-all"
+                                className="h-8 w-8 rounded-full border border-rose-600/30 bg-rose-600/10 flex items-center justify-center hover:bg-rose-600/20 text-rose-700 transition-all"
                                 title="Reject & Delete"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -1251,13 +1277,13 @@ export default function AdminConsole({
               </div>
             </div>
           </div>
-        )}
+        ))}`
 
         {/* 3. LEAD CAREERS APPLICATIONS MANAGEMENT */}
-        {activeTab === 'leads' && (
+        {activeTab === 'leads' && (!featureFlags.enableLeadApplications ? renderLockedModule() : (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Header & Global Settings Toggle Switch */}
-            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h1 className="font-outfit text-xl sm:text-2xl font-black text-autumn-bark">
                   Lead Careers Management
@@ -1267,7 +1293,7 @@ export default function AdminConsole({
                 </p>
               </div>
               
-              <div className="flex items-center gap-4 bg-[#EFE8D6]/60 border border-autumn-bark/10 rounded-xl px-4 py-2 shrink-0">
+              <div className="flex items-center gap-4 bg-[#F8F8F6] border border-[#E7E7E4] rounded-xl px-4 py-2 shrink-0">
                 <span className="text-[10px] font-bold text-autumn-bark uppercase tracking-wider">
                   Enable Careers Section
                 </span>
@@ -1290,7 +1316,7 @@ export default function AdminConsole({
 
             {/* Metrics counter card */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-5 rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm">
+              <div className="p-5 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm">
                 <span className="text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold block">Total Applications Received</span>
                 <span className="font-outfit text-2xl font-black text-autumn-bark mt-1 block">
                   {leadApplications.length} Lead Applications
@@ -1311,10 +1337,10 @@ export default function AdminConsole({
             </div>
 
             {/* Applications Table */}
-            <div className="rounded-2xl border border-autumn-bark/10 bg-[#F3ECDD]/70 backdrop-blur-xl shadow-xl overflow-hidden">
+            <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-autumn-bark">
-                  <thead className="bg-[#EFE8D6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-autumn-bark/15">
+                  <thead className="bg-[#F8F8F6] text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold border-b border-[#E7E7E4]">
                     <tr>
                       <th className="py-4 px-5">Candidate Name</th>
                       <th className="py-4 px-5">Contact (WhatsApp)</th>
@@ -1334,7 +1360,7 @@ export default function AdminConsole({
                       </tr>
                     ) : (
                       (leadApplications || []).map((app) => (
-                        <tr key={app.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                        <tr key={app.id} className="hover:bg-[#F8F8F6] transition-colors">
                           {/* Full Name & Resume */}
                           <td className="py-4 px-5 font-semibold">
                             <div>
@@ -1357,7 +1383,7 @@ export default function AdminConsole({
 
                           {/* Regions */}
                           <td className="py-4 px-5">
-                            <span className="text-[10px] font-bold text-[#E3A21E] bg-[#E3A21E]/10 border border-[#E3A21E]/20 px-2 py-0.5 rounded uppercase">
+                            <span className="text-[10px] font-bold text-[#C1571F] bg-autumn-maple/10 border border-autumn-maple/20 px-2 py-0.5 rounded uppercase">
                               {app.regions}
                             </span>
                           </td>
@@ -1371,7 +1397,7 @@ export default function AdminConsole({
                           <td className="py-4 px-5">
                             <span className={`inline-block px-2.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border ${
                               app.status === 'Approved'
-                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-450'
                                 : app.status === 'Contacted'
                                 ? 'bg-autumn-amber/10 border-autumn-amber/30 text-autumn-amber'
                                 : 'bg-autumn-rhodo/10 border-autumn-rhodo/30 text-autumn-rhodo'
@@ -1387,7 +1413,7 @@ export default function AdminConsole({
                               <a
                                 href={app.resumeUrl}
                                 download={app.resumeFilename}
-                                className="h-8 px-2.5 rounded-lg border border-autumn-bark/20 bg-autumn-mist/5 flex items-center justify-center hover:bg-autumn-mist/10 text-autumn-bark text-[10px] font-bold uppercase tracking-wider transition-all gap-1"
+                                className="h-8 px-2.5 rounded-lg border border-[#E7E7E4] bg-[#F8F8F6] flex items-center justify-center hover:bg-[#E7E7E4]/50 text-autumn-bark text-[10px] font-bold uppercase tracking-wider transition-all gap-1"
                                 title="Download CV File"
                               >
                                 <Upload className="h-3.5 w-3.5 rotate-180" />
@@ -1435,12 +1461,12 @@ export default function AdminConsole({
             </div>
 
           </div>
-        )}
+        ))}`
 
-        {activeTab === 'views' && (
+        {activeTab === 'views' && (!featureFlags.enableExpeditionViews ? renderLockedModule() : (
           <div className="space-y-8 animate-in fade-in duration-300">
             {/* Header Description */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
               <div>
                 <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
                   Expedition Views Management
@@ -1456,8 +1482,8 @@ export default function AdminConsole({
               
               {/* Left Side: Upload Panel */}
               <div className="lg:col-span-4 space-y-6">
-                <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm p-6 space-y-5">
-                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-autumn-bark/10 pb-3 flex items-center gap-2">
+                <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm p-6 space-y-5">
+                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-[#E7E7E4] pb-3 flex items-center gap-2">
                     <Upload className="h-5 w-5 text-[#C1571F]" />
                     Upload New View
                   </h3>
@@ -1476,7 +1502,7 @@ export default function AdminConsole({
                         type="text"
                         value={viewTitle}
                         onChange={(e) => setViewTitle(e.target.value)}
-                        className="w-full h-11 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist text-xs text-autumn-bark placeholder-stone-500 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F]/60 transition-all"
                         placeholder="e.g. NETRAVATHI"
                         disabled={isUploading}
                       />
@@ -1489,14 +1515,14 @@ export default function AdminConsole({
                         min="1"
                         value={displayOrder}
                         onChange={(e) => setDisplayOrder(e.target.value)}
-                        className="w-full h-11 px-4 rounded-xl border border-autumn-bark/10 bg-autumn-mist text-xs text-autumn-bark placeholder-stone-500 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple transition-all"
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F]/60 transition-all"
                         placeholder="e.g. 1"
                         disabled={isUploading}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-[#3A2A1E]/70 mb-2">Select Media File</label>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Select Media File</label>
                       <label 
                         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                         onDragLeave={() => setDragOver(false)}
@@ -1508,10 +1534,10 @@ export default function AdminConsole({
                         }}
                         className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer block transition-all ${
                           dragOver 
-                            ? 'border-[#C1571F] bg-[#EBE3D3]/80' 
+                            ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
                             : selectedFile 
                               ? 'border-emerald-500/40 bg-emerald-500/5' 
-                              : 'border-[#C1571F]/40 bg-[#EBE3D3] hover:border-[#C1571F]'
+                              : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
                         }`}
                       >
                         <input 
@@ -1564,7 +1590,7 @@ export default function AdminConsole({
                     <button
                       type="submit"
                       disabled={isUploading || !selectedFile || !viewTitle.trim() || !displayOrder.trim()}
-                      className="w-full h-12 bg-[#C1571F] hover:bg-[#a44717] disabled:bg-stone-500 text-white font-outfit text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 mt-4"
+                      className="w-full h-12 bg-[#C1571F] hover:bg-[#A84310] disabled:bg-stone-300 text-white font-outfit text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 mt-4"
                     >
                       {isUploading ? (
                         <>
@@ -1584,8 +1610,8 @@ export default function AdminConsole({
 
               {/* Right Side: Showcase Gallery Table */}
               <div className="lg:col-span-8">
-                <div className="rounded-2xl border border-autumn-bark/10 bg-[#EFE8D6]/60 backdrop-blur-sm p-6">
-                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-autumn-bark/10 pb-3 flex items-center gap-2 mb-6">
+                <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm p-6">
+                  <h3 className="font-outfit text-lg font-bold text-autumn-bark border-b border-[#E7E7E4] pb-3 flex items-center gap-2 mb-6">
                     <Compass className="h-5 w-5 text-[#C1571F]" />
                     Live Slideshow Gallery
                   </h3>
@@ -1593,7 +1619,7 @@ export default function AdminConsole({
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-autumn-bark/10 text-[10px] font-bold uppercase tracking-wider text-autumn-bark/60">
+                        <tr className="border-b border-[#E7E7E4] text-[10px] font-bold uppercase tracking-wider text-[#52524E]">
                           <th className="py-3 px-4">Preview</th>
                           <th className="py-3 px-4">Title</th>
                           <th className="py-3 px-4">Order</th>
@@ -1601,7 +1627,7 @@ export default function AdminConsole({
                           <th className="py-3 px-4 text-right">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-autumn-bark/10 text-xs">
+                      <tbody className="divide-y divide-[#E7E7E4] text-xs">
                         {(expeditionViews || []).length === 0 ? (
                           <tr>
                             <td colSpan="5" className="py-12 text-center text-autumn-bark/40 italic">
@@ -1610,9 +1636,9 @@ export default function AdminConsole({
                           </tr>
                         ) : (
                           (expeditionViews || []).map((record) => (
-                            <tr key={record.id} className="hover:bg-[#EFE8D6]/40 transition-colors">
+                            <tr key={record.id} className="hover:bg-[#F8F8F6] transition-colors">
                               <td className="py-3 px-4">
-                                <div className="h-12 w-20 rounded-lg overflow-hidden border border-autumn-bark/10 bg-autumn-mist flex items-center justify-center">
+                                <div className="h-12 w-20 rounded-lg overflow-hidden border border-[#E7E7E4] bg-[#F8F8F6] flex items-center justify-center">
                                   {record.mediaType === 'video' ? (
                                     <video 
                                       src={record.mediaUrl}
@@ -1629,7 +1655,7 @@ export default function AdminConsole({
                                   )}
                                 </div>
                               </td>
-                              <td className="py-3 px-4 font-bold uppercase text-[#3A2A1E]">
+                              <td className="py-3 px-4 font-bold uppercase text-[#1A1A18]">
                                 {record.title}
                               </td>
                               <td className="py-3 px-4 font-mono font-bold text-[#C1571F]">
@@ -1664,11 +1690,11 @@ export default function AdminConsole({
 
             </div>
           </div>
-        )}
+        ))}`
 
-        {activeTab === 'social' && (
+        {activeTab === 'social' && (!featureFlags.enableSocialFeeds ? renderLockedModule() : (
           <div className="space-y-6">
-            <div className="bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+            <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
               <h1 className="font-outfit text-2xl sm:text-3xl font-black text-autumn-bark">
                 SOCIAL MEDIA FEEDS MANAGER
               </h1>
@@ -1679,7 +1705,7 @@ export default function AdminConsole({
 
             <div className="grid gap-6 lg:grid-cols-3">
               {/* Form panel */}
-              <div className="lg:col-span-1 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md h-fit">
+              <div className="lg:col-span-1 bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm h-fit">
                 <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark/80 mb-4">
                   Add New Feed Item
                 </h3>
@@ -1703,7 +1729,7 @@ export default function AdminConsole({
                         className={`h-10 rounded-xl border font-outfit text-xs font-bold uppercase tracking-wider transition-colors ${
                           socialType === 'instagram'
                             ? 'bg-[#C1571F] text-white border-[#C1571F]'
-                            : 'border-autumn-bark/10 bg-[#EFE8D6]/40 text-autumn-bark/70 hover:bg-[#EFE8D6]'
+                            : 'border-[#E7E7E4] bg-[#F8F8F6] text-[#52524E] hover:bg-[#E7E7E4]/50'
                         }`}
                       >
                         Instagram
@@ -1714,7 +1740,7 @@ export default function AdminConsole({
                         className={`h-10 rounded-xl border font-outfit text-xs font-bold uppercase tracking-wider transition-colors ${
                           socialType === 'youtube'
                             ? 'bg-[#C1571F] text-white border-[#C1571F]'
-                            : 'border-autumn-bark/10 bg-[#EFE8D6]/40 text-autumn-bark/70 hover:bg-[#EFE8D6]'
+                            : 'border-[#E7E7E4] bg-[#F8F8F6] text-[#52524E] hover:bg-[#E7E7E4]/50'
                         }`}
                       >
                         YouTube
@@ -1733,7 +1759,7 @@ export default function AdminConsole({
                       placeholder="Enter a description label"
                       value={socialTitle}
                       onChange={(e) => setSocialTitle(e.target.value)}
-                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-[#C1571F]"
                     />
                   </div>
 
@@ -1748,7 +1774,7 @@ export default function AdminConsole({
                       placeholder={socialType === 'instagram' ? 'https://instagram.com/p/...' : 'https://youtube.com/watch?v=...'}
                       value={socialUrl}
                       onChange={(e) => setSocialUrl(e.target.value)}
-                      className="w-full h-11 px-4 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/70 text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-autumn-maple"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-[#C1571F]"
                     />
                   </div>
 
@@ -1774,8 +1800,8 @@ export default function AdminConsole({
                         }}
                         className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer ${
                           socialDragOver
-                            ? 'border-autumn-maple bg-[#EFE8D6]'
-                            : 'border-autumn-bark/20 bg-[#EFE8D6]/40 hover:bg-[#EFE8D6]/70'
+                            ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]'
+                            : 'border-[#E7E7E4] bg-[#F8F8F6] hover:bg-[#E7E7E4]/50'
                         }`}
                       >
                         <input
@@ -1800,11 +1826,11 @@ export default function AdminConsole({
                         </label>
                       </div>
                     ) : (
-                      <div className="relative rounded-xl overflow-hidden border border-autumn-bark/15 bg-[#EFE8D6]/70 p-3 flex items-center gap-3">
+                      <div className="relative rounded-xl overflow-hidden border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm p-3 flex items-center gap-3">
                         <img
                           src={socialThumbnailUrl}
                           alt="Thumbnail Preview"
-                          className="w-16 h-16 object-cover rounded-lg border border-autumn-bark/10"
+                          className="w-16 h-16 object-cover rounded-lg border border-[#E7E7E4]"
                         />
                         <div className="flex-1 min-w-0">
                           <div className="text-[10px] font-bold text-autumn-bark/70 truncate">Thumbnail Loaded</div>
@@ -1826,7 +1852,7 @@ export default function AdminConsole({
                   <button
                     type="submit"
                     disabled={isSavingFeed}
-                    className="w-full h-11 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-widest text-[#F3ECDD] hover:bg-[#a44717] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-widest text-white hover:bg-[#A84310] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSavingFeed ? 'Saving...' : 'Add to Feed'}
                   </button>
@@ -1834,7 +1860,7 @@ export default function AdminConsole({
               </div>
 
               {/* List panel */}
-              <div className="lg:col-span-2 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-6 backdrop-blur-md">
+              <div className="lg:col-span-2 bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
                 <h3 className="font-outfit text-sm font-bold uppercase tracking-wider text-autumn-bark/80 mb-4">
                   Active Social Feed Items ({socialFeeds.length})
                 </h3>
@@ -1848,7 +1874,7 @@ export default function AdminConsole({
                     {socialFeeds.map((item) => (
                       <div
                         key={item.id}
-                        className="rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/40 p-4 flex flex-col justify-between"
+                        className="rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] p-4 flex flex-col justify-between shadow-sm"
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2">
@@ -1868,10 +1894,10 @@ export default function AdminConsole({
                               <img
                                 src={item.thumbnailUrl || item.imageUrl}
                                 alt="Feed preview"
-                                className="w-12 h-12 object-cover rounded border border-autumn-bark/10 shrink-0 bg-autumn-mist"
+                                className="w-12 h-12 object-cover rounded border border-[#E7E7E4] shrink-0 bg-[#F8F8F6]"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded border border-autumn-bark/10 shrink-0 bg-gradient-to-tr from-autumn-moss/40 to-autumn-maple/40 flex items-center justify-center text-[10px] font-bold text-autumn-bark/65">
+                              <div className="w-12 h-12 rounded border border-[#E7E7E4] shrink-0 bg-gradient-to-tr from-autumn-moss/40 to-autumn-maple/40 flex items-center justify-center text-[10px] font-bold text-autumn-bark/65">
                                 Logo
                               </div>
                             )}
@@ -1886,7 +1912,7 @@ export default function AdminConsole({
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-3 border-t border-autumn-bark/5 flex justify-end">
+                        <div className="mt-4 pt-3 border-t border-[#E7E7E4] flex justify-end">
                           <button
                             onClick={() => handleDeleteSocialFeed(item.id)}
                             className="h-8 w-8 rounded bg-autumn-rhodo/10 hover:bg-autumn-rhodo/20 text-autumn-rhodo flex items-center justify-center transition-colors cursor-pointer"
@@ -1902,27 +1928,27 @@ export default function AdminConsole({
               </div>
             </div>
           </div>
-        )}
+        ))}`
       </main>
 
       {/* BLOG PREVIEW MODAL */}
       {viewingBlog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-autumn-maple/20 bg-[#F3ECDD] text-autumn-bark shadow-2xl animate-in zoom-in-95 duration-200 max-h-[80vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-955/20 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] text-autumn-bark shadow-sm animate-in zoom-in-95 duration-200 max-h-[80vh] flex flex-col">
             
             {/* Modal Header */}
-            <div className="bg-[#EFE8D6] p-5 flex justify-between items-center border-b border-autumn-bark/10 shrink-0">
+            <div className="bg-[#F8F8F6] p-5 flex justify-between items-center border-b border-[#E7E7E4] shrink-0">
               <div>
                 <h3 className="font-outfit text-base font-bold uppercase tracking-wider text-autumn-bark">
                   Preview Story
                 </h3>
-                <span className="text-[10px] uppercase tracking-widest text-[#6E7042] font-semibold">
+                <span className="text-[10px] uppercase tracking-widest text-[#C1571F] font-semibold">
                   {viewingBlog.category} • Submitted by {viewingBlog.author}
                 </span>
               </div>
               <button 
                 onClick={() => setViewingBlog(null)}
-                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-autumn-bark/10 text-autumn-bark/60 hover:text-autumn-bark transition-colors"
+                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-[#E7E7E4] text-[#52524E] hover:text-[#1A1A18] transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1933,7 +1959,7 @@ export default function AdminConsole({
               <img 
                 src={viewingBlog.coverUrl} 
                 alt={viewingBlog.title} 
-                className="h-48 w-full object-cover rounded-xl border border-autumn-bark/10" 
+                className="h-48 w-full object-cover rounded-xl border border-[#E7E7E4]" 
               />
               <h2 className="font-outfit text-xl font-bold">{viewingBlog.title}</h2>
               <div className="whitespace-pre-line text-xs text-autumn-bark/85">
@@ -1942,10 +1968,10 @@ export default function AdminConsole({
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-[#EFE8D6]/40 p-5 border-t border-autumn-bark/10 flex gap-3 shrink-0">
+            <div className="bg-[#F8F8F6] p-5 border-t border-[#E7E7E4] flex gap-3 shrink-0">
               <button 
                 onClick={() => setViewingBlog(null)}
-                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg border border-autumn-bark/20 hover:bg-autumn-bark/5 text-autumn-bark/80 font-outfit text-xs font-bold uppercase tracking-wider transition-colors"
+                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg border border-[#E7E7E4] hover:bg-[#F8F8F6] text-[#52524E] font-outfit text-xs font-bold uppercase tracking-wider transition-colors"
               >
                 Close Preview
               </button>
@@ -1955,7 +1981,7 @@ export default function AdminConsole({
                     handleApproveBlog(viewingBlog.id);
                     setViewingBlog(null);
                   }}
-                  className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-[#6E7042] hover:bg-[#5b5d36] text-[#F3ECDD] font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-md"
+                  className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
                 >
                   Approve & Publish
                 </button>
@@ -1968,11 +1994,11 @@ export default function AdminConsole({
 
       {/* CREATE / EDIT MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-mist/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-autumn-maple/30 bg-[#F3ECDD]/95 backdrop-blur-xl shadow-2xl p-6 sm:p-8 space-y-6 text-autumn-bark">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-955/20 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#E7E7E4] bg-[#FFFFFF] text-autumn-bark shadow-sm p-6 sm:p-8 space-y-6">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-autumn-bark/10 pb-4">
+            <div className="flex items-center justify-between border-b border-[#E7E7E4] pb-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-autumn-maple/20 text-autumn-maple flex items-center justify-center border border-autumn-maple/30">
                   <Sparkles className="h-5 w-5" />
@@ -1987,7 +2013,7 @@ export default function AdminConsole({
 
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="h-8 w-8 rounded-full bg-[#EFE8D6] flex items-center justify-center text-autumn-bark/60 hover:text-autumn-bark transition-colors"
+                className="h-8 w-8 rounded-full bg-[#F8F8F6] border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1A1A18] transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -2006,7 +2032,7 @@ export default function AdminConsole({
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. Netravathi Peak Trek"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   />
                 </div>
 
@@ -2020,7 +2046,7 @@ export default function AdminConsole({
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     placeholder="e.g. Chikkamagaluru, Karnataka"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   />
                 </div>
 
@@ -2034,7 +2060,7 @@ export default function AdminConsole({
                     value={formData.altitude}
                     onChange={(e) => setFormData({ ...formData, altitude: e.target.value })}
                     placeholder="e.g. 1,520 m / 4,986 ft"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   />
                 </div>
 
@@ -2048,7 +2074,7 @@ export default function AdminConsole({
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                     placeholder="e.g. 2 Days / 1 Night"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   />
                 </div>
 
@@ -2062,7 +2088,7 @@ export default function AdminConsole({
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="3499"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple font-mono"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60 font-mono"
                   />
                 </div>
 
@@ -2076,7 +2102,7 @@ export default function AdminConsole({
                     value={formData.originalPrice}
                     onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
                     placeholder="4499"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple font-mono"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60 font-mono"
                   />
                 </div>
 
@@ -2090,7 +2116,7 @@ export default function AdminConsole({
                     value={formData.slotsLeft}
                     onChange={(e) => setFormData({ ...formData, slotsLeft: e.target.value })}
                     placeholder="10"
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple font-mono"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60 font-mono"
                   />
                 </div>
 
@@ -2101,10 +2127,10 @@ export default function AdminConsole({
                   <select
                     value={formData.tag}
                     onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   >
                     {BADGE_OPTIONS.map(b => (
-                      <option key={b.label} value={b.label} className="bg-[#EFE8D6] text-autumn-bark">
+                      <option key={b.label} value={b.label} className="bg-white text-autumn-bark">
                         {b.label}
                       </option>
                     ))}
@@ -2118,12 +2144,12 @@ export default function AdminConsole({
                 </label>
                 
                 {formData.image ? (
-                  <div className="relative rounded-xl overflow-hidden border border-autumn-maple/20 bg-[#3A2A1E]/5 p-3 flex items-center justify-between gap-4">
+                  <div className="relative rounded-xl overflow-hidden border border-[#E7E7E4] bg-[#F8F8F6] p-3 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <img 
                         src={formData.image} 
                         alt="Trek Preview" 
-                        className="h-14 w-24 object-cover rounded-lg border border-autumn-maple/10"
+                        className="h-14 w-24 object-cover rounded-lg border border-[#E7E7E4]"
                       />
                       <div>
                         <span className="text-xs font-semibold text-autumn-bark">Banner Selected</span>
@@ -2147,8 +2173,8 @@ export default function AdminConsole({
                     onClick={() => trekFileInputRef.current?.click()}
                     className={`border-2 border-dashed transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 ${
                       isAdminDragOver 
-                        ? 'border-[#C1571F] bg-[#3A2A1E]/10 scale-[0.99]' 
-                        : 'border-[#C1571F]/40 bg-[#3A2A1E]/5 hover:border-[#C1571F]'
+                        ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
+                        : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
                     }`}
                   >
                     <input 
@@ -2177,7 +2203,7 @@ export default function AdminConsole({
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Provide a detailed trail summary..."
-                  className="w-full p-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple resize-none"
+                  className="w-full p-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60 resize-none"
                 />
               </div>
 
@@ -2190,7 +2216,7 @@ export default function AdminConsole({
                   placeholder="https://drive.google.com/file/d/... or PDF URL"
                   value={formData.itineraryDocUrl}
                   onChange={(e) => setFormData({ ...formData, itineraryDocUrl: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                  className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                 />
               </div>
 
@@ -2213,12 +2239,12 @@ export default function AdminConsole({
                         handleAddInclusion();
                       }
                     }}
-                    className="flex-1 h-10 px-3 rounded-xl border border-autumn-bark/15 bg-[#EFE8D6]/80 text-xs text-autumn-bark focus:outline-none focus:border-autumn-maple"
+                    className="flex-1 h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                   />
                   <button
                     type="button"
                     onClick={handleAddInclusion}
-                    className="px-4 py-2 bg-autumn-maple hover:bg-[#a44717] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center shrink-0"
+                    className="px-4 py-2 bg-[#C1571F] hover:bg-[#A84310] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm flex items-center justify-center shrink-0"
                   >
                     + Add Inclusion
                   </button>
@@ -2237,7 +2263,7 @@ export default function AdminConsole({
                         className={`px-3 py-2 rounded-xl text-xxs font-bold text-left transition-all flex items-center justify-between border ${
                           isChecked 
                             ? 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/50' 
-                            : 'bg-[#EFE8D6]/60 text-autumn-bark/60 border-autumn-bark/10 hover:border-autumn-bark/30'
+                            : 'bg-[#F8F8F6] text-autumn-bark/60 border border-[#E7E7E4] hover:bg-[#E7E7E4]/50'
                         }`}
                       >
                         <span className="truncate pr-1">{item}</span>
@@ -2249,14 +2275,14 @@ export default function AdminConsole({
 
                 {/* Active Inclusions Chips */}
                 <div className="text-[9px] uppercase tracking-wider text-autumn-bark/50 font-bold mb-1.5">Active Inclusions ({formData.inclusion.length})</div>
-                <div className="flex flex-wrap gap-2 p-2 bg-[#3A2A1E]/5 rounded-xl border border-autumn-bark/5 min-h-[40px]">
+                <div className="flex flex-wrap gap-2 p-2 bg-[#F8F8F6] rounded-xl border border-[#E7E7E4] min-h-[40px]">
                   {formData.inclusion.length === 0 ? (
                     <span className="text-xxs text-autumn-bark/40 italic pl-1 self-center">No inclusions added yet.</span>
                   ) : (
                     formData.inclusion.map((item, idx) => (
                       <span 
                         key={idx}
-                        className="inline-flex items-center gap-1 bg-[#F3ECDD] border border-autumn-maple/35 text-autumn-maple px-2.5 py-1 rounded-full text-xxs font-bold uppercase tracking-wider shadow-sm"
+                        className="inline-flex items-center gap-1 bg-white border border-[#E7E7E4] text-[#C1571F] px-2.5 py-1 rounded-full text-xxs font-bold uppercase tracking-wider shadow-sm"
                       >
                         {item}
                         <button
@@ -2288,12 +2314,12 @@ export default function AdminConsole({
                     type="date"
                     value={newBatchDateInput}
                     onChange={(e) => setNewBatchDateInput(e.target.value)}
-                    className="bg-[#EBE3D3] border border-[#3A2A1E]/20 text-[#3A2A1E] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C1571F] flex-1"
+                    className="bg-[#F8F8F6] border border-[#E7E7E4] text-autumn-bark rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C1571F]"
                   />
                   <button
                     type="button"
                     onClick={handleAddBatchDate}
-                    className="bg-[#C1571F] text-white font-bold hover:bg-[#a44717] rounded-lg px-4 py-2 text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 shadow-sm shrink-0"
+                    className="bg-[#C1571F] text-white font-bold hover:bg-[#A84310] rounded-lg px-4 py-2 text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 shadow-sm shrink-0"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Add Batch Date
@@ -2308,7 +2334,7 @@ export default function AdminConsole({
                     (formData.batchDates || []).map((dateStr, index) => (
                       <span 
                         key={index} 
-                        className="bg-[#3A2A1E] text-[#F3ECDD] rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-[#C1571F]/30"
+                        className="bg-[#FFFFFF] text-autumn-bark rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-[#E7E7E4]"
                       >
                         <Calendar className="h-3 w-3 text-[#C1571F]" />
                         {dateStr}
@@ -2327,17 +2353,17 @@ export default function AdminConsole({
               </div>
 
               {/* Form Buttons */}
-              <div className="pt-4 border-t border-autumn-bark/10 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#E7E7E4] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="h-11 px-5 rounded-xl border border-autumn-bark/20 bg-transparent text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-autumn-mist/10 transition-colors"
+                  className="h-11 px-5 rounded-xl border border-[#E7E7E4] bg-transparent text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-[#F8F8F6] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="h-11 px-6 rounded-xl bg-autumn-maple font-outfit text-xs font-bold uppercase tracking-wider text-[#F3ECDD] hover:bg-[#a44717] transition-colors shadow-lg shadow-autumn-maple/20"
+                  className="h-11 px-6 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-colors shadow-sm"
                 >
                   {editingTrek ? 'Save Changes' : 'Publish Trek Package'}
                 </button>
@@ -2349,8 +2375,8 @@ export default function AdminConsole({
 
       {/* CONFIRM DELETE MODAL */}
       {deleteConfirmTrek && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-autumn-mist/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-autumn-rhodo/40 bg-[#F3ECDD]/95 backdrop-blur-xl shadow-2xl p-6 text-autumn-bark space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-955/20 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm p-6 text-autumn-bark space-y-5">
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-xl bg-autumn-rhodo/20 border border-autumn-rhodo/40 text-rose-400 flex items-center justify-center shrink-0">
                 <AlertTriangle className="h-6 w-6" />
@@ -2361,20 +2387,20 @@ export default function AdminConsole({
               </div>
             </div>
 
-            <p className="text-xs text-autumn-bark/80 bg-[#EFE8D6] p-3.5 rounded-xl border border-autumn-bark/10">
+            <p className="text-xs text-autumn-bark/80 bg-[#F8F8F6] p-3.5 rounded-xl border border-[#E7E7E4]">
               Are you sure you want to purge <strong>{deleteConfirmTrek.title}</strong> from active inventory?
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setDeleteConfirmTrek(null)}
-                className="h-10 px-4 rounded-xl border border-autumn-bark/20 bg-transparent text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-autumn-mist/10 transition-colors"
+                className="h-10 px-4 rounded-xl border border-[#E7E7E4] bg-transparent text-xs font-bold uppercase tracking-wider text-autumn-bark hover:bg-[#F8F8F6] transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="h-10 px-5 rounded-xl bg-autumn-rhodo border border-autumn-rhodo/50 font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-rose-700 transition-colors shadow-lg shadow-autumn-rhodo/30"
+                className="h-10 px-5 rounded-xl bg-rose-600 border border-rose-700/50 font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-rose-700 transition-colors shadow-sm"
               >
                 Purge Package
               </button>
