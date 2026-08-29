@@ -1825,7 +1825,7 @@ export default function App() {
               />
             </a>
             <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
-              We guide adventurers to unexplored peaks and premium trails across Southern India. Fully vetted batches, certified mountain leads, and environment first.
+              We guide adventurers to unexplored peaks and premium trails across Western Ghats, The Himalayan and International treks and Expeditions. Fully vetted batches, certified mountain leads, and environment first.
             </p>
             <div className="flex items-center gap-4">
               <a href="https://instagram.com/bootpaths" target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full border border-autumn-bark/10 flex items-center justify-center text-autumn-bark/70 hover:text-autumn-maple hover:border-emerald-505/30 transition-colors bg-[#EFE8D6]/20">
@@ -1861,8 +1861,10 @@ export default function App() {
             <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Get in Touch</h4>
             <ul className="space-y-2.5 text-autumn-bark/50">
               <li>Email: contact@bootpaths.com</li>
-              <li>WhatsApp Support: +91 98765 43210</li>
-              <li>Instagram DM: @bootpaths</li>
+              <li>WhatsApp Support: +91 884 899 8470</li>
+              <li>WhatsApp Support: +91 98954 52187</li>
+              <li>WhatsApp Support: +91 9446102200</li>
+              <li>Instagram DM: <a href="https://www.instagram.com/bootpaths/" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">@bootpaths</a></li>
             </ul>
           </div>
 
