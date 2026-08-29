@@ -44,9 +44,43 @@ import {
   LogOut,
   Wallet,
   Compass,
-  ChevronDown,
   Users
 } from 'lucide-react';
+
+const Youtube = (props) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+  </svg>
+);
+
+const Facebook = (props) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
 
 const Instagram = (props) => (
   <svg 
@@ -1827,9 +1861,30 @@ export default function App() {
             <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
               We guide adventurers to unexplored peaks and premium trails across Western Ghats, The Himalayan and International treks and Expeditions. Fully vetted batches, certified mountain leads, and environment first.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="https://instagram.com/bootpaths" target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full border border-autumn-bark/10 flex items-center justify-center text-autumn-bark/70 hover:text-autumn-maple hover:border-emerald-505/30 transition-colors bg-[#EFE8D6]/20">
-                <Instagram className="h-4.5 w-4.5" />
+            <div className="flex items-center gap-3 mt-4">
+              <a 
+                href="https://instagram.com/bootpaths" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.youtube.com/@BOOTpaths2025" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Youtube className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.facebook.com/share/1ELLiv1gUJ/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Facebook className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -1860,10 +1915,10 @@ export default function App() {
           <div className="space-y-4">
             <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Get in Touch</h4>
             <ul className="space-y-2.5 text-autumn-bark/50">
-              <li>Email: contact@bootpaths.com</li>
-              <li>WhatsApp Support: +91 884 899 8470</li>
-              <li>WhatsApp Support: +91 98954 52187</li>
-              <li>WhatsApp Support: +91 9446102200</li>
+              <li>Email: <a href="mailto:[EMAIL_ADDRESS]" className="hover:text-autumn-maple transition-colors">[bootpaths@gmail.com]</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/918848998470" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 8848998470</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/919895452187" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 9895452187</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/919446102200" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 9446102200</a></li>
               <li>Instagram DM: <a href="https://www.instagram.com/bootpaths/" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">@bootpaths</a></li>
             </ul>
           </div>
