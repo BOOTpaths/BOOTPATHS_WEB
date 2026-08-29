@@ -873,19 +873,19 @@ export default function App() {
         {/* Hero Content */}
         <div className="relative z-20 mx-auto w-full max-w-5xl text-center md:text-left">
           
-          {/* Trust Badge / Decathlon Pill */}
+         {/* Trust Badge / Decathlon Pill
           <div className="inline-flex items-center gap-2 rounded-full border border-[#F3ECDD]/10 bg-[#3A2A1E]/40 py-1.5 px-4 backdrop-blur-md transition-colors hover:border-autumn-maple/30">
             <span className="flex h-2 w-2 rounded-full bg-autumn-maple animate-ping"></span>
             <span className="font-outfit text-xs font-bold tracking-widest uppercase text-[#F3ECDD]/80">
               Official Trekking Partner with <span className="text-autumn-maple font-extrabold">Decathlon</span>
             </span>
-          </div>
+          </div>*/}
 
           {/* Main Slogan */}
           <h1 className="mt-8 font-outfit text-4xl font-black leading-none tracking-tight text-[#F3ECDD] sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-lg">
-            Every Trail <br />
+            Every Step, <br />
             <span className="bg-gradient-to-r from-autumn-maple via-autumn-amber to-autumn-rhodo bg-clip-text text-transparent">
-              Turns You
+              a new story
             </span>
           </h1>
 
@@ -898,19 +898,19 @@ export default function App() {
           <div className="mt-10 grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-[#F3ECDD]/10 bg-[#3A2A1E]/40 p-4 backdrop-blur-sm sm:grid-cols-4">
             <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4">
               <span className="font-outfit text-lg font-bold text-autumn-maple">100%</span>
-              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Certified Guides</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Experienced Leads</span>
             </div>
             <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4 sm:border-r">
               <span className="font-outfit text-lg font-bold text-autumn-maple">Zero Waste</span>
               <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Green Trail Policy</span>
             </div>
             <div className="flex flex-col border-r border-[#F3ECDD]/10 pr-4 sm:pr-0 sm:border-r-0 md:border-r md:pr-4">
-              <span className="font-outfit text-lg font-bold text-autumn-maple">Premium Gear</span>
-              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Decathlon Powered</span>
+              <span className="font-outfit text-lg font-bold text-autumn-maple">Safety First</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">First-Aid Kits</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-outfit text-lg font-bold text-autumn-maple">Live Slots</span>
-              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Instant Approval</span>
+              <span className="font-outfit text-lg font-bold text-autumn-maple">Inclusivity</span>
+              <span className="text-xxs uppercase tracking-wider text-[#F3ECDD]/60">Safe Spaces</span>
             </div>
           </div>
 
