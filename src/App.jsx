@@ -44,7 +44,8 @@ import {
   LogOut,
   Wallet,
   Compass,
-  ChevronDown
+  ChevronDown,
+  Users
 } from 'lucide-react';
 
 const Instagram = (props) => (
@@ -1044,22 +1045,22 @@ export default function App() {
             <div className="group relative rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/20 p-8 backdrop-blur-sm transition-all duration-300 hover:border-autumn-bark/10 hover:bg-[#EFE8D6]/40 hover:-translate-y-1">
               <div className="absolute top-0 left-8 h-[2px] w-20 bg-autumn-maple transition-all duration-300 group-hover:w-36"></div>
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-autumn-maple/10 text-autumn-maple">
-                <Shield className="h-6 w-6" />
+                <Users className="h-6 w-6" />
               </div>
               <h3 className="mt-6 font-outfit text-xl font-bold text-autumn-bark">
-                Decathlon Standards
+                Inclusivity
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-autumn-bark/70">
-                Our official alliance guarantees premium Decathlon equipment: Quechua tents, high-grade warm sleeping bags, and reliable safety harnesses. Rigorously benchmarked outdoor gears for every climate.
+                We believe the wilderness belongs to everyone. Our expeditions are mindfully designed to welcome solo travelers, beginners, diverse age groups, and women trekkers in a supportive, judgment-free community.
               </p>
               <ul className="mt-6 flex flex-col gap-2.5">
                 <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
-                  Quechua-approved camp hygiene setup
+                  Dedicated female trek leads & safe environments
                 </li>
                 <li className="flex items-center gap-2 text-xs text-autumn-bark/80">
                   <Check className="h-4 w-4 text-autumn-maple shrink-0" />
-                  Gear maintenance audited monthly
+                  Beginner-friendly pacing with zero gatekeeping
                 </li>
               </ul>
             </div>
