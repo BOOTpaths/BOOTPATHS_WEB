@@ -77,9 +77,8 @@ export default function BlogSection({ blogs: propBlogs, user }) {
     }, 100);
   };
 
-  // If a blog is selected, render the full-page editorial reader view
   if (selectedBlog) {
-    return <BlogReader blog={selectedBlog} onBack={handleBack} />;
+    return <BlogReader blog={selectedBlog} onBack={handleBack} allBlogs={publishedBlogs} onSelectBlog={handleSelectBlog} />;
   }
 
   return (

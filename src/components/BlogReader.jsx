@@ -20,21 +20,19 @@ const FacebookIcon = (props) => (
   </svg>
 );
 
-const InstagramIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-  </svg>
-);
-
 const TwitterIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
   </svg>
 );
 
-export default function BlogReader({ blog, onBack }) {
+const LinkedInIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M22.23 0H1.77C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0zM7.12 20.45H3.56V9H7.12v11.45zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.92 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zm15.11 13.02h-3.56V14.9c0-1.32-.03-3.01-1.84-3.01-1.84 0-2.12 1.43-2.12 2.91v5.65h-3.56V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z"/>
+  </svg>
+);
+
+export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }) {
   if (!blog) return null;
 
   const shareUrl = window.location.href;
@@ -47,9 +45,8 @@ export default function BlogReader({ blog, onBack }) {
       window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
     } else if (platform === 'twitter') {
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
-    } else if (platform === 'instagram') {
-      navigator.clipboard.writeText(shareUrl);
-      alert('Instagram does not support direct link sharing. The link has been copied to your clipboard. You can paste it in your story or bio!');
+    } else if (platform === 'linkedin') {
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank');
     }
   };
 
@@ -72,176 +69,253 @@ export default function BlogReader({ blog, onBack }) {
 
   const paragraphs = blog.content ? blog.content.split('\n\n').filter(p => p.trim()) : [];
 
+  // Filter other blogs from the same category for the Multi-Post Story Stream
+  const relatedBlogs = allBlogs.filter(b => b.category === blog.category && b.id !== blog.id);
+
   return (
     <div className="bg-[#F8F8F6] text-[#1A1A18] font-outfit min-h-screen">
       
-      {/* 1. Hero Header Banner (Top Full-Bleed Section) */}
-      <div className="w-full relative bg-[#E7E7E4]">
+      {/* 1. Top Panoramic Hero Banner (Full-Bleed) */}
+      <div className="w-full h-[320px] md:h-[440px] overflow-hidden">
         <img 
           src={blog.coverUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80'} 
-          alt={blog.title}
-          className="w-full h-[450px] md:h-[550px] object-cover"
+          className="w-full h-full object-cover" 
+          alt="Blog Topic Hero" 
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-stone-900/20 pointer-events-none"></div>
       </div>
 
-      {/* 2. Editorial Content Container */}
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative">
+      {/* 2. Main 3-Column Editorial Grid */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         
-        {/* 5. Top Left Floating Share Pill (Desktop Only) */}
-        <div className="hidden lg:flex flex-col items-center gap-3 absolute -left-16 top-16 sticky top-48 z-10">
-          <span className="text-[9px] uppercase tracking-widest text-[#52524E]/60 font-bold block [writing-mode:vertical-lr] select-none mb-1">
-            SHARE
-          </span>
-          <button 
-            onClick={() => handleShare('whatsapp')}
-            className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#25D366] hover:border-[#25D366] transition-all shadow-sm cursor-pointer"
-            title="Share on WhatsApp"
-          >
-            <WhatsAppIcon className="h-3.5 w-3.5" />
-          </button>
-          <button 
-            onClick={() => handleShare('facebook')}
-            className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1877F2] hover:border-[#1877F2] transition-all shadow-sm cursor-pointer"
-            title="Share on Facebook"
-          >
-            <FacebookIcon className="h-3.5 w-3.5" />
-          </button>
-          <button 
-            onClick={() => handleShare('twitter')}
-            className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all shadow-sm cursor-pointer"
-            title="Share on X"
-          >
-            <TwitterIcon className="h-3.5 w-3.5" />
-          </button>
-          <button 
-            onClick={handleCopyLink}
-            className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm cursor-pointer"
-            title="Copy Link"
-          >
-            <Link2 className="h-3.5 w-3.5" />
-          </button>
-        </div>
+        {/* 3. Left Sidebar Column (lg:col-span-2 hidden lg:block sticky top-36) */}
+        <aside className="hidden lg:block lg:col-span-2 sticky top-36 space-y-6">
+          <div>
+            <span className="text-xs font-black uppercase text-[#1A1A18] border-b-2 border-[#C1571F] pb-1 block">
+              Blogs about {blog.category || 'Trail Insights'}
+            </span>
+          </div>
 
-        {/* 3. Left / Center Column (lg:col-span-8) */}
-        <main className="lg:col-span-8 bg-white border border-[#E7E7E4] rounded-2xl p-6 sm:p-8 md:p-10 shadow-sm relative">
-          
-          {/* Category Breadcrumb */}
-          <nav className="text-sm text-[#52524E] mb-4 flex flex-wrap items-center gap-1.5 font-medium">
-            <a 
-              href="#blogs" 
-              onClick={(e) => { e.preventDefault(); onBack(); }} 
-              className="hover:text-[#C1571F] transition-colors"
-            >
-              Category
-            </a>
-            <span>»</span>
-            <a 
-              href="#blogs" 
-              onClick={(e) => { e.preventDefault(); onBack(); }} 
-              className="hover:text-[#C1571F] transition-colors"
-            >
-              Trek Insights & Experiences
-            </a>
-            <span>»</span>
-            <span className="text-[#C1571F] font-semibold">{blog.category || 'Trail Guide'}</span>
-          </nav>
-
-          {/* Article Heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1A1A18] tracking-tight leading-tight mb-5 font-outfit">
-            {blog.title}
-          </h1>
-
-          {/* Author & Date Sub-header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-y border-[#E7E7E4]/60 mb-6 bg-[#F8F8F6]/50 px-4 rounded-xl">
-            <div className="flex items-center gap-2 text-xs text-[#52524E] font-medium">
-              <span>By <strong className="text-[#1A1A18] font-bold">{blog.author || 'BOOTpaths Lead'}</strong></span>
-              <span className="text-[#E7E7E4]">•</span>
-              <span>{formatDate(blog.date)}</span>
-            </div>
-
-            {/* Inline Share Icons beside the author name */}
-            <div className="flex items-center gap-2">
+          <div className="pt-2">
+            <span className="text-[10px] uppercase tracking-widest text-[#52524E]/70 font-bold block mb-3">
+              Share this story
+            </span>
+            <div className="flex flex-col gap-2">
               <button 
                 onClick={() => handleShare('whatsapp')}
-                className="h-8 w-8 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#25D366] hover:border-[#25D366] transition-all shadow-sm cursor-pointer"
+                className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#25D366] hover:border-[#25D366] transition-all shadow-sm cursor-pointer"
                 title="Share on WhatsApp"
               >
                 <WhatsAppIcon className="h-3.5 w-3.5" />
               </button>
               <button 
                 onClick={() => handleShare('facebook')}
-                className="h-8 w-8 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1877F2] hover:border-[#1877F2] transition-all shadow-sm cursor-pointer"
+                className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1877F2] hover:border-[#1877F2] transition-all shadow-sm cursor-pointer"
                 title="Share on Facebook"
               >
                 <FacebookIcon className="h-3.5 w-3.5" />
               </button>
               <button 
+                onClick={() => handleShare('linkedin')}
+                className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#0A66C2] hover:border-[#0A66C2] transition-all shadow-sm cursor-pointer"
+                title="Share on LinkedIn"
+              >
+                <LinkedInIcon className="h-3.5 w-3.5" />
+              </button>
+              <button 
                 onClick={() => handleShare('twitter')}
-                className="h-8 w-8 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all shadow-sm cursor-pointer"
+                className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all shadow-sm cursor-pointer"
                 title="Share on X"
               >
                 <TwitterIcon className="h-3.5 w-3.5" />
               </button>
               <button 
                 onClick={handleCopyLink}
-                className="h-8 w-8 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm cursor-pointer"
+                className="h-9 w-9 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm cursor-pointer"
                 title="Copy Link"
               >
                 <Link2 className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
+        </aside>
 
-          {/* Article Content Body */}
-          <div className="text-[#334155] text-lg leading-relaxed space-y-6 font-normal font-outfit border-b border-[#E7E7E4] pb-10">
-            {paragraphs.length > 0 ? (
-              paragraphs.map((para, idx) => (
-                <p key={idx} className="whitespace-pre-wrap">
-                  {para}
-                </p>
-              ))
-            ) : (
-              <p>{blog.content}</p>
-            )}
+        {/* 4. Center Editorial Column (lg:col-span-7 space-y-12) */}
+        <main className="lg:col-span-7 space-y-12">
+          
+          {/* Main Header Card container */}
+          <div className="bg-white border border-[#E7E7E4] rounded-2xl p-6 sm:p-8 shadow-sm">
+            {/* Breadcrumbs */}
+            <nav className="text-xs text-[#64748B] mb-3 flex flex-wrap items-center gap-1.5 font-medium">
+              <a 
+                href="#blogs" 
+                onClick={(e) => { e.preventDefault(); onBack(); }} 
+                className="hover:text-[#C1571F] transition-colors"
+              >
+                Category
+              </a>
+              <span>»</span>
+              <a 
+                href="#blogs" 
+                onClick={(e) => { e.preventDefault(); onBack(); }} 
+                className="hover:text-[#C1571F] transition-colors"
+              >
+                Trek Insights & Experiences
+              </a>
+              <span>»</span>
+              <span className="text-[#C1571F] font-semibold">{blog.category || 'Trail Guide'}</span>
+            </nav>
+
+            {/* Title */}
+            <h1 className="text-3xl md:text-5xl font-black text-[#1A1A18] tracking-tight leading-tight mb-4 font-serif">
+              {blog.title}
+            </h1>
+
+            {/* Author Byline & Inline Social Share */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-y border-[#E7E7E4]/60 mb-6 bg-[#F8F8F6]/50 px-4 rounded-xl">
+              <div className="text-xs text-[#52524E] font-semibold">
+                By <strong className="text-[#1A1A18] font-bold">{blog.author || 'BOOTpaths Lead'}</strong> • {formatDate(blog.date)}
+              </div>
+
+              {/* Inline Social Share */}
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => handleShare('whatsapp')}
+                  className="h-7 w-7 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#25D366] hover:border-[#25D366] transition-all shadow-sm cursor-pointer"
+                  title="Share on WhatsApp"
+                >
+                  <WhatsAppIcon className="h-3 w-3" />
+                </button>
+                <button 
+                  onClick={() => handleShare('facebook')}
+                  className="h-7 w-7 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#1877F2] hover:border-[#1877F2] transition-all shadow-sm cursor-pointer"
+                  title="Share on Facebook"
+                >
+                  <FacebookIcon className="h-3 w-3" />
+                </button>
+                <button 
+                  onClick={handleCopyLink}
+                  className="h-7 w-7 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm cursor-pointer"
+                  title="Copy Link"
+                >
+                  <Link2 className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+
+            {/* Editorial Content paragraphs */}
+            <div className="text-[#334155] text-lg leading-relaxed space-y-6 font-normal font-outfit border-b border-[#E7E7E4] pb-8">
+              {paragraphs.length > 0 ? (
+                paragraphs.map((para, idx) => (
+                  <p key={idx} className="whitespace-pre-wrap">
+                    {para}
+                  </p>
+                ))
+              ) : (
+                <p>{blog.content}</p>
+              )}
+            </div>
+
+            {/* Back CTA */}
+            <div className="mt-6 flex justify-between items-center">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onBack();
+                }}
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#C1571F] hover:text-[#A84310] transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4" /> Back to all stories
+              </button>
+            </div>
           </div>
 
-          {/* Bottom Back Action */}
-          <div className="mt-8 pt-2">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                onBack();
-              }}
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#C1571F] hover:text-[#A84310] transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="h-4 w-4" /> Back to all stories
-            </button>
-          </div>
+          {/* Article Feed / Multi-Post Story Stream Section */}
+          {relatedBlogs.length > 0 && (
+            <div className="space-y-10 pt-6">
+              <h3 className="font-outfit text-xl font-black uppercase text-[#1A1A18] tracking-wide border-b border-[#E7E7E4] pb-3">
+                More Stories on {blog.category}
+              </h3>
+              
+              <div className="space-y-12">
+                {relatedBlogs.map((post) => {
+                  const excerpt = post.content 
+                    ? (post.content.length > 180 ? post.content.substring(0, 180) + '...' : post.content)
+                    : '';
+                  
+                  return (
+                    <article key={post.id} className="group flex flex-col gap-5 pb-8 border-b border-[#E7E7E4] last:border-b-0">
+                      <div>
+                        {/* Sub-heading title */}
+                        <h4 
+                          onClick={() => onSelectBlog(post)}
+                          className="text-2xl font-bold text-[#1A1A18] hover:text-[#C1571F] cursor-pointer transition-colors font-serif leading-snug"
+                        >
+                          {post.title}
+                        </h4>
+                        
+                        <div className="flex items-center gap-2 mt-2 text-xxs uppercase tracking-wider text-[#52524E]/70 font-bold">
+                          <span>By {post.author || 'BOOTpaths Lead'}</span>
+                          <span>•</span>
+                          <span>{post.date}</span>
+                        </div>
+                      </div>
+
+                      {/* Excerpt paragraph */}
+                      <p className="text-base text-[#475569] leading-relaxed">
+                        {excerpt}
+                      </p>
+
+                      {/* Read full blog link */}
+                      <div>
+                        <button
+                          onClick={() => onSelectBlog(post)}
+                          className="text-sm font-bold text-[#C1571F] hover:underline hover:text-[#A84310] transition-colors cursor-pointer inline-flex items-center gap-1"
+                        >
+                          Read full blog ➔
+                        </button>
+                      </div>
+
+                      {/* Inline scenic photograph with altitude/location caption tags */}
+                      <div className="relative rounded-xl overflow-hidden border border-[#E7E7E4] bg-[#F8F8F6]">
+                        <img 
+                          src={post.coverUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'} 
+                          alt={post.title}
+                          className="w-full h-64 object-cover"
+                        />
+                        <div className="bg-stone-900/60 text-white text-[10px] font-bold uppercase tracking-wider py-1.5 px-3 flex items-center justify-between">
+                          <span>Altitude: 3,450 ft</span>
+                          <span>Location: {post.category || 'Western Ghats'}</span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </main>
 
-        {/* 4. Right Sidebar (lg:col-span-4 sticky top-36) */}
-        <aside className="lg:col-span-4 space-y-8 sticky top-36">
+        {/* 5. Right Sidebar Column (lg:col-span-3 space-y-8 sticky top-36) */}
+        <aside className="lg:col-span-3 space-y-8 sticky top-36">
           
           {/* Author Profile Card */}
-          <div className="bg-white border border-[#E7E7E4] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
-            
-            {/* Large circular author photo / avatar badge */}
-            <div className="h-20 w-20 rounded-full bg-[#E3A21E]/10 border border-[#E3A21E]/30 text-[#E3A21E] flex items-center justify-center font-bold text-2xl uppercase mb-3 shadow-inner">
+          <div className="bg-white border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
+            {/* Centered circular author avatar image */}
+            <div className="w-20 h-20 rounded-full mx-auto border-2 border-white shadow-md bg-[#E3A21E]/10 border-[#E3A21E]/30 text-[#E3A21E] flex items-center justify-center font-bold text-2xl uppercase overflow-hidden">
               {blog.author ? blog.author.substring(0, 1) : 'B'}
             </div>
 
-            {/* Bold author name below the photo */}
-            <h5 className="font-bold text-[#1A1A18] text-base leading-tight">
+            {/* Author Name in bold */}
+            <h5 className="text-center font-bold text-base text-[#1A1A18] mt-3">
               {blog.author || 'BOOTpaths Explorer'}
             </h5>
             
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-[#E3A21E] block mt-1">
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-[#E3A21E] text-center block mt-0.5">
               {blog.authorBadge || 'Trek Lead'}
             </span>
 
             {/* About the author box */}
-            <div className="w-full text-xs text-[#52524E] leading-relaxed mt-4 pt-4 border-t border-[#E7E7E4]/50">
+            <div className="bg-[#F8F8F6] p-4 rounded-xl text-xs text-[#52524E] leading-relaxed border border-[#E7E7E4] mt-4">
               <p>
                 {blog.author === 'Sreelesh' || blog.author?.includes('Sreelesh')
                   ? "Sreelesh is a lead mountaineer, explorer, and wilderness first-aid certified expedition coordinator at BOOTpaths."
@@ -250,57 +324,64 @@ export default function BlogReader({ blog, onBack }) {
             </div>
           </div>
 
-          {/* Upcoming Treks Widget */}
+          {/* "Upcoming Treks" Sticky List */}
           <div className="bg-white border border-[#E7E7E4] rounded-2xl p-6 shadow-sm">
-            <h4 className="text-[10px] uppercase tracking-widest text-[#52524E]/70 font-bold mb-4 pb-2 border-b border-[#E7E7E4]/60">
-              Upcoming Expeditions
-            </h4>
+            <div className="mb-4">
+              <h4 className="text-lg font-extrabold text-[#1A1A18] border-b-2 border-[#C1571F] pb-1 inline-block">
+                Upcoming Treks
+              </h4>
+            </div>
+            
             <div className="space-y-4">
               {/* Trek 1: Netravathi */}
-              <div className="group rounded-xl border border-[#E7E7E4] overflow-hidden bg-[#F8F8F6] p-3 flex flex-col gap-2.5 hover:border-[#C1571F]/40 transition-colors">
+              <div className="group rounded-xl border border-[#E7E7E4] overflow-hidden bg-[#F8F8F6] p-3 flex flex-col gap-2 hover:border-[#C1571F]/40 transition-colors">
                 <img 
                   src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" 
                   alt="Netravathi Peak"
                   className="h-24 w-full object-cover rounded-lg"
                 />
                 <div>
-                  <span className="inline-block rounded-full bg-rose-500/10 border border-rose-500/25 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-rose-600 mb-1">
-                    Filling Fast
-                  </span>
-                  <h5 className="text-xs font-bold text-[#1A1A18] leading-snug group-hover:text-[#C1571F] transition-colors">
-                    Netravathi Peak Weekend Trek
+                  <div className="flex items-center justify-between">
+                    <span className="inline-block rounded-full bg-rose-500/10 border border-rose-500/25 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-rose-600">
+                      2 Days • Moderate
+                    </span>
+                    <span className="text-[10px] font-bold text-[#1A1A18]">₹3,450</span>
+                  </div>
+                  <h5 className="text-xs font-bold text-[#1A1A18] leading-snug group-hover:text-[#C1571F] transition-colors mt-1.5">
+                    Netravathi Peak Trek
                   </h5>
-                  <span className="text-[10px] text-[#52524E] block mt-0.5">2 Days • Western Ghats</span>
                 </div>
                 <a 
                   href="#upcoming-treks"
                   className="h-8 w-full rounded-lg bg-[#C1571F] hover:bg-[#A84310] text-white flex items-center justify-center font-bold text-[10px] uppercase tracking-wider transition-colors"
                 >
-                  View Trek
+                  View Dates
                 </a>
               </div>
 
               {/* Trek 2: Brahmagiri */}
-              <div className="group rounded-xl border border-[#E7E7E4] overflow-hidden bg-[#F8F8F6] p-3 flex flex-col gap-2.5 hover:border-[#C1571F]/40 transition-colors">
+              <div className="group rounded-xl border border-[#E7E7E4] overflow-hidden bg-[#F8F8F6] p-3 flex flex-col gap-2 hover:border-[#C1571F]/40 transition-colors">
                 <img 
                   src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80" 
                   alt="Brahmagiri Coorg"
                   className="h-24 w-full object-cover rounded-lg"
                 />
                 <div>
-                  <span className="inline-block rounded-full bg-[#E3A21E]/10 border border-[#E3A21E]/35 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#C1571F] mb-1">
-                    Limited Slots
-                  </span>
-                  <h5 className="text-xs font-bold text-[#1A1A18] leading-snug group-hover:text-[#C1571F] transition-colors">
-                    Brahmagiri Coorg Expedition
+                  <div className="flex items-center justify-between">
+                    <span className="inline-block rounded-full bg-[#E3A21E]/10 border border-[#E3A21E]/35 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#C1571F]">
+                      2 Days • Moderate
+                    </span>
+                    <span className="text-[10px] font-bold text-[#1A1A18]">₹3,750</span>
+                  </div>
+                  <h5 className="text-xs font-bold text-[#1A1A18] leading-snug group-hover:text-[#C1571F] transition-colors mt-1.5">
+                    Brahmagiri Coorg Trek
                   </h5>
-                  <span className="text-[10px] text-[#52524E] block mt-0.5">2 Days • Western Ghats</span>
                 </div>
                 <a 
                   href="#upcoming-treks"
                   className="h-8 w-full rounded-lg bg-[#C1571F] hover:bg-[#A84310] text-white flex items-center justify-center font-bold text-[10px] uppercase tracking-wider transition-colors"
                 >
-                  View Trek
+                  View Dates
                 </a>
               </div>
             </div>
