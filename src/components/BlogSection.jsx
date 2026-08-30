@@ -144,7 +144,7 @@ export default function BlogSection({ blogs: propBlogs, onAddBlog, user, onOpenA
   };
 
   return (
-    <section id="blog" className="relative bg-[#F8F8F6] py-24 px-6 md:px-12 text-[#1A1A18] overflow-hidden border-t border-[#C1571F]/15">
+    <section id="community" className="scroll-mt-36 relative bg-[#F8F8F6] py-24 px-6 md:px-12 text-[#1A1A18] overflow-hidden border-t border-[#C1571F]/15">
       
       {/* Background Subtle Gradient Blobs for Ecotourism Depth */}
       <div className="absolute top-1/3 right-0 h-[400px] w-[400px] rounded-full bg-[#C1571F]/5 blur-[120px] pointer-events-none"></div>

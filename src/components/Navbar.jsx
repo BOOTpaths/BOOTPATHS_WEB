@@ -103,7 +103,11 @@ export default function Navbar({
             <a href="#advantage" className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors">
               Safety
             </a>
-            <a href="#community" className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors">
+            <a 
+              href="#community" 
+              onClick={(e) => { e.preventDefault(); document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors"
+            >
               Community
             </a>
 
@@ -251,9 +255,13 @@ export default function Navbar({
           Eco-Initiatives
         </a>
 
-        {/* Trek Blog & Guides */}
-        <a href="#advantage" className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold">
-          Trek Blog & Guides
+        {/* Community & Stories */}
+        <a 
+          href="#community" 
+          onClick={(e) => { e.preventDefault(); document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); }}
+          className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold"
+        >
+          Community & Stories
         </a>
       </div>
 
@@ -356,11 +364,15 @@ export default function Navbar({
             </a>
 
             <a 
-              href="#advantage" 
-              onClick={() => setMobileMenuOpen(false)}
+              href="#community" 
+              onClick={(e) => { 
+                e.preventDefault(); 
+                setMobileMenuOpen(false); 
+                document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); 
+              }}
               className="font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1"
             >
-              Trek Blog & Guides
+              Community & Stories
             </a>
 
             {isCareersEnabled && (
