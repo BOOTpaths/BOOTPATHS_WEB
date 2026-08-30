@@ -32,8 +32,25 @@ const LinkedInIcon = (props) => (
   </svg>
 );
 
-export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }) {
-  if (!blog) return null;
+export default function BlogDetailPage({ blogId, blogs = [], onBack }) {
+  const blog = blogs.find(b => b.id === blogId);
+
+  if (!blog) {
+    return (
+      <div className="bg-[#F8F8F6] text-[#1A1A18] font-outfit min-h-screen flex flex-col items-center justify-center py-20 px-6">
+        <div className="text-center space-y-4 max-w-md bg-white border border-[#E7E7E4] rounded-2xl p-8 shadow-sm">
+          <h2 className="text-2xl font-black text-[#1A1A18]">Article Not Found</h2>
+          <p className="text-xs text-[#52524E]">The requested story could not be retrieved from the database, or it is still loading.</p>
+          <button 
+            onClick={onBack}
+            className="inline-flex items-center gap-2 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-[#FFFFFF] font-bold px-5 py-2.5 font-outfit text-xs uppercase tracking-wider transition-all duration-300 shadow-sm cursor-pointer"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to home
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const shareUrl = window.location.href;
   const shareTitle = blog.title;
@@ -70,13 +87,19 @@ export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }
   const paragraphs = blog.content ? blog.content.split('\n\n').filter(p => p.trim()) : [];
 
   // Filter other blogs from the same category for the Multi-Post Story Stream
-  const relatedBlogs = allBlogs.filter(b => b.category === blog.category && b.id !== blog.id);
+  const relatedBlogs = blogs.filter(b => b.category === blog.category && b.id !== blog.id);
+
+  // Link select handler
+  const handleSelectRelated = (post) => {
+    window.location.hash = `#blog-${post.id}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="bg-[#F8F8F6] text-[#1A1A18] font-outfit min-h-screen">
+    <div className="bg-[#F8F8F6] text-[#1A1A18] font-outfit min-h-screen pt-[115px]">
       
       {/* 1. Top Panoramic Hero Banner (Full-Bleed) */}
-      <div className="w-full h-[320px] md:h-[440px] overflow-hidden">
+      <div className="w-full h-[360px] md:h-[480px] overflow-hidden">
         <img 
           src={blog.coverUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80'} 
           className="w-full h-full object-cover" 
@@ -142,7 +165,6 @@ export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }
         {/* 4. Center Editorial Column (lg:col-span-7 space-y-12) */}
         <main className="lg:col-span-7 space-y-12">
           
-          {/* Main Header Card container */}
           <div className="bg-white border border-[#E7E7E4] rounded-2xl p-6 sm:p-8 shadow-sm">
             {/* Breadcrumbs */}
             <nav className="text-xs text-[#64748B] mb-3 flex flex-wrap items-center gap-1.5 font-medium">
@@ -224,7 +246,7 @@ export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }
                 }}
                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#C1571F] hover:text-[#A84310] transition-colors cursor-pointer"
               >
-                <ArrowLeft className="h-4 w-4" /> Back to all stories
+                <ArrowLeft className="h-4 w-4" /> Back to all treks & stories
               </button>
             </div>
           </div>
@@ -247,7 +269,7 @@ export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }
                       <div>
                         {/* Sub-heading title */}
                         <h4 
-                          onClick={() => onSelectBlog(post)}
+                          onClick={() => handleSelectRelated(post)}
                           className="text-2xl font-bold text-[#1A1A18] hover:text-[#C1571F] cursor-pointer transition-colors font-serif leading-snug"
                         >
                           {post.title}
@@ -268,7 +290,7 @@ export default function BlogReader({ blog, onBack, allBlogs = [], onSelectBlog }
                       {/* Read full blog link */}
                       <div>
                         <button
-                          onClick={() => onSelectBlog(post)}
+                          onClick={() => handleSelectRelated(post)}
                           className="text-sm font-bold text-[#C1571F] hover:underline hover:text-[#A84310] transition-colors cursor-pointer inline-flex items-center gap-1"
                         >
                           Read full blog ➔

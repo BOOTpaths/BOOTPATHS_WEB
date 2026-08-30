@@ -9,10 +9,8 @@ import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { db } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import BlogReader from './BlogReader';
 
 export default function BlogSection({ blogs: propBlogs, user }) {
-  const [selectedBlog, setSelectedBlog] = useState(null);
   const [liveBlogs, setLiveBlogs] = useState([]);
 
   // Subscribe to live published blogs from Firestore
@@ -42,44 +40,10 @@ export default function BlogSection({ blogs: propBlogs, user }) {
 
   const publishedBlogs = liveBlogs.length > 0 ? liveBlogs : (propBlogs || []).filter(b => b.status === 'published');
 
-  // Handle hash-based dynamic routing
-  useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#blog-')) {
-        const id = hash.replace('#blog-', '');
-        const found = publishedBlogs.find(b => b.id === id);
-        if (found) {
-          setSelectedBlog(found);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      } else {
-        setSelectedBlog(null);
-      }
-    };
-
-    handleHash(); // Run on mount / update
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, [publishedBlogs]);
-
   const handleSelectBlog = (blog) => {
-    setSelectedBlog(blog);
     window.location.hash = `#blog-${blog.id}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const handleBack = () => {
-    setSelectedBlog(null);
-    window.location.hash = '#blogs';
-    setTimeout(() => {
-      document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
-  if (selectedBlog) {
-    return <BlogReader blog={selectedBlog} onBack={handleBack} allBlogs={publishedBlogs} onSelectBlog={handleSelectBlog} />;
-  }
 
   return (
     <section id="blogs" className="scroll-mt-36 relative bg-[#F8F8F6] py-24 px-6 md:px-12 text-[#1A1A18] overflow-hidden border-t border-[#C1571F]/15">
