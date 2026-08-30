@@ -256,13 +256,13 @@ export default function Navbar({
         </a>
 
         {/* Community & Stories */}
-        <a 
+        {/* <a 
           href="#blogs" 
           onClick={(e) => { e.preventDefault(); document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); }}
           className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold"
         >
           Blogs
-        </a>
+        </a> */}
       </div>
 
       {/* Mobile Navigation Drawer */}

@@ -6,9 +6,10 @@
  * is strictly prohibited without express written permission from BOOTpaths.
  */
 import { useState, useEffect } from 'react';
-import { X, Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { db } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import BlogReader from './BlogReader';
 
 export default function BlogSection({ blogs: propBlogs, user }) {
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -40,6 +41,46 @@ export default function BlogSection({ blogs: propBlogs, user }) {
   }, []);
 
   const publishedBlogs = liveBlogs.length > 0 ? liveBlogs : (propBlogs || []).filter(b => b.status === 'published');
+
+  // Handle hash-based dynamic routing
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#blog-')) {
+        const id = hash.replace('#blog-', '');
+        const found = publishedBlogs.find(b => b.id === id);
+        if (found) {
+          setSelectedBlog(found);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        setSelectedBlog(null);
+      }
+    };
+
+    handleHash(); // Run on mount / update
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [publishedBlogs]);
+
+  const handleSelectBlog = (blog) => {
+    setSelectedBlog(blog);
+    window.location.hash = `#blog-${blog.id}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBack = () => {
+    setSelectedBlog(null);
+    window.location.hash = '#blogs';
+    setTimeout(() => {
+      document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  // If a blog is selected, render the full-page editorial reader view
+  if (selectedBlog) {
+    return <BlogReader blog={selectedBlog} onBack={handleBack} />;
+  }
 
   return (
     <section id="blogs" className="scroll-mt-36 relative bg-[#F8F8F6] py-24 px-6 md:px-12 text-[#1A1A18] overflow-hidden border-t border-[#C1571F]/15">
@@ -123,7 +164,7 @@ export default function BlogSection({ blogs: propBlogs, user }) {
                     <div className="mt-6 pt-4 border-t border-[#E7E7E4] flex items-center justify-between">
                       <span className="text-xxs text-[#52524E] font-semibold">By {post.author || 'BOOTpaths Lead'}</span>
                       <button
-                        onClick={() => setSelectedBlog(post)}
+                        onClick={() => handleSelectBlog(post)}
                         className="inline-flex items-center gap-1.5 font-outfit text-xxs font-bold uppercase tracking-wider text-[#C1571F] group-hover:text-[#A84310] transition-colors cursor-pointer"
                       >
                         Read Article <ArrowRight className="h-3 w-3" />
@@ -137,71 +178,6 @@ export default function BlogSection({ blogs: propBlogs, user }) {
         )}
 
       </div>
-
-      {/* ARTICLE SLIDE-OVER READER MODAL */}
-      {selectedBlog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] text-[#1A1A18] shadow-sm animate-in zoom-in-95 duration-300 max-h-[85vh] flex flex-col">
-            
-            {/* Cover Header */}
-            <div className="relative h-64 shrink-0">
-              <img 
-                src={selectedBlog.coverUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'} 
-                alt={selectedBlog.title}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/10 to-transparent"></div>
-              
-              {/* Close Button */}
-              <button 
-                onClick={() => setSelectedBlog(null)}
-                className="absolute top-4 right-4 h-9 w-9 flex items-center justify-center rounded-full bg-[#FFFFFF]/80 hover:bg-[#E7E7E4] text-[#1A1A18] transition-colors border border-[#E7E7E4] shadow-sm cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-
-              <div className="absolute bottom-4 left-6 right-6">
-                <span className="inline-block rounded-full bg-[#C1571F] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md mb-2">
-                  {selectedBlog.category || 'Trail Guide'}
-                </span>
-                <h3 className="font-outfit text-xl sm:text-2xl font-black leading-tight text-[#1A1A18] drop-shadow-sm">
-                  {selectedBlog.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Content Details */}
-            <div className="p-6 overflow-y-auto flex-1 space-y-4 text-sm leading-relaxed text-[#52524E]">
-              <div className="flex items-center gap-3 border-b border-[#E7E7E4] pb-4 mb-4">
-                <div className="h-9 w-9 rounded-full bg-[#E3A21E]/10 flex items-center justify-center border border-[#E3A21E]/30 text-[#E3A21E]">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-[#1A1A18]">{selectedBlog.author || 'BOOTpaths Lead'}</div>
-                  <div className="text-[10px] uppercase font-semibold text-[#E3A21E]/80 tracking-wider">
-                    {(selectedBlog.authorBadge || 'Lead Guide')} • Published {selectedBlog.date}
-                  </div>
-                </div>
-              </div>
-
-              <div className="whitespace-pre-line space-y-4 font-outfit text-stone-700">
-                {selectedBlog.content}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="bg-[#F8F8F6] px-6 py-4 border-t border-[#E7E7E4] flex justify-end shrink-0">
-              <button 
-                onClick={() => setSelectedBlog(null)}
-                className="h-10 px-6 rounded-lg bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-              >
-                Close Article
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
 
     </section>
   );
