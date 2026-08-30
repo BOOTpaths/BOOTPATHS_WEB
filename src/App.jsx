@@ -262,6 +262,12 @@ export default function App() {
       snapshot.forEach((doc) => {
         docs.push({ id: doc.id, ...doc.data() });
       });
+      // Sort in memory to guarantee sorting by createdAt descending without requiring a Firestore index
+      docs.sort((a, b) => {
+        const timeA = a.createdAt ? (typeof a.createdAt === 'string' ? new Date(a.createdAt).getTime() : a.createdAt) : 0;
+        const timeB = b.createdAt ? (typeof b.createdAt === 'string' ? new Date(b.createdAt).getTime() : b.createdAt) : 0;
+        return timeB - timeA;
+      });
       setBlogs(docs);
     }, (err) => {
       console.warn('Blogs snapshot error:', err);

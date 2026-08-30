@@ -104,11 +104,11 @@ export default function Navbar({
               Safety
             </a>
             <a 
-              href="#community" 
-              onClick={(e) => { e.preventDefault(); document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); }}
+              href="#blogs" 
+              onClick={(e) => { e.preventDefault(); document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors"
             >
-              Community
+              Blogs
             </a>
 
             {/* Nav CTA / User Avatar */}
@@ -257,11 +257,11 @@ export default function Navbar({
 
         {/* Community & Stories */}
         <a 
-          href="#community" 
-          onClick={(e) => { e.preventDefault(); document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); }}
+          href="#blogs" 
+          onClick={(e) => { e.preventDefault(); document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); }}
           className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold"
         >
-          Community & Stories
+          Blogs
         </a>
       </div>
 
@@ -364,15 +364,15 @@ export default function Navbar({
             </a>
 
             <a 
-              href="#community" 
+              href="#blogs" 
               onClick={(e) => { 
                 e.preventDefault(); 
                 setMobileMenuOpen(false); 
-                document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' }); 
+                document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); 
               }}
               className="font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1"
             >
-              Community & Stories
+              Blogs
             </a>
 
             {isCareersEnabled && (
