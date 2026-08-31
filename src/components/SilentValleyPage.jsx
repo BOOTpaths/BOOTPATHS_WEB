@@ -6,6 +6,7 @@
  * is strictly prohibited without express written permission from BOOTpaths.
  */
 import { useState, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import './SilentValleyPage.css';
 
 // Import local assets
@@ -628,7 +629,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
             <h2 className="stitle">Frequently Asked Questions</h2>
             <p className="ssub">Everything you need to know about trekking in Silent Valley National Park</p>
           </div>
-          <div className="faq-list">
+          <div className="max-w-4xl mx-auto space-y-4 px-4">
             
             {[
               { q: 'Do we need prior government permits to trek in Silent Valley?', a: "Yes. Silent Valley is an ecologically sensitive core zone under the Kerala Forest and Wildlife Department. Visitor numbers are strictly capped every day to minimize human footprint. Bootpaths secures all official forest permits, vehicle safari permissions, and tribal guide allotments on your behalf in advance." },
@@ -640,13 +641,37 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
             ].map((faq, idx) => {
               const isOpen = activeFaq === idx;
               return (
-                <div key={idx} className={`faq-item ${isOpen ? 'open' : ''}`}>
-                  <div className="faq-q" onClick={() => setActiveFaq(isOpen ? null : idx)}>
-                    <h3 className="font-outfit">{faq.q}</h3>
-                    <span className="faq-arrow">{isOpen ? '−' : '＋'}</span>
-                  </div>
-                  <div className={`fqa ${isOpen ? 'open' : ''}`}>
-                    <p className="font-outfit">{faq.a}</p>
+                <div 
+                  key={idx} 
+                  className={`group rounded-2xl border transition-all duration-300 ${
+                    isOpen 
+                      ? 'border-[#C1571F]/60 bg-[#FAFAF8] shadow-md' 
+                      : 'bg-white border-[#E7E7E4] shadow-sm hover:border-[#C1571F]/40'
+                  }`}
+                >
+                  <button 
+                    onClick={() => setActiveFaq(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-5 text-left font-bold text-[#1A1A18] text-base md:text-lg focus:outline-none cursor-pointer"
+                  >
+                    <span className="font-outfit pr-4">{faq.q}</span>
+                    <div 
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
+                        isOpen 
+                          ? 'rotate-180 text-[#C1571F] bg-[#C1571F]/10' 
+                          : 'bg-[#F5F5F3] text-[#52524E]'
+                      }`}
+                    >
+                      <ChevronDown className="w-4.5 h-4.5" />
+                    </div>
+                  </button>
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      isOpen ? 'max-h-[500px]' : 'max-h-0'
+                    }`}
+                  >
+                    <div className="px-5 pb-5 pt-1 text-sm md:text-base text-[#52524E] leading-relaxed border-t border-[#F0F0EE] mt-1">
+                      <p className="font-outfit">{faq.a}</p>
+                    </div>
                   </div>
                 </div>
               );
