@@ -33,7 +33,9 @@ const GALLERY_ITEMS = [
   { id: 7, cat: 'trail', src: mukkaliCamp, alt: "Mukkali Forest Basecamp", caption: "Mukkali Forest Base & Inspection Bungalow" }
 ];
 
-export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
+export default function SilentValleyPage({ onBack, onOpenBookingModal, packageData }) {
+  const price = packageData?.price || 4000;
+  const formattedPrice = Number(price).toLocaleString('en-IN');
   // Mobile navigation
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -217,7 +219,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
             <div className="qi"><span>⛺</span><div><small>Accommodation</small><strong>Forest Bungalow &amp; Camp</strong></div></div>
             <div className="qi"><span>🥾</span><div><small>Trek Distance</small><strong>~32 km Circuit Trail</strong></div></div>
             <div className="qi"><span>🚗</span><div><small>Starting Base</small><strong>Mukkali, Palakkad (658m)</strong></div></div>
-            <div className="qi"><span>💰</span><div><small>Eco Expedition</small><strong>₹4,000 / person</strong></div></div>
+            <div className="qi"><span>💰</span><div><small>Eco Expedition</small><strong>₹{formattedPrice} / person</strong></div></div>
           </div>
         </div>
       </div>
@@ -696,7 +698,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
                 <div className="spc-badge">ALL-INCLUSIVE ECO-EXPEDITION PACKAGE</div>
                 <div className="spc-price-row">
                   <div className="spc-price">
-                    <span className="spc-curr">₹</span><span className="spc-amt">4,000</span>
+                    <span className="spc-curr">₹</span><span className="spc-amt">{formattedPrice}</span>
                     <span className="spc-per">/ person (All-Inclusive)</span>
                   </div>
                   <div className="spc-duration">3 Days • Mukkali to Mukkali Base</div>
@@ -714,7 +716,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
                 </div>
                 
                 <div className="spc-cta-row">
-                  <button onClick={onOpenBookingModal} className="btn-p btn-spc border-none cursor-pointer">Book at ₹4,000</button>
+                  <button onClick={onOpenBookingModal} className="btn-p btn-spc border-none cursor-pointer">Book at ₹{formattedPrice}</button>
                   <a 
                     href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%2520I%2520would%2520like%2520to%2520book%2520the%2520Silent%2520Valley%2520Rainforest%2520Trek." 
                     target="_blank" 

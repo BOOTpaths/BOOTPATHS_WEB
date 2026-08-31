@@ -990,20 +990,31 @@ export default function App() {
   }
 
   if (currentHash === '#silent-valley') {
+    const svTrek = treks.find(t => t.id === 'silent-valley' || t.title?.toLowerCase().includes('silent valley')) || {
+      id: 'silent-valley',
+      title: 'Silent Valley Rainforest Trek',
+      price: 4000,
+      duration: '3 Days',
+      altitude: '2,383m',
+      location: 'Mukkali, Palakkad',
+      originalPrice: 4500,
+      slotsLeft: 12
+    };
+
     return (
       <SilentValleyPage 
+        packageData={svTrek}
         onBack={() => {
           window.location.hash = '#upcoming-treks';
         }}
         onOpenBookingModal={() => {
-          const svTrek = treks.find(t => t.id === 'silent-valley' || t.title?.toLowerCase().includes('silent valley'));
-          if (svTrek) {
-            handleBookNow(svTrek);
-          } else {
-            // fallback if it isn't loaded yet from Firestore
-            const fallbackTrek = { id: 'silent-valley', title: 'Silent Valley Rainforest Trek', price: 4000, duration: '3 Days', altitude: '2,383m', location: 'Mukkali, Palakkad', originalPrice: 4500, slotsLeft: 12 };
-            handleBookNow(fallbackTrek);
-          }
+          setSelectedTrek(svTrek);
+          setSelectedDate(svTrek.batchDates ? svTrek.batchDates[0] : (svTrek.dates ? svTrek.dates[0] : ''));
+          setNumTrekkers(1);
+          window.location.hash = '#upcoming-treks';
+          setTimeout(() => {
+            document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
+          }, 200);
         }}
       />
     );
