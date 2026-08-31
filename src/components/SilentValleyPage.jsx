@@ -5,7 +5,7 @@
  * Unauthorized copying, modifying, cloning, distribution, or downloading of this file, via any medium, 
  * is strictly prohibited without express written permission from BOOTpaths.
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './SilentValleyPage.css';
 
 // Import local assets
@@ -19,17 +19,6 @@ import sairandhriTower from '../assets/silent-valley/Silent valley/Assets/sairan
 import silentValleyHero from '../assets/silent-valley/Silent valley/Assets/silent_valley_hero.jpg';
 import sisparaPass from '../assets/silent-valley/Silent valley/Assets/sispara_pass.jpg';
 import wildFlora from '../assets/silent-valley/Silent valley/Assets/wild_flora.jpg';
-
-// Waypoints data
-const WAYPOINTS_3D = [
-  { name: "Mukkali Base", alt: 658, altFt: 2158, day: "Day 1 (Morning)", o2: "98%", x: -42, y: 2.5, z: 10, desc: "Silent Valley Forest Information Centre & safari jeep starting point in Mannarkkad." },
-  { name: "Sairandhri Gate", alt: 1020, altFt: 3346, day: "Day 1 (Midday)", o2: "95%", x: -28, y: 5.5, z: 4, desc: "Entrance gate to core national park zone with Forest Rest House & 100ft observation tower." },
-  { name: "Kunthi River", alt: 920, altFt: 3018, day: "Day 1 (Afternoon)", o2: "96%", x: -14, y: 4.2, z: -2, desc: "Crystal-clear Kunthipuzha river crossed via the historic suspension bridge under dense canopy." },
-  { name: "Poochipara Trail", alt: 1150, altFt: 3772, day: "Day 2 (Morning)", o2: "94%", x: 2, y: 7.8, z: -6, desc: "Virgin rainforest trek route lined with giant ferns, orchids, and endemic Lion-tailed Macaques." },
-  { name: "Walakkad Base", alt: 1450, altFt: 4757, day: "Day 2 (Afternoon)", o2: "91%", x: 18, y: 11.2, z: -10, desc: "Deep interior wilderness campsite surrounded by ancient shola forest and mountain streams." },
-  { name: "Sispara Ridge", alt: 2206, altFt: 7237, day: "Day 3 (Peak)", o2: "85%", x: 32, y: 17.5, z: -14, desc: "Historic mountain pass connecting Nilgiris and Kerala with breathtaking 360° views across the valley." },
-  { name: "Anginda Peak", alt: 2383, altFt: 7818, day: "Day 3 (High Summit)", o2: "83%", x: 44, y: 21.0, z: -8, desc: "Highest elevation point in the Silent Valley Nilgiri Biosphere rim overlooking virgin Western Ghats clouds." }
-];
 
 // Gallery images array
 const GALLERY_ITEMS = [
@@ -61,18 +50,6 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // 3D Altitude Profile state
-  const [elevationMode, setElevationMode] = useState('terrain'); // 'terrain' or 'profile'
-  const [autoRotate, setAutoRotate] = useState(true);
-  const [activeWaypoint, setActiveWaypoint] = useState(5); // Default Sispara Ridge
-
-  // Ref for canvas
-  const canvasRef = useRef(null);
-  const rotationYRef = useRef(-0.45);
-  const rotationXRef = useRef(0.38);
-  const isDraggingRef = useRef(false);
-  const previousMouseRef = useRef({ x: 0, y: 0 });
-
   // Scroll handler for sticky navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -81,264 +58,6 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Sync auto rotation
-  useEffect(() => {
-    let frameId;
-    const animate = () => {
-      if (autoRotate && !isDraggingRef.current) {
-        rotationYRef.current += 0.0035;
-      }
-      drawTerrain();
-      frameId = requestAnimationFrame(animate);
-    };
-    frameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frameId);
-  }, [autoRotate, elevationMode, activeWaypoint]);
-
-  // Redraw when waypoint, category, or dimensions change
-  useEffect(() => {
-    drawTerrain();
-  }, [activeWaypoint, elevationMode]);
-
-  // Draw simulated 3D terrain profile on canvas
-  const drawTerrain = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const width = canvas.width;
-    const height = canvas.height;
-    ctx.clearRect(0, 0, width, height);
-
-    const centerX = width / 2;
-    const centerY = height / 2 + 10;
-    const zoom = Math.min(width / 130, height / 50);
-
-    const rotY = rotationYRef.current;
-    const rotX = rotationXRef.current;
-
-    // Helper: Project 3D point to 2D screen
-    const project = (x, y, z) => {
-      // Rotate around Y axis
-      const xRotY = x * Math.cos(rotY) - z * Math.sin(rotY);
-      const zRotY = x * Math.sin(rotY) + z * Math.cos(rotY);
-
-      // Rotate around X axis
-      const xRotX = xRotY;
-      const yRotX = y * Math.cos(rotX) - zRotY * Math.sin(rotX);
-      const zRotX = y * Math.sin(rotX) + zRotY * Math.cos(rotX);
-
-      // Simple perspective scaling
-      const scale = 300 / (300 + zRotX);
-      const screenX = centerX + xRotX * zoom * scale;
-      const screenY = centerY - yRotX * zoom * scale;
-
-      return { x: screenX, y: screenY };
-    };
-
-    if (elevationMode === 'terrain') {
-      // Draw grid mountain terrain wireframe
-      const gridX = 40;
-      const gridZ = 24;
-      const stepX = 110 / gridX;
-      const stepZ = 65 / gridZ;
-
-      // Draw horizontal lines (along X axis)
-      for (let zi = 0; zi <= gridZ; zi++) {
-        const z = -32.5 + zi * stepZ;
-        ctx.beginPath();
-        for (let xi = 0; xi <= gridX; xi++) {
-          const x = -55 + xi * stepX;
-          const normX = (x + 55) / 110;
-          let y = Math.pow(normX, 1.45) * 20;
-
-          // River depression
-          const riverDist = Math.abs(x - (-14));
-          if (riverDist < 16) {
-            y -= (1 - riverDist / 16) * 5;
-          }
-
-          // Valley noise
-          const ridgeNoise = Math.sin(x * 0.12) * Math.cos(z * 0.15) * 3.5 + Math.sin(x * 0.05 + z * 0.07) * 3.0;
-          const sideElevation = (Math.abs(z) / 32.5) * 6.0;
-          y = Math.max(0, y + ridgeNoise + sideElevation);
-
-          const pt = project(x, y, z);
-          if (xi === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        }
-        ctx.strokeStyle = 'rgba(21, 128, 61, 0.15)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      // Draw vertical lines (along Z axis)
-      for (let xi = 0; xi <= gridX; xi++) {
-        const x = -55 + xi * stepX;
-        ctx.beginPath();
-        for (let zi = 0; zi <= gridZ; zi++) {
-          const z = -32.5 + zi * stepZ;
-          const normX = (x + 55) / 110;
-          let y = Math.pow(normX, 1.45) * 20;
-
-          // River depression
-          const riverDist = Math.abs(x - (-14));
-          if (riverDist < 16) {
-            y -= (1 - riverDist / 16) * 5;
-          }
-
-          const ridgeNoise = Math.sin(x * 0.12) * Math.cos(z * 0.15) * 3.5 + Math.sin(x * 0.05 + z * 0.07) * 3.0;
-          const sideElevation = (Math.abs(z) / 32.5) * 6.0;
-          y = Math.max(0, y + ridgeNoise + sideElevation);
-
-          const pt = project(x, y, z);
-          if (zi === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        }
-        ctx.strokeStyle = 'rgba(21, 128, 61, 0.15)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      // Draw River ribbon (blue)
-      ctx.beginPath();
-      const riverPoints = [
-        { x: -50, y: 1.5, z: 25 },
-        { x: -35, y: 2.0, z: 12 },
-        { x: -14, y: 2.2, z: -2 },
-        { x: -5, y: 2.6, z: -18 },
-        { x: 5, y: 3.2, z: -30 }
-      ];
-      riverPoints.forEach((ptVal, idx) => {
-        const pt = project(ptVal.x, ptVal.y, ptVal.z);
-        if (idx === 0) ctx.moveTo(pt.x, pt.y);
-        else ctx.lineTo(pt.x, pt.y);
-      });
-      ctx.strokeStyle = 'rgba(2, 132, 199, 0.85)';
-      ctx.lineWidth = 4;
-      ctx.stroke();
-    } else {
-      // Draw Extruded profile layout (solid gray boundary with orange extrusion)
-      ctx.beginPath();
-      WAYPOINTS_3D.forEach((wp, idx) => {
-        const pt = project(wp.x, wp.y, wp.z);
-        if (idx === 0) ctx.moveTo(pt.x, pt.y);
-        else ctx.lineTo(pt.x, pt.y);
-      });
-      // Close base extrusion shape
-      const lastPt = project(WAYPOINTS_3D[WAYPOINTS_3D.length - 1].x, 0, WAYPOINTS_3D[WAYPOINTS_3D.length - 1].z);
-      const firstPt = project(WAYPOINTS_3D[0].x, 0, WAYPOINTS_3D[0].z);
-      ctx.lineTo(lastPt.x, lastPt.y);
-      ctx.lineTo(firstPt.x, firstPt.y);
-      ctx.closePath();
-
-      ctx.fillStyle = 'rgba(249, 115, 22, 0.1)';
-      ctx.fill();
-      ctx.strokeStyle = '#f97316';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      // Draw base reference line
-      ctx.beginPath();
-      ctx.moveTo(firstPt.x, firstPt.y);
-      ctx.lineTo(lastPt.x, lastPt.y);
-      ctx.strokeStyle = '#94a3b8';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
-
-    // Draw Trail path tube (thick orange)
-    ctx.beginPath();
-    WAYPOINTS_3D.forEach((wp, idx) => {
-      const pt = project(wp.x, wp.y + 0.3, wp.z);
-      if (idx === 0) ctx.moveTo(pt.x, pt.y);
-      else ctx.lineTo(pt.x, pt.y);
-    });
-    ctx.strokeStyle = '#f97316';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    // Draw Waypoint pins & Beacons
-    WAYPOINTS_3D.forEach((wp, idx) => {
-      const pinBase = project(wp.x, wp.y, wp.z);
-      const pinTop = project(wp.x, wp.y + 3.5, wp.z);
-      const isActive = idx === activeWaypoint;
-
-      // Draw stick
-      ctx.beginPath();
-      ctx.moveTo(pinBase.x, pinBase.y);
-      ctx.lineTo(pinTop.x, pinTop.y);
-      ctx.strokeStyle = '#0f172a';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Draw head sphere
-      ctx.beginPath();
-      ctx.arc(pinTop.x, pinTop.y, isActive ? 5.5 : 4.5, 0, 2 * Math.PI);
-      const isPeak = idx >= WAYPOINTS_3D.length - 2;
-      ctx.fillStyle = isActive ? (isPeak ? '#e11d48' : '#f97316') : '#334155';
-      ctx.fill();
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // If active, draw pulsing ring
-      if (isActive) {
-        ctx.beginPath();
-        ctx.arc(pinBase.x, pinBase.y, 8, 0, 2 * Math.PI);
-        ctx.strokeStyle = isPeak ? 'rgba(225, 29, 72, 0.7)' : 'rgba(249, 115, 22, 0.7)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-    });
-  };
-
-  // Drag interaction handlers
-  const handleMouseDown = (e) => {
-    isDraggingRef.current = true;
-    setAutoRotate(false);
-    previousMouseRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDraggingRef.current) return;
-    const deltaX = e.clientX - previousMouseRef.current.x;
-    const deltaY = e.clientY - previousMouseRef.current.y;
-
-    rotationYRef.current += deltaX * 0.008;
-    rotationXRef.current = Math.max(0.15, Math.min(Math.PI / 2.2, rotationXRef.current + deltaY * 0.008));
-
-    previousMouseRef.current = { x: e.clientX, y: e.clientY };
-    drawTerrain();
-  };
-
-  const handleMouseUp = () => {
-    isDraggingRef.current = false;
-  };
-
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 1) {
-      isDraggingRef.current = true;
-      setAutoRotate(false);
-      previousMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    }
-  };
-
-  const handleTouchMove = (e) => {
-    if (isDraggingRef.current && e.touches.length === 1) {
-      const deltaX = e.touches[0].clientX - previousMouseRef.current.x;
-      const deltaY = e.touches[0].clientY - previousMouseRef.current.y;
-
-      if (Math.abs(deltaX) > Math.abs(deltaY) * 0.8) {
-        rotationYRef.current += deltaX * 0.01;
-        rotationXRef.current = Math.max(0.15, Math.min(Math.PI / 2.2, rotationXRef.current + deltaY * 0.01));
-        previousMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        drawTerrain();
-      }
-    }
-  };
 
   // Packing list checker
   const handleToggleCheck = (id) => {
@@ -395,7 +114,6 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
             <ul className="nav-links">
               <li><a href="#overview" onClick={(e) => { e.preventDefault(); handleNavClick('overview'); }}>Overview</a></li>
               <li><a href="#highlights" onClick={(e) => { e.preventDefault(); handleNavClick('highlights'); }}>Highlights</a></li>
-              <li><a href="#altitude" onClick={(e) => { e.preventDefault(); handleNavClick('altitude'); }}>3D Elevation</a></li>
               <li><a href="#itinerary" onClick={(e) => { e.preventDefault(); handleNavClick('itinerary'); }}>Itinerary</a></li>
               <li><a href="#gallery" onClick={(e) => { e.preventDefault(); handleNavClick('gallery'); }}>Gallery</a></li>
               <li><a href="#inclusions" onClick={(e) => { e.preventDefault(); handleNavClick('inclusions'); }}>Inclusions</a></li>
@@ -540,24 +258,24 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
           </div>
           <div className="hl-grid">
             <div className="hlc">
-              <div className="hlc-img-w"><img src={kunthiRiver} alt="Kunthi River Suspension Bridge" loading="lazy"/><div className="hlc-ov"></div><span class="hln">01</span></div>
-              <div class="hlc-body"><h3>Kunthi River &amp; Suspension Bridge</h3><p>Cross the mythical Kunthipuzha river over the steel suspension bridge — water so untouched and pure it famously never turns muddy even during heavy tropical rains.</p></div>
+              <div className="hlc-img-w"><img src={kunthiRiver} alt="Kunthi River Suspension Bridge" loading="lazy"/><div className="hlc-ov"></div><span className="hln">01</span></div>
+              <div className="hlc-body"><h3>Kunthi River &amp; Suspension Bridge</h3><p>Cross the mythical Kunthipuzha river over the steel suspension bridge — water so untouched and pure it famously never turns muddy even during heavy tropical rains.</p></div>
             </div>
             <div className="hlc">
-              <div className="hlc-img-w"><img src={sairandhriTower} alt="Sairandhri 100ft Tower" loading="lazy"/><div className="hlc-ov"></div><span class="hln">02</span></div>
-              <div class="hlc-body"><h3>Sairandhri 100ft Canopy Tower</h3><p>Ascend the observation tower standing 100 feet above the multi-tiered jungle canopy for a panoramic 360-degree view of endless emerald peaks and drifting valley mist.</p></div>
+              <div className="hlc-img-w"><img src={sairandhriTower} alt="Sairandhri 100ft Tower" loading="lazy"/><div className="hlc-ov"></div><span className="hln">02</span></div>
+              <div className="hlc-body"><h3>Sairandhri 100ft Canopy Tower</h3><p>Ascend the observation tower standing 100 feet above the multi-tiered jungle canopy for a panoramic 360-degree view of endless emerald peaks and drifting valley mist.</p></div>
             </div>
             <div className="hlc">
-              <div className="hlc-img-w"><img src={lionTailedMacaque} alt="Endangered Lion-tailed Macaque" loading="lazy"/><div className="hlc-ov"></div><span class="hln">03</span></div>
-              <div class="hlc-body"><h3>Lion-tailed Macaque Tracking</h3><p>Encounter India's most iconic primate — the majestic, silver-maned Lion-tailed Macaque (Macaca silenus) — living freely in its largest viable global population.</p></div>
+              <div className="hlc-img-w"><img src={lionTailedMacaque} alt="Endangered Lion-tailed Macaque" loading="lazy"/><div className="hlc-ov"></div><span className="hln">03</span></div>
+              <div className="hlc-body"><h3>Lion-tailed Macaque Tracking</h3><p>Encounter India's most iconic primate — the majestic, silver-maned Lion-tailed Macaque (Macaca silenus) — living freely in its largest viable global population.</p></div>
             </div>
             <div className="hlc">
-              <div className="hlc-img-w"><img src={poochiparaTrail} alt="Poochipara Rainforest Trail" loading="lazy"/><div className="hlc-ov"></div><span class="hln">04</span></div>
-              <div class="hlc-body"><h3>Poochipara Trail &amp; Waterfalls</h3><p>Trek beneath colossal ancient buttress-rooted trees, hanging lianas, and mossy jungle logs along the pristine Poochipara stream and secluded cascade pools.</p></div>
+              <div className="hlc-img-w"><img src={poochiparaTrail} alt="Poochipara Rainforest Path" loading="lazy"/><div className="hlc-ov"></div><span className="hln">04</span></div>
+              <div className="hlc-body"><h3>Poochipara Trail &amp; Waterfalls</h3><p>Trek beneath colossal ancient buttress-rooted trees, hanging lianas, and mossy jungle logs along the pristine Poochipara stream and secluded cascade pools.</p></div>
             </div>
             <div className="hlc">
-              <div className="hlc-img-w"><img src={sisparaPass} alt="Sispara Historic Ridge" loading="lazy"/><div className="hlc-ov"></div><span class="hln">05</span></div>
-              <div class="hlc-body"><h3>Historic Sispara Shola Pass</h3><p>Explore the historic pass linking Kerala and the Nilgiri hills, where unique high-altitude shola grasslands meet the mist-soaked rainforest ridges at over 2,200m.</p></div>
+              <div className="hlc-img-w"><img src={sisparaPass} alt="Sispara Historic Ridge" loading="lazy"/><div className="hlc-ov"></div><span className="hln">05</span></div>
+              <div className="hlc-body"><h3>Historic Sispara Shola Pass</h3><p>Explore the historic pass linking Kerala and the Nilgiri hills, where unique high-altitude shola grasslands meet the mist-soaked rainforest ridges at over 2,200m.</p></div>
             </div>
             <div className="hlc hlc-wide">
               <div className="hlc-wide-inner">
@@ -571,106 +289,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       </section>
 
-      {/* 6. 3D ELEVATION TOPOGRAPHY PROFILE */}
-      <section className="alt-section section" id="altitude">
-        <div className="container">
-          <div className="sh center">
-            <div className="stag">3D Terrain &amp; Elevation</div>
-            <h2 className="stitle">Real-Type 3D Altitude Profile</h2>
-            <p className="ssub">Explore the interactive 3D topography from Mukkali Basecamp through Sairandhri, Kunthi River, and Sispara high ridges</p>
-          </div>
-
-          <div className="alt-3d-card">
-            <div className="alt-3d-toolbar">
-              <div className="alt-view-modes">
-                <button 
-                  className={`view-mode-btn ${elevationMode === 'terrain' ? 'active' : ''}`} 
-                  onClick={() => setElevationMode('terrain')}
-                >
-                  <span className="vm-ico">🏔️</span> 3D Rainforest Valley
-                </button>
-                <button 
-                  className={`view-mode-btn ${elevationMode === 'profile' ? 'active' : ''}`} 
-                  onClick={() => setElevationMode('profile')}
-                >
-                  <span className="vm-ico">📊</span> 3D Extruded Profile
-                </button>
-              </div>
-              
-              <div className="alt-cam-controls">
-                <button 
-                  className="cam-btn" 
-                  onClick={() => setAutoRotate(!autoRotate)}
-                >
-                  <span>{autoRotate ? '⏸️' : '▶️'}</span> <span className="cb-txt">Auto-Rotate</span>
-                </button>
-                <button 
-                  className="cam-btn" 
-                  onClick={() => {
-                    rotationYRef.current = -0.45;
-                    rotationXRef.current = 0.38;
-                    setAutoRotate(true);
-                    drawTerrain();
-                  }}
-                >
-                  <span>🔄</span> <span className="cb-txt">Reset</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="alt-canvas-wrap" id="altCanvasWrap">
-              <canvas 
-                ref={canvasRef} 
-                width={800} 
-                height={450} 
-                id="alt3dCanvas"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleMouseUp}
-              ></canvas>
-              
-              {/* WAYPOINT HUD OVERLAY */}
-              <div className="alt-hud-tooltip visible">
-                <div className="hud-header">
-                  <span className="hud-day">{WAYPOINTS_3D[activeWaypoint].day}</span>
-                  <h4 className="hud-name">{WAYPOINTS_3D[activeWaypoint].name}</h4>
-                </div>
-                <div className="hud-stats">
-                  <div className="hud-stat"><span>Altitude:</span> <b>{WAYPOINTS_3D[activeWaypoint].alt} m ({WAYPOINTS_3D[activeWaypoint].altFt} ft)</b></div>
-                  <div className="hud-stat"><span>Canopy Density:</span> <b>~{WAYPOINTS_3D[activeWaypoint].o2} Virgin Cover</b></div>
-                </div>
-                <p className="hud-desc">{WAYPOINTS_3D[activeWaypoint].desc}</p>
-              </div>
-
-              <div className="alt-drag-hint">
-                <span>👈 Drag to rotate mountain valley • Pinch / scroll to zoom • Click buttons below for details</span>
-              </div>
-            </div>
-
-            {/* INTERACTIVE MILESTONES STRIP */}
-            <div className="alt-waypoints-strip">
-              <span className="aw-lbl">Interactive Milestones:</span>
-              <div className="aw-pills">
-                {WAYPOINTS_3D.map((wp, idx) => (
-                  <button 
-                    key={idx}
-                    className={`aw-btn ${idx === activeWaypoint ? 'active-selected' : ''}`} 
-                    onClick={() => setActiveWaypoint(idx)}
-                  >
-                    {wp.name} <span>{wp.alt}m</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. ITINERARY */}
+      {/* 6. ITINERARY */}
       <section className="itinerary section" id="itinerary">
         <div className="container">
           <div className="sh center">
@@ -863,7 +482,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       </section>
 
-      {/* 8. PHOTO GALLERY */}
+      {/* 7. PHOTO GALLERY */}
       <section className="gallery section" id="gallery">
         <div className="container">
           <div className="sh center">
@@ -918,7 +537,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       )}
 
-      {/* 9. INCLUSIONS & EXCLUSIONS */}
+      {/* 8. INCLUSIONS & EXCLUSIONS */}
       <section className="ie-section section" id="inclusions">
         <div className="container">
           <div className="sh center">
@@ -953,7 +572,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
             </div>
           </div>
 
-          {/* 10. PACKING & GEAR CHECKLIST */}
+          {/* 9. PACKING & GEAR CHECKLIST */}
           <div className="gear-section" style={{ marginTop: '60px' }}>
             <div className="sh center" style={{ marginBottom: '30px' }}>
               <div className="stag">Trail Readiness</div>
@@ -1001,7 +620,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       </section>
 
-      {/* 11. FAQ */}
+      {/* 10. FAQ */}
       <section className="faq section" id="faq">
         <div className="container">
           <div className="sh center">
@@ -1037,7 +656,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       </section>
 
-      {/* 12. BOOKING SECTION */}
+      {/* 11. BOOKING SECTION */}
       <section className="booking section" id="booking">
         <div className="bk-bg"><img src={silentValleyHero} alt="Silent Valley Trek" className="bk-bgi"/><div className="bk-ov"></div></div>
         <div className="container">
@@ -1052,7 +671,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
                 <div className="spc-badge">ALL-INCLUSIVE ECO-EXPEDITION PACKAGE</div>
                 <div className="spc-price-row">
                   <div className="spc-price">
-                    <span className="spc-curr">₹</span><span class="spc-amt">4,000</span>
+                    <span className="spc-curr">₹</span><span className="spc-amt">4,000</span>
                     <span className="spc-per">/ person (All-Inclusive)</span>
                   </div>
                   <div className="spc-duration">3 Days • Mukkali to Mukkali Base</div>
@@ -1086,7 +705,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
         </div>
       </section>
 
-      {/* 13. FOOTER */}
+      {/* 12. FOOTER */}
       <footer className="footer">
         <div className="container">
           <div className="ft-grid">
@@ -1105,7 +724,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal }) {
                 </a>
               </div>
             </div>
-            <div className="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview" onClick={(e) => { e.preventDefault(); handleNavClick('overview'); }}>About the Trek</a></li><li><a href="#highlights" onClick={(e) => { e.preventDefault(); handleNavClick('highlights'); }}>Trek Highlights</a></li><li><a href="#altitude" onClick={(e) => { e.preventDefault(); handleNavClick('altitude'); }}>3D Terrain Profile</a></li><li><a href="#itinerary" onClick={(e) => { e.preventDefault(); handleNavClick('itinerary'); }}>Detailed Itinerary</a></li><li><a href="#gallery" onClick={(e) => { e.preventDefault(); handleNavClick('gallery'); }}>Photo Gallery</a></li><li><a href="#inclusions" onClick={(e) => { e.preventDefault(); handleNavClick('inclusions'); }}>Inclusions</a></li><li><a href="#faq" onClick={(e) => { e.preventDefault(); handleNavClick('faq'); }}>FAQs</a></li><li><a href="#booking" onClick={(e) => { e.preventDefault(); handleNavClick('booking'); }}>Book Now</a></li></ul></div>
+            <div className="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview" onClick={(e) => { e.preventDefault(); handleNavClick('overview'); }}>About the Trek</a></li><li><a href="#highlights" onClick={(e) => { e.preventDefault(); handleNavClick('highlights'); }}>Trek Highlights</a></li><li><a href="#itinerary" onClick={(e) => { e.preventDefault(); handleNavClick('itinerary'); }}>Detailed Itinerary</a></li><li><a href="#gallery" onClick={(e) => { e.preventDefault(); handleNavClick('gallery'); }}>Photo Gallery</a></li><li><a href="#inclusions" onClick={(e) => { e.preventDefault(); handleNavClick('inclusions'); }}>Inclusions</a></li><li><a href="#faq" onClick={(e) => { e.preventDefault(); handleNavClick('faq'); }}>FAQs</a></li><li><a href="#booking" onClick={(e) => { e.preventDefault(); handleNavClick('booking'); }}>Book Now</a></li></ul></div>
             <div className="ft-col"><h4>Other Treks</h4><ul><li><a href="#upcoming-treks" onClick={() => onBack()}>Netravathi Peak Trek</a></li><li><a href="#upcoming-treks" onClick={() => onBack()}>Brahmagiri Coorg Trek</a></li><li><a href="#upcoming-treks" onClick={() => onBack()}>Vellagavi Village Trek</a></li></ul></div>
             <div className="ft-col"><h4>Contact Bootpaths</h4><ul className="ct"><li><span>📧</span> <a href="mailto:lead@bootpaths.com">lead@bootpaths.com</a></li><li><span>📱</span> <a href="tel:+919446102200">Call: +91 9446102200</a></li><li><span>💬</span> <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener noreferrer">WhatsApp: +91 9446102200</a></li><li><span>💬</span> <a href="https://wa.me/919895452187?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener noreferrer">WhatsApp: +91 9895452187</a></li><li><span>💬</span> <a href="https://wa.me/918848998470?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener noreferrer">WhatsApp: +91 8848998470</a></li><li><span>🕒</span> Mon–Sat: 9am – 7pm IST</li></ul></div>
           </div>
