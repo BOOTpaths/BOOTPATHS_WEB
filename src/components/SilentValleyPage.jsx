@@ -43,7 +43,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
   // Accordions and UI tabs
   const [activeAccordion, setActiveAccordion] = useState('detailed'); // 'quick' or 'detailed'
   const [activeDay, setActiveDay] = useState(1); // 1, 2, or 3
-  const [activeFaq, setActiveFaq] = useState(null); // FAQ item index
+  const [activeFaq, setActiveFaq] = useState(0); // FAQ item index
 
   // Checklist state
   const [checkedItems, setCheckedItems] = useState(new Set());
@@ -624,70 +624,67 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
       </section>
 
       {/* 10. FAQ */}
-      <section className="faq section" id="faq">
-        <div className="container">
-          <div className="sh center">
-            <div className="stag">Got Questions?</div>
-            <h2 className="stitle">Frequently Asked Questions</h2>
-            <p className="ssub">Everything you need to know about trekking in Silent Valley National Park</p>
-          </div>
-          <div className="max-w-4xl mx-auto px-4 space-y-3.5">
-            
-            {[
-              { q: 'Do we need prior government permits to trek in Silent Valley?', a: "Yes. Silent Valley is an ecologically sensitive core zone under the Kerala Forest and Wildlife Department. Visitor numbers are strictly capped every day to minimize human footprint. Bootpaths secures all official forest permits, vehicle safari permissions, and tribal guide allotments on your behalf in advance." },
-              { q: 'Are there leeches on the trail and how do we prepare?', a: "Because Silent Valley is a moist tropical evergreen rainforest, leeches are common along damp forest paths, particularly after light rain. Leeches are completely harmless and do not carry diseases. Bootpaths provides specialized knee-high leech gaiters and natural herbal salt/lime solutions to keep them off comfortably." },
-              { q: 'Can beginners and first-time trekkers join this trek?', a: "Absolutely! The 3-day Silent Valley expedition is rated as Moderate. It involves daily walks of 4 to 14 km over natural terrain with gentle to moderate inclines. Anyone with average cardiovascular fitness and a passion for wild nature can complete it with ease." },
-              { q: 'What is the chance of spotting the rare Lion-tailed Macaque?', a: "Silent Valley houses one of the healthiest viable populations of the endangered Lion-tailed Macaque in the world. While wildlife sightings are naturally wild and unpredictable, our trek routes through Poochipara and Sairandhri offer over an 80% sighting probability, especially in the early mornings when they feed in the high canopy." },
-              { q: 'How do I reach the Mukkali basecamp?', a: "Mukkali is located in Mannarkkad taluk, Palakkad district, Kerala. The nearest major railway stations are Palakkad Junction (60 km) and Coimbatore Junction (85 km). The nearest airport is Coimbatore International Airport (CJB - 95 km) or Calicut International Airport (CCJ - 100 km). Bootpaths can arrange shared or private cab transfers directly from Palakkad or Coimbatore upon request." },
-              { q: 'What are the plastic and ecological regulations in the park?', a: "Silent Valley is a strict zero-plastic zone. Single-use plastic bottles, polythene bags, alcohol, smoking, and music speakers are strictly prohibited. All baggage is inspected by forest rangers at the Mukkali check-post. Trekkers must carry reusable steel or copper water bottles." }
-            ].map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
+      <section className="w-full flex flex-col items-center justify-center py-20 px-4 bg-white" id="faq">
+        <div className="w-full max-w-3xl flex flex-col items-center space-y-4">
+          <span className="px-3.5 py-1 rounded-md bg-[#FFF2EA] text-[#E05A1B] text-xs font-black tracking-widest uppercase mb-3">GOT QUESTIONS?</span>
+          <h2 className="text-3xl md:text-5xl font-serif font-black text-[#1A1A18] text-center mb-3">Frequently Asked Questions</h2>
+          <p className="text-sm text-[#718096] text-center max-w-xl mb-10">Everything you need to know about trekking in Silent Valley National Park</p>
+
+          {[
+            { q: 'Do we need prior government permits to trek in Silent Valley?', a: "Yes. Silent Valley is an ecologically sensitive core zone under the Kerala Forest and Wildlife Department. Visitor numbers are strictly capped every day to minimize human footprint. Bootpaths secures all official forest permits, vehicle safari permissions, and tribal guide allotments on your behalf in advance." },
+            { q: 'Are there leeches on the trail and how do we prepare?', a: "Because Silent Valley is a moist tropical evergreen rainforest, leeches are common along damp forest paths, particularly after light rain. Leeches are completely harmless and do not carry diseases. Bootpaths provides specialized knee-high leech gaiters and natural herbal salt/lime solutions to keep them off comfortably." },
+            { q: 'Can beginners and first-time trekkers join this trek?', a: "Absolutely! The 3-day Silent Valley expedition is rated as Moderate. It involves daily walks of 4 to 14 km over natural terrain with gentle to moderate inclines. Anyone with average cardiovascular fitness and a passion for wild nature can complete it with ease." },
+            { q: 'What is the chance of spotting the rare Lion-tailed Macaque?', a: "Silent Valley houses one of the healthiest viable populations of the endangered Lion-tailed Macaque in the world. While wildlife sightings are naturally wild and unpredictable, our trek routes through Poochipara and Sairandhri offer over an 80% sighting probability, especially in the early mornings when they feed in the high canopy." },
+            { q: 'How do I reach the Mukkali basecamp?', a: "Mukkali is located in Mannarkkad taluk, Palakkad district, Kerala. The nearest major railway stations are Palakkad Junction (60 km) and Coimbatore Junction (85 km). The nearest airport is Coimbatore International Airport (CJB - 95 km) or Calicut International Airport (CCJ - 100 km). Bootpaths can arrange shared or private cab transfers directly from Palakkad or Coimbatore upon request." },
+            { q: 'What are the plastic and ecological regulations in the park?', a: "Silent Valley is a strict zero-plastic zone. Single-use plastic bottles, polythene bags, alcohol, smoking, and music speakers are strictly prohibited. All baggage is inspected by forest rangers at the Mukkali check-post. Trekkers must carry reusable steel or copper water bottles." }
+          ].map((faq, idx) => {
+            const isOpen = activeFaq === idx;
+            return (
+              <div 
+                key={idx} 
+                className={`w-full rounded-2xl transition-all duration-300 overflow-hidden ${
+                  isOpen 
+                    ? 'border border-[#FF9E66] bg-white shadow-sm' 
+                    : 'border border-[#FFE2D1] bg-white'
+                }`}
+              >
+                <button 
+                  onClick={() => setActiveFaq(isOpen ? null : idx)}
+                  className="w-full flex items-center justify-between p-5 md:px-7 md:py-5 text-left focus:outline-none cursor-pointer"
+                >
+                  <span className={`pr-4 font-bold text-sm md:text-base transition-colors duration-300 ${
+                    isOpen ? 'text-[#E05A1B]' : 'text-[#1A1A18]'
+                  }`}>
+                    {faq.q}
+                  </span>
+                  <div className="shrink-0 transition-all duration-300">
+                    {isOpen ? (
+                      <div className="w-8 h-8 rounded-full bg-[#E05A1B] text-white flex items-center justify-center text-xs font-black">
+                        ✕
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[#FFF0E6] text-[#E05A1B] flex items-center justify-center text-sm font-bold">
+                        +
+                      </div>
+                    )}
+                  </div>
+                </button>
                 <div 
-                  key={idx} 
-                  className={`rounded-2xl border shadow-none transition-all duration-300 ${
-                    isOpen 
-                      ? 'border-[#FFB285] bg-[#FAFAF8]' 
-                      : 'bg-white border-[#FFD8C2]'
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? 'max-h-[500px]' : 'max-h-0'
                   }`}
                 >
-                  <button 
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-5 text-left focus:outline-none cursor-pointer"
-                  >
-                    <span className={`font-outfit pr-4 font-bold text-sm md:text-base transition-colors duration-200 ${
-                      isOpen ? 'text-[#E05A1B]' : 'text-[#1A1A18]'
-                    }`}>
-                      {faq.q}
-                    </span>
-                    <div className="shrink-0 transition-all duration-300">
-                      {isOpen ? (
-                        <div className="w-8 h-8 rounded-full bg-[#E05A1B] text-white flex items-center justify-center text-xs font-bold">
-                          <X className="w-3.5 h-3.5 stroke-[3px]" />
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-[#FFF0E6] flex items-center justify-center text-[#E05A1B] text-base font-bold">
-                          <Plus className="w-3.5 h-3.5 stroke-[3px]" />
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      isOpen ? 'max-h-[500px]' : 'max-h-0'
-                    }`}
-                  >
-                    <div className="px-5 pb-5 pt-1 mt-1">
-                      <div className="border-t border-[#FEE7D8] mt-3 pt-4 text-[#4A5568] text-xs md:text-sm leading-relaxed">
-                        <p className="font-outfit">{faq.a}</p>
-                      </div>
-                    </div>
+                  <div className="px-5 md:px-7 pb-5 pt-0">
+                    <div className="border-t border-[#FFE2D1] my-4" />
+                    <p className="text-left text-xs md:text-sm text-[#4A5568] leading-relaxed pb-2 font-outfit">
+                      {faq.a}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
 
-          </div>
         </div>
       </section>
 
