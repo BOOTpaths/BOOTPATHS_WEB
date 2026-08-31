@@ -6,7 +6,7 @@
  * is strictly prohibited without express written permission from BOOTpaths.
  */
 import { useState, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Plus, X } from 'lucide-react';
 import './SilentValleyPage.css';
 
 // Import local assets
@@ -631,7 +631,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
             <h2 className="stitle">Frequently Asked Questions</h2>
             <p className="ssub">Everything you need to know about trekking in Silent Valley National Park</p>
           </div>
-          <div className="max-w-4xl mx-auto space-y-4 px-4">
+          <div className="max-w-4xl mx-auto px-4 space-y-3.5">
             
             {[
               { q: 'Do we need prior government permits to trek in Silent Valley?', a: "Yes. Silent Valley is an ecologically sensitive core zone under the Kerala Forest and Wildlife Department. Visitor numbers are strictly capped every day to minimize human footprint. Bootpaths secures all official forest permits, vehicle safari permissions, and tribal guide allotments on your behalf in advance." },
@@ -645,25 +645,31 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
               return (
                 <div 
                   key={idx} 
-                  className={`group rounded-2xl border transition-all duration-300 ${
+                  className={`rounded-2xl border shadow-none transition-all duration-300 ${
                     isOpen 
-                      ? 'border-[#C1571F]/60 bg-[#FAFAF8] shadow-md' 
-                      : 'bg-white border-[#E7E7E4] shadow-sm hover:border-[#C1571F]/40'
+                      ? 'border-[#FFB285] bg-[#FAFAF8]' 
+                      : 'bg-white border-[#FFD8C2]'
                   }`}
                 >
                   <button 
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-5 text-left font-bold text-[#1A1A18] text-base md:text-lg focus:outline-none cursor-pointer"
+                    className="w-full flex items-center justify-between p-5 text-left focus:outline-none cursor-pointer"
                   >
-                    <span className="font-outfit pr-4">{faq.q}</span>
-                    <div 
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
-                        isOpen 
-                          ? 'rotate-180 text-[#C1571F] bg-[#C1571F]/10' 
-                          : 'bg-[#F5F5F3] text-[#52524E]'
-                      }`}
-                    >
-                      <ChevronDown className="w-4.5 h-4.5" />
+                    <span className={`font-outfit pr-4 font-bold text-sm md:text-base transition-colors duration-200 ${
+                      isOpen ? 'text-[#E05A1B]' : 'text-[#1A1A18]'
+                    }`}>
+                      {faq.q}
+                    </span>
+                    <div className="shrink-0 transition-all duration-300">
+                      {isOpen ? (
+                        <div className="w-8 h-8 rounded-full bg-[#E05A1B] text-white flex items-center justify-center text-xs font-bold">
+                          <X className="w-3.5 h-3.5 stroke-[3px]" />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-[#FFF0E6] flex items-center justify-center text-[#E05A1B] text-base font-bold">
+                          <Plus className="w-3.5 h-3.5 stroke-[3px]" />
+                        </div>
+                      )}
                     </div>
                   </button>
                   <div 
@@ -671,8 +677,10 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
                       isOpen ? 'max-h-[500px]' : 'max-h-0'
                     }`}
                   >
-                    <div className="px-5 pb-5 pt-1 text-sm md:text-base text-[#52524E] leading-relaxed border-t border-[#F0F0EE] mt-1">
-                      <p className="font-outfit">{faq.a}</p>
+                    <div className="px-5 pb-5 pt-1 mt-1">
+                      <div className="border-t border-[#FEE7D8] mt-3 pt-4 text-[#4A5568] text-xs md:text-sm leading-relaxed">
+                        <p className="font-outfit">{faq.a}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
