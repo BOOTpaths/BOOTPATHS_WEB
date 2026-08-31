@@ -10,6 +10,7 @@ import AdminConsole from './components/AdminConsole';
 import DeveloperConsole from './components/DeveloperConsole';
 import BlogSection from './components/BlogSection';
 import BlogDetailPage from './components/BlogDetailPage';
+import SilentValleyPage from './components/SilentValleyPage';
 import LeadCareers from './components/LeadCareers';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -224,9 +225,9 @@ export default function App() {
     };
   }, []);
 
-  // Scroll to top when loading the blog details page
+  // Scroll to top when loading the blog details page or silent valley page
   useEffect(() => {
-    if (currentHash.startsWith('#blog-')) {
+    if (currentHash.startsWith('#blog-') || currentHash === '#silent-valley') {
       window.scrollTo(0, 0);
     }
   }, [currentHash]);
@@ -988,6 +989,26 @@ export default function App() {
     );
   }
 
+  if (currentHash === '#silent-valley') {
+    return (
+      <SilentValleyPage 
+        onBack={() => {
+          window.location.hash = '#upcoming-treks';
+        }}
+        onOpenBookingModal={() => {
+          const svTrek = treks.find(t => t.id === 'silent-valley' || t.title?.toLowerCase().includes('silent valley'));
+          if (svTrek) {
+            handleBookNow(svTrek);
+          } else {
+            // fallback if it isn't loaded yet from Firestore
+            const fallbackTrek = { id: 'silent-valley', title: 'Silent Valley Rainforest Trek', price: 4000, duration: '3 Days', altitude: '2,383m', location: 'Mukkali, Palakkad', originalPrice: 4500, slotsLeft: 12 };
+            handleBookNow(fallbackTrek);
+          }
+        }}
+      />
+    );
+  }
+
   const activeHeroMedia = expeditionViews.length > 0 ? expeditionViews : HERO_MEDIA;
 
   return (
@@ -1393,7 +1414,13 @@ export default function App() {
                     {/* Action Row */}
                     <div className="grid grid-cols-2 gap-3 mt-6">
                       <button
-                        onClick={() => handleGetDetails(trek)}
+                        onClick={() => {
+                          if (trek.id === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
+                            window.location.hash = '#silent-valley';
+                          } else {
+                            handleGetDetails(trek);
+                          }
+                        }}
                         className="inline-flex h-11 items-center justify-center rounded-lg border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10"
                       >
                         Get Details
