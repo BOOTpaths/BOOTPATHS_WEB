@@ -48,3 +48,8 @@
 - `[x]` Refactor FAQ component layout to center perfectly on screen and default first item open
 - `[x]` Set badge, title, subtitle styles, card padding, and dividers to match specs
 - `[x]` Clean up temporary scratch scripts, test compilation, commit, push, and deploy
+- `[x]` Implement multi-dataset live search indexing (Treks, Blogs, Page Sections) in Navbar.jsx
+- `[x]` Build floating suggestion modal anchored below search bar with group headers (🌲 Treks, 📝 Blogs, 🧭 Navigation)
+- `[x]` Add navigation handlers for direct trek routing, full-screen blog reader (#blog/:id), and smooth page section scrolling
+- `[x]` Implement keyboard navigation (Enter key top-result selection, Escape key closing) and ✕ clear button
+- `[x]` Test compile, commit, push, and deploy live
