@@ -227,7 +227,7 @@ export default function App() {
 
   // Scroll to top when loading the blog details page or silent valley page
   useEffect(() => {
-    if (currentHash.startsWith('#blog-') || currentHash === '#silent-valley') {
+    if (currentHash.startsWith('#blog-') || currentHash.startsWith('#blog/') || currentHash === '#silent-valley') {
       window.scrollTo(0, 0);
     }
   }, [currentHash]);
@@ -863,8 +863,10 @@ export default function App() {
     );
   }
 
-  if (currentHash.startsWith('#blog-')) {
-    const blogId = currentHash.replace('#blog-', '');
+  if (currentHash.startsWith('#blog-') || currentHash.startsWith('#blog/')) {
+    const blogId = currentHash.startsWith('#blog/') 
+      ? currentHash.replace('#blog/', '') 
+      : currentHash.replace('#blog-', '');
     return (
       <div className="min-h-screen bg-autumn-mist text-autumn-bark font-sans selection:bg-autumn-maple selection:text-black">
         
@@ -874,6 +876,21 @@ export default function App() {
           user={user}
           userRole={userRole}
           handleLogout={handleLogout}
+          setIsDashboardOpen={setIsDashboardOpen}
+          setIsAuthModalOpen={setIsAuthModalOpen}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+          treks={treks}
+          blogs={blogs}
+          onSelectTrek={(trek) => {
+            setSelectedTrek(trek);
+            setSelectedDate(trek.batchDates ? trek.batchDates[0] : (trek.dates ? trek.dates[0] : ''));
+            setNumTrekkers(1);
+            window.location.hash = '#upcoming-treks';
+            setTimeout(() => {
+              document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+          }}
           onOpenAuth={(action) => {
             setPendingAction(action);
             setIsAuthModalOpen(true);
@@ -1035,6 +1052,17 @@ export default function App() {
         setIsAuthModalOpen={setIsAuthModalOpen}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
+        treks={treks}
+        blogs={blogs}
+        onSelectTrek={(trek) => {
+          setSelectedTrek(trek);
+          setSelectedDate(trek.batchDates ? trek.batchDates[0] : (trek.dates ? trek.dates[0] : ''));
+          setNumTrekkers(1);
+          window.location.hash = '#upcoming-treks';
+          setTimeout(() => {
+            document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }}
       />
 
       {/* 2. HERO SECTION */}

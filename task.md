@@ -1,0 +1,50 @@
+# Tasks
+
+- `[x]` Update Navbar.jsx community links to blogs
+- `[x]` Update BlogSection.jsx presentation layout and Firestore subscription
+- `[x]` Update AdminConsole.jsx Blogs panel with Create/Delete form
+- `[x]` Update App.jsx collection sorting by createdAt
+- `[x]` Verify with npm run build and test deployment
+- `[x]` Create BlogReader.jsx component with full editorial grid
+- `[x]` Update BlogSection.jsx to handle routing/render BlogReader
+- `[x]` Test compile and push changes
+- `[x]` Refactor BlogReader.jsx to support panoramic cover and full editorial layout
+- `[x]` Verify compilation and push changes
+- `[x]` Refactor BlogReader.jsx to support 3-column Indiahikes Blog Topic/Archive layout
+- `[x]` Update BlogSection.jsx to pass down published blogs array
+- `[x]` Run build to verify changes compilation
+- `[x]` Push to GitHub and deploy
+- `[x]` Create BlogDetailPage.jsx component (based on BlogReader.jsx)
+- `[x]` Remove BlogReader.jsx
+- `[x]` Refactor BlogSection.jsx to be grid-only and trigger URL hash navigation on card click
+- `[x]` Update App.jsx to handle full-page routing based on window.location.hash
+- `[x]` Run build to check compiler status
+- `[x]` Push to GitHub and deploy
+- `[x]` Create SilentValleyPage.jsx React component converting HTML/CSS/JS assets
+- `[x]` Scope SilentValleyPage.css to prevent global leaks and clashing with Tailwind
+- `[x]` Integrate Silent Valley page routing in App.jsx and add scroll-to-top handler
+- `[x]` Update upcoming treks card click behavior for Silent Valley
+- `[x]` Build and verify compiler bundling
+- `[x]` Push changes to GitHub and deploy
+- `[x]` Update index.html multi-resolution favicons, schema, and social meta tags
+- `[x]` Run build to verify compile and bundle
+- `[x]` Commit, push to GitHub, and deploy
+- `[x]` Remove 3D elevation profile section from SilentValleyPage component
+- `[x]` Remove 3D Elevation links from sub-navbar and footer in Silent Valley page
+- `[x]` Verify clean bundle compile, commit, push, and deploy
+- `[x]` Fix contrast and visibility of Silent Valley sub-navbar buttons and links
+- `[x]` Force frosted glass background backdrop blur on sub-navbar container
+- `[x]` Commit, push, and deploy styles update
+- `[x]` Refactor FAQ section to modern accordion component with Lucide ChevronDown
+- `[x]` Set up card style container, rotating indicators, and smooth content drawers
+- `[x]` Commit, push, and deploy FAQ accordion update
+- `[x]` Connect Silent Valley landing page to live Firestore package data
+- `[x]` Wire booking actions to pre-select destination and scroll smoothly to reservation widget
+- `[x]` Verify real-time propagation of Admin changes to Silent Valley page
+- `[x]` Commit, push, and deploy Firestore database hookup
+- `[x]` Style FAQ accordion to match Chimmini reference design
+- `[x]` Add soft orange outline borders, vibrant brand text active highlight, and Plus/X toggle icon badges
+- `[x]` Commit, push, and deploy styles customization
+- `[x]` Refactor FAQ component layout to center perfectly on screen and default first item open
+- `[x]` Set badge, title, subtitle styles, card padding, and dividers to match specs
+- `[x]` Clean up temporary scratch scripts, test compilation, commit, push, and deploy
