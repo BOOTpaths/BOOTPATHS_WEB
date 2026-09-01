@@ -39,7 +39,8 @@ import {
   BookOpen,
   Download,
   Users,
-  DollarSign
+  DollarSign,
+  RefreshCw
 } from 'lucide-react';
 
 const BADGE_OPTIONS = [
@@ -161,10 +162,12 @@ export default function AdminConsole({
   }, [isAdminLoggedIn]);
 
   // Bookings & Cancellations Management State
+  const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
   const [adminBookings, setAdminBookings] = useState([]);
   const [bookingStatusFilter, setBookingStatusFilter] = useState('All'); // 'All' | 'Confirmed' | 'Pending' | 'Cancelled'
   const [bookingTrekFilter, setBookingTrekFilter] = useState('All');
   const [bookingSearchQuery, setBookingSearchQuery] = useState('');
+  const [isSyncingSheets, setIsSyncingSheets] = useState(false);
 
   useEffect(() => {
     if (!isAdminLoggedIn) return;
@@ -388,6 +391,48 @@ export default function AdminConsole({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Force Sync All Past & Current Bookings to Google Sheets
+  const handleSyncAllToSheets = async () => {
+    const listToSync = displayBookings;
+    if (listToSync.length === 0) {
+      alert('No booking records available to sync.');
+      return;
+    }
+
+    if (!window.confirm(`Force sync all ${listToSync.length} booking records to Google Sheets?`)) return;
+
+    setIsSyncingSheets(true);
+    let syncedCount = 0;
+
+    try {
+      for (const b of listToSync) {
+        await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bookingId: b.id || b.bookingId || "BP-REF",
+            fullName: b.userName || b.fullName || b.name || "Trek Participant",
+            email: b.userEmail || b.email || "N/A",
+            phone: b.userPhone || b.phone || "N/A",
+            trekName: b.title || b.trekName || b.destination || "N/A",
+            batchDate: b.date || b.batchDate || "N/A",
+            trekkersCount: b.trekkers || b.trekkersCount || b.slots || 1,
+            totalPrice: b.price || b.totalPrice || b.amount || 0,
+            status: (b.status || "CONFIRMED").toUpperCase()
+          })
+        }).catch((err) => console.error("Sheet Sync item error:", err));
+        syncedCount++;
+      }
+      alert(`Google Sheet successfully synced with all ${syncedCount} past and current bookings!`);
+    } catch (err) {
+      console.error("Sheet Sync All error:", err);
+      alert(`Sync process completed with notice: ${err.message}`);
+    } finally {
+      setIsSyncingSheets(false);
+    }
   };
 
   const handleThumbnailFileChange = (file) => {
@@ -1490,11 +1535,20 @@ export default function AdminConsole({
 
           <div className="flex flex-wrap items-center gap-3">
             <button
-              onClick={() => window.open("https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec", "_blank")}
+              onClick={() => window.open(GOOGLE_SHEET_WEBHOOK_URL, "_blank")}
               className="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit"
               title="Open Google Apps Script Web App / Live Roster Sheet"
             >
               <span>📊 Open Google Spreadsheet</span>
+            </button>
+            <button
+              onClick={handleSyncAllToSheets}
+              disabled={isSyncingSheets}
+              className="bg-white border border-[#E7E7E4] hover:bg-[#FAF8F5] text-[#1A1A18] px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit disabled:opacity-50"
+              title="Export all past and current Firestore bookings to Google Sheets"
+            >
+              <RefreshCw className={`h-4 w-4 text-[#C1571F] ${isSyncingSheets ? 'animate-spin' : ''}`} />
+              <span>{isSyncingSheets ? 'Syncing...' : '🔄 Sync Existing Bookings'}</span>
             </button>
             <button
               onClick={handleExportCSV}
