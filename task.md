@@ -56,5 +56,7 @@
 - `[x]` Add top KPI summary cards (Confirmed Bookings, Total Trekkers, Cancelled Bookings, Total Revenue ₹)
 - `[x]` Implement live status filter buttons ([All], [Confirmed], [Pending], [Cancelled]), trek dropdown filter, and search input
 - `[x]` Build detailed bookings table with lead trekker info, direct WhatsApp wa.me links, headcount, price, status badges, and cancel/confirm/delete actions
-- `[x]` Add Download Batch CSV / Attendance Roster export utility for checkpost submissions
+- `[x]` Connect booking reservation creation in App.jsx to Google Apps Script webhook
+- `[x]` Connect booking cancellation in AdminConsole.jsx to Google Apps Script webhook
+- `[x]` Add "📊 Open Google Spreadsheet" button in Admin Console Bookings tab header
 - `[x]` Test compile, commit, push, and deploy live
