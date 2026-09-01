@@ -672,10 +672,16 @@ export default function App() {
     const newBookingId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
     const newRecord = {
       id: newBookingId,
-      title: selectedTrek.title,
-      date: selectedDate || (selectedTrek.batchDates ? selectedTrek.batchDates[0] : (selectedTrek.dates ? selectedTrek.dates[0] : '')),
+      trekId: selectedTrek?.id || 'silent-valley',
+      title: selectedTrek?.title || 'Wilderness Trek',
+      date: selectedDate || (selectedTrek?.batchDates ? selectedTrek.batchDates[0] : (selectedTrek?.dates ? selectedTrek.dates[0] : '')),
       trekkers: numTrekkers,
+      trekkersCount: numTrekkers,
       price: amount,
+      totalPrice: amount,
+      userName: name || user?.name || 'Trek Participant',
+      userEmail: email || user?.email || '',
+      userPhone: phone || user?.phone || '',
       status: 'Confirmed',
       paymentId: paymentId || 'Simulated'
     };

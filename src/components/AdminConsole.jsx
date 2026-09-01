@@ -30,11 +30,16 @@ import {
   Mail,
   Search,
   CheckCircle2,
+  CheckCircle,
+  XCircle,
   Eye,
   Upload,
   Phone,
   Compass,
-  BookOpen
+  BookOpen,
+  Download,
+  Users,
+  DollarSign
 } from 'lucide-react';
 
 const BADGE_OPTIONS = [
@@ -154,6 +159,219 @@ export default function AdminConsole({
     });
     return () => unsub();
   }, [isAdminLoggedIn]);
+
+  // Bookings & Cancellations Management State
+  const [adminBookings, setAdminBookings] = useState([]);
+  const [bookingStatusFilter, setBookingStatusFilter] = useState('All'); // 'All' | 'Confirmed' | 'Pending' | 'Cancelled'
+  const [bookingTrekFilter, setBookingTrekFilter] = useState('All');
+  const [bookingSearchQuery, setBookingSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (!isAdminLoggedIn) return;
+    try {
+      const unsub = onSnapshot(collection(db, 'bookings'), (snapshot) => {
+        const docs = [];
+        snapshot.forEach((docSnap) => {
+          docs.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        docs.sort((a, b) => {
+          const tA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const tB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return tB - tA;
+        });
+        setAdminBookings(docs);
+      }, (err) => {
+        if (!import.meta.env.PROD) {
+          console.warn('Bookings snapshot notice:', err.message);
+        }
+      });
+      return () => unsub();
+    } catch (err) {
+      if (!import.meta.env.PROD) {
+        console.warn('Bookings listener notice:', err.message);
+      }
+    }
+  }, [isAdminLoggedIn]);
+
+  const MOCK_ADMIN_BOOKINGS = [
+    {
+      id: 'BP-849201',
+      trekId: 'silent-valley',
+      title: 'Silent Valley Rainforest Trek',
+      date: 'Jul 18, 2026',
+      trekkers: 2,
+      trekkersCount: 2,
+      price: 8000,
+      totalPrice: 8000,
+      userName: 'Anand Varma',
+      userEmail: 'anand.varma@gmail.com',
+      userPhone: '+91 9895452187',
+      status: 'Confirmed',
+      createdAt: '2026-07-02T10:30:00Z',
+      paymentId: 'pay_P849201xyz'
+    },
+    {
+      id: 'BP-392018',
+      trekId: 'netravathi',
+      title: 'Netravathi Peak Trek',
+      date: 'Jul 25, 2026',
+      trekkers: 3,
+      trekkersCount: 3,
+      price: 10497,
+      totalPrice: 10497,
+      userName: 'Meera Nair',
+      userEmail: 'meera.nair@outlook.com',
+      userPhone: '+91 8848998470',
+      status: 'Confirmed',
+      createdAt: '2026-07-01T14:20:00Z',
+      paymentId: 'pay_M392018abc'
+    },
+    {
+      id: 'BP-774012',
+      trekId: 'brahmagiri',
+      title: 'Brahmagiri Coorg Trek',
+      date: 'Aug 01, 2026',
+      trekkers: 1,
+      trekkersCount: 1,
+      price: 3899,
+      totalPrice: 3899,
+      userName: 'Rohan Sharma',
+      userEmail: 'rohan.sharma@techcorp.in',
+      userPhone: '+91 9446102200',
+      status: 'Pending',
+      createdAt: '2026-07-03T09:15:00Z',
+      paymentId: 'pay_R774012def'
+    },
+    {
+      id: 'BP-519284',
+      trekId: 'silent-valley',
+      title: 'Silent Valley Rainforest Trek',
+      date: 'Jul 11, 2026',
+      trekkers: 4,
+      trekkersCount: 4,
+      price: 16000,
+      totalPrice: 16000,
+      userName: 'Deepa Krishnan',
+      userEmail: 'deepa.k@yahoo.com',
+      userPhone: '+91 9895123456',
+      status: 'Cancelled',
+      createdAt: '2026-06-28T16:45:00Z',
+      paymentId: 'pay_D519284ref'
+    }
+  ];
+
+  const displayBookings = adminBookings.length > 0 ? adminBookings : MOCK_ADMIN_BOOKINGS;
+
+  // KPI Calculations
+  const confirmedBookingsCount = displayBookings.filter(b => (b.status || '').toLowerCase() === 'confirmed').length;
+  const totalTrekkersCount = displayBookings
+    .filter(b => (b.status || '').toLowerCase() !== 'cancelled')
+    .reduce((sum, b) => sum + Number(b.trekkers || b.trekkersCount || b.headcount || 1), 0);
+  const cancelledBookingsCount = displayBookings.filter(b => (b.status || '').toLowerCase() === 'cancelled').length;
+  const totalRevenueAmount = displayBookings
+    .filter(b => (b.status || '').toLowerCase() === 'confirmed')
+    .reduce((sum, b) => sum + Number(b.price || b.totalPrice || 0), 0);
+
+  // Filtered Bookings List
+  const filteredBookings = displayBookings.filter(b => {
+    const status = (b.status || 'Confirmed').toLowerCase();
+    if (bookingStatusFilter !== 'All') {
+      if (bookingStatusFilter.toLowerCase() !== status) return false;
+    }
+
+    if (bookingTrekFilter !== 'All') {
+      const title = (b.title || b.trekTitle || '').toLowerCase();
+      if (!title.includes(bookingTrekFilter.toLowerCase())) return false;
+    }
+
+    if (bookingSearchQuery.trim()) {
+      const q = bookingSearchQuery.trim().toLowerCase();
+      const name = (b.userName || b.name || b.leadTrekker || '').toLowerCase();
+      const email = (b.userEmail || b.email || '').toLowerCase();
+      const phone = (b.userPhone || b.phone || b.whatsapp || '').toLowerCase();
+      const id = (b.id || '').toLowerCase();
+      const trek = (b.title || '').toLowerCase();
+      return name.includes(q) || email.includes(q) || phone.includes(q) || id.includes(q) || trek.includes(q);
+    }
+
+    return true;
+  });
+
+  // Action Handlers
+  const handleCancelBooking = async (booking) => {
+    if (!window.confirm(`Are you sure you want to CANCEL booking ${booking.id} for ${booking.userName || booking.name || 'this trekker'}?`)) return;
+
+    try {
+      await setDoc(doc(db, 'bookings', booking.id), { status: 'Cancelled' }, { merge: true });
+      setAdminBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'Cancelled' } : b));
+
+      // Re-increment slotsLeft on corresponding package if available
+      const matchedTrek = (treks || []).find(t => t.id === booking.trekId || (t.title && booking.title && t.title.toLowerCase() === booking.title.toLowerCase()));
+      if (matchedTrek && matchedTrek.id) {
+        const returnedSlots = Number(booking.trekkers || booking.trekkersCount || 1);
+        const newSlotsLeft = (matchedTrek.slotsLeft || 0) + returnedSlots;
+        await updateDoc(doc(db, 'packages', matchedTrek.id), { slotsLeft: newSlotsLeft });
+        setTreks?.(prev => prev.map(t => t.id === matchedTrek.id ? { ...t, slotsLeft: newSlotsLeft } : t));
+      }
+    } catch (err) {
+      console.error('Cancel booking error:', err);
+      alert(`Failed to cancel booking: ${err.message}`);
+    }
+  };
+
+  const handleConfirmBooking = async (booking) => {
+    try {
+      await setDoc(doc(db, 'bookings', booking.id), { status: 'Confirmed' }, { merge: true });
+      setAdminBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'Confirmed' } : b));
+    } catch (err) {
+      console.error('Confirm booking error:', err);
+      alert(`Failed to confirm booking: ${err.message}`);
+    }
+  };
+
+  const handleDeleteBookingRecord = async (booking) => {
+    if (!window.confirm(`PERMANENT DELETION: Delete booking record ${booking.id} permanently from database?`)) return;
+
+    try {
+      await deleteDoc(doc(db, 'bookings', booking.id));
+      setAdminBookings(prev => prev.filter(b => b.id !== booking.id));
+    } catch (err) {
+      console.error('Delete booking error:', err);
+      alert(`Failed to delete record: ${err.message}`);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (filteredBookings.length === 0) {
+      alert('No booking records to export.');
+      return;
+    }
+
+    const headers = ['Booking ID', 'Lead Trekker', 'Email', 'Phone / WhatsApp', 'Destination & Batch', 'Batch Date', 'Headcount', 'Amount Paid (INR)', 'Status', 'Payment ID', 'Created At'];
+    
+    const rows = filteredBookings.map(b => [
+      `"${b.id || ''}"`,
+      `"${b.userName || b.name || 'Anonymous'}"`,
+      `"${b.userEmail || b.email || ''}"`,
+      `"${b.userPhone || b.phone || ''}"`,
+      `"${(b.title || b.trekTitle || '').replace(/"/g, '""')}"`,
+      `"${b.date || b.batchDate || ''}"`,
+      b.trekkers || b.trekkersCount || 1,
+      b.price || b.totalPrice || 0,
+      `"${b.status || 'Confirmed'}"`,
+      `"${b.paymentId || ''}"`,
+      `"${b.createdAt || ''}"`
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `BOOTpaths_Batch_Roster_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleThumbnailFileChange = (file) => {
     if (!file) return;
@@ -990,16 +1208,29 @@ export default function AdminConsole({
       <main className="mx-auto max-w-7xl p-4 sm:p-8 space-y-6">
 
         {/* Tab Switcher */}
-        <div className="flex gap-4 border-b border-autumn-bark/10 pb-1">
+        <div className="flex gap-4 border-b border-autumn-bark/10 pb-1 overflow-x-auto scrollbar-none whitespace-nowrap">
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
               activeTab === 'inventory' 
                 ? 'border-autumn-maple text-autumn-maple' 
                 : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
             }`}
           >
             Trek Inventory
+          </button>
+          <button
+            onClick={() => setActiveTab('bookings')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
+              activeTab === 'bookings' 
+                ? 'border-[#C1571F] text-[#C1571F]' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            <span>BOOKINGS &amp; RESERVATIONS</span>
+            <span className="px-2 py-0.5 rounded-full bg-[#C1571F]/15 text-[#C1571F] text-[10px] font-extrabold">
+              {displayBookings.length}
+            </span>
           </button>
           {featureFlags.enableCommunityBlogs && (
             <button
@@ -1222,6 +1453,287 @@ export default function AdminConsole({
           </div>
         </div>
       </>
+    )}
+
+    {activeTab === 'bookings' && (
+      <div className="space-y-6 animate-in fade-in duration-200">
+        {/* 1. Header Banner */}
+        <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F] block">
+              OPERATIONS &amp; RESERVATIONS CONTROL
+            </span>
+            <h1 className="font-outfit text-2xl sm:text-3xl font-black text-[#1A1A18] mt-1">
+              Bookings &amp; Cancellations Management
+            </h1>
+            <p className="text-xs text-[#52524E] mt-1 max-w-2xl">
+              Real-time tracking of trek participant reservations, payment confirmation, cancellation slot releases, and checkpost roster exports.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={handleExportCSV}
+              className="h-11 px-5 rounded-xl bg-[#1A1A18] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#3E2723] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              title="Export CSV Roster for Forest Checkpost"
+            >
+              <Download className="h-4 w-4 text-[#FF6B00]" />
+              <span>Download Batch CSV / Attendance Roster</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 2. Top Metric KPI Strip (4 Cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Confirmed Bookings */}
+          <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 shadow-sm flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-800 block">Confirmed Bookings</span>
+              <span className="font-outfit text-3xl font-black text-emerald-950 mt-1 block">{confirmedBookingsCount}</span>
+              <span className="text-[11px] text-emerald-700 font-medium mt-0.5 block">Active Reservations</span>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-700 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="h-6 w-6" />
+            </div>
+          </div>
+
+          {/* Total Trekkers */}
+          <div className="p-5 rounded-2xl border border-blue-200 bg-blue-50/50 shadow-sm flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-blue-800 block">Total Trekkers</span>
+              <span className="font-outfit text-3xl font-black text-blue-950 mt-1 block">{totalTrekkersCount}</span>
+              <span className="text-[11px] text-blue-700 font-medium mt-0.5 block">Participants Headcount</span>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-700 flex items-center justify-center shrink-0">
+              <Users className="h-6 w-6" />
+            </div>
+          </div>
+
+          {/* Cancelled Bookings */}
+          <div className="p-5 rounded-2xl border border-rose-200 bg-rose-50/50 shadow-sm flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-rose-800 block">Cancelled Bookings</span>
+              <span className="font-outfit text-3xl font-black text-rose-950 mt-1 block">{cancelledBookingsCount}</span>
+              <span className="text-[11px] text-rose-700 font-medium mt-0.5 block">Returned / Released Slots</span>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-rose-500/15 text-rose-700 flex items-center justify-center shrink-0">
+              <XCircle className="h-6 w-6" />
+            </div>
+          </div>
+
+          {/* Total Revenue */}
+          <div className="p-5 rounded-2xl border border-[#FFD8C2] bg-[#FFF2EA]/80 shadow-sm flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F] block">Total Revenue</span>
+              <span className="font-outfit text-3xl font-black text-[#1A1A18] mt-1 block">₹{totalRevenueAmount.toLocaleString('en-IN')}</span>
+              <span className="text-[11px] text-[#C1571F] font-medium mt-0.5 block">Confirmed Payments</span>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-[#C1571F]/15 text-[#C1571F] flex items-center justify-center shrink-0">
+              <DollarSign className="h-6 w-6" />
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Filter & Search Strip */}
+        <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Quick Status Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 md:pb-0">
+            {['All', 'Confirmed', 'Pending', 'Cancelled'].map((status) => {
+              const isActive = bookingStatusFilter === status;
+              return (
+                <button
+                  key={status}
+                  onClick={() => setBookingStatusFilter(status)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold font-outfit uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'bg-[#C1571F] text-white shadow-sm'
+                      : 'bg-[#F8F8F6] text-[#52524E] hover:bg-[#EFE8D6] hover:text-[#1A1A18]'
+                  }`}
+                >
+                  {status}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Trek Selector Dropdown & Search Input */}
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            {/* Trek Filter */}
+            <select
+              value={bookingTrekFilter}
+              onChange={(e) => setBookingTrekFilter(e.target.value)}
+              className="w-full sm:w-48 h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs font-bold text-[#1A1A18] focus:outline-none focus:border-[#C1571F] cursor-pointer"
+            >
+              <option value="All">All Expeditions</option>
+              {Array.from(new Set([...(treks || []).map(t => t.title), 'Silent Valley Rainforest Trek'])).map((title, idx) => (
+                <option key={idx} value={title}>{title}</option>
+              ))}
+            </select>
+
+            {/* Search Input */}
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                value={bookingSearchQuery}
+                onChange={(e) => setBookingSearchQuery(e.target.value)}
+                placeholder="Search name, phone, email, ID..."
+                className="w-full h-10 pl-9 pr-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#8C8C88] focus:outline-none focus:border-[#C1571F]"
+              />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-[#8C8C88] pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Bookings Data Table */}
+        <div className="rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-[#1A1A18]">
+              <thead className="bg-[#F8F8F6] text-[10px] uppercase tracking-wider text-[#718096] font-bold border-b border-[#E7E7E4]">
+                <tr>
+                  <th className="py-4 px-5">Lead Trekker</th>
+                  <th className="py-4 px-5">Destination &amp; Batch</th>
+                  <th className="py-4 px-5">Headcount</th>
+                  <th className="py-4 px-5">Amount Paid</th>
+                  <th className="py-4 px-5">Status</th>
+                  <th className="py-4 px-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#F5F5F3]">
+                {filteredBookings.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="py-12 text-center text-[#718096] font-medium">
+                      No booking records match the selected filters.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredBookings.map((b) => {
+                    const statusNormalized = (b.status || 'Confirmed').toLowerCase();
+                    const cleanPhone = (b.userPhone || b.phone || b.whatsapp || '').replace(/[^0-9]/g, '');
+
+                    return (
+                      <tr key={b.id} className="hover:bg-[#F8F8F6] transition-colors">
+                        {/* Lead Trekker */}
+                        <td className="py-4 px-5">
+                          <div className="font-outfit font-bold text-sm text-[#1A1A18]">
+                            {b.userName || b.name || b.leadTrekker || 'Trek Participant'}
+                          </div>
+                          <div className="text-xs text-[#718096]">
+                            {b.userEmail || b.email || 'No email provided'}
+                          </div>
+                          {cleanPhone ? (
+                            <a
+                              href={`https://wa.me/${cleanPhone}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-semibold text-xs mt-1 transition-colors"
+                              title="Open WhatsApp Chat"
+                            >
+                              <Phone className="h-3 w-3" />
+                              <span>{b.userPhone || b.phone || cleanPhone}</span>
+                            </a>
+                          ) : (
+                            <div className="text-xs text-[#A0AEC0] mt-0.5">No phone provided</div>
+                          )}
+                          <div className="text-[10px] text-[#A0AEC0] font-mono mt-0.5">
+                            ID: {b.id}
+                          </div>
+                        </td>
+
+                        {/* Destination & Batch */}
+                        <td className="py-4 px-5">
+                          <span className="font-outfit font-bold text-sm text-[#1A1A18] block">
+                            {b.title || b.trekTitle || 'Expedition'}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-xs text-[#718096] mt-0.5">
+                            <Calendar className="h-3 w-3 text-[#C1571F]" />
+                            {b.date || b.batchDate || 'Scheduled Batch'}
+                          </span>
+                        </td>
+
+                        {/* Headcount */}
+                        <td className="py-4 px-5 font-bold font-outfit text-sm text-[#1A1A18]">
+                          {b.trekkers || b.trekkersCount || 1} {Number(b.trekkers || b.trekkersCount || 1) === 1 ? 'Person' : 'Persons'}
+                        </td>
+
+                        {/* Amount Paid */}
+                        <td className="py-4 px-5">
+                          <div className="font-outfit font-black text-sm text-[#C1571F]">
+                            ₹{Number(b.price || b.totalPrice || 0).toLocaleString('en-IN')}
+                          </div>
+                          {b.paymentId && (
+                            <span className="text-[10px] text-[#A0AEC0] font-mono block">
+                              PayID: {b.paymentId}
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Status Badge */}
+                        <td className="py-4 px-5">
+                          {statusNormalized === 'confirmed' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wider">
+                              <CheckCircle2 className="h-3 w-3" />
+                              Confirmed
+                            </span>
+                          ) : statusNormalized === 'pending' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-[10px] font-extrabold uppercase tracking-wider">
+                              <AlertTriangle className="h-3 w-3" />
+                              Pending
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-700 text-[10px] font-extrabold uppercase tracking-wider">
+                              <XCircle className="h-3 w-3" />
+                              Cancelled
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-4 px-5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {statusNormalized !== 'cancelled' ? (
+                              <button
+                                onClick={() => handleCancelBooking(b)}
+                                className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                title="Cancel booking & release slot"
+                              >
+                                Cancel Booking
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => handleConfirmBooking(b)}
+                                className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                title="Re-confirm booking"
+                              >
+                                Confirm Booking
+                              </button>
+                            )}
+                            {statusNormalized === 'pending' && (
+                              <button
+                                onClick={() => handleConfirmBooking(b)}
+                                className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                title="Approve booking"
+                              >
+                                Confirm
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDeleteBookingRecord(b)}
+                              className="p-1.5 rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              title="Delete booking record"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     )}
 
     {activeTab === 'blogs' && (!featureFlags.enableCommunityBlogs ? renderLockedModule() : (
