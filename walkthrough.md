@@ -1,72 +1,65 @@
-# Walkthrough - Google Sheet Webhook Sync Integration
+# Walkthrough - Force Sync to Google Sheets & Live Webhook Integration
 
-Successfully connected the BOOTpaths booking flow and cancellation system to automatically sync with the Google Sheet webhook:
-
----
-
-## 1. Webhook Endpoint
-- **Active Web App URL**:
-  `https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec`
+Successfully added the **"Force Sync Existing Bookings to Google Sheets"** feature to [`src/components/AdminConsole.jsx`](file:///c:/Users/sreel/OneDrive/Documents/BootPaths_demo/src/components/AdminConsole.jsx) and verified automatic live syncing on fresh bookings in [`src/App.jsx`](file:///c:/Users/sreel/OneDrive/Documents/BootPaths_demo/src/App.jsx):
 
 ---
 
-## 2. Sync on Booking Reservation ([`src/App.jsx`](file:///c:/Users/sreel/OneDrive/Documents/BootPaths_demo/src/App.jsx))
-- Upon successful payment/reservation in `handleBookingSuccess`, a background non-blocking POST request sends the new booking payload:
-  ```javascript
-  fetch(webhookUrl, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      bookingId: newBookingId,
-      fullName: name || user?.name || "Trek Participant",
-      email: email || user?.email || "N/A",
-      phone: phone || user?.phone || "N/A",
-      trekName: newRecord.title,
-      batchDate: newRecord.date,
-      trekkersCount: newRecord.trekkersCount || 1,
-      totalPrice: newRecord.totalPrice || amount || 0,
-      status: "CONFIRMED"
-    })
-  }).catch((err) => console.error("Google Sheet Sync Error:", err));
-  ```
+## 1. Webhook Endpoint Configuration
+- **Endpoint Constant**:
+  `const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";`
 
 ---
 
-## 3. Sync on Booking Cancellation ([`src/components/AdminConsole.jsx`](file:///c:/Users/sreel/OneDrive/Documents/BootPaths_demo/src/components/AdminConsole.jsx))
-- When an administrator cancels a booking in `handleCancelBooking`:
-  * Updates Firestore booking status to `"Cancelled"`.
-  * Returns available slots back to the package document in `packages`.
-  * Sends an update payload to the webhook:
+## 2. Sync All Handler (`handleSyncAllToSheets`)
+- Added asynchronous loop handler in `AdminConsole.jsx`:
+  * Prompts administrator confirmation before bulk syncing.
+  * Shows spinning loading state (`isSyncingSheets` state on button).
+  * Sends individual POST payloads with `mode: 'no-cors'`:
     ```javascript
-    fetch(webhookUrl, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "update_status",
-        bookingId: booking.id,
-        status: "CANCELLED"
-      })
-    }).catch((err) => console.error("Sheet Cancellation Sync Error:", err));
+    for (const b of listToSync) {
+      await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId: b.id || b.bookingId || "BP-REF",
+          fullName: b.userName || b.fullName || b.name || "Trek Participant",
+          email: b.userEmail || b.email || "N/A",
+          phone: b.userPhone || b.phone || "N/A",
+          trekName: b.title || b.trekName || b.destination || "N/A",
+          batchDate: b.date || b.batchDate || "N/A",
+          trekkersCount: b.trekkers || b.trekkersCount || b.slots || 1,
+          totalPrice: b.price || b.totalPrice || b.amount || 0,
+          status: (b.status || "CONFIRMED").toUpperCase()
+        })
+      });
+    }
     ```
+  * Displays success notification: `"Google Sheet successfully synced with all X past and current bookings!"`
 
 ---
 
-## 4. Admin Console Spreadsheet Link
-- Added a **"📊 Open Google Spreadsheet"** action button in the Bookings tab header:
+## 3. UI Button in Admin Console Header
+- Positioned alongside **"📊 OPEN GOOGLE SPREADSHEET"**:
   ```jsx
   <button
-    onClick={() => window.open("https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec", "_blank")}
-    className="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit"
+    onClick={handleSyncAllToSheets}
+    disabled={isSyncingSheets}
+    className="bg-white border border-[#E7E7E4] hover:bg-[#FAF8F5] text-[#1A1A18] px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit disabled:opacity-50"
+    title="Export all past and current Firestore bookings to Google Sheets"
   >
-    <span>📊 Open Google Spreadsheet</span>
+    <RefreshCw className={`h-4 w-4 text-[#C1571F] ${isSyncingSheets ? 'animate-spin' : ''}`} />
+    <span>{isSyncingSheets ? 'Syncing...' : '🔄 Sync Existing Bookings'}</span>
   </button>
   ```
 
 ---
 
-## 5. Verification & Deployment
-- `mode: 'no-cors'` is strictly preserved to prevent CORS blocking.
-- Verified build via `npm run build` (0 errors).
-- Committed changes and published live to GitHub Pages.
+## 4. Verification of Real-Time Fresh Booking Trigger
+- Confirmed that in `src/App.jsx` (`handleBookingSuccess`), every new reservation automatically fires a non-blocking POST request to the Google Apps Script Web App so new bookings show up live in the Google Sheet automatically without manual sync needed.
+
+---
+
+## 5. Build & Deployment
+- Zero compilation errors (`npm run build`).
+- Committed to `main` branch and deployed live to GitHub Pages.

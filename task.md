@@ -59,4 +59,6 @@
 - `[x]` Connect booking reservation creation in App.jsx to Google Apps Script webhook
 - `[x]` Connect booking cancellation in AdminConsole.jsx to Google Apps Script webhook
 - `[x]` Add "📊 Open Google Spreadsheet" button in Admin Console Bookings tab header
+- `[x]` Add "🔄 Sync Existing Bookings" button in Admin Console to force sync all Firestore bookings to Google Sheets
+- `[x]` Verify real-time booking trigger in App.jsx
 - `[x]` Test compile, commit, push, and deploy live
