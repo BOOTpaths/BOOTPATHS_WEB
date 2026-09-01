@@ -313,6 +313,23 @@ export default function AdminConsole({
         await updateDoc(doc(db, 'packages', matchedTrek.id), { slotsLeft: newSlotsLeft });
         setTreks?.(prev => prev.map(t => t.id === matchedTrek.id ? { ...t, slotsLeft: newSlotsLeft } : t));
       }
+
+      // Send cancellation update payload to Google Apps Script Web App Webhook
+      try {
+        const webhookUrl = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+        fetch(webhookUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "update_status",
+            bookingId: booking.id,
+            status: "CANCELLED"
+          })
+        }).catch((err) => console.error("Sheet Cancellation Sync Error:", err));
+      } catch (sheetErr) {
+        console.warn("Sheet Cancellation Trigger Error:", sheetErr);
+      }
     } catch (err) {
       console.error('Cancel booking error:', err);
       alert(`Failed to cancel booking: ${err.message}`);
@@ -1472,6 +1489,13 @@ export default function AdminConsole({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => window.open("https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec", "_blank")}
+              className="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit"
+              title="Open Google Apps Script Web App / Live Roster Sheet"
+            >
+              <span>📊 Open Google Spreadsheet</span>
+            </button>
             <button
               onClick={handleExportCSV}
               className="h-11 px-5 rounded-xl bg-[#1A1A18] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#3E2723] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"

@@ -703,6 +703,29 @@ export default function App() {
       }
     }
 
+    // Background POST request to Google Apps Script Web App Webhook
+    try {
+      const webhookUrl = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId: newBookingId,
+          fullName: name || user?.name || "Trek Participant",
+          email: email || user?.email || "N/A",
+          phone: phone || user?.phone || "N/A",
+          trekName: newRecord.title,
+          batchDate: newRecord.date,
+          trekkersCount: newRecord.trekkersCount || 1,
+          totalPrice: newRecord.totalPrice || amount || 0,
+          status: "CONFIRMED"
+        })
+      }).catch((err) => console.error("Google Sheet Sync Error:", err));
+    } catch (sheetErr) {
+      console.warn("Google Sheet Trigger Error:", sheetErr);
+    }
+
     // Deduct wallet balance if credit discount was applied
     if (appliedWalletDiscount > 0) {
       setWalletBalance(prev => Math.max(0, prev - appliedWalletDiscount));
