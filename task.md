@@ -52,4 +52,9 @@
 - `[x]` Build floating suggestion modal anchored below search bar with group headers (🌲 Treks, 📝 Blogs, 🧭 Navigation)
 - `[x]` Add navigation handlers for direct trek routing, full-screen blog reader (#blog/:id), and smooth page section scrolling
 - `[x]` Implement keyboard navigation (Enter key top-result selection, Escape key closing) and ✕ clear button
+- `[x]` Add BOOKINGS & RESERVATIONS management tab in AdminConsole.jsx
+- `[x]` Add top KPI summary cards (Confirmed Bookings, Total Trekkers, Cancelled Bookings, Total Revenue ₹)
+- `[x]` Implement live status filter buttons ([All], [Confirmed], [Pending], [Cancelled]), trek dropdown filter, and search input
+- `[x]` Build detailed bookings table with lead trekker info, direct WhatsApp wa.me links, headcount, price, status badges, and cancel/confirm/delete actions
+- `[x]` Add Download Batch CSV / Attendance Roster export utility for checkpost submissions
 - `[x]` Test compile, commit, push, and deploy live
