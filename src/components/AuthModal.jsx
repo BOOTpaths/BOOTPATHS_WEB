@@ -171,7 +171,7 @@ export default function AuthModal({
               className="h-8 w-auto object-contain"
             />
             <div>
-              <span className="block text-[10px] text-autumn-maple tracking-wider font-extrabold uppercase drop-shadow-sm">Decathlon Partner Portal</span>
+              <span className="block text-[10px] text-autumn-maple tracking-wider font-extrabold uppercase drop-shadow-sm">BOOTPATHS MEMBER PORTAL</span>
             </div>
           </div>
           <button 
@@ -227,7 +227,7 @@ export default function AuthModal({
                       type="text"
                       value={authName}
                       onChange={(e) => setAuthName(e.target.value)}
-                      placeholder="Decathlon Hiker"
+                      placeholder="e.g., Jane Doe"
                       className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                     />
                     {authErrors.name && (
@@ -244,7 +244,7 @@ export default function AuthModal({
                     type="email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    placeholder="hiker@decathlon.com"
+                    placeholder="trekker@example.com"
                     className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                   />
                   {authErrors.email && (
