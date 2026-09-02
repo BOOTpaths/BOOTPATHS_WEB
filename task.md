@@ -60,5 +60,6 @@
 - `[x]` Connect booking cancellation in AdminConsole.jsx to Google Apps Script webhook
 - `[x]` Add "📊 Open Google Spreadsheet" button in Admin Console Bookings tab header
 - `[x]` Add "🔄 Sync Existing Bookings" button in Admin Console to force sync all Firestore bookings to Google Sheets
-- `[x]` Verify real-time booking trigger in App.jsx
+- `[x]` Refactor AuthModal.jsx header title to "BOOTPATHS MEMBER PORTAL" with official logo
+- `[x]` Update AuthModal.jsx input placeholders to generic trekker placeholders
 - `[x]` Test compile, commit, push, and deploy live
