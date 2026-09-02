@@ -637,6 +637,24 @@ export default function App() {
   };
 
   const handleGetDetails = (trek) => {
+    if (!trek) return;
+    const detailsUrl = trek.detailsUrl || trek.details_url;
+    if (detailsUrl && detailsUrl.trim()) {
+      const trimmed = detailsUrl.trim();
+      if (trimmed.startsWith('/treks/') || trimmed.startsWith('treks/')) {
+        const fullUrl = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+        window.open(fullUrl, '_blank');
+        return;
+      }
+      if (trimmed.startsWith('#')) {
+        window.location.hash = trimmed;
+        return;
+      }
+    }
+    if (trek.id === 'silent-valley' || trek.slug === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
+      window.location.hash = '#silent-valley';
+      return;
+    }
     setDetailedTrek(trek);
   };
 
@@ -1482,14 +1500,8 @@ export default function App() {
                     {/* Action Row */}
                     <div className="grid grid-cols-2 gap-3 mt-6">
                       <button
-                        onClick={() => {
-                          if (trek.id === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
-                            window.location.hash = '#silent-valley';
-                          } else {
-                            handleGetDetails(trek);
-                          }
-                        }}
-                        className="inline-flex h-11 items-center justify-center rounded-lg border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10"
+                        onClick={() => handleGetDetails(trek)}
+                        className="inline-flex h-11 items-center justify-center rounded-lg border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10 cursor-pointer"
                       >
                         Get Details
                       </button>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Kathirmudi Trek | Bootpaths – Walk the World's Greatest Trails</title>
+  <meta name="description" content="Embark on the captivating Kathirmudi Trek with Bootpaths. Traverse misty colonial tea plantations, ancient shola rainforests, and conquer the 1,120m panoramic summit ridge in the Agasthyamala Biosphere Reserve, Kerala." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <div class="logo-icon-container">
+          <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+        </div>
+        <span class="logo-text"><span class="text-orange">BOOT</span><span class="text-brown">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#itinerary">Itinerary</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#inclusions">Inclusions</a></li>
+          <li><a href="#checklist">Checklist</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kathirmudi%20Trek." target="_blank" rel="noopener" class="mobile-callback-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+            Request Callback on WhatsApp
+          </a>
+          <a href="#booking" class="mobile-cta-btn" onclick="toggleMenu()">Book Now</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kathirmudi%20Trek." target="_blank" rel="noopener" class="nav-callback-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.771zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request Callback
+        </a>
+        <a href="#booking" class="nav-cta">Book Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="images/kathirmudi_hero.jpg" alt="Kathirmudi Peak Western Ghats Sunrise and Misty Ridge" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Kerala &bull; Agasthyamala Biosphere &bull; Bonacaud</div>
+      <h1 class="hero-title">Kathirmudi<br/><em>Misty Ridge &amp; Shola Trek</em></h1>
+      <p class="hero-sub">Venture into the untamed heart of the Western Ghats &mdash; ascending through historic colonial tea slopes, ancient moss-draped shola rainforests, and standing atop the dramatic 1,120m summit ridge overlooking seas of clouds.</p>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-ico">&#9968;&#65039;</span><div><b>1,120m</b><small>Summit Elevation</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128197;</span><div><b>1–2 Days</b><small>Duration</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#129506;</span><div><b>Moderate</b><small>Difficulty Grade</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128205;</span><div><b>Bonacaud Base</b><small>Trailhead</small></div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-p">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kathirmudi%20Trek." target="_blank" rel="noopener" class="btn-wa">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g">View Itinerary</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="sarrow"></div></div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>&#128197;</span><div><small>Best Season</small><strong>Oct&ndash;May (Clear &amp; Lush)</strong></div></div>
+        <div class="qi"><span>&#127957;&#65039;</span><div><small>Terrain</small><strong>Tea Slopes, Shola &amp; High Grassland</strong></div></div>
+        <div class="qi"><span>&#129495;</span><div><small>Trek Distance</small><strong>~10 km Round Circuit</strong></div></div>
+        <div class="qi"><span>&#128663;</span><div><small>Starting Base</small><strong>Bonacaud Checkpost (~480m)</strong></div></div>
+        <div class="qi"><span>&#128176;</span><div><small>Expedition Fee</small><strong>&#8377;1,950 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW SECTION -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">Kerala's Pristine<br/>High-Altitude Wilderness</h2>
+          <p class="ov-lead">Nestled within the UNESCO-recognized Agasthyamala Biosphere Reserve, Kathirmudi is a soaring crown peak that separates the misty tea plantations of Bonacaud from the dense, virgin rainforests of the Peppara and Agasthyarkoodam wilderness.</p>
+          <p class="ov-body">The <strong>Kathirmudi Trek</strong> offers a rare, multi-layered trekking experience. You begin among the nostalgic ruins of colonial British tea bungalows and terraced tea gardens before delving into shadowy primary shola forests flanked by ancient mossy trees, wild orchids, and murmuring freshwater cascades.</p>
+          <p class="ov-body">As the forest gives way to open alpine grasslands, you negotiate a rewarding ridge scramble to reach the windswept summit of Kathirmudi (1,120m). Here, you are rewarded with 360-degree vistas stretching across the Peppara reservoir basin, Ponmudi hill station, and the sacred pyramid peak of Agasthyarkoodam.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>1,120m</b><small>Peak Altitude MSL</small></div>
+            <div class="fact"><b>2,000+</b><small>Endemic Flora Species</small></div>
+            <div class="fact"><b>100%</b><small>Certified VSS Eco-Trail</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/kathirmudi_summit.jpg" alt="Kathirmudi Summit Ridge View" class="si1"/>
+            <img src="images/kathirmudi_trail.jpg" alt="Shola Rainforest Trail in Kathirmudi" class="si2"/>
+            <div class="img-float"><span>01&ndash;02</span><small>Days in Wilderness</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS SECTION -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">From heritage tea gardens to primeval shola canopies and breezy summit ridges, discover the defining experiences of Kathirmudi.</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kathirmudi_summit.jpg" alt="Kathirmudi Summit 360 Vistas" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>1,120m High Summit Ridge</h3><p>Stand atop the windswept rocky crest of Kathirmudi, gazing out over rolling carpets of clouds, Peppara reservoir catchments, and distant Ghat ridges.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/bonacaud_estate.jpg" alt="Bonacaud Colonial Tea Heritage" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Bonacaud Heritage &amp; Tea Foothills</h3><p>Begin your adventure passing through the historic 19th-century British tea estate, rustic stone bungalows, and misty terraced green hill slopes.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kathirmudi_trail.jpg" alt="Ancient Shola Rainforest Canopy" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Ancient Shola Rainforest &amp; Canopy</h3><p>Traverse pristine stunted evergreen shola woodlands draped in moss, lichens, wild epiphytic orchids, and giant bamboo thickets.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kathirmudi_stream.jpg" alt="Pristine Forest Stream Cascades" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Pristine River Cascades &amp; Pools</h3><p>Cross crystal-clear forest streams originating from the high mountain springs, splashing through natural granite rock pools and shady glens.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kathirmudi_wildlife.jpg" alt="Malabar Giant Squirrel & Endemic Fauna" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Endemic Wildlife &amp; Birdwatching</h3><p>Spot the vibrant Malabar Giant Squirrel, Nilgiri Langurs, endemic laughingthrushes, Malabar Trogons, and exotic Western Ghats butterflies.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">&#127795;</div>
+            <h3>360&deg; Agasthyamala Biosphere Reserve Ecosystem</h3>
+            <p>Immerse yourself in one of the world's most critical biodiversity hotspots &mdash; shielding rare medicinal plants, sacred tribal trails, and pristine water catchments managed jointly by the Kerala Forest Department and indigenous Vana Samrakshana Samithi (VSS).</p>
+            <div class="mtn-tags"><span>Agasthyamala Biosphere</span><span>Malabar Giant Squirrel</span><span>Shola Grasslands</span><span>Bonacaud Estate</span><span>Nilgiri Langur</span><span>Peppara Catchment</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REDESIGNED ITINERARY SECTION -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Route Guide</div>
+        <h2 class="stitle">Itinerary Details</h2>
+        <p class="ssub">Explore the meticulously curated Kathirmudi route &mdash; complete with timing milestones, elevation shifts, terrain breakdown, and safety notes.</p>
+      </div>
+
+      <div class="itinerary-accordions">
+
+        <!-- DROPDOWN 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128203;</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary</h3>
+                <p>At-a-glance expedition milestones &amp; timing schedule</p>
+              </div>
+            </div>
+            <div class="mah-action">
+              <span class="mah-pill">Summary View</span>
+              <span class="mah-chevron"></span>
+            </div>
+          </div>
+          <div class="main-accordion-content">
+            <div class="mac-inner">
+              <div class="qi-timeline">
+                
+                <div class="qi-card">
+                  <div class="qi-card-left">
+                    <div class="qi-time-badge">07:00 AM</div>
+                    <div class="qi-elev-tag"><span class="ico">&#9968;</span> 480m MSL</div>
+                  </div>
+                  <div class="qi-card-right">
+                    <div class="qi-card-header">
+                      <h4>Base Camp Assembly &amp; Tea Estate Start</h4>
+                      <span class="qi-tag terrain">Tea Slopes</span>
+                    </div>
+                    <p class="qi-desc">Gather at the Bonacaud Forest Checkpost. Verification of forest permits, briefing by certified tribal naturalist guide, gear check, and scenic stroll past colonial tea plantation trails.</p>
+                    <div class="qi-meta-row">
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Bonacaud Checkpost</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> 1.5 Hours</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18 10V3H6v7H4v11h16V10h-2zm-8-5h4v5h-4V5zm-4 7h12v7H6v-7z"/></svg> Morning Tea &amp; Snacks</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="qi-card">
+                  <div class="qi-card-left">
+                    <div class="qi-time-badge">09:00 AM</div>
+                    <div class="qi-elev-tag"><span class="ico">&#9968;</span> 820m MSL</div>
+                  </div>
+                  <div class="qi-card-right">
+                    <div class="qi-card-header">
+                      <h4>Dense Shola Forest &amp; River Cascade Crossings</h4>
+                      <span class="qi-tag jungle">Rainforest</span>
+                    </div>
+                    <p class="qi-desc">Enter the secluded evergreen shola canopy. Wade across crystal mountain streams, observe giant bamboo thickets, birdwatch for endemic species, and begin the steep ridge ascent.</p>
+                    <div class="qi-meta-row">
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Shola Buffer Zone</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> 2.5 Hours</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> Energy Bars &amp; Hydration</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="qi-card">
+                  <div class="qi-card-left">
+                    <div class="qi-time-badge">11:30 AM</div>
+                    <div class="qi-elev-tag"><span class="ico">&#9968;</span> 1,120m MSL</div>
+                  </div>
+                  <div class="qi-card-right">
+                    <div class="qi-card-header">
+                      <h4>Kathirmudi Summit Ridge &amp; Cloudscapes</h4>
+                      <span class="qi-tag summit">Summit 360&deg;</span>
+                    </div>
+                    <p class="qi-desc">Summit Kathirmudi peak. Soak in breathtaking 360-degree views of Peppara Dam, Ponmudi hill ridges, and Agasthyarkoodam. Enjoy a packed traditional lunch amidst mountain breezes.</p>
+                    <div class="qi-meta-row">
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Kathirmudi Summit Crest</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> 1.5 Hours at Peak</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.48L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v.99c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1zm15.03-7c0-8-15.03-8-15.03 0h15.03z"/></svg> Packed Kerala Lunch</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="qi-card">
+                  <div class="qi-card-left">
+                    <div class="qi-time-badge">01:30 PM</div>
+                    <div class="qi-elev-tag"><span class="ico">&#9968;</span> 480m MSL</div>
+                  </div>
+                  <div class="qi-card-right">
+                    <div class="qi-card-header">
+                      <h4>Grassland Ridge Descent &amp; Bonacaud Return</h4>
+                      <span class="qi-tag return">Descent</span>
+                    </div>
+                    <p class="qi-desc">Controlled descent via alternate grassland ridge slopes. Rest at the forest stream, re-enter Bonacaud tea estate, and conclude at base camp with piping hot organic cardamom tea.</p>
+                    <div class="qi-meta-row">
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Base Camp Finish</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> 2.5 Hours</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM2 19h20v2H2z"/></svg> Fresh Plantation Tea</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 2: DETAILED PHASE-BY-PHASE ITINERARY -->
+        <div class="main-accordion-item" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128506;&#65039;</span>
+              <div class="mah-text">
+                <h3>Detailed Phase-by-Phase Route</h3>
+                <p>In-depth breakdown of trail stages, terrain conditions &amp; guide notes</p>
+              </div>
+            </div>
+            <div class="mah-action">
+              <span class="mah-pill">Comprehensive</span>
+              <span class="mah-chevron"></span>
+            </div>
+          </div>
+          <div class="main-accordion-content">
+            <div class="mac-inner">
+              
+              <!-- Sub-accordion Phase 1 -->
+              <div class="phase-card">
+                <div class="phase-header" onclick="togglePhase(this)">
+                  <div class="phase-left">
+                    <span class="phase-badge">Phase 01</span>
+                    <div>
+                      <h4>Bonacaud Base Camp to Lower Shola Gateway</h4>
+                      <p class="phase-sub">Trailhead Clearance &bull; 480m to 750m &bull; ~3.5 km</p>
+                    </div>
+                  </div>
+                  <span class="phase-chevron"></span>
+                </div>
+                <div class="phase-body">
+                  <div class="pb-inner">
+                    <p class="phase-narrative">The expedition kicks off at the Bonacaud Forest Station, nestled in the scenic foothills near Vithura. Trekkers are welcomed with refreshing local tea and complete identity verification for Agasthyamala Biosphere Reserve entry permits. The initial leg winds through gentle terraced slopes of the historic British tea estate, providing panoramic glimpses of the mist-cloaked Kathirmudi massif looming above.</p>
+                    
+                    <div class="trail-milestones">
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Forest Checkpost Clearance:</strong> Biometric verification, bag check for single-use plastic disposal, and safety protocol alignment.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Colonial Bungalow Pass:</strong> Hike past the stone relics of 19th-century planter architecture and towering silver oak canopy avenues.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Transition to Wild Shola:</strong> The manicured tea rows yield to thick evergreen tree lines, marking your entry into the core wildlife corridor.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="phase-tips">
+                      <div class="pt-icon">&#128161;</div>
+                      <div class="pt-text">
+                        <strong>Naturalist Pro-Tip:</strong> Apply leech gaiters or eucalyptus/snuff powder before stepping past the tea boundary into the moist leaf-litter trails.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-accordion Phase 2 -->
+              <div class="phase-card">
+                <div class="phase-header" onclick="togglePhase(this)">
+                  <div class="phase-left">
+                    <span class="phase-badge">Phase 02</span>
+                    <div>
+                      <h4>Deep Rainforest, Stream Cascades &amp; Ridge Ascent</h4>
+                      <p class="phase-sub">Heart of Shola &bull; 750m to 1,020m &bull; ~3 km</p>
+                    </div>
+                  </div>
+                  <span class="phase-chevron"></span>
+                </div>
+                <div class="phase-body">
+                  <div class="pb-inner">
+                    <p class="phase-narrative">Leaving the open slopes behind, the trail plunges under a cathedral of ancient tropical trees. Giant lianas twist across massive hardwood trunks draped in rare hanging moss. You will cross two crystal-clear mountain streams fed by high-altitude springs, offering refreshing resting spots before the trail steepens into a cardiovascular ascent through natural rocky root-steps.</p>
+                    
+                    <div class="trail-milestones">
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Kallar Catchment Stream Crossing:</strong> Step across smooth granite boulders with cool, drinkable natural mineral water flowing straight from the hills.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Giant Bamboo Corridor:</strong> Hike beneath soaring clusters of wild bamboo whose creaking in the wind creates an enchanting wilderness orchestra.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Wildlife Canopy Lookout:</strong> Frequent sightings of the maroon-and-black Malabar Giant Squirrel and Nilgiri Langurs high in the canopy branches.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="phase-tips">
+                      <div class="pt-icon">&#9888;&#65039;</div>
+                      <div class="pt-text">
+                        <strong>Terrain Notice:</strong> The climb involves natural root scrambles and a 30-degree slope. Trekking poles provide tremendous stability here.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-accordion Phase 3 -->
+              <div class="phase-card">
+                <div class="phase-header" onclick="togglePhase(this)">
+                  <div class="phase-left">
+                    <span class="phase-badge">Phase 03</span>
+                    <div>
+                      <h4>Kathirmudi Summit Ridge &amp; Panoramic Crest</h4>
+                      <p class="phase-sub">Summit Pinnacle &bull; 1,020m to 1,120m &bull; ~3.5 km Loop</p>
+                    </div>
+                  </div>
+                  <span class="phase-chevron"></span>
+                </div>
+                <div class="phase-body">
+                  <div class="pb-inner">
+                    <p class="phase-narrative">The dense shola jungle abruptly gives way to expansive, wind-sculpted grasslands. A final 20-minute ridge scramble over solid granite brings you to the summit cairn of Kathirmudi. At 1,120 meters, the view opens up into a dramatic 360-degree panorama: looking west at the shimmering blue expanse of the Peppara reservoir, north towards Ponmudi, and south-east towards the revered peak of Agasthyarkoodam.</p>
+                    
+                    <div class="trail-milestones">
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>High Alpine Grassland Crest:</strong> Walk along the narrow grassy ridge with cool mountain gusts blowing up from the valley below.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Summit Pinnacle Vantage:</strong> 360-degree sweeping vista of the Western Ghats mountain spine, cloud inversions, and reservoir basin.
+                        </div>
+                      </div>
+                      <div class="tm-item">
+                        <div class="tm-dot"></div>
+                        <div class="tm-content">
+                          <strong>Summit Lunch &amp; Photography:</strong> Unpack your eco-friendly banana-leaf packed Kerala meal while savoring the untouched silence of the peaks.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="phase-tips">
+                      <div class="pt-icon">&#127807;</div>
+                      <div class="pt-text">
+                        <strong>Eco Code:</strong> Strictly zero-trace zone. All wrappers, peelings, and belongings must be carried back to base camp for recycling.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 3: TRAIL CONDITIONS & SAFETY GUIDE -->
+        <div class="main-accordion-item" id="acc-safety-guide">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128737;&#65039;</span>
+              <div class="mah-text">
+                <h3>Trail Regulations &amp; Safety Guide</h3>
+                <p>Permit guidelines, weather advisories &amp; responsible eco-trek protocols</p>
+              </div>
+            </div>
+            <div class="mah-action">
+              <span class="mah-pill">Must Read</span>
+              <span class="mah-chevron"></span>
+            </div>
+          </div>
+          <div class="main-accordion-content">
+            <div class="mac-inner">
+              <div class="safety-grid">
+                
+                <div class="safety-card">
+                  <div class="sc-icon">&#128220;</div>
+                  <h4>Forest Permits &amp; Entry Rules</h4>
+                  <p>Kathirmudi is a protected zone within the Agasthyamala Biosphere Reserve. All entries require prior permission from the Kerala Forest Department &amp; Vana Samrakshana Samithi (VSS). Bootpaths handles all advance booking permits and entry passes on your behalf.</p>
+                </div>
+
+                <div class="safety-card">
+                  <div class="sc-icon">&#128094;</div>
+                  <h4>Footwear &amp; Leeches</h4>
+                  <p>Sturdy trekking shoes with high-traction lug soles are strongly advised due to wet rocks and grass roots. The shola forest section has forest leeches during post-monsoon months; leech socks, salt, and tobacco dust will be provided by your guide.</p>
+                </div>
+
+                <div class="safety-card">
+                  <div class="sc-icon">&#9878;&#65039;</div>
+                  <h4>Fitness Requirement</h4>
+                  <p>Rated as <strong>Moderate</strong>. Requires reasonable stamina for 5–6 hours of walking with intermittent steep ascents. Suitable for regular hikers, active families with teenagers, and beginner trekkers with good baseline fitness.</p>
+                </div>
+
+                <div class="safety-card">
+                  <div class="sc-icon">&#9851;&#65039;</div>
+                  <h4>Strict Plastic-Free Policy</h4>
+                  <p>The sanctuary enforces a 100% ban on single-use plastic bottles, snack wrappers, and polythene. Trekkers must carry reusable metallic or BPA-free water bottles. Forest guards will inspect baggage at the Bonacaud entry gate.</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY SECTION -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Visual Experience</div>
+        <h2 class="stitle">Kathirmudi Gallery</h2>
+        <p class="ssub">Witness the serene beauty of misty ridges, dense canopy trails, and ancient tea estate slopes</p>
+      </div>
+
+      <!-- Gallery Filter Tabs -->
+      <div class="gallery-filters">
+        <button class="g-filter active" data-filter="all">All Photos</button>
+        <button class="g-filter" data-filter="summit">Summit Ridge</button>
+        <button class="g-filter" data-filter="trails">Forest Trails</button>
+        <button class="g-filter" data-filter="estate">Tea Foothills</button>
+        <button class="g-filter" data-filter="nature">Water &amp; Wildlife</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-grid">
+        <div class="g-item" data-category="summit" onclick="openLightbox(0)">
+          <img src="images/kathirmudi_hero.jpg" alt="Kathirmudi Sunrise over Western Ghats" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>Golden Sunrise at Kathirmudi</h4>
+              <p>Misty morning over the high mountain ridge</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-item" data-category="trails" onclick="openLightbox(1)">
+          <img src="images/kathirmudi_trail.jpg" alt="Shola Rainforest Trail" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>Ancient Shola Canopy</h4>
+              <p>Moss-covered trees &amp; wild bamboo path</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-item" data-category="estate" onclick="openLightbox(2)">
+          <img src="images/bonacaud_estate.jpg" alt="Bonacaud Tea Plantation" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>Bonacaud Tea Foothills</h4>
+              <p>Historic colonial plantation estate</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-item" data-category="summit" onclick="openLightbox(3)">
+          <img src="images/kathirmudi_summit.jpg" alt="Kathirmudi Summit Ridge View" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>1,120m Summit Panorama</h4>
+              <p>Clouds rolling below the rocky pinnacle</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-item" data-category="nature" onclick="openLightbox(4)">
+          <img src="images/kathirmudi_stream.jpg" alt="Crystal Forest River Stream" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>Crystal Forest Stream</h4>
+              <p>Natural mountain spring cascades</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-item" data-category="nature" onclick="openLightbox(5)">
+          <img src="images/kathirmudi_wildlife.jpg" alt="Malabar Giant Squirrel" loading="lazy" />
+          <div class="g-overlay">
+            <span class="g-zoom">&#128269;</span>
+            <div class="g-info">
+              <h4>Malabar Giant Squirrel</h4>
+              <p>Endemic fauna in the dense canopy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close Lightbox">&times;</button>
+    <button class="lb-prev" onclick="prevLightbox()" aria-label="Previous Image">&#10094;</button>
+    <button class="lb-next" onclick="nextLightbox()" aria-label="Next Image">&#10095;</button>
+    <div class="lb-content">
+      <img src="" alt="" id="lbImage" />
+      <div class="lb-caption" id="lbCaption"></div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE PACKING CHECKLIST SECTION -->
+  <section class="checklist section" id="checklist">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Gear &amp; Readiness</div>
+        <h2 class="stitle">Trail Packing Checklist</h2>
+        <p class="ssub">Check off each essential item as you pack for your Kathirmudi expedition</p>
+      </div>
+
+      <div class="checklist-card">
+        <div class="cl-header">
+          <div>
+            <h3>Essential Gear Checklist</h3>
+            <p>Recommended items for a safe and comfortable day trek</p>
+          </div>
+          <div class="cl-progress">
+            <span id="clCount">0</span> of <span id="clTotal">8</span> Packed
+            <div class="cl-bar-bg"><div class="cl-bar-fill" id="clBarFill"></div></div>
+          </div>
+        </div>
+
+        <div class="cl-grid" id="clGrid">
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Sturdy Trekking / Hiking Shoes</strong>
+              <small>With deep traction tread for wet rocks &amp; grass roots</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Reusable Water Bottle (1.5L–2L)</strong>
+              <small>Single-use plastic bottles are strictly confiscated at checkpost</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Lightweight Rain Poncho / Windcheater</strong>
+              <small>Mountain weather can shift rapidly on the high ridge</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Leech Gaiters &amp; Long Trek Pants</strong>
+              <small>Essential protection through moist shola forest trails</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Compact 15L–20L Daypack</strong>
+              <small>To carry personal snacks, rain gear, and personal meds</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Energy Bars, Nuts &amp; Electrolytes</strong>
+              <small>Quick carbohydrates for steep ascents</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Sun Hat, Sunglasses &amp; Sunscreen</strong>
+              <small>Direct UV exposure on open summit grasslands</small>
+            </div>
+          </label>
+
+          <label class="cl-item">
+            <input type="checkbox" onchange="updateChecklist(this)" />
+            <span class="cl-custom-check"></span>
+            <div class="cl-info">
+              <strong>Original Govt ID Proof (Aadhaar / Passport)</strong>
+              <small>Mandatory for Kerala Forest Department entry register</small>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INCLUSIONS & EXCLUSIONS SECTION -->
+  <section class="inclusions section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Expedition Package</div>
+        <h2 class="stitle">What's Included &amp; Excluded</h2>
+        <p class="ssub">Complete transparency with zero hidden charges for your Kathirmudi adventure</p>
+      </div>
+
+      <div class="inc-grid">
+        <div class="inc-card included">
+          <div class="inc-header">
+            <span class="inc-icon">&#9989;</span>
+            <h3>Package Inclusions</h3>
+          </div>
+          <ul class="inc-list">
+            <li><span class="chk">&#10003;</span> Kerala Forest Department &amp; VSS Trekking Entry Permits</li>
+            <li><span class="chk">&#10003;</span> Certified Tribal Naturalist &amp; Bootpaths Expedition Leader</li>
+            <li><span class="chk">&#10003;</span> Traditional Kerala Vegetarian Packed Lunch at Summit</li>
+            <li><span class="chk">&#10003;</span> Welcome Morning Tea, Snacks &amp; Post-Trek Cardamom Tea</li>
+            <li><span class="chk">&#10003;</span> Leech Protection Essentials &amp; Forest Safety Kit</li>
+            <li><span class="chk">&#10003;</span> Comprehensive First Aid Support &amp; Emergency Coordination</li>
+            <li><span class="chk">&#10003;</span> Community Eco-Development &amp; Tribal Welfare Contribution</li>
+          </ul>
+        </div>
+
+        <div class="inc-card excluded">
+          <div class="inc-header">
+            <span class="inc-icon">&#10060;</span>
+            <h3>Package Exclusions</h3>
+          </div>
+          <ul class="inc-list">
+            <li><span class="cross">&#10005;</span> Transportation to and from Bonacaud Base Checkpost</li>
+            <li><span class="cross">&#10005;</span> Personal Trekking Gear (shoes, rain gear, daypacks)</li>
+            <li><span class="cross">&#10005;</span> Commercial Camera &amp; Videography Forest Fees (if applicable)</li>
+            <li><span class="cross">&#10005;</span> Personal Medical or Travel Insurance</li>
+            <li><span class="cross">&#10005;</span> Any expenses incurred due to weather delays or natural contingencies</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Questions &amp; Answers</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know before booking the Kathirmudi Trek</p>
+      </div>
+
+      <div class="faq-accordion">
+        
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFaq(this)">
+            <span>How difficult is the Kathirmudi Trek?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <p>The Kathirmudi Trek is rated as <strong>Moderate</strong>. The total distance is approximately 10 km round trip, starting from 480m elevation at Bonacaud and ascending to 1,120m at the summit. While the tea estate section is gentle, the shola forest and grassland ridge involve steady inclines and uneven rocky terrain. Anyone with average cardiovascular fitness and active lifestyle can complete it comfortably.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFaq(this)">
+            <span>What is the best season to do this trek?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <p>The premier trekking window is from <strong>October to May</strong>. Post-monsoon (October–January) offers vivid green hills, active streams, and dramatic cloudbeds. The drier months (February–May) provide crystal clear horizon views extending to the Arabian Sea and distant Western Ghats peaks. Trekking is subject to forest department weather restrictions during heavy monsoon peaks.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFaq(this)">
+            <span>How do I reach the Bonacaud starting point?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <p>Bonacaud is located approximately 55 km from Thiruvananthapuram (Trivandrum) city. You can reach Bonacaud via Nedumangad &ndash; Vithura. Private cabs, self-drive vehicles, and early morning KSRTC buses from Trivandrum / Nedumangad operate to Vithura / Bonacaud. Bootpaths can also arrange shared group pickups from Trivandrum upon request.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFaq(this)">
+            <span>Is prior trekking permission needed?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <p>Yes. Kathirmudi falls under the eco-fragile Agasthyamala Biosphere Reserve and Peppara Wildlife division. Entry is strictly regulated with limited daily passes issued by the Kerala Forest Department. When you book with Bootpaths, all mandatory department permits, guide allocations, and safety clearances are secured in advance.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFaq(this)">
+            <span>Are children and seniors permitted?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <p>Children aged 10 and above with active outdoor experience are welcome. Seniors with good health, no severe knee/cardiac issues, and comfortable with moderate ascents can also enjoy the trek. Trekking poles are highly recommended for additional knee support on descents.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING PACKAGE SECTION -->
+  <section class="booking section" id="booking">
+    <div class="container">
+      <div class="booking-card">
+        <div class="bc-content">
+          <div class="stag light">Reserve Your Slot</div>
+          <h2 class="stitle light">Ready to Conquer Kathirmudi Peak?</h2>
+          <p class="bc-sub">Join Bootpaths for an unforgettable eco-wilderness expedition in Kerala's Agasthyamala Biosphere. Limited weekend slots to protect forest ecology.</p>
+          
+          <div class="bc-highlights">
+            <div class="bch-item"><span>&#10003;</span> All Forest Permits Included</div>
+            <div class="bch-item"><span>&#10003;</span> Certified Tribal Naturalist</div>
+            <div class="bch-item"><span>&#10003;</span> Summit Meals &amp; Refreshments</div>
+            <div class="bch-item"><span>&#10003;</span> 100% Eco-Safe Expedition</div>
+          </div>
+
+          <div class="bc-pricing">
+            <div class="price-block">
+              <small>All-Inclusive Expedition Price</small>
+              <div class="price-val">&#8377;1,950 <span>/ person</span></div>
+            </div>
+            <div class="bc-actions">
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20book%20the%20Kathirmudi%20Trek." target="_blank" rel="noopener" class="btn-wa-lg">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+                Book via WhatsApp
+              </a>
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20have%20questions%20regarding%20the%20Kathirmudi%20Trek." target="_blank" rel="noopener" class="btn-chat">
+                Chat with Trek Expert
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo">
+            <div class="logo-icon-container">
+              <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+            </div>
+            <span class="logo-text"><span class="text-orange">BOOT</span><span class="text-brown">paths</span></span>
+          </a>
+          <p class="footer-tagline">Walk the World's Greatest Trails &bull; Curated eco-wilderness expeditions across Kerala and the Western Ghats.</p>
+          
+          <!-- SOCIAL LINKS (YouTube Left, Instagram Right) -->
+          <div class="social-links-container">
+            <!-- 1st: YouTube on the Left Side -->
+            <a href="https://www.youtube.com/@BOOTpaths2025" target="_blank" rel="noopener" class="social-btn youtube-btn" aria-label="YouTube Channel">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              <span>YouTube</span>
+            </a>
+
+            <!-- 2nd: Instagram on the Right Side -->
+            <a href="https://www.instagram.com/bootpaths?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" class="social-btn insta-btn" aria-label="Instagram Profile">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.79-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              <span>Instagram</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Explore Trails</h4>
+          <ul>
+            <li><a href="#overview">Kathirmudi Overview</a></li>
+            <li><a href="#highlights">Trek Highlights</a></li>
+            <li><a href="#itinerary">Route &amp; Itinerary</a></li>
+            <li><a href="#gallery">Photo Gallery</a></li>
+            <li><a href="#checklist">Packing Checklist</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Expedition Support</h4>
+          <ul>
+            <li><a href="#faq">Permits &amp; FAQ</a></li>
+            <li><a href="#inclusions">Inclusions &amp; Pricing</a></li>
+            <li><a href="https://wa.me/919446102200" target="_blank" rel="noopener">WhatsApp Support</a></li>
+            <li><a href="tel:+919446102200">+91 94461 02200</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bootpaths. All rights reserved. Registered eco-tourism partner for Western Ghats trails.</p>
+        <p class="footer-eco-note">&#127793; Practicing Leave No Trace &amp; Sustainable Tribal Eco-Tourism</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

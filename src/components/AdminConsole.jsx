@@ -641,8 +641,466 @@ export default function AdminConsole({
     image: '',
     inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
     batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
-    itineraryDocUrl: ''
+    itineraryDocUrl: '',
+    detailsUrl: ''
   });
+
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  const SEED_TREKS_DATA = [
+    {
+      id: 'agasthyarkoodam',
+      title: 'Agasthyarkoodam Wilderness Trek',
+      category: 'Western Ghats',
+      price: 4500,
+      originalPrice: 5500,
+      slotsLeft: 8,
+      location: 'Trivandrum, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '1,868 m',
+      difficulty: 'Challenging',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/Agasthyarkoodam/index.html',
+      description: 'Journey into the sacred UNESCO biosphere reserve of Agasthyarkoodam peak, rich in rare medicinal flora and biological diversity.',
+      image: '/treks/Agasthyarkoodam/Assets/hero-bg.jpg',
+      inclusion: ['Forest Permits', 'Certified Guide', 'Safety Harness'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'arippa',
+      title: 'Arippa Ecotourism Forest Walk',
+      category: 'Western Ghats',
+      price: 2200,
+      originalPrice: 2800,
+      slotsLeft: 15,
+      location: 'Kollam, Kerala',
+      duration: '1 Day',
+      altitude: '450 m',
+      difficulty: 'Easy',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Arippa/index.html',
+      description: 'Immerse yourself in lush bird sanctuaries and ancient evergreen canopy trails of the Arippa forest reserve.',
+      image: '/treks/Arippa/Assets/hero-bg.jpg',
+      inclusion: ['Bird Watching Guide', 'Forest Pass', 'Refreshments'],
+      batchDates: ['Jul 12, 2026', 'Jul 19, 2026', 'Jul 26, 2026']
+    },
+    {
+      id: 'athirapally',
+      title: 'Athirapally Waterfall & Jungle Trail',
+      category: 'Western Ghats',
+      price: 1800,
+      originalPrice: 2400,
+      slotsLeft: 12,
+      location: 'Thrissur, Kerala',
+      duration: '1 Day',
+      altitude: '300 m',
+      difficulty: 'Easy',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Athirapally/index.html',
+      description: 'Explore the roaring Niagara of South India along pristine rainforest riverbanks and hornbill habitats.',
+      image: '/treks/Athirapally/Assets/hero-bg.jpg',
+      inclusion: ['Entry Pass', 'Local Eco Lead', 'First Aid'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'banasura',
+      title: 'Banasura Hill Expedition',
+      category: 'Western Ghats',
+      price: 3200,
+      originalPrice: 4000,
+      slotsLeft: 10,
+      location: 'Wayanad, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '2,073 m',
+      difficulty: 'Moderate',
+      tag: 'LIMITED SLOTS',
+      tagColor: 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40',
+      detailsUrl: '/treks/Banasura/index.html',
+      description: 'Scale the second highest peak in Wayanad through shola grasslands and steep mountain ridges with panoramic valley views.',
+      image: '/treks/Banasura/Assets/hero-bg.jpg',
+      inclusion: ['Camping Tents', 'Permit Fees', 'Meals'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'brahmagiri',
+      title: 'Brahmagiri Peak Trek',
+      category: 'Western Ghats',
+      price: 3899,
+      originalPrice: 4500,
+      slotsLeft: 7,
+      location: 'Wayanad / Coorg Border',
+      duration: '2 Days / 1 Night',
+      altitude: '1,608 m',
+      difficulty: 'Moderate',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/Brahmagiri/index.html',
+      description: 'Walk along mist-covered mountain crests bordering Karnataka and Kerala, leading to Pakshipathalam caves.',
+      image: '/treks/Brahmagiri/Assets/hero-bg.jpg',
+      inclusion: ['Quechua Gear', 'Permits', 'Lead Hiker'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'chimmini-amphi',
+      title: 'Chimmini Amphitheater Jungle Camp',
+      category: 'Western Ghats',
+      price: 2800,
+      originalPrice: 3500,
+      slotsLeft: 14,
+      location: 'Thrissur, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '650 m',
+      difficulty: 'Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Chimmini-amphi/index.html',
+      description: 'Camp in natural forest amphitheaters surrounding the Chimmini reservoir with tribal guides.',
+      image: '/treks/Chimmini-amphi/Assets/hero-bg.jpg',
+      inclusion: ['Bamboo Rafting', 'Tent Stay', 'Tribal Guide'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'gavi',
+      title: 'Gavi Forest Expedition & Safari',
+      category: 'Western Ghats',
+      price: 4200,
+      originalPrice: 5000,
+      slotsLeft: 6,
+      location: 'Pathanamthitta, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '1,000 m',
+      difficulty: 'Moderate',
+      tag: 'LIMITED SLOTS',
+      tagColor: 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40',
+      detailsUrl: '/treks/Gavi/index.html',
+      description: 'Discover untouched cardamom hills, deep woods, and wild elephant corridors in the heart of Periyar Tiger Reserve.',
+      image: '/treks/Gavi/Assets/hero-bg.jpg',
+      inclusion: ['Jungle Safari', 'Forest Lodge', 'All Meals'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'goechala',
+      title: 'Goechala Pass Expedition',
+      category: 'Himalayas',
+      price: 18500,
+      originalPrice: 22000,
+      slotsLeft: 5,
+      location: 'Sikkim Himalayas',
+      duration: '10 Days / 9 Nights',
+      altitude: '4,600 m',
+      difficulty: 'Challenging',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/Goachala-pass/index.html',
+      description: 'Trek to the grand view-point of Kanchenjunga southeast face through rhododendron forests and high altitude alpine lakes.',
+      image: '/treks/Goachala-pass/Assets/hero-bg.jpg',
+      inclusion: ['Himalayan Guide', 'Tents & Mats', 'High Altitude Food'],
+      batchDates: ['Jul 15, 2026', 'Aug 05, 2026', 'Sep 10, 2026']
+    },
+    {
+      id: 'kathirmudi',
+      title: 'Kathirmudi Mist Peak Trail',
+      category: 'Western Ghats',
+      price: 2500,
+      originalPrice: 3200,
+      slotsLeft: 10,
+      location: 'Idukki, Kerala',
+      duration: '1 Day',
+      altitude: '1,400 m',
+      difficulty: 'Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Kathirmudi/index.html',
+      description: 'A serene ridge walk through tea gardens and mist-capped granite peaks of Idukki district.',
+      image: '/treks/Kathirmudi/Assets/hero-bg.jpg',
+      inclusion: ['Local Trek Leader', 'Forest Permit', 'Snacks'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'kilimanjaro',
+      title: 'Mount Kilimanjaro Summit Trek',
+      category: 'International',
+      price: 145000,
+      originalPrice: 165000,
+      slotsLeft: 4,
+      location: 'Tanzania, Africa',
+      duration: '8 Days / 7 Nights',
+      altitude: '5,895 m',
+      difficulty: 'Strenuous',
+      tag: 'LIMITED SLOTS',
+      tagColor: 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40',
+      detailsUrl: '/treks/Kilimanjaro/index.html',
+      description: 'Stand on Uhuru Peak, the roof of Africa, climbing through 5 distinct ecological climate zones.',
+      image: '/treks/Kilimanjaro/Assets/hero-bg.jpg',
+      inclusion: ['Machame Route Lead', 'Porters & Cook', 'Park Permits'],
+      batchDates: ['Aug 10, 2026', 'Sep 15, 2026', 'Oct 20, 2026']
+    },
+    {
+      id: 'kolukkumala',
+      title: 'Kolukkumala Sunrise & Peak Trek',
+      category: 'Western Ghats',
+      price: 3500,
+      originalPrice: 4200,
+      slotsLeft: 9,
+      location: 'Munnar, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '2,170 m',
+      difficulty: 'Moderate',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/Kolukkumala/index.html',
+      description: 'Experience golden sunrise views over world highest organic tea plantations and sharp rocky pinnacles.',
+      image: '/treks/Kolukkumala/Assets/hero-bg.jpg',
+      inclusion: ['4x4 Offroad Jeep', 'Tent Stay', 'Organic Tea Tour'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'meeshapulimala',
+      title: 'Meeshapulimala Ridge Trek',
+      category: 'Western Ghats',
+      price: 3900,
+      originalPrice: 4800,
+      slotsLeft: 8,
+      location: 'Munnar, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '2,640 m',
+      difficulty: 'Moderate-Strenuous',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Meeshapulimala/index.html',
+      description: 'Trek through eight high-altitude mountain hills where green valleys touch the clouds.',
+      image: '/treks/Meeshapulimala/Assets/hero-bg.jpg',
+      inclusion: ['KFDC Forest Pass', 'Base Camp Stay', 'Certified Guide'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'mt-elbrus',
+      title: 'Mount Elbrus Summit Expedition',
+      category: 'International',
+      price: 135000,
+      originalPrice: 150000,
+      slotsLeft: 3,
+      location: 'Caucasus Mountains, Russia',
+      duration: '9 Days / 8 Nights',
+      altitude: '5,642 m',
+      difficulty: 'Strenuous',
+      tag: 'LIMITED SLOTS',
+      tagColor: 'bg-autumn-maple/20 text-autumn-maple border-autumn-maple/40',
+      detailsUrl: '/treks/Mt.Elbrus/index.html',
+      description: 'Conquer the highest peak in Europe on a glaciated mountaineering expedition.',
+      image: '/treks/Mt.Elbrus/Assets/hero-bg.jpg',
+      inclusion: ['Crampons & Ice Axe', 'Mountain Guides', 'Refuge Huts'],
+      batchDates: ['Aug 01, 2026', 'Aug 20, 2026']
+    },
+    {
+      id: 'parambikulam',
+      title: 'Parambikulam Tiger Reserve Trail',
+      category: 'Western Ghats',
+      price: 3400,
+      originalPrice: 4200,
+      slotsLeft: 11,
+      location: 'Palakkad, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '800 m',
+      difficulty: 'Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Parambikulam/index.html',
+      description: 'Deep forest walking safari inside protected tiger habitats with native Kadar tribal trackers.',
+      image: '/treks/Parambikulam/Assets/hero-bg.jpg',
+      inclusion: ['Treehouse Stay', 'Tribal Trackers', 'Boating'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'periyar-boarder',
+      title: 'Periyar Border Hiking & Rafting',
+      category: 'Western Ghats',
+      price: 3600,
+      originalPrice: 4500,
+      slotsLeft: 8,
+      location: 'Thekkady, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '900 m',
+      difficulty: 'Moderate',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/Periyar-boarder/index.html',
+      description: 'Full day border hike combined with bamboo rafting across deep jungle rivers of Periyar.',
+      image: '/treks/Periyar-boarder/Assets/hero-bg.jpg',
+      inclusion: ['Bamboo Rafting', 'Armed Forest Guard', 'Packed Meals'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'thommankuthu',
+      title: 'Thommankuthu 7-Step Falls Trek',
+      category: 'Western Ghats',
+      price: 1900,
+      originalPrice: 2500,
+      slotsLeft: 15,
+      location: 'Idukki, Kerala',
+      duration: '1 Day',
+      altitude: '500 m',
+      difficulty: 'Easy-Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Thommankuthu/index.html',
+      description: 'A refreshing water trek visiting seven cascading waterfall steps and forest caves.',
+      image: '/treks/Thommankuthu/Assets/hero-bg.jpg',
+      inclusion: ['Waterfall Permit', 'Eco Guide', 'Life Jackets'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'yellapatty',
+      title: 'Yellapatty Cloud Camping Trek',
+      category: 'Western Ghats',
+      price: 3100,
+      originalPrice: 3800,
+      slotsLeft: 10,
+      location: 'Munnar, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '1,900 m',
+      difficulty: 'Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/Yellapatty/index.html',
+      description: 'Camp under starry skies amidst tea estate hills and cliff edges shrouded in floating clouds.',
+      image: '/treks/Yellapatty/Assets/hero-bg.jpg',
+      inclusion: ['Campfire & Tents', 'Dinner & Breakfast', 'Guide'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'chimmini-climate-walk',
+      title: 'Chimmini Climate & Rain Walk',
+      category: 'Western Ghats',
+      price: 2100,
+      originalPrice: 2700,
+      slotsLeft: 12,
+      location: 'Thrissur, Kerala',
+      duration: '1 Day',
+      altitude: '400 m',
+      difficulty: 'Easy',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/chimmini-climate-walk/index.html',
+      description: 'Learn forest conservation and rainfall patterns on an educational monsoon eco walk.',
+      image: '/treks/chimmini-climate-walk/Assets/hero-bg.jpg',
+      inclusion: ['Rain Gear', 'Naturalist Lead', 'Forest Entry'],
+      batchDates: ['Jul 12, 2026', 'Jul 19, 2026', 'Jul 26, 2026']
+    },
+    {
+      id: 'chokkramudi',
+      title: 'Chokramudi Peak Sunrise Trek',
+      category: 'Western Ghats',
+      price: 2900,
+      originalPrice: 3600,
+      slotsLeft: 10,
+      location: 'Munnar, Kerala',
+      duration: '1 Day',
+      altitude: '2,180 m',
+      difficulty: 'Moderate',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/chokkramudi/index.html',
+      description: 'Climb Chokramudi peak in early morning to catch spectacular sea-of-clouds phenomena.',
+      image: '/treks/chokkramudi/Assets/hero-bg.jpg',
+      inclusion: ['Early Morning Lead', 'Permit Fees', 'Breakfast'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'ebc-trek',
+      title: 'Everest Base Camp (EBC) Expedition',
+      category: 'Himalayas',
+      price: 58000,
+      originalPrice: 68000,
+      slotsLeft: 6,
+      location: 'Solukhumbu, Nepal',
+      duration: '14 Days / 13 Nights',
+      altitude: '5,364 m',
+      difficulty: 'Strenuous',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '/treks/ebc-trek/index.html',
+      description: 'The legendary trek to the foot of Mt. Everest through Sherpa villages, Tengboche monastery, and Khumbu icefall.',
+      image: '/treks/ebc-trek/Assets/hero-bg.jpg',
+      inclusion: ['Sherpa Guides', 'Teahouse Lodging', 'TIMS Permits'],
+      batchDates: ['Sep 01, 2026', 'Oct 10, 2026', 'Nov 05, 2026']
+    },
+    {
+      id: 'peechimoodal',
+      title: 'Peechi Moodal Forest Trail',
+      category: 'Western Ghats',
+      price: 1700,
+      originalPrice: 2200,
+      slotsLeft: 16,
+      location: 'Thrissur, Kerala',
+      duration: '1 Day',
+      altitude: '350 m',
+      difficulty: 'Easy',
+      tag: 'FILLING FAST!',
+      tagColor: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40',
+      detailsUrl: '/treks/peechimoodal/index.html',
+      description: 'A soothing jungle path following freshwater streamlets inside Peechi-Vazhani Wildlife Sanctuary.',
+      image: '/treks/peechimoodal/Assets/hero-bg.jpg',
+      inclusion: ['Forest Pass', 'Eco Guide', 'Snacks'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    },
+    {
+      id: 'silent-valley',
+      title: 'Silent Valley Rainforest Trek',
+      category: 'Western Ghats',
+      price: 4000,
+      originalPrice: 5000,
+      slotsLeft: 8,
+      location: 'Palakkad, Kerala',
+      duration: '2 Days / 1 Night',
+      altitude: '2,383 m',
+      difficulty: 'Moderate-Challenging',
+      tag: 'PREMIUM TRAIL',
+      tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+      detailsUrl: '#silent-valley',
+      description: 'Trek into the legendary Silent Valley National Park, home to ancient rainforests, Kunthi River, and lion-tailed macaques.',
+      image: '/treks/silent-valley/Assets/hero-bg.jpg',
+      inclusion: ['Sairandhri Tower Access', 'Forest Department Permits', 'Certified Lead'],
+      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    }
+  ];
+
+  const handleSeedAllTreks = async () => {
+    if (!window.confirm('Auto-populate all 22 static trek packages into Firestore database? Existing packages with matching IDs will be updated.')) return;
+
+    setIsSeeding(true);
+    let count = 0;
+
+    try {
+      for (const trekItem of SEED_TREKS_DATA) {
+        await setDoc(doc(db, 'packages', trekItem.id), trekItem, { merge: true });
+        count++;
+      }
+
+      setTreks(prev => {
+        const merged = [...prev];
+        SEED_TREKS_DATA.forEach(sItem => {
+          const idx = merged.findIndex(t => t.id === sItem.id);
+          if (idx >= 0) {
+            merged[idx] = { ...merged[idx], ...sItem };
+          } else {
+            merged.unshift(sItem);
+          }
+        });
+        return merged;
+      });
+
+      alert(`Successfully populated ${count} trek packages to Firestore!`);
+    } catch (err) {
+      console.error("Seed treks error:", err);
+      alert(`Seeding notice: ${err.message}`);
+    } finally {
+      setIsSeeding(false);
+    }
+  };
 
   // Open Create Modal
   const handleOpenCreateModal = () => {
@@ -661,7 +1119,8 @@ export default function AdminConsole({
       image: '',
       inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
       batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
-      itineraryDocUrl: ''
+      itineraryDocUrl: '',
+      detailsUrl: ''
     });
     setNewBatchDateInput('');
     setNewInclusion('');
@@ -686,7 +1145,8 @@ export default function AdminConsole({
       image: trek.image || '',
       inclusion: trek.inclusion || [],
       batchDates: existingDates,
-      itineraryDocUrl: trek.itineraryDocUrl || ''
+      itineraryDocUrl: trek.itineraryDocUrl || '',
+      detailsUrl: trek.detailsUrl || trek.details_url || ''
     });
     setNewBatchDateInput('');
     setNewInclusion('');
@@ -1370,10 +1830,20 @@ export default function AdminConsole({
               <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-autumn-bark/40 pointer-events-none" />
             </div>
 
+            {/* Seed All Treks Button */}
+            <button
+              onClick={handleSeedAllTreks}
+              disabled={isSeeding}
+              className="h-11 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 font-outfit text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
+              title="Batch populate all 22 static trek pages into Firestore"
+            >
+              <span>⚡ {isSeeding ? 'Seeding...' : 'Seed All Trek Packages'}</span>
+            </button>
+
             {/* Add Trek Button */}
             <button
               onClick={handleOpenCreateModal}
-              className="h-11 px-5 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all flex items-center justify-center gap-2 shadow-sm"
+              className="h-11 px-5 rounded-xl bg-[#C1571F] font-outfit text-xs font-bold uppercase tracking-wider text-white hover:bg-[#A84310] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
             >
               <Plus className="h-4 w-4" />
               Add New Trek
@@ -3099,6 +3569,19 @@ export default function AdminConsole({
                   placeholder="https://drive.google.com/file/d/... or PDF URL"
                   value={formData.itineraryDocUrl}
                   onChange={(e) => setFormData({ ...formData, itineraryDocUrl: e.target.value })}
+                  className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1">
+                  Details Page URL / Static Path
+                </label>
+                <input 
+                  type="text" 
+                  placeholder="/treks/brahmagiri/index.html or #silent-valley"
+                  value={formData.detailsUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, detailsUrl: e.target.value })}
                   className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark focus:outline-none focus:border-[#C1571F]/60"
                 />
               </div>

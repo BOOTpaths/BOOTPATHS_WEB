@@ -9,17 +9,17 @@ import { useState, useEffect } from 'react';
 import { ChevronDown, Plus, X } from 'lucide-react';
 import './SilentValleyPage.css';
 
-// Import local assets
-import logoImg from '../assets/silent-valley/Silent valley/Assets/bootpaths_logo.png';
-import kunthiRiver from '../assets/silent-valley/Silent valley/Assets/kunthi_river.jpg';
-import lionTailedMacaque from '../assets/silent-valley/Silent valley/Assets/lion_tailed_macaque.jpg';
-import mukkaliCamp from '../assets/silent-valley/Silent valley/Assets/mukkali_camp.jpg';
-import poochiparaTrail from '../assets/silent-valley/Silent valley/Assets/poochipara_trail.jpg';
-import rainforestCanopy from '../assets/silent-valley/Silent valley/Assets/rainforest_canopy.jpg';
-import sairandhriTower from '../assets/silent-valley/Silent valley/Assets/sairandhri_tower.jpg';
-import silentValleyHero from '../assets/silent-valley/Silent valley/Assets/silent_valley_hero.jpg';
-import sisparaPass from '../assets/silent-valley/Silent valley/Assets/sispara_pass.jpg';
-import wildFlora from '../assets/silent-valley/Silent valley/Assets/wild_flora.jpg';
+// Public asset URLs
+const logoImg = "/logo.png";
+const kunthiRiver = "/treks/silent-valley/Silent valley/Assets/kunthi_river.jpg";
+const lionTailedMacaque = "/treks/silent-valley/Silent valley/Assets/lion_tailed_macaque.jpg";
+const mukkaliCamp = "/treks/silent-valley/Silent valley/Assets/mukkali_camp.jpg";
+const poochiparaTrail = "/treks/silent-valley/Silent valley/Assets/poochipara_trail.jpg";
+const rainforestCanopy = "/treks/silent-valley/Silent valley/Assets/rainforest_canopy.jpg";
+const sairandhriTower = "/treks/silent-valley/Silent valley/Assets/sairandhri_tower.jpg";
+const silentValleyHero = "/treks/silent-valley/Silent valley/Assets/silent_valley_hero.jpg";
+const sisparaPass = "/treks/silent-valley/Silent valley/Assets/sispara_pass.jpg";
+const wildFlora = "/treks/silent-valley/Silent valley/Assets/wild_flora.jpg";
 
 // Gallery images array
 const GALLERY_ITEMS = [
