@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Meeshapulimala Trek | Bootpaths – Walk Above the Clouds</title>
+  <meta name="description" content="Embark on the legendary Meeshapulimala Trek with Bootpaths. 2 days through Rhodo Valley, Pandava Cave, 8 rolling peaks, and South India's highest trekkable summit at 2,640m above a sea of clouds." />
+  <meta name="keywords" content="Meeshapulimala trek, Bootpaths, Munnar trekking, Rhodo valley, Charlie mist, Kerala high altitude trekking, Western Ghats peak" />
+  
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:title" content="Meeshapulimala Trek | Bootpaths – Walk Above the Clouds" />
+  <meta property="og:description" content="Experience the mist of Charlie and stand atop South India's highest trekkable peak at 2,640m. All-inclusive camping and guided expedition." />
+  <meta property="og:image" content="images/meeshapulimala_hero.jpg" />
+  <meta property="og:type" content="website" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  
+  <!-- Three.js for 3D Real-Type Elevation Topography -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" aria-label="Bootpaths Home">
+        <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+        <span class="logo-text">Bootpaths</span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#altitude">3D Elevation</a></li>
+          <li><a href="#itinerary">Itinerary</a></li>
+          <li><a href="#media">Media &amp; Reels</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#inclusions">Inclusions</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Meeshapulimala%20trek." target="_blank" rel="noopener" class="mobile-callback-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+            Request Callback on WhatsApp
+          </a>
+          <a href="#booking" class="mobile-cta-btn" onclick="toggleMenu()">Book Now</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Meeshapulimala%20trek." target="_blank" rel="noopener" class="nav-callback-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request Callback
+        </a>
+        <a href="#booking" class="nav-cta">Book Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="images/meeshapulimala_hero.jpg" alt="Meeshapulimala Sunrise Above Clouds" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Idukki &bull; Munnar &bull; Western Ghats 2,640m</div>
+      <h1 class="hero-title">Meeshapulimala<br/><em>Trek</em></h1>
+      <p class="hero-sub">Experience the legendary "Mist of Charlie" &amp; walk above an endless sea of clouds across South India's highest trekkable peak</p>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-ico">⛰️</span><div><b>2,640m</b><small>Summit Height</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">📅</span><div><b>2 Days / 1N</b><small>Trek Duration</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">🥾</span><div><b>Moderate</b><small>Difficulty Grade</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">📍</span><div><b>Munnar Base</b><small>Starting Hub</small></div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-p">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Meeshapulimala%20trek." target="_blank" rel="noopener" class="btn-wa">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g">View Itinerary</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="sarrow"></div></div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>🗓️</span><div><small>Best Season</small><strong>Sep–May (Winter &amp; Spring)</strong></div></div>
+        <div class="qi"><span>⛺</span><div><small>Accommodation</small><strong>KFDC Tents / Rhodo Mansion</strong></div></div>
+        <div class="qi"><span>🧭</span><div><small>Trek Distance</small><strong>~15 km Full Traverse</strong></div></div>
+        <div class="qi"><span>🚙</span><div><small>Off-Road Safari</small><strong>4x4 Jeep to Rhodo Valley</strong></div></div>
+        <div class="qi"><span>💰</span><div><small>All-Inclusive Package</small><strong>₹4,999 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">The Cloud Kingdom &amp;<br/>The Mist of Charlie</h2>
+          <p class="ov-lead">Standing tall at 2,640 metres (8,661 feet) in the pristine High Ranges of Munnar, Meeshapulimala is the second highest peak in the Western Ghats and the highest summit in South India accessible to passionate trekkers.</p>
+          <p class="ov-body">The mountain derives its name from its distinctive profile: "Meesha" (whiskers), "Puli" (tiger), and "Mala" (mountain) &mdash; a dramatic ridgeline of eight undulating peaks resembling the face and whiskers of a roaring tiger rising out of misty Shola valleys.</p>
+          <p class="ov-body">Immortalized across India by the cult Malayalam cinema <em>Charlie</em> &mdash; <em>"Meeshapulimalayil manju veezhunathu kandittundo?"</em> &mdash; this trek is a transcendental journey. You will travel by rugged 4x4 Jeep through emerald tea gardens to Rhodo Valley, camp under a blanket of unpolluted stars, and summit at dawn as golden sun rays illuminate an endless ocean of fluffy white clouds beneath your feet.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>2,640m</b><small>Summit Elevation</small></div>
+            <div class="fact"><b>8 Peaks</b><small>Undulating Ridge Walk</small></div>
+            <div class="fact"><b>1,000+</b><small>Acres of Shola Forests</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/rhodo_valley.jpg" alt="Rhodo Valley Munnar" class="si1"/>
+            <img src="images/kolukkumalai_sunrise.jpg" alt="Kolukkumalai Sunrise Panorama" class="si2"/>
+            <div class="img-float"><span>2</span><small>Days of Wonder</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">Moments of wonder that make Meeshapulimala the crown jewel of South Indian trekking</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/meeshapulimala_hero.jpg" alt="Sea of Clouds Sunrise" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Sunrise Sea of Clouds</h3><p>Stand atop the pinnacle at dawn as rolling clouds carpet the valleys below like a vast white ocean, with distant peaks piercing the horizon.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/rhodo_valley.jpg" alt="Rhodo Valley Blossoms" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Rhodo Valley Blossoms</h3><p>Trek through South India's rare high-altitude Rhododendron arboreum sanctuary, where ancient mossy trees bloom with flaming crimson flowers.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/shola_grassland.jpg" alt="The 8-Peak Ridge Traverse" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>8-Peak Ridge Traverse</h3><p>Hike across the famous undulating "Tiger Whiskers" ridge along the Kerala-Tamil Nadu border, feeling the brisk mountain gales and swirling mist.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/pandava_cave.jpg" alt="Mystical Pandava Cave" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Mystical Pandava Cave</h3><p>Visit the ancient granite rock shelter nestled in alpine grasslands, where the legendary Pandavas are believed to have sought refuge during exile.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/jeep_safari.jpg" alt="4x4 Off-Road Mountain Safari" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>4x4 Off-Road Mountain Safari</h3><p>Thrill in an exhilarating 4x4 Jeep expedition climbing through rugged tea garden tracks, pine woods, and cloud-draped mountain passes to Rhodo Valley.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">🌄</div>
+            <h3>360&deg; Western Ghats Panoramas</h3>
+            <p>Look out across the world's highest organic tea plantations at Kolukkumalai, the calm waters of Mattupetty &amp; Anayirankal dams, Anamudi peak, and the sun-drenched plains of Tamil Nadu.</p>
+            <div class="mtn-tags"><span>Anamudi (2,695m)</span><span>Rhodo Valley</span><span>Kolukkumalai</span><span>Anayirankal</span><span>Mattupetty</span><span>Top Station</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D REALTYPE ALTITUDE PROFILE -->
+  <section class="alt-section section" id="altitude">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">3D Terrain &amp; Elevation</div>
+        <h2 class="stitle">Real-Type 3D Altitude Profile</h2>
+        <p class="ssub">Explore the interactive 3D topography from KFDC Munnar Basecamp to Rhodo Valley and the 2,640m Meeshapulimala Summit</p>
+      </div>
+
+      <div class="alt-3d-card">
+        <!-- 3D Toolbar & Controls Header -->
+        <div class="alt-3d-toolbar">
+          <div class="alt-view-modes">
+            <button class="view-mode-btn active" id="btnModeTerrain" onclick="set3DMode('terrain')">
+              <span class="vm-ico">🏔️</span> 3D Mountain Valley
+            </button>
+            <button class="view-mode-btn" id="btnModeProfile" onclick="set3DMode('profile')">
+              <span class="vm-ico">📊</span> 3D Extruded Profile
+            </button>
+          </div>
+          
+          <div class="alt-cam-controls">
+            <button class="cam-btn" id="btnAutoRotate" onclick="toggle3DRotate()" title="Toggle Auto-Rotation">
+              <span id="rotateIcon">⏸️</span> <span class="cb-txt">Auto-Rotate</span>
+            </button>
+            <button class="cam-btn" onclick="reset3DCamera()" title="Reset Camera View">
+              <span>🔄</span> <span class="cb-txt">Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D WebGL Canvas Container -->
+        <div class="alt-canvas-wrap" id="altCanvasWrap">
+          <canvas id="alt3dCanvas"></canvas>
+          
+          <!-- 3D HUD Tooltip Card -->
+          <div class="alt-hud-tooltip active" id="altHudTooltip">
+            <div class="hud-header">
+              <span class="hud-day" id="hudDay">Day 2 (7:00 AM Sunrise)</span>
+              <h4 class="hud-name" id="hudName">Meeshapulimala Summit</h4>
+            </div>
+            <div class="hud-stats">
+              <div class="hud-stat"><span>Altitude:</span> <b id="hudAlt">2,640 m (8,661 ft)</b></div>
+              <div class="hud-stat"><span>Oxygen Level:</span> <b id="hudO2">~74% sea level</b></div>
+            </div>
+            <p class="hud-desc" id="hudDesc">The crowning peak of Meeshapulimala! South India's highest trekkable summit, famous for 'mist of Charlie' &amp; 360° panoramas.</p>
+          </div>
+
+          <!-- Interaction Hint Overlay -->
+          <div class="alt-drag-hint" id="altDragHint">
+            <span>👆 Drag to rotate 3D mountain &bull; Scroll / Pinch to zoom &bull; Click pins for details</span>
+          </div>
+        </div>
+
+        <!-- Waypoint Quick Jumper Strip -->
+        <div class="alt-waypoints-strip">
+          <span class="aw-lbl">Interactive Milestones:</span>
+          <div class="aw-pills" id="awPills">
+            <button class="aw-btn" onclick="focus3DWaypoint(0)">Basecamp <span>1,850m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(1)">Checkpost <span>1,980m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(2)">Rhodo Valley <span>2,160m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(3)">Pandava Cave <span>2,300m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(4)">Peak 4 Ridge <span>2,450m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(5)">Peak 7 Shoulder <span>2,560m</span></button>
+            <button class="aw-btn active-selected" onclick="focus3DWaypoint(6)">Summit Peak <span>2,640m</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Guide</div>
+        <h2 class="stitle">Itinerary Details</h2>
+        <p class="ssub">Plan your 2-Day / 1-Night high-altitude Western Ghats expedition with our comprehensive route breakdown</p>
+      </div>
+
+      <!-- MAIN ACCORDIONS CONTAINER -->
+      <div class="itinerary-accordions">
+
+        <!-- ACCORDION 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">📋</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary</h3>
+                <p>Get your trek plan at a glance with key elevation milestones and schedules</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="quick-itin-wrapper">
+              
+              <!-- Trail Route Map Banner -->
+              <div class="quick-itin-map-card">
+                <div class="qim-badge">📍 Official Meeshapulimala Trail Route</div>
+                <h4>Munnar Basecamp to Meeshapulimala Summit Trail Route</h4>
+                <p class="qim-path">KFDC Munnar Basecamp (1,850m) &rarr; Forest Checkpost (1,980m) &rarr; 4x4 Off-Road Safari &rarr; Rhodo Valley Basecamp (2,160m) &rarr; Pandava Cave (2,300m) &rarr; Peak 4 Ridge (2,450m) &rarr; Peak 7 Shoulder (2,560m) &rarr; Meeshapulimala Summit (2,640m)</p>
+              </div>
+
+              <!-- Day by day summary list -->
+              <div class="quick-itin-list">
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 1</div>
+                  <div class="qi-row-content">
+                    <h4>Munnar Basecamp Arrival, 4x4 Off-Road Safari to Rhodo Valley (2,160m)</h4>
+                    <div class="qi-meta">Duration: 4&ndash;5 hours | Altitude: 1,850m &rarr; 2,160m | 24 km 4x4 Off-Road Safari</div>
+                  </div>
+                </div>
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 2</div>
+                  <div class="qi-row-content">
+                    <h4>Dawn Summit Assault via 8-Peak Ridge to Meeshapulimala (2,640m) &amp; Return</h4>
+                    <div class="qi-meta">Duration: 5&ndash;6 hours | Altitude: 2,160m &rarr; 2,640m Summit &rarr; 1,850m | 8 km Summit Ridge Trek</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 2: DETAILED DAY-BY-DAY ITINERARY (OPEN BY DEFAULT) -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">🗺️</span>
+              <div class="mah-text">
+                <h3>Detailed Day-by-Day Walkthrough</h3>
+                <p>In-depth hour-by-hour breakdown, trail terrain, meals, wildlife, and photo guides</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="day-tabs-wrapper">
+              
+              <!-- Day Tab Selectors -->
+              <div class="day-tab-nav" id="dayTabNav">
+                <button class="day-tab-btn active" onclick="switchDayTab(1)">DAY 1</button>
+                <button class="day-tab-btn" onclick="switchDayTab(2)">DAY 2</button>
+              </div>
+
+              <!-- Day Tab Content Panels -->
+              <div class="day-tab-panels" id="dayTabPanels">
+                
+                <!-- DAY 1 PANEL -->
+                <div class="day-panel active" id="day-panel-1">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 1</span>
+                    <h3 class="dt-title">Munnar Arrival &bull; 4x4 Safari &bull; Rhodo Valley Alpine Camp</h3>
+                  </div>
+                  
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">⏱️</span>
+                      <div><strong>Duration:</strong> <span>4&ndash;5 hours (Jeep safari + acclimatization stroll)</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">📈</span>
+                      <div><strong>Altitude Gain:</strong> <span>1,850 m &rarr; 2,160 m (+310m vertical gain)</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">🥾</span>
+                      <div><strong>Difficulty &amp; Terrain:</strong> <span>Moderate off-road dirt trail &amp; shola forest walk</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">🌟</span>
+                      <div><strong>Trail Highlights:</strong> <span>Munnar tea estates, KFDC forest checkpost, flowering Rhododendrons, campfire dinner under stars</span></div>
+                    </div>
+                  </div>
+
+                  <div class="dt-narrative">
+                    <p><strong>10:30 AM &ndash; Registration &amp; Briefing:</strong> Arrive at the Kerala Forest Development Corporation (KFDC) basecamp in Munnar. Complete registration permits, meet your certified Bootpaths mountain leaders, and review medical &amp; safety protocols.</p>
+                    <p><strong>12:00 PM &ndash; Rugged 4x4 Off-Road Mountain Safari:</strong> Board 4x4 Jeeps for a thrilling 24 km mountain climb passing lush tea plantations, eucalyptus slopes, and high-altitude mist gates up to Rhodo Valley.</p>
+                    <p><strong>02:30 PM &ndash; Campsite Check-in:</strong> Settle into high-altitude alpine dome tents equipped with thermal sleeping bags at Rhodo Valley (2,160m) &mdash; South India's highest motorable basecamp.</p>
+                    <p><strong>04:30 PM &ndash; Acclimatization Walk:</strong> Take a tranquil walk along the crystal mountain stream and flowering wild <em>Rhododendron arboreum</em> grove. Keep watch for the Nilgiri Tahr on rocky crags.</p>
+                    <p><strong>07:30 PM &ndash; Campfire &amp; Traditional Kerala Dinner:</strong> Gather around a crackling campfire in the crisp mountain air. Relish freshly prepared Kerala meals followed by a briefing on tomorrow's dawn summit assault.</p>
+                  </div>
+
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card">
+                      <img src="images/jeep_safari.jpg" alt="4x4 Off-Road Jeep climbing mountain trail" loading="lazy" />
+                      <span class="dt-photo-caption">4x4 Off-Road Jeep climbing through tea plantations</span>
+                    </div>
+                    <div class="dt-photo-card">
+                      <img src="images/kfdc_basecamp.jpg" alt="Campfire night under starry sky at KFDC Rhodo Valley Base" loading="lazy" />
+                      <span class="dt-photo-caption">Campfire night under the stars at Rhodo Valley (2,160m)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DAY 2 PANEL -->
+                <div class="day-panel" id="day-panel-2">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 2</span>
+                    <h3 class="dt-title">Dawn Summit Ascent (2,640m) &bull; Sea of Clouds &bull; Return Journey</h3>
+                  </div>
+                  
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">⏱️</span>
+                      <div><strong>Duration:</strong> <span>5&ndash;6 hours total (8 km summit hike + return safari)</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">📈</span>
+                      <div><strong>Altitude Gain/Loss:</strong> <span>2,160 m &rarr; 2,640 m (Summit) &rarr; 1,850 m (Basecamp)</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">🥾</span>
+                      <div><strong>Difficulty &amp; Terrain:</strong> <span>Moderate ridge trail, rocky outcrops &amp; alpine grasslands</span></div>
+                    </div>
+                    <div class="dt-spec-item">
+                      <span class="dt-spec-icon">🌟</span>
+                      <div><strong>Trail Highlights:</strong> <span>Pandava Cave, 8-peak tiger-whisker ridge walk, sunrise over the sea of clouds, 360° Western Ghats views</span></div>
+                    </div>
+                  </div>
+
+                  <div class="dt-narrative">
+                    <p><strong>04:30 AM &ndash; Dawn Awakening:</strong> Wake to the crisp mountain breeze and hot chai. Equip headlamps and warm layers for the summit push.</p>
+                    <p><strong>05:00 AM &ndash; Summit Assault Commences:</strong> Trek under a canopy of stars past the mystical boulder overhang of <em>Pandava Cave</em> (2,300m), entering rolling montane grasslands.</p>
+                    <p><strong>06:00 AM &ndash; The 8-Peak Tiger Whisker Ridge:</strong> As the horizon turns purple and gold, traverse the 8 undulating peaks with swirling mist rising from the Tamil Nadu valleys.</p>
+                    <p><strong>06:45 AM &ndash; Crowning Meeshapulimala Summit (2,640m):</strong> Stand on the rocky summit of South India's highest trekkable mountain! Witness the spectacular sunrise over an endless sea of white clouds &mdash; the world-famous <em>"Mist of Charlie"</em>.</p>
+                    <p><strong>08:30 AM &ndash; Descent &amp; Hot Breakfast:</strong> Hike back down to Rhodo Valley for hot South Indian breakfast (Idlis, Vadas, Upma, Coffee).</p>
+                    <p><strong>11:30 AM &ndash; 4x4 Jeep Descent to Basecamp:</strong> Board the 4x4 Jeeps back to KFDC Basecamp. Conclude an unforgettable mountain journey.</p>
+                  </div>
+
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card">
+                      <img src="images/meeshapulimala_summit.jpg" alt="Trekkers at Meeshapulimala Summit" loading="lazy" />
+                      <span class="dt-photo-caption">Standing above the sea of clouds at the 2,640m summit</span>
+                    </div>
+                    <div class="dt-photo-card">
+                      <img src="images/rhodo_valley.jpg" alt="Rhodo Valley Flowers and River" loading="lazy" />
+                      <span class="dt-photo-caption">Scarlet Rhododendron blossoms along the mountain brook</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 3: ROUTE MAP & TERRAIN BREAKDOWN -->
+        <div class="main-accordion-item" id="acc-route-map">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">📐</span>
+              <div class="mah-text">
+                <h3>Route Profile &amp; Technical Breakdown</h3>
+                <p>Terrain grades, water sources, forest boundaries, and weather parameters</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="route-breakdown-grid">
+              <div class="rb-item">
+                <span class="rb-ico">🏔️</span>
+                <h5>Elevation Gain</h5>
+                <p>+790m vertical gain from Munnar Basecamp to Meeshapulimala Summit (2,640m).</p>
+              </div>
+              <div class="rb-item">
+                <span class="rb-ico">🌿</span>
+                <h5>Terrain Type</h5>
+                <p>4x4 dirt trails, mossy Shola forest corridors, rocky outcrops, and montane grasslands.</p>
+              </div>
+              <div class="rb-item">
+                <span class="rb-ico">💧</span>
+                <h5>Water Sources</h5>
+                <p>Pristine mountain brooks in Rhodo Valley. Carry 1.5L personal hydration pack for summit hike.</p>
+              </div>
+              <div class="rb-item">
+                <span class="rb-ico">🌡️</span>
+                <h5>Temperature Range</h5>
+                <p>Day: 15&deg;C &ndash; 22&deg;C | Night / Dawn: 4&deg;C &ndash; 10&deg;C (can drop near 0&deg;C in Dec&ndash;Jan frost).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DEDICATED MEDIA & REELS SHOWCASE -->
+  <section class="vid-section section" id="media">
+    <div class="vid-bg">
+      <img src="images/meeshapulimala_hero.jpg" alt="Meeshapulimala Media" class="vid-bgi"/>
+      <div class="vid-ov"></div>
+    </div>
+    <div class="container">
+      <div class="vid-cnt">
+        <div class="stag light">Watch the Journey</div>
+        <h2 class="stitle light">Feel the Mist of Meeshapulimala</h2>
+        <p class="vid-desc">Experience the raw rhythm, rolling sea of clouds, and misty crests of South India's highest trekkable mountain through authentic trail videos and trending Instagram reels.</p>
+        
+        <!-- YOUTUBE VIDEO FRAMES -->
+        <div class="vid-frames" id="videoFramesContainer">
+          <div class="vf">
+            <iframe src="https://www.youtube.com/embed/d5wik_29obg?rel=0&amp;modestbranding=1" title="Meeshapulimala Trekking Complete 4K Travel Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="vf">
+            <iframe src="https://www.youtube.com/embed/Fn8LmMc83iM?rel=0&amp;modestbranding=1" title="Hiking to the Top of Meeshapulimala Munnar" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <!-- INSTAGRAM REELS SHOWCASE HEADER -->
+        <div class="reels-header-wrap" style="margin-top: 55px; text-align: center;">
+          <div class="stag light" style="margin-bottom: 8px;">Social Media Highlights</div>
+          <h3 style="font-size: clamp(1.6rem, 3.5vw, 2.3rem); font-family: 'Playfair Display', serif; color: #ffffff;">Trending Instagram Reels</h3>
+          <p style="color: rgba(255,255,255,0.8); max-width: 620px; margin: 8px auto 0; font-size: 0.95rem;">Tap any reel below to preview real moments and viral mist captured on our trails</p>
+        </div>
+
+        <!-- REELS GRID (9:16 CARDS) -->
+        <div class="reels-grid" id="reelsContainer">
+          
+          <!-- REEL 1 -->
+          <div class="reel-card" onclick="toggleReelPlayback(this)">
+            <img src="images/meeshapulimala_summit.jpg" alt="Meeshapulimala Summit Sea of Clouds Reel" class="reel-media"/>
+            <div class="reel-play-indicator">▶</div>
+            <div class="reel-overlay">
+              <div class="reel-top">
+                <span class="reel-badge">
+                  <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                  Reel
+                </span>
+              </div>
+              <div class="reel-bottom">
+                <div class="reel-author">
+                  <img src="images/bootpaths_logo.png" alt="Bootpaths" class="reel-author-img"/>
+                  <span class="reel-handle">@bootpaths</span>
+                </div>
+                <p class="reel-caption">"Meeshapulimalayil manju veezhunathu kandittundo?" Standing above the cloud ocean! ☁️✨ #Charlie #Bootpaths</p>
+                <div class="reel-sound"><span>🎵</span> <span>Pularikalo &ndash; Charlie OST Ambient</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REEL 2 -->
+          <div class="reel-card" onclick="toggleReelPlayback(this)">
+            <img src="images/rhodo_valley.jpg" alt="Rhodo Valley Blooming Red Trees Reel" class="reel-media"/>
+            <div class="reel-play-indicator">▶</div>
+            <div class="reel-overlay">
+              <div class="reel-top">
+                <span class="reel-badge">
+                  <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                  Reel
+                </span>
+              </div>
+              <div class="reel-bottom">
+                <div class="reel-author">
+                  <img src="images/bootpaths_logo.png" alt="Bootpaths" class="reel-author-img"/>
+                  <span class="reel-handle">@bootpaths</span>
+                </div>
+                <p class="reel-caption">Red Rhododendrons blooming in the misty Rhodo Valley! High altitude paradise 🌺🌿 #MunnarTrek</p>
+                <div class="reel-sound"><span>🎵</span> <span>Mountain Stream Sound &ndash; Rhodo Valley</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REEL 3 -->
+          <div class="reel-card" onclick="toggleReelPlayback(this)">
+            <img src="images/jeep_safari.jpg" alt="4x4 Jeep Safari Reel" class="reel-media"/>
+            <div class="reel-play-indicator">▶</div>
+            <div class="reel-overlay">
+              <div class="reel-top">
+                <span class="reel-badge">
+                  <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                  Reel
+                </span>
+              </div>
+              <div class="reel-bottom">
+                <div class="reel-author">
+                  <img src="images/bootpaths_logo.png" alt="Bootpaths" class="reel-author-img"/>
+                  <span class="reel-handle">@bootpaths</span>
+                </div>
+                <p class="reel-caption">Crazy off-road 4x4 Jeep trail climbing through tea hills into thick mountain fog! 🚙💨 #OffroadAdventure</p>
+                <div class="reel-sound"><span>🎵</span> <span>Western Ghats Engine Roar</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REEL 4 -->
+          <div class="reel-card" onclick="toggleReelPlayback(this)">
+            <img src="images/kfdc_basecamp.jpg" alt="Basecamp Campfire Reel" class="reel-media"/>
+            <div class="reel-play-indicator">▶</div>
+            <div class="reel-overlay">
+              <div class="reel-top">
+                <span class="reel-badge">
+                  <svg viewBox="0 0 24 24" width="12" height="12"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                  Reel
+                </span>
+              </div>
+              <div class="reel-bottom">
+                <div class="reel-author">
+                  <img src="images/bootpaths_logo.png" alt="Bootpaths" class="reel-author-img"/>
+                  <span class="reel-handle">@bootpaths</span>
+                </div>
+                <p class="reel-caption">Night under the Milky Way at Rhodo Valley campsite. Campfire stories at 2,160m! 🔥🌌 #CampLife</p>
+                <div class="reel-sound"><span>🎵</span> <span>Campfire Crackle &bull; Acoustic Vibes</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- INTERACTIVE MEDIA UPLOAD & EMBED STUDIO -->
+        <div class="media-studio-box">
+          <div class="ms-header">
+            <div class="ms-title-group">
+              <h3><span>🎬</span> Upload / Embed Space for YouTube &amp; Instagram</h3>
+              <p>Easily showcase your own trek footage: paste a link or upload a video file to preview live on this page!</p>
+            </div>
+            <div class="ms-tabs">
+              <button class="ms-tab-btn active" onclick="switchMediaTab('youtube', this)">YouTube Video</button>
+              <button class="ms-tab-btn" onclick="switchMediaTab('instagram', this)">Instagram Reel</button>
+              <button class="ms-tab-btn" onclick="switchMediaTab('upload', this)">Local Video File</button>
+            </div>
+          </div>
+
+          <!-- PANEL 1: YOUTUBE EMBED -->
+          <div class="ms-tab-panel active" id="panel-youtube">
+            <form onsubmit="addYouTubeVideo(event)">
+              <div class="ms-form-grid">
+                <div class="ms-field">
+                  <label for="ytUrlInput">YouTube Video URL or Video ID</label>
+                  <input type="text" id="ytUrlInput" placeholder="e.g. https://www.youtube.com/watch?v=Fn8LmMc83iM or Fn8LmMc83iM" required/>
+                </div>
+                <div class="ms-field">
+                  <label for="ytTitleInput">Video Title / Trek Description</label>
+                  <input type="text" id="ytTitleInput" placeholder="e.g. Bootpaths Meeshapulimala Summit Trek Experience"/>
+                </div>
+              </div>
+              <div class="ms-btn-row">
+                <button type="submit" class="ms-add-btn"><span>➕</span> Add YouTube Video to Showcase</button>
+                <button type="button" class="ms-help-btn" onclick="toggleCodeHelper('ytCodeBox')">📋 View HTML Code Snippet</button>
+              </div>
+              <div class="ms-live-feedback" id="ytFeedback"></div>
+              <div class="ms-code-box" id="ytCodeBox">
+                <button type="button" class="ms-code-copy" onclick="copyCode('ytCodeBox')">Copy</button>
+                <pre>&lt;div class="vf"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&amp;modestbranding=1" 
+          title="Meeshapulimala Trek" frameborder="0" allowfullscreen loading="lazy"&gt;&lt;/iframe&gt;
+&lt;/div&gt;</pre>
+              </div>
+            </form>
+          </div>
+
+          <!-- PANEL 2: INSTAGRAM REEL EMBED -->
+          <div class="ms-tab-panel" id="panel-instagram">
+            <form onsubmit="addInstagramReel(event)">
+              <div class="ms-form-grid">
+                <div class="ms-field">
+                  <label for="reelLinkInput">Instagram Reel URL / Video Link</label>
+                  <input type="text" id="reelLinkInput" placeholder="e.g. https://www.instagram.com/reel/C123XYZ/ or direct .mp4 URL" required/>
+                </div>
+                <div class="ms-field">
+                  <label for="reelCaptionInput">Reel Caption</label>
+                  <input type="text" id="reelCaptionInput" placeholder="e.g. Waking up to the sea of clouds at Meeshapulimala! ☁️ #Bootpaths"/>
+                </div>
+                <div class="ms-field">
+                  <label for="reelAudioInput">Audio / Track Name</label>
+                  <input type="text" id="reelAudioInput" placeholder="e.g. Charlie Theme &bull; Munnar Breeze"/>
+                </div>
+              </div>
+              <div class="ms-btn-row">
+                <button type="submit" class="ms-add-btn"><span>➕</span> Add Reel to 9:16 Grid</button>
+                <button type="button" class="ms-help-btn" onclick="toggleCodeHelper('reelCodeBox')">📋 View HTML Code Snippet</button>
+              </div>
+              <div class="ms-live-feedback" id="reelFeedback"></div>
+              <div class="ms-code-box" id="reelCodeBox">
+                <button type="button" class="ms-code-copy" onclick="copyCode('reelCodeBox')">Copy</button>
+                <pre>&lt;div class="reel-card" onclick="toggleReelPlayback(this)"&gt;
+  &lt;img src="images/meeshapulimala_summit.jpg" class="reel-media"/&gt;
+  &lt;div class="reel-play-indicator"&gt;▶&lt;/div&gt;
+  &lt;div class="reel-overlay"&gt;
+    &lt;div class="reel-top"&gt;&lt;span class="reel-badge"&gt;Reel&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="reel-bottom"&gt;
+      &lt;div class="reel-author"&gt;&lt;span&gt;@bootpaths&lt;/span&gt;&lt;/div&gt;
+      &lt;p class="reel-caption"&gt;Walking above the clouds! #Meeshapulimala&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+              </div>
+            </form>
+          </div>
+
+          <!-- PANEL 3: LOCAL VIDEO FILE UPLOAD -->
+          <div class="ms-tab-panel" id="panel-upload">
+            <div class="ms-upload-dropzone">
+              <span class="ms-up-ico">📁</span>
+              <h4>Select a video file from your Android phone, iPhone, tablet or computer</h4>
+              <p>Supports MP4, MOV, WebM formats (Direct browser playback preview)</p>
+              <label for="localVideoUploadInput" class="ms-browse-btn">Browse Video File</label>
+              <input type="file" id="localVideoUploadInput" accept="video/mp4,video/webm,video/quicktime" onchange="handleVideoUpload(event)" style="display:none;"/>
+            </div>
+            <div class="ms-live-feedback" id="uploadFeedback"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trail Visuals</div>
+        <h2 class="stitle">Meeshapulimala Photo Gallery</h2>
+        <p class="ssub">Glimpses of high-altitude clouds, rhododendron groves, wildlife, and cozy alpine camps</p>
+      </div>
+
+      <!-- GALLERY CATEGORY FILTER BUTTONS -->
+      <div class="gallery-filters">
+        <button class="gb active" onclick="filterGallery('all', this)">All Photos</button>
+        <button class="gb" onclick="filterGallery('summit', this)">Summit &amp; Clouds</button>
+        <button class="gb" onclick="filterGallery('rhodo', this)">Rhodo Valley</button>
+        <button class="gb" onclick="filterGallery('wildlife', this)">Wildlife &amp; Shola</button>
+        <button class="gb" onclick="filterGallery('camp', this)">Campsite &amp; Jeep</button>
+      </div>
+
+      <!-- GALLERY GRID -->
+      <div class="gallery-grid">
+        <div class="gi" data-cat="summit" onclick="openLightbox(0)">
+          <img src="images/meeshapulimala_hero.jpg" alt="Meeshapulimala Sunrise Ridge" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Dawn breaking over the rolling sea of clouds</span></div>
+        </div>
+        <div class="gi" data-cat="rhodo" onclick="openLightbox(1)">
+          <img src="images/rhodo_valley.jpg" alt="Rhodo Valley Flowers" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Vibrant scarlet Rhododendron arboreum trees along mountain stream</span></div>
+        </div>
+        <div class="gi" data-cat="summit" onclick="openLightbox(2)">
+          <img src="images/meeshapulimala_summit.jpg" alt="Trekkers at Summit Pinnacle" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Trekkers standing on the rocky 2,640m summit pinnacle</span></div>
+        </div>
+        <div class="gi" data-cat="summit" onclick="openLightbox(3)">
+          <img src="images/pandava_cave.jpg" alt="Pandava Cave Shelter" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Ancient Pandava Cave resting point on the grassy trail</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(4)">
+          <img src="images/neelakurinji_bloom.jpg" alt="Neelakurinji Flower Hills" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Rolling hills of purple Neelakurinji wildflowers in bloom</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(5)">
+          <img src="images/shola_grassland.jpg" alt="Shola Forest Mosaic" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Pristine mosaic of Shola forest pockets and emerald montane grasslands</span></div>
+        </div>
+        <div class="gi" data-cat="summit" onclick="openLightbox(6)">
+          <img src="images/kolukkumalai_sunrise.jpg" alt="Kolukkumalai Tea Sunrise" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Sunrise over Kolukkumalai &mdash; world's highest tea plantation</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(7)">
+          <img src="images/nilgiri_tahr.jpg" alt="Endangered Nilgiri Tahr" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">The majestic Nilgiri Tahr mountain goat on rocky cliff</span></div>
+        </div>
+        <div class="gi" data-cat="camp" onclick="openLightbox(8)">
+          <img src="images/kfdc_basecamp.jpg" alt="Alpine Campsite Campfire" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Campfire night under starry sky at KFDC Rhodo Valley Base</span></div>
+        </div>
+        <div class="gi" data-cat="camp" onclick="openLightbox(9)">
+          <img src="images/jeep_safari.jpg" alt="4x4 Off-Road Jeep Expedition" loading="lazy"/>
+          <div class="gi-ov"><span class="gi-cap">Rugged 4x4 Mahindra Jeep climbing the mountain off-road tracks</span></div>
+        </div>
+      </div>
+
+      <!-- LIGHTBOX MODAL -->
+      <div class="gallery-lightbox" id="galleryLightbox">
+        <div class="glb-backdrop" onclick="closeLightbox()"></div>
+        <div class="glb-container">
+          <button class="glb-close" onclick="closeLightbox()" aria-label="Close Lightbox">&times;</button>
+          <button class="glb-prev" onclick="changeLightbox(-1)" aria-label="Previous Image">&#10094;</button>
+          <div class="glb-content">
+            <img src="" alt="" id="lightboxImg"/>
+            <div class="glb-caption-bar">
+              <span id="lightboxCaption"></span>
+              <span id="lightboxIndex"></span>
+            </div>
+          </div>
+          <button class="glb-next" onclick="changeLightbox(1)" aria-label="Next Image">&#10095;</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INCLUSIONS & EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Transparent Pricing</div>
+        <h2 class="stitle">What's Included &amp; Excluded</h2>
+        <p class="ssub">Everything you need for a safe, seamless, and deeply memorable Western Ghats expedition</p>
+      </div>
+
+      <div class="ie-grid">
+        <!-- INCLUSIONS -->
+        <div class="ie-col inc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✓</span>
+            <h3>What's Included</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Official Forest Permits:</b> Kerala Forest Development Corporation (KFDC) trek pass and sanctuary entry fees.</li>
+            <li><b>4x4 Off-Road Jeep Transfers:</b> Return off-road safari jeep transfers from Munnar Basecamp to Rhodo Valley.</li>
+            <li><b>Tented Stay:</b> Alpine dome tents with clean high-altitude sleeping bags, foam mats, and pillows.</li>
+            <li><b>Wholesome Mountain Meals:</b> Freshly prepared lunch, evening hot tea/snacks, campfire dinner, and post-summit breakfast.</li>
+            <li><b>Certified Trail Leadership:</b> Experienced Bootpaths mountain leads and local tribal naturalists.</li>
+            <li><b>Safety &amp; First Aid:</b> Comprehensive medical kit, pulse oximeter, and emergency evacuation protocol.</li>
+            <li><b>Campfire Experience:</b> Cozy evening gathering in the crisp high-altitude air (subject to forest weather conditions).</li>
+          </ul>
+        </div>
+
+        <!-- EXCLUSIONS -->
+        <div class="ie-col exc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✕</span>
+            <h3>What's Excluded</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Travel to Munnar:</b> Transportation from your home city / Kochi Airport to Munnar town.</li>
+            <li><b>Personal Gear:</b> Trekking shoes, warm thermal jackets, rainwear, and personal water bottles.</li>
+            <li><b>Camera Permits:</b> Commercial video equipment fees if mandated by the Forest Department.</li>
+            <li><b>Personal Expenses:</b> Mineral water bottles, tips, or personal emergency expenses.</li>
+            <li><b>Insurance:</b> Personal accidental and travel insurance coverage.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE PACKING CHECKLIST -->
+      <div class="packing-card" style="margin-top: 50px;">
+        <div class="pc-header">
+          <div>
+            <h3>🎒 Trek Essentials &amp; Packing Checklist</h3>
+            <p>Tap items below as you pack to ensure you don't leave anything behind for the cold summit morning</p>
+          </div>
+          <div class="pc-progress">
+            <span id="packCount">0/8 Packed</span>
+            <div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div>
+          </div>
+        </div>
+        <div class="pack-grid">
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Sturdy Trekking Shoes</b><small>Deep tread with ankle support</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Warm Down/Fleece Jacket</b><small>Dawn temperatures drop to 4°C</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Headlamp or Torch</b><small>Essential for 5:00 AM summit trek</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Reusable Water Bottle (1.5L)</b><small>Zero-plastic forest zone</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Quick-Dry Trek Pants</b><small>Breathable and flexible fabric</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Rain Poncho / Windcheater</b><small>High ridge wind &amp; mist protection</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Sunscreen &amp; Sunglasses</b><small>High UV exposure at 2,640m</small></div>
+          </div>
+          <div class="pack-item" onclick="togglePackItem(this)">
+            <span class="p-box"></span>
+            <div><b>Govt ID Card (Original)</b><small>Mandatory for forest checkpost</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about the Meeshapulimala expedition</p>
+      </div>
+
+      <div class="faq-accordion">
+        
+        <div class="faq-card open">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>How difficult is the Meeshapulimala Trek? Can beginners join?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The trek is rated <strong>Moderate</strong>. Since the rugged 4x4 Jeep takes you all the way up to Rhodo Valley at 2,160m, the walking trek is approximately 8 km round-trip across the 8 rolling peaks to the summit at 2,640m. Any individual with reasonable cardio fitness, comfortable walking stamina, and sturdy footwear can easily complete this trek.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What is the best time of the year to witness the "Mist of Charlie"?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The prime season spans from <strong>September to May</strong>. <em>September to November (Post-Monsoon)</em> offers emerald green grasslands and raging waterfalls. <em>December to February (Winter)</em> delivers the most iconic misty mornings, sea of clouds, and crisp temperatures dropping to near freezing. <em>March to April</em> brings blooming red Rhododendron arboreum flowers in Rhodo Valley.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Are permits mandatory, and can we trek without official guides?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p><strong>No solo or unpermitted trekking is allowed.</strong> Meeshapulimala is an ecologically protected forest reserve managed strictly by the Kerala Forest Development Corporation (KFDC). Bootpaths secures all mandatory forest entry permits, tent bookings, and authorized tribal guides for every group.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What are the accommodation and bathroom facilities at Rhodo Valley?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>You will stay in sturdy alpine dome tents pitched on flat grasslands with thermal sleeping bags and pillows. Well-maintained western/indian shared toilets and washrooms are available at the KFDC campsite facility. Note that being a high-altitude wilderness camp, electricity is solar-powered with limited charging points.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>How cold does it get at night and during the dawn summit?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>During the day, pleasant temperatures range between 15°C and 22°C. At night and during the 5:00 AM dawn summit climb, temperatures regularly hover between <strong>4°C and 10°C</strong>, and occasionally drop near 0°C with ground frost in mid-winter. A warm thermal layer, fleece/down jacket, beanie, and gloves are highly recommended.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>How do I reach the starting basecamp in Munnar?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The nearest airport and major railway junction is <strong>Cochin International Airport (COK) / Aluva Railway Station</strong>, located about 115 km (3.5 hours drive) from Munnar town. Frequent KSRTC buses and private cabs operate between Kochi/Ernakulam and Munnar. Our team can also arrange private pickup transfers on request.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING & CALLBACK -->
+  <section class="booking section" id="booking">
+    <div class="container">
+      <div class="booking-wrapper">
+        
+        <div class="bw-info">
+          <div class="stag light">Reserve Your Spot</div>
+          <h2 class="stitle light">Ready to Walk<br/>Above the Clouds?</h2>
+          <p class="bw-lead">Slots for Meeshapulimala are strictly capped by the Kerala Forest Department to preserve the fragile high-altitude ecosystem. Book your weekend or weekday slot early!</p>
+          
+          <div class="bw-perks">
+            <div class="perk"><span>✓</span> Official KFDC forest permits guaranteed</div>
+            <div class="perk"><span>✓</span> Return 4x4 mountain safari included</div>
+            <div class="perk"><span>✓</span> Certified mountain leaders &amp; tribal naturalists</div>
+            <div class="perk"><span>✓</span> Zero cancellation fee up to 7 days before trek</div>
+          </div>
+
+          <div class="bw-wa-box">
+            <h4>Have immediate questions?</h4>
+            <p>Chat directly with our trek coordinator on WhatsApp for customized group packages or corporate departures.</p>
+            <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20have%20questions%20regarding%20the%20Meeshapulimala%20Trek." target="_blank" rel="noopener" class="bw-wa-btn">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+              Chat on WhatsApp: +91 9446102200
+            </a>
+          </div>
+        </div>
+
+        <div class="bw-form-card">
+          <h3>Reserve Your Trek Slot</h3>
+          <p class="form-sub">Fill out the quick form to receive an instant WhatsApp booking confirmation</p>
+          
+          <form onsubmit="sf(event)">
+            <div class="form-row">
+              <div class="form-grp">
+                <label for="fn">First Name *</label>
+                <input type="text" id="fn" placeholder="e.g. Rahul" required/>
+              </div>
+              <div class="form-grp">
+                <label for="ln">Last Name</label>
+                <input type="text" id="ln" placeholder="e.g. Nair"/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-grp">
+                <label for="ph">Phone / WhatsApp Number *</label>
+                <input type="tel" id="ph" placeholder="+91 98765 43210" required/>
+              </div>
+              <div class="form-grp">
+                <label for="em">Email Address *</label>
+                <input type="email" id="em" placeholder="rahul@example.com" required/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-grp">
+                <label for="dt">Preferred Trek Date *</label>
+                <input type="date" id="dt" required/>
+              </div>
+              <div class="form-grp">
+                <label for="tr">Number of Trekkers *</label>
+                <select id="tr">
+                  <option value="1">1 Person (Solo)</option>
+                  <option value="2" selected>2 Persons</option>
+                  <option value="3">3 Persons</option>
+                  <option value="4">4 Persons</option>
+                  <option value="5-8">5 to 8 Persons (Group)</option>
+                  <option value="9+">9+ Persons (Corporate / Large Group)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grp">
+              <label for="pkg">Package Option</label>
+              <select id="pkg">
+                <option value="Rhodo Valley Alpine Tent Stay (2D/1N) - ₹4,999" selected>Rhodo Valley Alpine Tent Stay (2D/1N) &ndash; ₹4,999 / person</option>
+                <option value="Rhodo Mansion Room Stay (2D/1N) - ₹6,499">Rhodo Mansion Room Stay (2D/1N) &ndash; ₹6,499 / person</option>
+                <option value="Custom Private / Corporate Group Package">Custom Private / Corporate Group Package</option>
+              </select>
+            </div>
+
+            <div class="form-grp">
+              <label for="msg">Special Requests / Questions</label>
+              <textarea id="msg" rows="3" placeholder="Any dietary preferences or transport pickup requests from Kochi/Munnar..."></textarea>
+            </div>
+
+            <button type="submit" class="form-submit-btn">
+              <span>🚀</span> Request Instant Confirmation on WhatsApp
+            </button>
+            <p class="form-note">🔒 Your details are safe with us. No spam, guaranteed.</p>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="fg-col brand-col">
+          <a href="#" class="f-logo">
+            <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img"/>
+            <span class="logo-text">Bootpaths</span>
+          </a>
+          <p class="f-desc">Bootpaths curates transformative walking expeditions to the world's greatest trails &mdash; from the high Himalayas to the mist-wrapped ridges of the Western Ghats. Founded with a deep passion for wild mountains and respectful eco-trekking.</p>
+          <div class="f-contact-item">
+            <span>📞</span> <b>+91 9446102200</b>
+          </div>
+          <div class="f-contact-item">
+            <span>✉️</span> <b>info@bootpaths.com</b>
+          </div>
+        </div>
+
+        <div class="fg-col">
+          <h4>Expeditions</h4>
+          <ul class="f-links">
+            <li><a href="#hero">Meeshapulimala Peak (2,640m)</a></li>
+            <li><a href="https://bootpaths.github.io/EBC/" target="_blank" rel="noopener">Everest Base Camp (5,364m)</a></li>
+            <li><a href="#">Silent Valley Rainforest</a></li>
+            <li><a href="#">Agasthyarkoodam Trek</a></li>
+            <li><a href="#">Kashmir Great Lakes</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Navigation</h4>
+          <ul class="f-links">
+            <li><a href="#overview">About the Trek</a></li>
+            <li><a href="#highlights">Key Highlights</a></li>
+            <li><a href="#altitude">3D Real-Type Elevation</a></li>
+            <li><a href="#itinerary">2-Day Itinerary</a></li>
+            <li><a href="#media">Media &amp; Reels Space</a></li>
+            <li><a href="#gallery">Photo Gallery</a></li>
+            <li><a href="#inclusions">Inclusions &amp; Packing</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Trail Ethics</h4>
+          <p class="f-ethics-text">We strictly follow <strong>Leave No Trace</strong> principles. Meeshapulimala is a sensitive biodiversity hotspot &mdash; single-use plastics and noise pollution are strictly prohibited. Respect nature, cherish local communities, and leave only footprints.</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bootpaths Trails Pvt Ltd. All rights reserved. Walk the World's Greatest Trails.</p>
+        <div class="fb-links">
+          <a href="#">Terms &amp; Conditions</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Forest Regulations</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE STICKY BOTTOM ACTION BAR (OPTIMIZED FOR ANDROID & IPHONES) -->
+  <div class="mobile-bottom-bar" id="mobileBottomBar">
+    <a href="tel:+919446102200" class="mbb-btn mbb-call">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      Call Us
+    </a>
+    <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20book%20the%20Meeshapulimala%20trek." target="_blank" rel="noopener" class="mbb-btn mbb-wa">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+      WhatsApp
+    </a>
+    <a href="#booking" class="mbb-btn mbb-book">
+      Book Now
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

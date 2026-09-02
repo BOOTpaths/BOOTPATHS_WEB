@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Silent Valley Rainforest Trek | Bootpaths – Walk the World's Greatest Trails</title>
+  <meta name="description" content="Embark on the untamed Silent Valley Rainforest Trek with Bootpaths. Journey through India's last virgin tropical evergreen rainforest in the Nilgiri Biosphere Reserve, Kerala." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <div class="logo-icon-container">
+          <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+        </div>
+        <span class="logo-text"><span class="text-orange">BOOT</span><span class="text-brown">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#altitude">3D Elevation</a></li>
+          <li><a href="#itinerary">Itinerary</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#inclusions">Inclusions</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener" class="mobile-callback-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+            Request Callback on WhatsApp
+          </a>
+          <a href="#booking" class="mobile-cta-btn" onclick="toggleMenu()">Book Now</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener" class="nav-callback-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request Callback
+        </a>
+        <a href="#booking" class="nav-cta">Book Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="images/silent_valley_hero.jpg" alt="Silent Valley National Park" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Kerala &bull; Nilgiri Biosphere Reserve</div>
+      <h1 class="hero-title">Silent Valley<br/><em>Rainforest Trek</em></h1>
+      <p class="hero-sub">Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven</p>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-ico">&#9968;&#65039;</span><div><b>2,383m</b><small>Max Altitude</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128197;</span><div><b>3 Days</b><small>Duration</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#129506;</span><div><b>Moderate</b><small>Difficulty</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128205;</span><div><b>Mukkali</b><small>Start Point</small></div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-p">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener" class="btn-wa">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g">View Itinerary</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="sarrow"></div></div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>&#128197;</span><div><small>Best Season</small><strong>Oct&ndash;Mar (Cool &amp; Clear)</strong></div></div>
+        <div class="qi"><span>&#127957;&#65039;</span><div><small>Accommodation</small><strong>Forest Bungalow &amp; Camp</strong></div></div>
+        <div class="qi"><span>&#129495;</span><div><small>Trek Distance</small><strong>~32 km Circuit Trail</strong></div></div>
+        <div class="qi"><span>&#128663;</span><div><small>Starting Base</small><strong>Mukkali, Palakkad (658m)</strong></div></div>
+        <div class="qi"><span>&#128176;</span><div><small>Eco Expedition</small><strong>&#8377;4,000 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">India's Most Mystical<br/>Virgin Rainforest</h2>
+          <p class="ov-lead">Silent Valley National Park is one of the last undisturbed tropical evergreen rainforest tracts in the world &mdash; a living prehistoric sanctuary where the natural silence is broken only by the whispers of the canopy and the rush of the crystal Kunthi River.</p>
+          <p class="ov-body">Protected through the historic 1970s environmental movement that saved it from being submerged by a hydroelectric dam, Silent Valley stands today as the crown jewel of the UNESCO Nilgiri Biosphere Reserve. Because cicadas are mysteriously absent from these deep woods, the silence here has a sacred, primeval quality found nowhere else on earth.</p>
+          <p class="ov-body">Starting from Mukkali basecamp with Kerala Forest Department registered eco-guides, our expedition takes you across the roaring Sairandhri forest trails, over the legendary Kunthi River suspension footbridge, and into the heart of the endangered Lion-tailed Macaque's primary habitat.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>2,383m</b><small>Anginda Peak Rim</small></div>
+            <div class="fact"><b>1,000+</b><small>Flora &amp; Orchid Species</small></div>
+            <div class="fact"><b>100%</b><small>Virgin Forest Canopy</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/sairandhri_tower.jpg" alt="Sairandhri Watch Tower" class="si1"/>
+            <img src="images/kunthi_river.jpg" alt="Kunthi River" class="si2"/>
+            <div class="img-float"><span>03</span><small>Days in Jungle</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">Extraordinary moments in the heart of the Western Ghats biodiversity hotspot</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kunthi_river.jpg" alt="Kunthi River Suspension Bridge" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Kunthi River &amp; Suspension Bridge</h3><p>Cross the mythical Kunthipuzha river over the steel suspension bridge &mdash; water so untouched and pure it famously never turns muddy even during heavy tropical rains.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/sairandhri_tower.jpg" alt="Sairandhri 100ft Tower" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Sairandhri 100ft Canopy Tower</h3><p>Ascend the observation tower standing 100 feet above the multi-tiered jungle canopy for a panoramic 360-degree view of endless emerald peaks and drifting valley mist.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/lion_tailed_macaque.jpg" alt="Endangered Lion-tailed Macaque" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Lion-tailed Macaque Tracking</h3><p>Encounter India's most iconic primate &mdash; the majestic, silver-maned Lion-tailed Macaque (Macaca silenus) &mdash; living freely in its largest viable global population.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/poochipara_trail.jpg" alt="Poochipara Rainforest Trail" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Poochipara Trail &amp; Waterfalls</h3><p>Trek beneath colossal ancient buttress-rooted trees, hanging lianas, and mossy jungle logs along the pristine Poochipara stream and secluded cascade pools.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/sispara_pass.jpg" alt="Sispara Historic Ridge" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Historic Sispara Shola Pass</h3><p>Explore the historic pass linking Kerala and the Nilgiri hills, where unique high-altitude shola grasslands meet the mist-soaked rainforest ridges at over 2,200m.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">&#127795;</div>
+            <h3>360&deg; Nilgiri Biosphere Rainforest Canopy</h3>
+            <p>Walk through one of the planet's top biodiversity hotspots &mdash; home to rare endemic birds, Malabar giant squirrels, Ceylon frogmouths, Nilgiri langurs, and centuries-old tropical trees.</p>
+            <div class="mtn-tags"><span>Lion-tailed Macaque</span><span>Malabar Giant Squirrel</span><span>Great Indian Hornbill</span><span>Nilgiri Tahr</span><span>Ceylon Frogmouth</span><span>Kunthi River</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D REALTYPE ALTITUDE PROFILE
+  <section class="alt-section section" id="altitude">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">3D Terrain &amp; Elevation</div>
+        <h2 class="stitle">Real-Type 3D Altitude Profile</h2>
+        <p class="ssub">Explore the interactive 3D topography from Mukkali Basecamp through Sairandhri, Kunthi River, and Sispara high ridges</p>
+      </div>
+
+      <div class="alt-3d-card">
+        <div class="alt-3d-toolbar">
+          <div class="alt-view-modes">
+            <button class="view-mode-btn active" id="btnModeTerrain" onclick="set3DMode('terrain')">
+              <span class="vm-ico">&#127956;&#65039;</span> 3D Rainforest Valley
+            </button>
+            <button class="view-mode-btn" id="btnModeProfile" onclick="set3DMode('profile')">
+              <span class="vm-ico">&#128202;</span> 3D Extruded Profile
+            </button>
+          </div>
+          
+          <div class="alt-cam-controls">
+            <button class="cam-btn" id="btnAutoRotate" onclick="toggle3DRotate()" title="Toggle Auto-Rotation">
+              <span id="rotateIcon">&#9208;&#65039;</span> <span class="cb-txt">Auto-Rotate</span>
+            </button>
+            <button class="cam-btn" onclick="reset3DCamera()" title="Reset Camera View">
+              <span>&#128260;</span> <span class="cb-txt">Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="alt-canvas-wrap" id="altCanvasWrap">
+          <canvas id="alt3dCanvas"></canvas>
+          
+          <div class="alt-hud-tooltip" id="altHudTooltip">
+            <div class="hud-header">
+              <span class="hud-day" id="hudDay">Day 1</span>
+              <h4 class="hud-name" id="hudName">Sairandhri Gate &amp; Tower</h4>
+            </div>
+            <div class="hud-stats">
+              <div class="hud-stat"><span>Altitude:</span> <b id="hudAlt">1,020 m (3,346 ft)</b></div>
+              <div class="hud-stat"><span>Canopy Density:</span> <b id="hudO2">~95% Virgin Cover</b></div>
+            </div>
+            <p class="hud-desc" id="hudDesc">Entrance to the deep core national park zone with 100ft watch tower overlooking the rainforest.</p>
+          </div>
+
+          <div class="alt-drag-hint" id="altDragHint">
+            <span>&#128070; Drag to rotate 3D mountain valley &bull; Scroll / Pinch to zoom &bull; Click pins for details</span>
+          </div>
+        </div>
+
+        <div class="alt-waypoints-strip">
+          <span class="aw-lbl">Interactive Milestones:</span>
+          <div class="aw-pills" id="awPills">
+            <button class="aw-btn" onclick="focus3DWaypoint(0)">Mukkali <span>658m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(1)">Sairandhri <span>1,020m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(2)">Kunthi River <span>920m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(3)">Poochipara <span>1,150m</span></button>
+            <button class="aw-btn" onclick="focus3DWaypoint(4)">Walakkad <span>1,450m</span></button>
+            <button class="aw-btn active-kp" onclick="focus3DWaypoint(5)">Sispara <span>2,206m</span></button>
+            <button class="aw-btn active-ebc" onclick="focus3DWaypoint(6)">Anginda Peak <span>2,383m</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ITINERARY -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Route Guide</div>
+        <h2 class="stitle">Itinerary Details</h2>
+        <p class="ssub">Discover the 3-day rainforest expedition with daily milestones, trail maps, and eco-guidelines</p>
+      </div>
+
+      <div class="itinerary-accordions">
+
+        <!-- DROPDOWN 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128203;</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary</h3>
+                <p>Get your trek plan at a glance with key milestones &amp; daily highlights</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="quick-it-grid">
+              <div class="qi-card">
+                <div class="qi-card-badge">Day 1</div>
+                <h4>Mukkali Base to Sairandhri &amp; Kunthi River</h4>
+                <p>Arrival at Mukkali basecamp. Forest Department permit verification, safari jeep drive (23 km) into dense buffer zone, check-in at Sairandhri, trek down to the historic suspension bridge over Kunthi River.</p>
+                <div class="qi-stats"><span>&#128099; 4 km Trek</span><span>&#9968;&#65039; 1,020m</span><span>&#127957;&#65039; Sairandhri FRH / Camp</span></div>
+              </div>
+
+              <div class="qi-card">
+                <div class="qi-card-badge">Day 2</div>
+                <h4>Poochipara Deep Rainforest Trail &amp; Wildlife</h4>
+                <p>Early morning ascent to Sairandhri 100ft watch tower for canopy birdwatching. Full-day guided trek into Poochipara forest path, observing Lion-tailed Macaques, endemic flora, and swimming in crystal natural pools.</p>
+                <div class="qi-stats"><span>&#128099; 14 km Trek</span><span>&#9968;&#65039; 1,150m</span><span>&#127957;&#65039; Forest Eco Camp</span></div>
+              </div>
+
+              <div class="qi-card">
+                <div class="qi-card-badge">Day 3</div>
+                <h4>Walakkad Shola Ridge &amp; Mukkali Return</h4>
+                <p>Trek towards Walakkad wilderness ridge bordering the Nilgiri Biosphere sholas. Final panoramic views across Sispara Pass, descent back to Sairandhri, safari return to Mukkali, and certificate presentation.</p>
+                <div class="qi-stats"><span>&#128099; 10 km Trek</span><span>&#9968;&#65039; 1,450m</span><span>&#127937; Departure</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 2: DETAILED DAY-BY-DAY ITINERARY -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128506;&#65039;</span>
+              <div class="mah-text">
+                <h3>Detailed Day-by-Day Itinerary</h3>
+                <p>In-depth schedule with elevations, terrain descriptions, wildlife spotting, and meals</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="it-days-list">
+
+              <!-- DAY 1 -->
+              <div class="it-day open">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge">Day 1</span>
+                    <div>
+                      <h4 class="itd-title">Arrival at Mukkali, Forest Jeep Safari to Sairandhri &amp; Kunthi River Bridge</h4>
+                      <div class="itd-sub">Mukkali (658m) &rarr; Sairandhri (1,020m) &rarr; Kunthi River (920m)</div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4 km hike</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 1,020m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <p>Meet the Bootpaths expedition leader at the Mukkali Forest Information Centre at 08:30 AM. After Forest Department registration and a comprehensive briefing on rainforest etiquette, board authorized 4WD forest safari jeeps for the scenic 23 km journey through the buffer zone to Sairandhri.</p>
+                      <p>Check into the Forest Inspection Bungalow / Eco-Camps at Sairandhri. After a warm traditional Kerala lunch, set out on foot with certified tribal trackers descending through towering mahogany, rosewood, and bamboo groves towards the Kunthi River.</p>
+                      <p>Stand in awe on the historic suspension footbridge over the crystal-clear waters of the Kunthi River, known as the river that never turns muddy. Return to camp before sunset for tea and an evening naturalist presentation on the endemic biodiversity of the Silent Valley.</p>
+                      <div class="itd-meta-grid">
+                        <div class="im-item"><b>Distance</b><span>23 km Jeep + 4 km Trek</span></div>
+                        <div class="im-item"><b>Duration</b><span>5&ndash;6 Hours total</span></div>
+                        <div class="im-item"><b>Meals</b><span>Lunch, Evening Tea &amp; Dinner</span></div>
+                        <div class="im-item"><b>Stay</b><span>Forest Inspection Bungalow / Eco Camp</span></div>
+                      </div>
+                    </div>
+                    <div class="itd-vis">
+                      <img src="images/kunthi_river.jpg" alt="Kunthi River Footbridge" loading="lazy"/>
+                      <span class="itd-vis-cap">Historic suspension bridge over the crystal Kunthi River</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DAY 2 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge">Day 2</span>
+                    <div>
+                      <h4 class="itd-title">Poochipara Deep Rainforest Expedition &amp; Lion-tailed Macaque Tracking</h4>
+                      <div class="itd-sub">Sairandhri (1,020m) &rarr; Sairandhri Tower &rarr; Poochipara Stream (1,150m)</div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 14 km trek</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 1,150m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <p>Wake up to the symphony of Malabar Whistling Thrushes at dawn. Climb the 100ft Sairandhri observation tower to watch early morning mist rolling over the multi-tiered canopy of the Western Ghats.</p>
+                      <p>Equipped with leech gaiters and trail packs, embark on the legendary Poochipara trek. This trail penetrates deep into the primary tropical evergreen rainforest. Keep your eyes trained on the upper canopy for the glossy black fur and silver mane of the Lion-tailed Macaque foraging in wild fig trees.</p>
+                      <p>Reach the picturesque Poochipara riverbed and natural cascade pools for a packed trail lunch beside pristine cascades. Return along the shaded forest route, spotting Malabar Giant Squirrels, hornbills, and rare tree frogs.</p>
+                      <div class="itd-meta-grid">
+                        <div class="im-item"><b>Distance</b><span>14 km round trip</span></div>
+                        <div class="im-item"><b>Duration</b><span>6&ndash;7 Hours</span></div>
+                        <div class="im-item"><b>Meals</b><span>Breakfast, Trail Lunch &amp; Dinner</span></div>
+                        <div class="im-item"><b>Stay</b><span>Sairandhri Forest Camp</span></div>
+                      </div>
+                    </div>
+                    <div class="itd-vis">
+                      <img src="images/poochipara_trail.jpg" alt="Poochipara Rainforest Trail" loading="lazy"/>
+                      <span class="itd-vis-cap">Walking beneath giant rainforest canopy trees along Poochipara trail</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DAY 3 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge">Day 3</span>
+                    <div>
+                      <h4 class="itd-title">Walakkad Shola Wilderness, Sairandhri Farewell &amp; Mukkali Return</h4>
+                      <div class="itd-sub">Sairandhri &rarr; Walakkad Ridge (1,450m) &rarr; Mukkali Base (658m)</div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 10 km trek</span>
+                      <span class="itd-pill alt-down"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg> 658m base</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <p>Start early with a scenic trek towards the Walakkad forest ridge, where the dense rainforest gradually transitions into the high-altitude shola grasslands of the Nilgiris border.</p>
+                      <p>Enjoy uninterrupted views towards Sispara Pass and Anginda Peak. Return to camp for a traditional brunch, pack up, and board the 4WD safari jeeps back down the winding ghat road to Mukkali.</p>
+                      <p>Conclude the expedition with certificate distribution, sharing group memories, and farewells at the Mukkali Forest Information Centre by 03:00 PM.</p>
+                      <div class="itd-meta-grid">
+                        <div class="im-item"><b>Distance</b><span>10 km trek + 23 km Jeep</span></div>
+                        <div class="im-item"><b>Duration</b><span>4&ndash;5 Hours</span></div>
+                        <div class="im-item"><b>Meals</b><span>Breakfast &amp; Lunch</span></div>
+                        <div class="im-item"><b>Stay</b><span>Departure to Palakkad / Coimbatore</span></div>
+                      </div>
+                    </div>
+                    <div class="itd-vis">
+                      <img src="images/sairandhri_tower.jpg" alt="Silent Valley Wilderness" loading="lazy"/>
+                      <span class="itd-vis-cap">Farewell vistas over the pristine Western Ghats canopy</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Visual Experience</div>
+        <h2 class="stitle">Photo Gallery</h2>
+        <p class="ssub">Moments captured deep in the virgin tropical evergreen wilderness of Silent Valley</p>
+      </div>
+
+      <div class="gallery-tabs">
+        <button class="gt-btn active" onclick="filterGallery('all', this)">All Photos</button>
+        <button class="gt-btn" onclick="filterGallery('canopy', this)">Canopy &amp; Peaks</button>
+        <button class="gt-btn" onclick="filterGallery('river', this)">Rivers &amp; Falls</button>
+        <button class="gt-btn" onclick="filterGallery('wildlife', this)">Wildlife &amp; Flora</button>
+        <button class="gt-btn" onclick="filterGallery('trail', this)">Trail Life</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gi" data-cat="canopy" onclick="openLightbox(0)">
+          <img src="images/silent_valley_hero.jpg" alt="Silent Valley Evergreen Canopy" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Misty Sunrise over Virgin Rainforest Canopy</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="river" onclick="openLightbox(1)">
+          <img src="images/kunthi_river.jpg" alt="Kunthi River Suspension Bridge" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Pristine Kunthi River &amp; Suspension Bridge</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="canopy" onclick="openLightbox(2)">
+          <img src="images/sairandhri_tower.jpg" alt="Sairandhri 100ft Watch Tower" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">100ft Sairandhri Observation Tower</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(3)">
+          <img src="images/lion_tailed_macaque.jpg" alt="Lion-tailed Macaque" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Endangered Lion-tailed Macaque in Habitat</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(4)">
+          <img src="images/poochipara_trail.jpg" alt="Poochipara Rainforest Path" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Poochipara Rainforest Trail with Trekkers</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="canopy" onclick="openLightbox(5)">
+          <img src="images/sispara_pass.jpg" alt="Sispara Mountain Pass" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Sispara Mountain Ridge at 2,206m</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="canopy" onclick="openLightbox(6)">
+          <img src="images/rainforest_canopy.jpg" alt="Tropical Rainforest Canopy" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Lush Western Ghats Rainforest Canopy</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(7)">
+          <img src="images/mukkali_camp.jpg" alt="Mukkali Forest Basecamp" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Mukkali Forest Base &amp; Inspection Bungalow</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="gallery-lightbox" id="galleryLightbox" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-prev" onclick="changeLightbox(-1)">&#10094;</button>
+      <img src="" alt="" id="lightboxImg" />
+      <button class="lightbox-next" onclick="changeLightbox(1)">&#10095;</button>
+      <div class="lightbox-info">
+        <div id="lightboxCaption"></div>
+        <div id="lightboxIndex"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUSIONS / EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">What is Covered</div>
+        <h2 class="stitle">Inclusions &amp; Exclusions</h2>
+        <p class="ssub">Complete transparency on what your Silent Valley eco-trek package covers</p>
+      </div>
+      <div class="ie-grid">
+        <div class="iec inc-card">
+          <div class="iec-h"><span>&#9989;</span><h3>What is Included</h3></div>
+          <ul>
+            <li><span class="chk">&#10003;</span> Kerala Forest Department entry &amp; trekking permits</li>
+            <li><span class="chk">&#10003;</span> Certified government-licensed tribal naturalist guide</li>
+            <li><span class="chk">&#10003;</span> Sairandhri return 4WD forest safari jeep transfers</li>
+            <li><span class="chk">&#10003;</span> Sairandhri Forest Inspection Bungalow / Eco-camp stay (2 nights)</li>
+            <li><span class="chk">&#10003;</span> All meals during trek (traditional organic Kerala breakfast, trail lunch &amp; dinner)</li>
+            <li><span class="chk">&#10003;</span> Leech gaiters &amp; natural herbal repellent kit</li>
+            <li><span class="chk">&#10003;</span> Full wilderness first-aid kit &amp; certified wilderness responder</li>
+            <li><span class="chk">&#10003;</span> Certificate of Eco-Trek Completion signed by Bootpaths</li>
+          </ul>
+        </div>
+        <div class="iec exc-card">
+          <div class="iec-h"><span>&#10060;</span><h3>What is Excluded</h3></div>
+          <ul>
+            <li><span class="cross">&times;</span> Travel to and from Mukkali Base (available as add-on from Palakkad / Coimbatore)</li>
+            <li><span class="cross">&times;</span> Professional camera/video permits mandated by Forest Dept</li>
+            <li><span class="cross">&times;</span> Personal trekking gear (boots, rain ponchos, backpack)</li>
+            <li><span class="cross">&times;</span> Personal expenses, mineral water bottles, snacks</li>
+            <li><span class="cross">&times;</span> Travel insurance &amp; medical evacuation costs</li>
+            <li><span class="cross">&times;</span> Tips or gratuities for forest drivers and tribal eco-trackers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PACKING & GEAR CHECKLIST -->
+      <div class="gear-section" style="margin-top: 60px;">
+        <div class="sh center" style="margin-bottom: 30px;">
+          <div class="stag">Trail Readiness</div>
+          <h3 style="font-size: 1.8rem; font-family: 'Playfair Display', serif; color: #0f172a;">Essential Rainforest Packing Checklist</h3>
+          <p class="ssub">Click items to mark them as packed into your rucksack</p>
+          <div class="cl-badge" id="clCountBadge" style="display:inline-block; margin-top:10px; background:#e0f2fe; color:#0284c7; padding:6px 16px; border-radius:9999px; font-weight:700; font-size:0.85rem;">0 / 8 Packed</div>
+        </div>
+        <div class="checklist-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Leech Socks / Gaiters</strong><br/><small style="color:#64748b;">Vital protection on forest floor</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Waterproof Trekking Shoes</strong><br/><small style="color:#64748b;">With aggressive grip for wet trails</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Rain Poncho / Jacket</strong><br/><small style="color:#64748b;">Lightweight tropical rain cover</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Quick-Dry Full Sleeve Shirts</strong><br/><small style="color:#64748b;">Earthy tones (green, olive, brown)</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Binoculars (8x42 or 10x42)</strong><br/><small style="color:#64748b;">For high canopy birdwatching</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Dry Bags / Waterproof Pouch</strong><br/><small style="color:#64748b;">For phone, camera &amp; documents</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Reusable Water Flask (1.5L)</strong><br/><small style="color:#64748b;">Strict plastic-free park rule</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Headlamp &amp; Extra Batteries</strong><br/><small style="color:#64748b;">For eco-camp nights in the jungle</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about trekking in Silent Valley National Park</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>Do we need prior government permits to trek in Silent Valley?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Silent Valley is an ecologically sensitive core zone under the Kerala Forest and Wildlife Department. Visitor numbers are strictly capped every day to minimize human footprint. Bootpaths secures all official forest permits, vehicle safari permissions, and tribal guide allotments on your behalf in advance.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>Are there leeches on the trail and how do we prepare?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Because Silent Valley is a moist tropical evergreen rainforest, leeches are common along damp forest paths, particularly after light rain. Leeches are completely harmless and do not carry diseases. Bootpaths provides specialized knee-high leech gaiters and natural herbal salt/lime solutions to keep them off comfortably.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>Can beginners and first-time trekkers join this trek?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Absolutely! The 3-day Silent Valley expedition is rated as Moderate. It involves daily walks of 4 to 14 km over natural terrain with gentle to moderate inclines. Anyone with average cardiovascular fitness and a passion for wild nature can complete it with ease.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>What is the chance of spotting the rare Lion-tailed Macaque?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Silent Valley houses one of the healthiest viable populations of the endangered Lion-tailed Macaque in the world. While wildlife sightings are naturally wild and unpredictable, our trek routes through Poochipara and Sairandhri offer over an 80% sighting probability, especially in the early mornings when they feed in the high canopy.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>How do I reach the Mukkali basecamp?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Mukkali is located in Mannarkkad taluk, Palakkad district, Kerala. The nearest major railway stations are Palakkad Junction (60 km) and Coimbatore Junction (85 km). The nearest airport is Coimbatore International Airport (CJB - 95 km) or Calicut International Airport (CCJ - 100 km). Bootpaths can arrange shared or private cab transfers directly from Palakkad or Coimbatore upon request.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h3>What are the plastic and ecological regulations in the park?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Silent Valley is a strict zero-plastic zone. Single-use plastic bottles, polythene bags, alcohol, smoking, and music speakers are strictly prohibited. All baggage is inspected by forest rangers at the Mukkali check-post. Trekkers must carry reusable steel or copper water bottles.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING SECTION -->
+  <section class="booking section" id="booking">
+    <div class="bk-bg"><img src="images/silent_valley_hero.jpg" alt="Silent Valley Trek" class="bk-bgi"/><div class="bk-ov"></div></div>
+    <div class="container">
+      <div class="bk-layout">
+        <div class="bk-info">
+          <div class="stag light">Reserve Your Spot</div>
+          <h2 class="stitle light">Ready to Explore India's<br/>Last Virgin Rainforest?</h2>
+          <p class="bk-desc">Join Bootpaths on this once-in-a-lifetime expedition into Silent Valley National Park. 3 unforgettable days of deep forest silence, crystal river crossings, and indigenous wildlife with government-certified naturalist guides.</p>
+          
+          <!-- Package Card -->
+          <div class="single-pkg-card">
+            <div class="spc-badge">ALL-INCLUSIVE ECO-EXPEDITION PACKAGE</div>
+            <div class="spc-price-row">
+              <div class="spc-price">
+                <span class="spc-curr">&#8377;</span><span class="spc-amt">4,000</span>
+                <span class="spc-per">/ person (All-Inclusive)</span>
+              </div>
+              <div class="spc-duration">3 Days &bull; Mukkali to Mukkali Base</div>
+            </div>
+            
+            <div class="spc-features-grid">
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Kerala Forest Department Permits &amp; Entry</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Sairandhri 4WD Forest Safari Transfers</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Forest Inspection Bungalow / Camp (2 Nights)</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Certified Tribal Naturalist &amp; Eco Guides</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> All Meals &amp; Traditional Kerala Feasts</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Kunthi River &amp; Poochipara Deep Trails</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Leech Gaiters &amp; Natural Repellent Kit</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Emergency First-Aid &amp; Responder Lead</div>
+            </div>
+            
+            <div class="spc-cta-row">
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20book%20the%20Silent%20Valley%20Rainforest%20Trek." target="_blank" rel="noopener" class="btn-p btn-spc">Book at &#8377;4,000</a>
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener" class="btn-wa">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <div class="ft-logo"><img src="images/bootpaths_logo.png" alt="Bootpaths"/><span>Bootpaths</span></div>
+          <p>Walk the world's greatest paths with expert guides, thoughtful logistics, and an unwavering passion for wild nature.</p>
+          <div class="socials">
+            <a href="#" aria-label="Instagram" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="#" aria-label="Facebook" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a href="#" aria-label="YouTube" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
+          </div>
+        </div>
+        <div class="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview">About the Trek</a></li><li><a href="#highlights">Trek Highlights</a></li><li><a href="#altitude">3D Terrain Profile</a></li><li><a href="#itinerary">Detailed Itinerary</a></li><li><a href="#gallery">Photo Gallery</a></li><li><a href="#inclusions">Inclusions</a></li><li><a href="#faq">FAQs</a></li><li><a href="#booking">Book Now</a></li></ul></div>
+        <div class="ft-col"><h4>Other Treks</h4><ul><li><a href="#">Everest Base Camp Trek</a></li><li><a href="#">Agasthyarkoodam Trek</a></li><li><a href="#">Meesapulimala Trek</a></li><li><a href="#">Chembra Peak Trek</a></li><li><a href="#">Anamudi Shola Trek</a></li><li><a href="#">Mardi Himal Trek</a></li></ul></div>
+        <div class="ft-col"><h4>Contact Bootpaths</h4><ul class="ct"><li><span>&#128231;</span> <a href="mailto:bootpaths@gmail.com">bootpaths@gmail.com</a></li><li><span>&#128241;</span> <a href="tel:+919446102200">Call: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener">WhatsApp: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919895452187?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener">WhatsApp: +91 9895452187</a></li><li><span>&#128172;</span> <a href="https://wa.me/918848998470?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener">WhatsApp: +91 8848998470</a></li><li><span>&#128336;</span> Mon&ndash;Sat: 9am &ndash; 7pm IST</li></ul></div>
+      </div>
+      <div class="ft-bottom"><p>&#169; 2025 Bootpaths Trekking Pvt. Ltd. All rights reserved.</p><p>Crafted for Silent Valley Wilderness</p></div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP / CALLBACK BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." target="_blank" rel="noopener" class="floating-callback" title="Request a Callback on WhatsApp">
+    <div class="floating-pulse"></div>
+    <div class="floating-inner">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+      <span class="floating-label">Request Callback</span>
+    </div>
+  </a>
+
+  <!-- THREE.JS & SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

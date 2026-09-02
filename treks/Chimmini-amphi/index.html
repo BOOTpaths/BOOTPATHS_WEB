@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Chimmini Amphi Trek | Bootpaths – Walk the World's Greatest Trails</title>
+  <meta name="description" content="Embark on the exhilarating Chimmini Amphi Trek with Bootpaths. Experience Kerala's premier amphibious eco-adventure combining deep tropical rainforest trails and traditional coracle boat rides in Chimmini Wildlife Sanctuary, Thrissur." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <div class="logo-icon-container">
+          <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+        </div>
+        <span class="logo-text"><span class="text-orange">BOOT</span><span class="text-brown">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#itinerary">Itinerary</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#inclusions">Inclusions</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener" class="mobile-callback-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+            Request Callback on WhatsApp
+          </a>
+          <a href="#booking" class="mobile-cta-btn" onclick="toggleMenu()">Book Now</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener" class="nav-callback-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request Callback
+        </a>
+        <a href="#booking" class="nav-cta">Book Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="images/chimmini_hero.jpg" alt="Chimmini Wildlife Sanctuary Reservoir and Western Ghats" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Kerala &bull; Chimmini Wildlife Sanctuary, Thrissur</div>
+      <h1 class="hero-title">Chimmini Amphi<br/><em>Rainforest &amp; Coracle Trek</em></h1>
+      <p class="hero-sub">Experience Kerala's premier amphibious wilderness adventure — traversing dense tropical evergreen trails and gliding across serene reservoir waters on traditional coracle boats</p>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-ico">&#9968;&#65039;</span><div><b>450m</b><small>High Ridge</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128197;</span><div><b>1–2 Days</b><small>Duration</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#129506;</span><div><b>Easy–Moderate</b><small>Difficulty</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128205;</span><div><b>Echippara</b><small>Start Point</small></div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-p">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener" class="btn-wa">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g">View Itinerary</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="sarrow"></div></div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>&#128197;</span><div><small>Best Season</small><strong>Oct&ndash;May (Vibrant &amp; Serene)</strong></div></div>
+        <div class="qi"><span>&#128675;</span><div><small>Experience</small><strong>Hike &amp; Coracle (Kottavanji)</strong></div></div>
+        <div class="qi"><span>&#129495;</span><div><small>Trek Distance</small><strong>~8 km Trail + 2 km Coracle</strong></div></div>
+        <div class="qi"><span>&#128663;</span><div><small>Starting Base</small><strong>Echippara, Thrissur (75m)</strong></div></div>
+        <div class="qi"><span>&#128176;</span><div><small>Eco Expedition</small><strong>&#8377;1,850 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">Kerala's Premier<br/>Amphibious Eco-Adventure</h2>
+          <p class="ov-lead">Chimmini Wildlife Sanctuary is a pristine ecological haven in Thrissur district where the rugged, mist-wrapped crests of the Western Ghats cradle a magnificent 10-square-kilometer emerald water reservoir.</p>
+          <p class="ov-body">What makes the <strong>Chimmini Amphi Trek</strong> uniquely captivating is its seamless amphibious rhythm: an exhilarating blend of an 8 km guided overland wilderness trek through moist deciduous and tropical evergreen jungle, followed by an unforgettable circular bamboo coracle boat (locally known as <em>Kottavanji</em>) voyage across mirror-smooth reservoir channels.</p>
+          <p class="ov-body">Accompanied by Kerala Forest Department certified indigenous guides and Bootpaths trek leads, you will discover hidden forest streams, navigate wild bamboo canopies, and observe diverse wildlife &mdash; from the flamboyant Indian Malabar Giant Squirrel and endangered hornbills to herds of sambar deer and Asian elephants congregating at the lake edge.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>85 km&sup2;</b><small>Protected Sanctuary Area</small></div>
+            <div class="fact"><b>192+</b><small>Avian &amp; Butterfly Species</small></div>
+            <div class="fact"><b>100%</b><small>Eco-Friendly Wilderness</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/coracle_ride.jpg" alt="Traditional Coracle Kottavanji on Chimmini Lake" class="si1"/>
+            <img src="images/jungle_trail.jpg" alt="Chimmini Tropical Rainforest Trail" class="si2"/>
+            <div class="img-float"><span>01&ndash;02</span><small>Days in Nature</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">Unrivaled experiences that balance overland jungle trekking with tranquil lake navigation</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/coracle_ride.jpg" alt="Traditional Kottavanji Coracle Ride" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Traditional Kottavanji Coracle Ride</h3><p>Glide silently in authentic circular woven bamboo coracle boats across calm turquoise waters, navigated by master local oarsmen with panoramic mountain vistas.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/chimmini_dam.jpg" alt="Chimmini Dam and Spillway" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Chimmini Dam &amp; Spillway Vistas</h3><p>Marvel at the imposing masonry dam and its sweeping reservoir waters surrounded by rolling forested peaks of the Western Ghats buffer zone.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/jungle_trail.jpg" alt="Rainforest and Bamboo Groves" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Deep Rainforest &amp; Bamboo Canopy</h3><p>Hike beneath colossal ancient trees, giant ferns, hanging lianas, and towering bamboo thickets teeming with the melodious calls of Western Ghats birds.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/stream_crossing.jpg" alt="Virakuthodu Stream Crossing" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Pristine Forest Stream Cascades</h3><p>Wade across the crystal waters of Virakuthodu stream, splashing through natural granite pools and cool cascading mountain brooks.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/wildlife_squirrel.jpg" alt="Malabar Giant Squirrel and Fauna" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Malabar Giant Squirrel &amp; Wildlife</h3><p>Spot the striking maroon-and-black Indian Giant Squirrel leaping across the canopy, along with Nilgiri Langurs, Great Hornbills, and rare butterflies.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">&#127795;</div>
+            <h3>360&deg; Chimmini Wildlife Sanctuary Ecosystem</h3>
+            <p>Immerse yourself in one of Kerala's most bio-diverse river basin catchments &mdash; bordering Peechi-Vazhani and Parambikulam Tiger Reserve, shielding countless endemic plants, reptiles, and mammals.</p>
+            <div class="mtn-tags"><span>Malabar Giant Squirrel</span><span>Asian Elephant</span><span>Southern Birdwing</span><span>Great Indian Hornbill</span><span>Kottavanji Coracle</span><span>Bamboo Rafting</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Route Guide</div>
+        <h2 class="stitle">Itinerary Details</h2>
+        <p class="ssub">Discover the curated amphibious expedition with schedule milestones, trail notes, and safety guidelines</p>
+      </div>
+
+      <div class="itinerary-accordions">
+
+        <!-- DROPDOWN 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128203;</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary</h3>
+                <p>Get your trek plan at a glance with key milestones &amp; daily highlights</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="quick-it-grid">
+              <div class="qi-card qi-leg-morning">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Morning Leg</span>
+                  <span class="qi-leg-time">08:30 AM &ndash; 11:30 AM</span>
+                </div>
+                <h4>Echippara Base to Dam Crest &amp; Rainforest Trail</h4>
+                <p>Arrival and assembly at Echippara Forest Eco-Tourism Centre. Verification of permits, safety briefing, walk across the grand Chimmini Dam crest, and entry into the tropical deciduous forest trail.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4 km Trek</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 95m&ndash;140m</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Forest Trail</span>
+                </div>
+              </div>
+
+              <div class="qi-card qi-leg-midday">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Midday Leg</span>
+                  <span class="qi-leg-time">11:45 AM &ndash; 02:15 PM</span>
+                </div>
+                <h4>Virakuthodu Stream Crossing &amp; Jungle Cascade</h4>
+                <p>Ascending gently through dense bamboo brakes towards Virakuthodu stream. Natural rock hopping, observing canopy wildlife, fresh packed traditional Kerala trail snacks, and resting near crystal cascade pools.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4 km Trek</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 185m Peak</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Stream Cascades</span>
+                </div>
+              </div>
+
+              <div class="qi-card qi-leg-afternoon">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Afternoon Leg</span>
+                  <span class="qi-leg-time">02:30 PM &ndash; 04:30 PM</span>
+                </div>
+                <h4>Kottavanji Coracle Ride &amp; Reservoir Backwaters</h4>
+                <p>Boarding authentic circular bamboo coracles (Kottavanji) with life jackets. Glide peacefully along the forested reservoir coves, watch waterfowl and elephants on the banks, concluding with farewell Kerala tea.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 2 km Coracle</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg> 85m Lake</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Farewell &amp; Tea</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 2: DETAILED DAY-BY-DAY ITINERARY -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128506;&#65039;</span>
+              <div class="mah-text">
+                <h3>Detailed Schedule &amp; Route Breakdown</h3>
+                <p>In-depth schedule with elevations, terrain descriptions, coracle operations, and meals</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="it-days-list">
+
+              <!-- STAGE 1 -->
+              <div class="it-day open">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase1">Phase 1</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Arrival at Echippara Base, Dam Crest Walk &amp; Core Jungle Ascent</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Echippara (75m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Chimmini Dam Spillway (95m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Virakuthodu Trail (185m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4.5 km hike</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 185m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Morning Assembly, Dam Panorama &amp; Deep Evergreen Forest Entry
+                      </div>
+                      
+                      <p class="itd-lead">Assemble at the Chimmini Forest Eco-Tourism Centre in Echippara at 08:30 AM. Meet your certified Bootpaths trek lead and registered tribal naturalist guides. Following Forest Department registration and a safety briefing, begin the walk across the masonry crest of Chimmini Dam.</p>
+                      
+                      <p>Take in spectacular morning panoramas of the 10-square-kilometer reservoir surrounded by emerald peaks of the Western Ghats. Transition into the core jungle trail through towering rosewood, terminalia, and wild bamboo thickets.</p>
+                      
+                      <p>Listen to the distinctive morning symphony of the Malabar Whistling Thrush and watch for the multi-hued Malabar Giant Squirrel foraging in the high canopy before arriving at the Virakuthodu stream crossing.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">08:30 AM</span>
+                          <div class="itl-body">
+                            <strong>Base Registration &amp; Guide Briefing</strong>
+                            <p>Verification of entry permits, safety briefing by indigenous trackers, hydration check.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">09:15 AM</span>
+                          <div class="itl-body">
+                            <strong>Chimmini Dam Crest Walk</strong>
+                            <p>Masonry crest traverse overlooking turquoise water reservoir and dense buffer sanctuary peaks.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">10:30 AM</span>
+                          <div class="itl-body">
+                            <strong>Core Jungle Canopy Ascent</strong>
+                            <p>Stepping under colossal rainforest canopies, wild bamboo groves, and rich avian habitats.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#129495;</div>
+                          <div class="im-info">
+                            <small>Trail Distance</small>
+                            <strong>4.5 km Trek</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>2.5&ndash;3 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127857;</div>
+                          <div class="im-info">
+                            <small>Meals &amp; Fuel</small>
+                            <strong>Welcome Drink &amp; Trail Snacks</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127795;</div>
+                          <div class="im-info">
+                            <small>Terrain &amp; Surface</small>
+                            <strong>Masonry Crest &amp; Earth Path</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> Keep binoculars handy across the dam crest; Great Indian Hornbills and Malabar Grey Hornbills frequently cross the reservoir corridor during morning hours.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/jungle_trail.jpg" alt="Trekkers on Chimmini Jungle Trail" loading="lazy"/>
+                        <span class="itd-vis-tag">&#127795; Phase 1 Highlights</span>
+                        <span class="itd-vis-cap">Walking beneath giant ancient canopy trees along the sanctuary trail</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STAGE 2 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase2">Phase 2</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Virakuthodu Stream Cascades, Riverside Break &amp; Traditional Feast</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Virakuthodu Stream (185m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Deep Bamboo Thickets</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Forest Camp Jetty (85m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 3.5 km trek</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 185m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Virakuthodu Stream Cascades, Wildlife Spoor &amp; Traditional Kerala Feast
+                      </div>
+                      
+                      <p class="itd-lead">Hike alongside the crystal clear Virakuthodu stream where gentle mountain cascades wash over weathered granite stones. The soothing sound of running water and natural shade creates a revitalizing tropical atmosphere.</p>
+                      
+                      <p>Stop for rest and wildlife tracking. The banks frequently reveal fresh pugmarks and hoof prints of sambar deer, spotted deer, and wild boars that visit for their morning drink.</p>
+                      
+                      <p>Descend along the gentle forested path towards the sheltered lakeside clearing, where you enjoy an authentic, piping-hot traditional Kerala lunch served in eco-friendly style.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">11:45 AM</span>
+                          <div class="itl-body">
+                            <strong>Virakuthodu Stream Cascade</strong>
+                            <p>Natural granite rock-hopping, cold mountain springs, splashing pools, and canopy birding.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">01:00 PM</span>
+                          <div class="itl-body">
+                            <strong>Riverside Wildlife Tracking</strong>
+                            <p>Examining mammal spoor along the damp riverbed with indigenous tribal trackers.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">01:30 PM</span>
+                          <div class="itl-body">
+                            <strong>Traditional Organic Kerala Feast</strong>
+                            <p>Authentic warm regional meal prepared with locally harvested organic ingredients at the forest campsite.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#129495;</div>
+                          <div class="im-info">
+                            <small>Trail Distance</small>
+                            <strong>3.5 km Trek</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>2 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127857;</div>
+                          <div class="im-info">
+                            <small>Meals &amp; Fuel</small>
+                            <strong>Traditional Organic Kerala Lunch</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127754;</div>
+                          <div class="im-info">
+                            <small>Highlight &amp; Waters</small>
+                            <strong>Natural Cascades &amp; Wildlife Spoor</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> Leeches are common in damp stream sections during post-monsoon months; Bootpaths provides high-grade leech gaiters and organic tobacco-lime repellent for all trekkers.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/stream_crossing.jpg" alt="Virakuthodu Forest Stream" loading="lazy"/>
+                        <span class="itd-vis-tag">&#127754; Phase 2 Highlights</span>
+                        <span class="itd-vis-cap">Pristine turquoise water pools and cascades in deep jungle</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STAGE 3 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase3">Phase 3</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Traditional Kottavanji Coracle Expedition &amp; Return to Base</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Lakeside Pier (85m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Reservoir Islands</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Echippara Centre (75m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 2 km water</span>
+                      <span class="itd-pill alt-down"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg> 75m base</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Authentic Bamboo Kottavanji Coracle Expedition &amp; Reservoir Backwaters
+                      </div>
+                      
+                      <p class="itd-lead">Equipped with standardized safety lifejackets, step into the round woven bamboo coracle boats (kottavanji) for the definitive "Amphi" water experience. Guided by experienced indigenous boatmen, glide serenely across the calm lake surface.</p>
+                      
+                      <p>Navigate through secluded channels between submerged forest islands, observing kingfishers, cormorants, and darter birds drying their wings on protruding tree snags. Enjoy the rare sensation of circular drifting on pristine mountain waters.</p>
+                      
+                      <p>Return to the Echippara main jetty by late afternoon for evening Kerala tea, banana fritters/snacks, debriefing, certificate presentation, and warm farewells by 04:30 PM.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">02:30 PM</span>
+                          <div class="itl-body">
+                            <strong>Coracle Pier Embarkation</strong>
+                            <p>Fitting life jackets and boarding circular woven bamboo coracles steered by tribal oarsmen.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">03:15 PM</span>
+                          <div class="itl-body">
+                            <strong>Reservoir Island Navigation</strong>
+                            <p>Drifting along island edges, viewing aquatic bird sanctuaries and submerged tree formations.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">04:15 PM</span>
+                          <div class="itl-body">
+                            <strong>Echippara Jetty Debrief &amp; Farewell Tea</strong>
+                            <p>Warm Kerala cardamom tea, freshly made banana fritters, certificate presentation &amp; return transfer.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#128675;</div>
+                          <div class="im-info">
+                            <small>Water Navigation</small>
+                            <strong>2 km Coracle Ride</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>1.5 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9749;</div>
+                          <div class="im-info">
+                            <small>Evening Refreshments</small>
+                            <strong>Kerala Tea &amp; Banana Fritters</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#128663;</div>
+                          <div class="im-info">
+                            <small>Departure &amp; Transit</small>
+                            <strong>Transfer to Thrissur / Kochi</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> Always keep camera neck straps secured and store phones in waterproof pouches while taking photos from the spinning coracle boat.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/coracle_ride.jpg" alt="Kottavanji Coracle Ride on Reservoir" loading="lazy"/>
+                        <span class="itd-vis-tag">&#128675; Phase 3 Highlights</span>
+                        <span class="itd-vis-cap">Peaceful coracle navigation amidst the Western Ghats hills</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Visual Experience</div>
+        <h2 class="stitle">Photo Gallery</h2>
+        <p class="ssub">Moments captured deep in the tropical rainforest trails and emerald waters of Chimmini Sanctuary</p>
+      </div>
+
+      <div class="gallery-tabs">
+        <button class="gt-btn active" onclick="filterGallery('all', this)">All Photos</button>
+        <button class="gt-btn" onclick="filterGallery('reservoir', this)">Reservoir &amp; Dam</button>
+        <button class="gt-btn" onclick="filterGallery('trail', this)">Forest Trails</button>
+        <button class="gt-btn" onclick="filterGallery('coracle', this)">Coracle Experience</button>
+        <button class="gt-btn" onclick="filterGallery('wildlife', this)">Wildlife &amp; Flora</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gi" data-cat="reservoir" onclick="openLightbox(0)">
+          <img src="images/chimmini_hero.jpg" alt="Misty Sunrise over Chimmini Sanctuary" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Misty Sunrise over Chimmini Sanctuary &amp; Reservoir</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="coracle" onclick="openLightbox(1)">
+          <img src="images/coracle_ride.jpg" alt="Traditional Coracle Kottavanji on Lake" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Traditional Coracle (Kottavanji) Ride on Lake</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="reservoir" onclick="openLightbox(2)">
+          <img src="images/chimmini_dam.jpg" alt="Chimmini Dam and Vast Reservoir" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Chimmini Dam Crest &amp; Vast Reservoir Landscape</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(3)">
+          <img src="images/jungle_trail.jpg" alt="Trekkers in Dense Western Ghats Rainforest" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Trekkers Exploring Dense Rainforest Canopy</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(4)">
+          <img src="images/stream_crossing.jpg" alt="Virakuthodu Stream Cascades" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Virakuthodu Natural Rock Pools &amp; Cascades</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(5)">
+          <img src="images/wildlife_squirrel.jpg" alt="Indian Malabar Giant Squirrel" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Endangered Indian Malabar Giant Squirrel</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="coracle" onclick="openLightbox(6)">
+          <img src="images/bamboo_rafting.jpg" alt="Bamboo Raft Expedition on Chimmini Lake" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Bamboo Rafting Expedition on Reservoir Waters</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(7)">
+          <img src="images/ridge_viewpoint.jpg" alt="Panoramic Viewpoint Over Chimmini Valley" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Panoramic Mountain Ridge Viewpoint</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="gallery-lightbox" id="galleryLightbox" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-prev" onclick="changeLightbox(-1)">&#10094;</button>
+      <img src="" alt="" id="lightboxImg" />
+      <button class="lightbox-next" onclick="changeLightbox(1)">&#10095;</button>
+      <div class="lightbox-info">
+        <div id="lightboxCaption"></div>
+        <div id="lightboxIndex"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUSIONS / EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">What is Covered</div>
+        <h2 class="stitle">Inclusions &amp; Exclusions</h2>
+        <p class="ssub">Complete transparency on what your Chimmini Amphi eco-trek package covers</p>
+      </div>
+      <div class="ie-grid">
+        <div class="iec inc-card">
+          <div class="iec-h"><span>&#9989;</span><h3>What is Included</h3></div>
+          <ul>
+            <li><span class="chk">&#10003;</span> Kerala Forest Department sanctuary entry &amp; trekking permits</li>
+            <li><span class="chk">&#10003;</span> Certified government-licensed tribal naturalist guide &amp; trek lead</li>
+            <li><span class="chk">&#10003;</span> Chimmini Dam reservoir entry &amp; eco-development committee fees</li>
+            <li><span class="chk">&#10003;</span> Traditional Kottavanji coracle boat ride session with certified boatmen</li>
+            <li><span class="chk">&#10003;</span> Standardized ISI-certified life jackets for all water activities</li>
+            <li><span class="chk">&#10003;</span> All meals during trek (traditional Kerala feast lunch, welcome drinks &amp; tea)</li>
+            <li><span class="chk">&#10003;</span> Leech gaiters &amp; natural herbal repellent kit</li>
+            <li><span class="chk">&#10003;</span> Certified first-aid kit &amp; Bootpaths Certificate of Eco-Trek Completion</li>
+          </ul>
+        </div>
+        <div class="iec exc-card">
+          <div class="iec-h"><span>&#10060;</span><h3>What is Excluded</h3></div>
+          <ul>
+            <li><span class="cross">&times;</span> Travel to and from Echippara Base (available as add-on from Thrissur / Kochi)</li>
+            <li><span class="cross">&times;</span> Professional camera/video permits mandated by Forest Dept</li>
+            <li><span class="cross">&times;</span> Personal trekking gear (boots, rain ponchos, backpack)</li>
+            <li><span class="cross">&times;</span> Personal expenses, single-use packaged goods, snacks</li>
+            <li><span class="cross">&times;</span> Travel insurance &amp; medical evacuation costs</li>
+            <li><span class="cross">&times;</span> Tips or gratuities for forest drivers and tribal eco-trackers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PACKING & GEAR CHECKLIST -->
+      <div class="gear-section" style="margin-top: 60px;">
+        <div class="sh center" style="margin-bottom: 30px;">
+          <div class="stag">Trail Readiness</div>
+          <h3 style="font-size: 1.8rem; font-family: 'Playfair Display', serif; color: #0f172a;">Essential Rainforest Packing Checklist</h3>
+          <p class="ssub">Click items to mark them as packed into your rucksack</p>
+          <div class="cl-badge" id="clCountBadge" style="display:inline-block; margin-top:10px; background:#e0f2fe; color:#0284c7; padding:6px 16px; border-radius:9999px; font-weight:700; font-size:0.85rem;">0 / 8 Packed</div>
+        </div>
+        <div class="checklist-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Waterproof Trekking Shoes</strong><br/><small style="color:#64748b;">With good grip for forest roots and damp rocks</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Leech Socks / Gaiters</strong><br/><small style="color:#64748b;">Comfortable protection along damp forest floor</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Rain Poncho / Windbreaker</strong><br/><small style="color:#64748b;">Lightweight cover for tropical showers</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Quick-Dry Full Sleeve Wear</strong><br/><small style="color:#64748b;">Earth-tone breathable fabrics (olive, khaki)</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Binoculars (8x42 or 10x42)</strong><br/><small style="color:#64748b;">Ideal for spotting canopy hornbills and giant squirrels</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Waterproof Dry Pouch</strong><br/><small style="color:#64748b;">Crucial for phone and wallet during coracle ride</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Reusable Water Flask (1.5L)</strong><br/><small style="color:#64748b;">Strict zero-plastic sanctuary regulations</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Sun Hat &amp; Insect Repellent</strong><br/><small style="color:#64748b;">Protection during open reservoir navigation</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about trekking and coracle boating in Chimmini Wildlife Sanctuary</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="true">
+            <h3>Is prior booking required for the Chimmini Amphi Trek?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Because Chimmini Wildlife Sanctuary is a protected reserve governed by the Kerala Forest and Wildlife Department, daily entries are regulated to conserve wildlife habitats. Bootpaths manages all official permits, eco-development committee (EDC) clearances, certified tribal guides, and coracle slot reservations in advance.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>What does the "Amphi" in Chimmini Amphi Trek stand for?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>"Amphi" signifies the unique amphibious nature of the journey &mdash; an immersive eco-adventure that covers both land and water. Trekkers traverse an 8 km trail through lush tropical evergreen forests and cross mountain streams, followed by an exhilarating circular bamboo coracle boat (Kottavanji) ride across the calm expanse of Chimmini reservoir.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>Can beginners, families, and children join this trek?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Absolutely! The Chimmini Amphi Trek is classified as Easy to Moderate. The trail features gentle undulations through shaded forest paths and stream beds. It is popular with nature enthusiasts, photographers, families, and first-time trekkers. Children above 7 years who enjoy walking in nature can comfortably participate.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>Is the coracle (Kottavanji) ride safe and are lifejackets provided?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Safety is our top priority. All coracle rides are steered by licensed local oarsmen who have navigated these waters for decades. Every participant is required to wear high-grade, certified personal flotation devices (lifejackets) throughout the lake journey. The reservoir waters are tranquil and calm.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>How do I reach the Chimmini basecamp at Echippara?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>The sanctuary base is at Echippara, approximately 40 km from Thrissur city, Kerala. The nearest major railway station is Thrissur (TCR - 40 km), and the nearest airport is Cochin International Airport (COK - 75 km). Well-paved roads connect via Varandarappilly. Bootpaths can also organize shared or dedicated private vehicle transfers upon request.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>What ecological and plastic guidelines must be followed?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Chimmini Wildlife Sanctuary strictly enforces a zero-tolerance policy against plastic littering, smoking, alcohol, and disruptive sound devices. Single-use plastic bottles are prohibited. Trekkers are provided with filtered fresh drinking water refills and must carry reusable water bottles or flasks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING SECTION -->
+  <section class="booking section" id="booking">
+    <div class="bk-bg"><img src="images/chimmini_hero.jpg" alt="Chimmini Trek Booking" class="bk-bgi"/><div class="bk-ov"></div></div>
+    <div class="container">
+      <div class="bk-layout">
+        <div class="bk-info">
+          <div class="stag light">Reserve Your Spot</div>
+          <h2 class="stitle light">Ready for Kerala's<br/>Finest Land &amp; Water Trek?</h2>
+          <p class="bk-desc">Join Bootpaths for an unforgettable journey into Chimmini Wildlife Sanctuary. Experience deep rainforest stillness, scenic stream crossings, and traditional coracle lake boating with licensed tribal naturalist guides.</p>
+          
+          <!-- Package Card -->
+          <div class="single-pkg-card">
+            <div class="spc-badge">ALL-INCLUSIVE ECO-EXPEDITION PACKAGE</div>
+            <div class="spc-price-row">
+              <div class="spc-price">
+                <span class="spc-curr">&#8377;</span><span class="spc-amt">1,850</span>
+                <span class="spc-per">/ person (All-Inclusive)</span>
+              </div>
+              <div class="spc-duration">Full Day Expedition &bull; Echippara to Echippara Base</div>
+            </div>
+            
+            <div class="spc-features-grid">
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Kerala Forest Department Sanctuary Permits</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Traditional Kottavanji Coracle Boating Session</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Certified ISI Lifejackets &amp; Safety Gear</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Government-Licensed Tribal Naturalist Guides</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Authentic Kerala Feast Lunch &amp; Evening Tea</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Virakuthodu Stream &amp; Core Jungle Trails</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Leech Gaiters &amp; Natural Repellent Kit</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Wilderness First-Aid &amp; Bootpaths Responder Lead</div>
+            </div>
+            
+            <div class="spc-cta-row">
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20book%20the%20Chimmini%20Amphi%20Trek." target="_blank" rel="noopener" class="btn-p btn-spc">Book at &#8377;1,850</a>
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener" class="btn-wa">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <div class="ft-logo"><img src="images/bootpaths_logo.png" alt="Bootpaths"/><span>Bootpaths</span></div>
+          <p>Walk the world's greatest paths with expert guides, thoughtful logistics, and an unwavering passion for wild nature.</p>
+          <div class="socials">
+            <a href="https://www.instagram.com/bootpaths?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="#" aria-label="Facebook" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a href="https://www.youtube.com/@BOOTpaths2025" target="_blank" rel="noopener" aria-label="YouTube" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
+          </div>
+        </div>
+        <div class="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview">About the Trek</a></li><li><a href="#highlights">Trek Highlights</a></li><li><a href="#itinerary">Detailed Itinerary</a></li><li><a href="#gallery">Photo Gallery</a></li><li><a href="#inclusions">Inclusions</a></li><li><a href="#faq">FAQs</a></li><li><a href="#booking">Book Now</a></li></ul></div>
+        <div class="ft-col"><h4>Other Treks</h4><ul><li><a href="#">Silent Valley Rainforest Trek</a></li><li><a href="#">Everest Base Camp Trek</a></li><li><a href="#">Agasthyarkoodam Trek</a></li><li><a href="#">Meesapulimala Trek</a></li><li><a href="#">Chembra Peak Trek</a></li><li><a href="#">Brahmagiri Trek</a></li></ul></div>
+        <div class="ft-col"><h4>Contact Bootpaths</h4><ul class="ct"><li><span>&#128231;</span> <a href="mailto:bootpaths@gmail.com">bootpaths@gmail.com</a></li><li><span>&#128241;</span> <a href="tel:+919446102200">Call: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener">WhatsApp: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919895452187?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener">WhatsApp: +91 9895452187</a></li><li><span>&#128172;</span> <a href="https://wa.me/918848998470?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener">WhatsApp: +91 8848998470</a></li><li><span>&#128336;</span> Mon&ndash;Sat: 9am &ndash; 7pm IST</li></ul></div>
+      </div>
+      <div class="ft-bottom"><p>&#169; 2025 Bootpaths Trekking Pvt. Ltd. All rights reserved.</p><p class="ft-credit">Crafted by <a href="#" class="vzentura-btn" target="_blank" rel="noopener"><span>Vzentura</span> <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></p></div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP / CALLBACK BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Chimmini%20Amphi%20trek." target="_blank" rel="noopener" class="floating-callback" title="Request a Callback on WhatsApp">
+    <div class="floating-pulse"></div>
+    <div class="floating-inner">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+      <span class="floating-label">Request Callback</span>
+    </div>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Gavi Eco-Trek &amp; Safari | Bootpaths – Walk the World's Greatest Trails</title>
+  <meta name="description" content="Embark on the captivating Gavi Eco-Trek with Bootpaths. Experience Kerala's premier wilderness sanctuary combining pristine tropical evergreen trails, Gavi lake boating, Sabarimala viewpoints, and rich wildlife in Pathanamthitta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <div class="logo-icon-container">
+          <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img" />
+        </div>
+        <span class="logo-text"><span class="text-orange">BOOT</span><span class="text-brown">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#itinerary">Itinerary</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#inclusions">Inclusions</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener" class="mobile-callback-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+            Request Callback on WhatsApp
+          </a>
+          <a href="#booking" class="mobile-cta-btn" onclick="toggleMenu()">Book Now</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener" class="nav-callback-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request Callback
+        </a>
+        <a href="#booking" class="nav-cta">Book Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="images/gavi_hero.jpg" alt="Misty Gavi Lake and Tropical Evergreen Forest Western Ghats" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Kerala &bull; Gavi &amp; Periyar Tiger Reserve Buffer, Pathanamthitta</div>
+      <h1 class="hero-title">Gavi Wilderness<br/><em>Eco-Trek &amp; Lake Safari</em></h1>
+      <p class="hero-sub">Step into Kerala's untouched tropical evergreen paradise — traversing fragrant cardamom plantations, gliding across mist-covered Gavi lake, and admiring panoramic Sabarimala viewpoints</p>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-ico">&#9968;&#65039;</span><div><b>1,036m</b><small>High Ridge</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128197;</span><div><b>1–2 Days</b><small>Duration</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#129506;</span><div><b>Easy–Moderate</b><small>Difficulty</small></div></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-ico">&#128205;</span><div><b>Vallakkadavu</b><small>Start Point</small></div></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-p">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener" class="btn-wa">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g">View Itinerary</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="sarrow"></div></div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>&#128197;</span><div><small>Best Season</small><strong>Sep&ndash;May (Vibrant &amp; Misty)</strong></div></div>
+        <div class="qi"><span>&#128675;</span><div><small>Experience</small><strong>Jungle Hike &amp; Lake Boating</strong></div></div>
+        <div class="qi"><span>&#129495;</span><div><small>Trek Distance</small><strong>~9 km Trail + Lake Safari</strong></div></div>
+        <div class="qi"><span>&#128663;</span><div><small>Starting Base</small><strong>Vallakkadavu / Angamoozhy</strong></div></div>
+        <div class="qi"><span>&#128176;</span><div><small>Eco Expedition</small><strong>&#8377;2,150 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">Kerala's Crown Jewel of<br/>Untouched Eco-Tourism</h2>
+          <p class="ov-lead">Gavi is an enchanting high-altitude ecological sanctuary tucked deep inside the pristine Ranni Reserve Forest and Periyar Tiger Reserve buffer zone in Pathanamthitta district.</p>
+          <p class="ov-body">Acclaimed internationally for its model conservation framework run by the Kerala Forest Development Corporation (KFDC), the <strong>Gavi Eco-Trek</strong> offers a deeply restorative communion with pure nature: trekking through high-altitude shola grasslands and aromatic cardamom plantations, followed by silent row-boating on the placid, mirror-clear Gavi lake.</p>
+          <p class="ov-body">Accompanied by certified local tribal trackers and Bootpaths wilderness expedition leads, you will ascend scenic cliff lookouts including the famed Sabarimala viewpoint, discover secluded waterfalls, and spot wildlife — such as wild Asian elephant herds, the endangered Lion-tailed Macaque, Nilgiri Tahr, and vibrant Malabar Giant Squirrels.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>1,036m</b><small>High Ridge Elevation</small></div>
+            <div class="fact"><b>260+</b><small>Bird &amp; Wildlife Species</small></div>
+            <div class="fact"><b>100%</b><small>Protected Forest Reserve</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/gavi_boating.jpg" alt="Row Boating on Gavi Lake" class="si1"/>
+            <img src="images/gavi_trail.jpg" alt="Cardamom Forest Trek in Gavi" class="si2"/>
+            <div class="img-float"><span>01&ndash;02</span><small>Days in Wilderness</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">Curated wilderness experiences combining high-canopy jungle exploration, tranquil lake boating, and panoramic mountain vistas</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/gavi_boating.jpg" alt="Tranquil Gavi Lake Boating" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Serene Gavi Lake Boating &amp; Canoeing</h3><p>Paddle across the calm emerald green waters of Gavi lake enveloped in cool mist, taking in reflections of towering shola trees and listening to forest birds.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/gavi_viewpoint.jpg" alt="Sabarimala Viewpoint in Gavi" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Breathtaking Sabarimala Viewpoint</h3><p>Stand atop dramatic mountain ridge vantage points offering panoramic vistas of the sacred Sabarimala temple hills, deep cloud valleys, and Pamba ravines.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/gavi_trail.jpg" alt="Cardamom Hills and Rainforest" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Cardamom Hills &amp; Deep Evergreen Canopy</h3><p>Trek beneath ancient tropical rainforest canopies, fragrant cardamom groves, and dense bamboo thickets accompanied by registered tribal trackers.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/gavi_waterfall.jpg" alt="Meenar Stream and Waterfall Cascades" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Meenar Stream &amp; Hidden Cascades</h3><p>Wade across pristine mountain brooks and relax beside natural granite rock pools fed by pure crystal-clear forest stream cascades.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/gavi_wildlife.jpg" alt="Wild Elephants and Fauna" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Rich Wildlife &amp; Asian Elephant Herds</h3><p>Observe herds of wild elephants grazing along forest clearings, Nilgiri Tahrs on granite cliffs, Gaurs, and Great Indian Hornbills overhead.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">&#127795;</div>
+            <h3>360&deg; Gavi &amp; Periyar Tiger Reserve Ecosystem</h3>
+            <p>Immerse yourself in one of India's most pristine bio-diverse habitats — housing over 260 bird species, endangered flora, endemic primates, and tranquil cloud forests under sustainable community stewardship.</p>
+            <div class="mtn-tags"><span>Asian Elephant</span><span>Lion-tailed Macaque</span><span>Nilgiri Tahr</span><span>Great Indian Hornbill</span><span>Malabar Giant Squirrel</span><span>Gavi Lake Boating</span><span>Cardamom Trails</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REDESIGNED ITINERARY -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Route Guide</div>
+        <h2 class="stitle">Itinerary Details</h2>
+        <p class="ssub">Explore the meticulously planned Gavi wilderness itinerary with phase schedules, elevation milestones, and naturalist field tips</p>
+      </div>
+
+      <div class="itinerary-accordions">
+
+        <!-- DROPDOWN 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128203;</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary</h3>
+                <p>Get your expedition plan at a glance with key timings &amp; leg highlights</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="quick-it-grid">
+              <div class="qi-card qi-leg-morning">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Morning Leg</span>
+                  <span class="qi-leg-time">07:30 AM &ndash; 11:30 AM</span>
+                </div>
+                <h4>Base Checkpost to Cardamom Hills &amp; Core Jungle</h4>
+                <p>Assembly and forest permit verification at Vallakkadavu checkpost. Scenic jungle transit safari into Gavi base, welcome herbal brew, and entry into the fragrant cardamom and evergreen canopy trails.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4.5 km Trek</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 850m&ndash;1,020m</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Shola Trails</span>
+                </div>
+              </div>
+
+              <div class="qi-card qi-leg-midday">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Midday Leg</span>
+                  <span class="qi-leg-time">11:45 AM &ndash; 02:00 PM</span>
+                </div>
+                <h4>Meenar Stream Cascades &amp; Traditional Kerala Feast</h4>
+                <p>Trekking towards Meenar forest stream and natural granite cascades. Wildlife tracking with tribal naturalists, relaxing by crystal pools, followed by an authentic organic Kerala buffet lunch at Gavi eco-lodge.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4 km Trail</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 980m Base</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Feast &amp; Rest</span>
+                </div>
+              </div>
+
+              <div class="qi-card qi-leg-afternoon">
+                <div class="qi-card-top">
+                  <span class="qi-card-badge">Afternoon Leg</span>
+                  <span class="qi-leg-time">02:15 PM &ndash; 05:00 PM</span>
+                </div>
+                <h4>Gavi Lake Boating, Sabarimala Lookout &amp; Return Safari</h4>
+                <p>Row boating and canoeing across serene Gavi lake with lifejackets. Drive to Sabarimala viewpoint for majestic valley panoramas, cardamom curing house visit, evening tea, and exit safari.</p>
+                <div class="qi-stats">
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lake Safari</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 1,036m Ridge</span>
+                  <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Tea &amp; Farewell</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 2: DETAILED DAY-BY-DAY ITINERARY -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128506;&#65039;</span>
+              <div class="mah-text">
+                <h3>Detailed Schedule &amp; Route Breakdown</h3>
+                <p>In-depth schedule with elevations, terrain descriptions, boating operations, and naturalist tips</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="it-days-list">
+
+              <!-- PHASE 1 -->
+              <div class="it-day open">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase1">Phase 1</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Checkpost Entry Safari, Cardamom Ridge Hike &amp; Canopy Ascent</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Vallakkadavu Checkpost (780m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">KFDC Reception (980m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Cardamom Forest Trail (1,020m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4.5 km hike</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 1,020m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Morning Forest Safari, Permit Clearances &amp; Shola Canopy Entry
+                      </div>
+                      
+                      <p class="itd-lead">Assemble early morning at the Vallakkadavu / Angamoozhy Forest Checkpost. Meet your certified Bootpaths trek lead and licensed indigenous tribal tracker guides. Following permit verification, embark on a scenic 15 km forest drive into the Gavi eco-centre.</p>
+                      
+                      <p>Savor a refreshing welcome herbal brew at the KFDC reception lodge before setting foot on the aromatic cardamom trails. Walk beneath towering tropical evergreens draped with wild moss and orchids.</p>
+                      
+                      <p>Keep your senses sharp for the alarm calls of Nilgiri Langurs and the resonant flapping of Great Indian Hornbills gliding between ancient forest giants.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">07:30 AM</span>
+                          <div class="itl-body">
+                            <strong>Forest Checkpost Assembly &amp; Clearance</strong>
+                            <p>Permit verification, tribal tracker briefing, and entry into the protected reserve forest corridor.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">08:45 AM</span>
+                          <div class="itl-body">
+                            <strong>Gavi Base Reception &amp; Welcome Drink</strong>
+                            <p>Herbal welcome drink, hydration prep, and orientation on eco-sensitive trail etiquette.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">09:30 AM</span>
+                          <div class="itl-body">
+                            <strong>Cardamom Plantation &amp; Shola Ridge Trek</strong>
+                            <p>Guided ascent through lush green cardamom estates into pristine tropical evergreen canopy paths.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#129495;</div>
+                          <div class="im-info">
+                            <small>Trail Distance</small>
+                            <strong>4.5 km Trek</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>3 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127857;</div>
+                          <div class="im-info">
+                            <small>Meals &amp; Fuel</small>
+                            <strong>Welcome Tea &amp; Trail Snacks</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127795;</div>
+                          <div class="im-info">
+                            <small>Terrain &amp; Surface</small>
+                            <strong>Lush Forest Earth &amp; Plantations</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> Morning hours between 08:30 AM and 10:30 AM offer the highest probability of spotting the shy Malabar Giant Squirrel and Nilgiri Langurs basking in the canopy sunlight.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/gavi_trail.jpg" alt="Hikers in Gavi Cardamom Forest" loading="lazy"/>
+                        <span class="itd-vis-tag">&#127795; Phase 1 Highlights</span>
+                        <span class="itd-vis-cap">Walking beneath ancient tree canopies and aromatic cardamom trails</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PHASE 2 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase2">Phase 2</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Meenar Stream Cascades, Wildlife Tracking &amp; Organic Feast</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Deep Shola Forest</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Meenar Stream (940m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Gavi Eco-Lodge (980m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 4 km trek</span>
+                      <span class="itd-pill alt-up"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg> 980m</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Meenar Stream Cascades, Spoor Tracking &amp; Authentic Kerala Lunch
+                      </div>
+                      
+                      <p class="itd-lead">Descend through shaded bamboo groves towards the pristine Meenar stream. Here, crystal-clear cold mountain waters rush across smooth granite rock formations, creating tranquil natural pools.</p>
+                      
+                      <p>Stop for rest and exploration with the tribal trackers, who identify elephant footprints, gaur signs, and wild boar scratch marks on the moist forest floor.</p>
+                      
+                      <p>Return to the main Gavi eco-centre by midday to relish an authentic, hot Kerala buffet lunch made with organic local harvest and served in traditional style.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">11:45 AM</span>
+                          <div class="itl-body">
+                            <strong>Meenar Stream &amp; Natural Cascades</strong>
+                            <p>Stream-side walk, crystal pool dipping, and refreshing mountain air amidst dense forest.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">01:00 PM</span>
+                          <div class="itl-body">
+                            <strong>Wildlife Spoor &amp; Flora Interpretation</strong>
+                            <p>Learning indigenous forest medicine, tracking techniques, and endemic flora with tribal guides.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">01:30 PM</span>
+                          <div class="itl-body">
+                            <strong>Traditional Organic Kerala Feast</strong>
+                            <p>Steaming red rice, authentic sambar, avial, forest honey desserts, and traditional delicacies.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#129495;</div>
+                          <div class="im-info">
+                            <small>Trail Distance</small>
+                            <strong>4 km Trek</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>2.2 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127857;</div>
+                          <div class="im-info">
+                            <small>Meals &amp; Fuel</small>
+                            <strong>Full Kerala Buffet Feast</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#127754;</div>
+                          <div class="im-info">
+                            <small>Highlights</small>
+                            <strong>Meenar Cascades &amp; Wildlife Spoor</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> Bootpaths provides all trekkers with premium leech gaiters and organic herbal repellent for absolute comfort throughout stream crossing sections.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/gavi_waterfall.jpg" alt="Meenar Waterfall Cascades in Gavi" loading="lazy"/>
+                        <span class="itd-vis-tag">&#127754; Phase 2 Highlights</span>
+                        <span class="itd-vis-cap">Pristine forest cascade pools along the Meenar stream</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PHASE 3 -->
+              <div class="it-day">
+                <div class="itd-h" onclick="toggleDay(this)">
+                  <div class="itd-left">
+                    <span class="itd-badge itd-badge-phase3">Phase 3</span>
+                    <div class="itd-heading-group">
+                      <h4 class="itd-title">Gavi Lake Boating, Sabarimala Viewpoint &amp; Return Safari</h4>
+                      <div class="itd-sub">
+                        <span class="itd-step">Gavi Lake Jetty (980m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Sabarimala Viewpoint (1,036m)</span>
+                        <span class="itd-sep">&rarr;</span>
+                        <span class="itd-step">Vallakkadavu Checkpost (780m)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="itd-right">
+                    <div class="itd-pills">
+                      <span class="itd-pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Lake Boating</span>
+                      <span class="itd-pill alt-down"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg> 780m base</span>
+                    </div>
+                    <div class="itd-arrow"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                  </div>
+                </div>
+                <div class="itd-body">
+                  <div class="itd-content">
+                    <div class="itd-text">
+                      <div class="itd-summary-badge">
+                        <span class="isb-dot"></span> Lake Boating Session, Sabarimala Panoramic Vista &amp; Evening Tea
+                      </div>
+                      
+                      <p class="itd-lead">Don certified ISI-standard lifejackets and board the wooden rowboats and canoes on the tranquil waters of Gavi Lake. Glide silently across the mirror-like surface while observing water birds and submerged forest trunks.</p>
+                      
+                      <p>Next, proceed by forest safari vehicle up to the legendary Sabarimala Viewpoint and Pullumedu ridge. Witness breathtaking panoramic vistas across deep forested valleys and rolling green hills.</p>
+                      
+                      <p>Conclude the expedition with a visit to the KFDC cardamom processing unit, savoring steaming hot Kerala cardamom tea and banana fritters before your departure transfer by 05:00 PM.</p>
+
+                      <!-- Micro-timeline -->
+                      <div class="itd-timeline">
+                        <div class="itl-item">
+                          <span class="itl-time">02:15 PM</span>
+                          <div class="itl-body">
+                            <strong>Gavi Lake Boating &amp; Canoeing</strong>
+                            <p>Serene guided paddle boating across tranquil emerald waters surrounded by misty hills.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">03:30 PM</span>
+                          <div class="itl-body">
+                            <strong>Sabarimala Viewpoint Safari</strong>
+                            <p>High-ridge panorama overlooking the sacred Sabarimala temple hills and deep Pamba valleys.</p>
+                          </div>
+                        </div>
+                        <div class="itl-item">
+                          <span class="itl-time">04:30 PM</span>
+                          <div class="itl-body">
+                            <strong>Cardamom Factory Tour &amp; Farewell Tea</strong>
+                            <p>Aromatic cardamom curing tour, fresh Kerala tea, snacks, certificate presentation, and return transfer.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Specification Cards Grid -->
+                      <div class="itd-meta-grid">
+                        <div class="im-item">
+                          <div class="im-icon">&#128675;</div>
+                          <div class="im-info">
+                            <small>Water Navigation</small>
+                            <strong>Gavi Lake Boating</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9201;&#65039;</div>
+                          <div class="im-info">
+                            <small>Time Duration</small>
+                            <strong>2.5 Hours</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#9749;</div>
+                          <div class="im-info">
+                            <small>Evening Refreshments</small>
+                            <strong>Cardamom Tea &amp; Snacks</strong>
+                          </div>
+                        </div>
+                        <div class="im-item">
+                          <div class="im-icon">&#128663;</div>
+                          <div class="im-info">
+                            <small>Departure &amp; Transit</small>
+                            <strong>Transfer to Kumily / Pathanamthitta</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Naturalist Tip Box -->
+                      <div class="itd-tip-box">
+                        <span class="itb-icon">&#128161;</span>
+                        <div class="itb-text">
+                          <strong>Naturalist Pro-Tip:</strong> The evening return safari through the forest corridor between 04:30 PM and 06:00 PM is prime time for spotting wild elephant herds and Indian Gaurs grazing near the roadside meadows.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="itd-vis">
+                      <div class="itd-vis-frame">
+                        <img src="images/gavi_viewpoint.jpg" alt="Sabarimala Viewpoint Gavi" loading="lazy"/>
+                        <span class="itd-vis-tag">&#128675; Phase 3 Highlights</span>
+                        <span class="itd-vis-cap">Panoramic views of the Western Ghats from Sabarimala Lookout</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Visual Experience</div>
+        <h2 class="stitle">Photo Gallery</h2>
+        <p class="ssub">Glimpses of pristine cloud forests, emerald waters, and wildlife captured in Gavi Wildlife Sanctuary</p>
+      </div>
+
+      <div class="gallery-tabs">
+        <button class="gt-btn active" onclick="filterGallery('all', this)">All Photos</button>
+        <button class="gt-btn" onclick="filterGallery('lake', this)">Gavi Lake</button>
+        <button class="gt-btn" onclick="filterGallery('trail', this)">Forest Trails</button>
+        <button class="gt-btn" onclick="filterGallery('viewpoint', this)">Viewpoints</button>
+        <button class="gt-btn" onclick="filterGallery('wildlife', this)">Wildlife &amp; Flora</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gi" data-cat="lake" onclick="openLightbox(0)">
+          <img src="images/gavi_hero.jpg" alt="Misty Sunrise over Gavi Lake and Sanctuary" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Misty Sunrise over Gavi Lake &amp; Western Ghats</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="lake" onclick="openLightbox(1)">
+          <img src="images/gavi_boating.jpg" alt="Row Boating on Gavi Emerald Lake" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Row Boating on Tranquil Gavi Emerald Lake</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="viewpoint" onclick="openLightbox(2)">
+          <img src="images/gavi_viewpoint.jpg" alt="Sabarimala Viewpoint Ridge Vista" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Sabarimala Viewpoint &amp; Pullumedu Ridge Vistas</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(3)">
+          <img src="images/gavi_trail.jpg" alt="Trekkers in Lush Cardamom Forest" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Trekkers Exploring Aromatic Cardamom Canopy</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="trail" onclick="openLightbox(4)">
+          <img src="images/gavi_waterfall.jpg" alt="Meenar Stream Natural Cascade Pool" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Meenar Stream Natural Cascade &amp; Granite Pools</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="wildlife" onclick="openLightbox(5)">
+          <img src="images/gavi_wildlife.jpg" alt="Wild Asian Elephant Herd in Gavi" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Wild Asian Elephant Herd in Forest Clearing</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="lake" onclick="openLightbox(6)">
+          <img src="images/gavi_boating.jpg" alt="Canoeing in Mist-covered Gavi Lake" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Canoeing through Morning Mist on Gavi Lake</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+        <div class="gi" data-cat="viewpoint" onclick="openLightbox(7)">
+          <img src="images/gavi_viewpoint.jpg" alt="Panoramic Cloud Mountain Ridge Viewpoint" loading="lazy"/>
+          <div class="gi-ov"><div class="gi-cap">Cloud-kissed Mountain Ridge Panorama</div><span class="gi-mag">&#128269;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="gallery-lightbox" id="galleryLightbox" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-prev" onclick="changeLightbox(-1)">&#10094;</button>
+      <img src="" alt="" id="lightboxImg" />
+      <button class="lightbox-next" onclick="changeLightbox(1)">&#10095;</button>
+      <div class="lightbox-info">
+        <div id="lightboxCaption"></div>
+        <div id="lightboxIndex"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUSIONS / EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">What is Covered</div>
+        <h2 class="stitle">Inclusions &amp; Exclusions</h2>
+        <p class="ssub">Complete transparency on what your Gavi Eco-Trek &amp; Safari package covers</p>
+      </div>
+      <div class="ie-grid">
+        <div class="iec inc-card">
+          <div class="iec-h"><span>&#9989;</span><h3>What is Included</h3></div>
+          <ul>
+            <li><span class="chk">&#10003;</span> Kerala Forest Department &amp; KFDC official sanctuary entry permits</li>
+            <li><span class="chk">&#10003;</span> Certified government-licensed indigenous tribal naturalist guides</li>
+            <li><span class="chk">&#10003;</span> Gavi Lake boating &amp; canoeing session with certified boatmen</li>
+            <li><span class="chk">&#10003;</span> Standardized ISI-certified personal flotation life jackets</li>
+            <li><span class="chk">&#10003;</span> Guided trek through cardamom plantations &amp; Meenar stream cascades</li>
+            <li><span class="chk">&#10003;</span> Sabarimala viewpoint &amp; cardamom processing unit safari</li>
+            <li><span class="chk">&#10003;</span> All meals during trek (welcome drink, authentic Kerala feast lunch &amp; evening tea)</li>
+            <li><span class="chk">&#10003;</span> Leech gaiters &amp; natural herbal repellent kit</li>
+            <li><span class="chk">&#10003;</span> First-aid support &amp; Bootpaths Certificate of Eco-Trek Completion</li>
+          </ul>
+        </div>
+        <div class="iec exc-card">
+          <div class="iec-h"><span>&#10060;</span><h3>What is Excluded</h3></div>
+          <ul>
+            <li><span class="cross">&times;</span> Travel to and from Base Checkpost (available as add-on from Kumily / Pathanamthitta / Kochi)</li>
+            <li><span class="cross">&times;</span> Commercial camera/video charges mandated by Forest Dept</li>
+            <li><span class="cross">&times;</span> Personal trekking apparel, footwear, and rain ponchos</li>
+            <li><span class="cross">&times;</span> Personal expenses, single-use items, bottled drinks</li>
+            <li><span class="cross">&times;</span> Travel insurance &amp; personal medical evacuation costs</li>
+            <li><span class="cross">&times;</span> Gratuities for tribal trackers and forest drivers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PACKING & GEAR CHECKLIST -->
+      <div class="gear-section" style="margin-top: 60px;">
+        <div class="sh center" style="margin-bottom: 30px;">
+          <div class="stag">Trail Readiness</div>
+          <h3 style="font-size: 1.8rem; font-family: 'Playfair Display', serif; color: #0f172a;">Essential Rainforest Packing Checklist</h3>
+          <p class="ssub">Click items to mark them as packed into your rucksack</p>
+          <div class="cl-badge" id="clCountBadge" style="display:inline-block; margin-top:10px; background:#e0f2fe; color:#0284c7; padding:6px 16px; border-radius:9999px; font-weight:700; font-size:0.85rem;">0 / 8 Packed</div>
+        </div>
+        <div class="checklist-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Trekking Shoes / Hiking Boots</strong><br/><small style="color:#64748b;">Good lug grip for forest roots and damp granite</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Leech Socks / Gaiters</strong><br/><small style="color:#64748b;">Essential protection along moist shola floor</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Light Raincoat / Windbreaker</strong><br/><small style="color:#64748b;">Quick protection from high-altitude mist showers</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Earth-Tone Quick-Dry Clothing</strong><br/><small style="color:#64748b;">Olive, khaki or muted shades (avoid loud colors)</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Binoculars (8x42 or 10x42)</strong><br/><small style="color:#64748b;">Great for spotting hornbills and canopy macaques</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Waterproof Dry Pouch</strong><br/><small style="color:#64748b;">Crucial for phone and camera during lake boating</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Reusable Water Flask (1.5L)</strong><br/><small style="color:#64748b;">Strict zero-plastic sanctuary regulations</small></div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)" style="background:#fff; border:1px solid rgba(15,23,42,0.08); padding:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s;">
+            <div class="cl-box" style="width:22px; height:22px; border:2px solid #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;"></div>
+            <div><strong>Sun Hat &amp; Insect Repellent</strong><br/><small style="color:#64748b;">Comfort on open viewpoints and ridge lookouts</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about trekking and safari in Gavi Wildlife Sanctuary</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="true">
+            <h3>Is prior official permit reservation mandatory for Gavi?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Gavi is a highly sensitive ecological zone within the Periyar Tiger Reserve buffer. The Kerala Forest Development Corporation (KFDC) and Kerala Forest Department restrict daily visitor entry through strict quotas. Bootpaths takes care of all advance entry permits, tribal guide allocations, safari clearances, and boating slots on your behalf.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>What is the fitness level required for the Gavi trek?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>The trek is graded as <strong>Easy to Moderate</strong>. The trails traverse gentle plantation paths, shaded shola canopies, and stream banks with moderate gradients. It is ideal for families, photographers, nature enthusiasts, and first-time hikers. Children aged 6 and above can comfortably participate.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>Is boating on Gavi Lake safe, and are lifejackets provided?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Safety is strictly enforced. All boating and canoeing activities are operated under the guidance of certified local oarsmen. High-grade ISI-certified personal flotation devices (lifejackets) are mandatory for every trekker before boarding.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>How do I reach the Gavi starting basecamp?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Gavi is accessed via the Vallakkadavu checkpost near Vandiperiyar / Kumily (approx. 28 km) or via Angamoozhy in Pathanamthitta district. The nearest railway stations are Kottayam (115 km) and Chengannur (120 km). The nearest airports are Cochin International Airport (COK - 165 km) and Madurai (IXM - 150 km). Bootpaths can arrange shared or private safari vehicle transfers.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>What wildlife might we encounter in Gavi?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Gavi is celebrated for sightings of wild Asian elephant herds, the endangered Lion-tailed Macaque, Nilgiri Tahr, Indian Gaur (bison), Sambar deer, Malabar Giant Squirrels, and over 260 bird species including the Great Indian Hornbill and Malabar Whistling Thrush.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0" aria-expanded="false">
+            <h3>What eco-regulations and plastic rules are in place?</h3>
+            <span class="faq-arrow">&#43;</span>
+          </div>
+          <div class="faq-a">
+            <p>Gavi is a strictly protected plastic-free sanctuary. Single-use plastic water bottles, disposable polythene bags, alcohol, and music speakers are strictly prohibited. Trekkers must carry reusable flasks, which can be refilled with filtered drinking water at the basecamp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING SECTION -->
+  <section class="booking section" id="booking">
+    <div class="bk-bg"><img src="images/gavi_hero.jpg" alt="Gavi Trek Booking" class="bk-bgi"/><div class="bk-ov"></div></div>
+    <div class="container">
+      <div class="bk-layout">
+        <div class="bk-info">
+          <div class="stag light">Reserve Your Spot</div>
+          <h2 class="stitle light">Ready for Kerala's<br/>Most Enchanting Wilderness?</h2>
+          <p class="bk-desc">Join Bootpaths for an unforgettable expedition into Gavi's protected evergreen sanctuary. Experience deep shola stillness, lake boating, and panoramic mountain viewpoints with licensed tribal naturalist guides.</p>
+          
+          <!-- Package Card -->
+          <div class="single-pkg-card">
+            <div class="spc-badge">ALL-INCLUSIVE ECO-EXPEDITION PACKAGE</div>
+            <div class="spc-price-row">
+              <div class="spc-price">
+                <span class="spc-curr">&#8377;</span><span class="spc-amt">2,150</span>
+                <span class="spc-per">/ person (All-Inclusive)</span>
+              </div>
+              <div class="spc-duration">Full Day Wilderness Expedition &bull; Base to Base</div>
+            </div>
+            
+            <div class="spc-features-grid">
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Kerala Forest Dept &amp; KFDC Sanctuary Permits</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Gavi Lake Row Boating &amp; Canoeing Session</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Certified ISI Lifejackets &amp; Safety Gear</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Government-Licensed Tribal Naturalist Guides</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Authentic Kerala Feast Lunch &amp; Evening Tea</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Sabarimala Viewpoint &amp; Cardamom Trails</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Leech Gaiters &amp; Natural Herbal Repellent Kit</div>
+              <div class="spc-feat-item"><span class="spc-chk">&#10003;</span> Wilderness First-Aid &amp; Bootpaths Responder Lead</div>
+            </div>
+            
+            <div class="spc-cta-row">
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20book%20the%20Gavi%20Eco-Trek." target="_blank" rel="noopener" class="btn-p btn-spc">Book at &#8377;2,150</a>
+              <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener" class="btn-wa">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <div class="ft-logo"><img src="images/bootpaths_logo.png" alt="Bootpaths"/><span>Bootpaths</span></div>
+          <p>Walk the world's greatest paths with certified tribal naturalists, thoughtful logistics, and an unwavering commitment to eco-conservation.</p>
+          
+          <!-- Social Icons: YouTube on LEFT, Instagram on RIGHT -->
+          <div class="socials">
+            <a href="https://www.youtube.com/@BOOTpaths2025" target="_blank" rel="noopener" aria-label="YouTube" class="sb sb-youtube" title="Watch on YouTube">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/bootpaths?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram" class="sb sb-instagram" title="Follow on Instagram">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview">About the Trek</a></li><li><a href="#highlights">Trek Highlights</a></li><li><a href="#itinerary">Detailed Itinerary</a></li><li><a href="#gallery">Photo Gallery</a></li><li><a href="#inclusions">Inclusions</a></li><li><a href="#faq">FAQs</a></li><li><a href="#booking">Book Now</a></li></ul></div>
+        <div class="ft-col"><h4>Other Treks</h4><ul><li><a href="#">Chimmini Amphi Trek</a></li><li><a href="#">Silent Valley Rainforest Trek</a></li><li><a href="#">Periyar Tiger Trail</a></li><li><a href="#">Meesapulimala Trek</a></li><li><a href="#">Agasthyarkoodam Trek</a></li><li><a href="#">Chembra Peak Trek</a></li></ul></div>
+        <div class="ft-col"><h4>Contact Bootpaths</h4><ul class="ct"><li><span>&#128231;</span> <a href="mailto:bootpaths@gmail.com">bootpaths@gmail.com</a></li><li><span>&#128241;</span> <a href="tel:+919446102200">Call: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener">WhatsApp: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919895452187?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener">WhatsApp: +91 9895452187</a></li><li><span>&#128172;</span> <a href="https://wa.me/918848998470?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener">WhatsApp: +91 8848998470</a></li><li><span>&#128336;</span> Mon&ndash;Sat: 9am &ndash; 7pm IST</li></ul></div>
+      </div>
+      <div class="ft-bottom"><p>&#169; 2025 Bootpaths Trekking Pvt. Ltd. All rights reserved.</p><p class="ft-credit">Crafted by <a href="#" class="vzentura-btn" target="_blank" rel="noopener"><span>Vzentura</span> <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></p></div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP / CALLBACK BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Gavi%20Trek." target="_blank" rel="noopener" class="floating-callback" title="Request a Callback on WhatsApp">
+    <div class="floating-pulse"></div>
+    <div class="floating-inner">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+      <span class="floating-label">Request Callback</span>
+    </div>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
