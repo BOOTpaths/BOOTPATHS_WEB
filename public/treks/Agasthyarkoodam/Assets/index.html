@@ -31,7 +31,6 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#overview">Overview</a></li>
           <li><a href="#highlights">Highlights</a></li>
-          <li><a href="#altitude">3D Profile</a></li>
           <li><a href="#itinerary">Itinerary</a></li>
           <li><a href="#reach">How to Reach</a></li>
           <li><a href="#gear">Gear</a></li>
@@ -293,77 +292,7 @@
     </div>
   </section>
 
-  <!-- 3D REALTYPE ALTITUDE PROFILE -->
-  <section class="alt-section section" id="altitude">
-    <div class="container">
-      <div class="sh center">
-        <div class="stag">3D Terrain &amp; Elevation</div>
-        <h2 class="stitle">Real-Type 3D Altitude Profile</h2>
-        <p class="ssub">Explore the interactive 3D Western Ghats elevation topography from Bonacaud Trailhead to Agastyarkoodam Peak (1,868m)</p>
-      </div>
-
-      <div class="alt-3d-card">
-        <!-- 3D Toolbar & Controls -->
-        <div class="alt-3d-toolbar">
-          <div class="alt-view-modes">
-            <button class="view-mode-btn active" id="btnModeTerrain" onclick="set3DMode('terrain')">
-              <span class="vm-ico">&#127956;&#65039;</span> 3D Biosphere Valley
-            </button>
-            <button class="view-mode-btn" id="btnModeProfile" onclick="set3DMode('profile')">
-              <span class="vm-ico">&#128202;</span> 3D Extruded Profile
-            </button>
-          </div>
-          
-          <div class="alt-cam-controls">
-            <button class="cam-btn" id="btnAutoRotate" onclick="toggle3DRotate()" title="Toggle Auto-Rotation">
-              <span id="rotateIcon">&#9208;&#65039;</span> <span class="cb-txt">Auto-Rotate</span>
-            </button>
-            <button class="cam-btn" onclick="reset3DCamera()" title="Reset Camera View">
-              <span>&#128260;</span> <span class="cb-txt">Reset</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 3D WebGL Canvas Container -->
-        <div class="alt-canvas-wrap" id="altCanvasWrap">
-          <canvas id="alt3dCanvas"></canvas>
-          
-          <!-- 3D HUD Tooltip Card -->
-          <div class="alt-hud-tooltip" id="altHudTooltip">
-            <div class="hud-header">
-              <span class="hud-day" id="hudDay">Day 2 Summit</span>
-              <h4 class="hud-name" id="hudName">Agastyarkoodam Peak</h4>
-            </div>
-            <div class="hud-stats">
-              <div class="hud-stat"><span>Altitude:</span> <b id="hudAlt">1,868 m (6,128 ft)</b></div>
-              <div class="hud-stat"><span>Terrain:</span> <b id="hudO2">360° windswept peak</b></div>
-            </div>
-            <p class="hud-desc" id="hudDesc">Kerala's 2nd highest summit with Sage Agastya shrine &amp; Arabian Sea views.</p>
-          </div>
-
-          <!-- Interaction Hint Overlay -->
-          <div class="alt-drag-hint" id="altDragHint">
-            <span>&#128070; Drag to rotate 3D ridge &bull; Scroll to zoom &bull; Click milestone pins for details</span>
-          </div>
-        </div>
-
-        <!-- Waypoint Quick Jumper Strip -->
-        <div class="alt-waypoints-strip">
-          <span class="aw-lbl">Key Milestones:</span>
-          <div class="aw-pills" id="awPills">
-            <button class="aw-btn" onclick="focus3DWaypoint(0)">Bonacaud <span>450m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(1)">Karamanayar <span>520m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(2)">Vazhapanthiyar <span>680m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(3)">Attayar Camp <span>750m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(4)">Athirumala <span>1,000m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(5)">Pongalapara <span>1,450m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(6)">Fixed Ropes <span>1,720m</span></button>
-            <button class="aw-btn active active-peak" onclick="focus3DWaypoint(7)">Agastyarkoodam Peak <span>1,868m</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- ITINERARY SECTION -->
 
   <!-- ITINERARY SECTION -->
   <section class="itinerary section" id="itinerary">
@@ -902,7 +831,6 @@
           <ul>
             <li><a href="#overview">Expedition Overview</a></li>
             <li><a href="#highlights">Trek Highlights</a></li>
-            <li><a href="#altitude">3D Elevation Profile</a></li>
             <li><a href="#itinerary">Day-by-Day Itinerary</a></li>
             <li><a href="#gear">Gear &amp; Packing List</a></li>
           </ul>
@@ -934,8 +862,7 @@
     </div>
   </footer>
 
-  <!-- Three.js (for 3D Altitude Profile) & Page Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Page Scripts -->
   <script src="script.js"></script>
 </body>
 </html>
