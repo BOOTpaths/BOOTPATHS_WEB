@@ -18,7 +18,6 @@ import RefundPolicy from './components/RefundPolicy';
 import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
@@ -1137,7 +1136,91 @@ export default function App() {
         />
 
         {/* FOOTER */}
-        <Footer isCareersEnabled={isCareersEnabled} />
+        <footer className="border-t border-autumn-bark/10 bg-autumn-mist py-16 px-6 md:px-12 text-autumn-bark/70 text-xs">
+          <div className="mx-auto max-w-7xl grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
+            
+            {/* Brand Info */}
+            <div className="lg:col-span-2 space-y-6">
+              <a href="#" className="flex items-center">
+                <img 
+                  src="/logo.png" 
+                  alt="BOOTpaths" 
+                  className="h-8 md:h-10 w-auto object-contain"
+                />
+              </a>
+              <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
+                We guide adventurers to unexplored peaks and premium trails across Western Ghats, The Himalayan and International treks and Expeditions. Fully vetted batches, certified mountain leads, and environment first.
+              </p>
+              <div className="flex items-center gap-3 mt-4">
+                <a 
+                  href="https://instagram.com/bootpaths" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+                >
+                  <Instagram className="h-5 w-5" />
+                </a>
+                <a 
+                  href="https://www.youtube.com/@BOOTpaths2025" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+                >
+                  <Youtube className="h-5 w-5" />
+                </a>
+                <a 
+                  href="https://www.facebook.com/share/1ELLiv1gUJ/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+                >
+                  <Facebook className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Links 1 */}
+            <div className="space-y-4">
+              <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Popular Trails</h4>
+              <ul className="space-y-2.5 text-autumn-bark/50">
+                <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Netravathi Peak Trek</a></li>
+                <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Brahmagiri Coorg Trek</a></li>
+                <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Vellagavi Village Trek</a></li>
+              </ul>
+            </div>
+
+            {/* Links 2 */}
+            <div className="space-y-4">
+              <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Resources</h4>
+              <ul className="space-y-2.5 text-autumn-bark/50">
+                <li><a href="#blogs" className="hover:text-autumn-maple transition-colors">Trek preparation guides</a></li>
+                <li><a href="#advantage" className="hover:text-autumn-maple transition-colors">Ecotourism standards</a></li>
+                <li><a href="#blogs" className="hover:text-autumn-maple transition-colors">Trek leads & safety logs</a></li>
+              </ul>
+            </div>
+
+            {/* Contact Details */}
+            <div className="space-y-4">
+              <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Contact Support</h4>
+              <ul className="space-y-2 text-autumn-bark/50">
+                <li>Email: lead@bootpaths.com</li>
+                <li>WhatsApp Support:</li>
+                <li className="font-semibold text-autumn-bark/70">+91 8848998470</li>
+                <li className="font-semibold text-autumn-bark/70">+91 9895452187</li>
+                <li className="font-semibold text-autumn-bark/70">+91 9446102200</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mx-auto max-w-7xl mt-12 pt-8 border-t border-autumn-bark/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-autumn-bark/40">
+            <span>© 2026 BOOTpaths. All Rights Reserved. Confidential & Proprietary.</span>
+            <div className="flex gap-4">
+              <a href="/terms" className="hover:underline transition-all">Terms of Service</a>
+              <a href="/privacy" className="hover:underline transition-all">Privacy Policy</a>
+              <a href="/refund" className="hover:underline transition-all">Refund Policy</a>
+            </div>
+          </div>
+        </footer>
 
         {/* AUTHENTICATION MODAL */}
         <AuthModal 
@@ -2196,7 +2279,123 @@ export default function App() {
       )}
 
       {/* FOOTER */}
-      <Footer isCareersEnabled={isCareersEnabled} />
+      <footer className="border-t border-autumn-bark/10 bg-autumn-mist py-16 px-6 md:px-12 text-autumn-bark/70 text-xs">
+        <div className="mx-auto max-w-7xl grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
+          
+          {/* Brand Info */}
+          <div className="lg:col-span-2 space-y-6">
+            <a href="#" className="flex items-center">
+              <img 
+                src="/logo.png" 
+                alt="BOOTpaths" 
+                className="h-8 md:h-10 w-auto object-contain"
+              />
+            </a>
+            <p className="text-xs text-autumn-bark/50 leading-relaxed max-w-sm">
+              We guide adventurers to unexplored peaks and premium trails across Western Ghats, The Himalayan and International treks and Expeditions. Fully vetted batches, certified mountain leads, and environment first.
+            </p>
+            <div className="flex items-center gap-3 mt-4">
+              <a 
+                href="https://instagram.com/bootpaths" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.youtube.com/@BOOTpaths2025" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Youtube className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.facebook.com/share/1ELLiv1gUJ/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
+              >
+                <Facebook className="h-5 w-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Links 1 */}
+          <div className="space-y-4">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Popular Trails</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
+              <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Netravathi Peak Trek</a></li>
+              <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Brahmagiri Coorg Trek</a></li>
+              <li><a href="#upcoming-treks" className="hover:text-autumn-maple transition-colors">Vellagavi Village Trek</a></li>
+            </ul>
+          </div>
+
+          {/* Links 2 */}
+          <div className="space-y-4">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Company Info</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
+              <li><a href="#advantage" className="hover:text-autumn-maple transition-colors">Our Crew & Advantage</a></li>
+              <li><a href="#community" className="hover:text-autumn-maple transition-colors">Community Stories</a></li>
+              {isCareersEnabled && (
+                <li><a href="#careers" className="hover:text-autumn-maple transition-colors">Careers for Leads</a></li>
+              )}
+            </ul>
+          </div>
+
+          {/* Contacts */}
+          <div className="space-y-4">
+            <h4 className="font-outfit text-xs font-bold uppercase tracking-wider text-autumn-bark/80">Get in Touch</h4>
+            <ul className="space-y-2.5 text-autumn-bark/50">
+              <li>Email: <a href="mailto:[EMAIL_ADDRESS]" className="hover:text-autumn-maple transition-colors">[bootpaths@gmail.com]</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/918848998470" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 8848998470</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/919895452187" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 9895452187</a></li>
+              <li>WhatsApp Support: <a href="https://wa.me/919446102200" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">+91 9446102200</a></li>
+              <li>Instagram DM: <a href="https://www.instagram.com/bootpaths/" target="_blank" rel="noreferrer" className="hover:text-autumn-maple transition-colors">@bootpaths</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div className="mx-auto max-w-7xl mt-12 pt-8 border-t border-autumn-bark/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xxs text-autumn-bark/40">
+          <div>
+            &copy; {new Date().getFullYear()} BOOTpaths Adventure Labs. All rights reserved.
+          </div>
+          <div className="flex gap-4">
+            <a 
+              href="#/terms" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/terms';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Terms of Service
+            </a>
+            <a 
+              href="#/privacy" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/privacy';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Privacy Policy
+            </a>
+            <a 
+              href="#/refund" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '#/refund';
+              }}
+              className="hover:text-autumn-bark/70"
+            >
+              Cancellation & Refund Policy
+            </a>
+          </div>
+        </div>
+      </footer>
 
       {/* TERMS OF SERVICE MODAL OVERLAY */}
       {isTermsModalOpen && (
