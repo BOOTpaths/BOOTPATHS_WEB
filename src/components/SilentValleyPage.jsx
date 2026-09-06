@@ -763,22 +763,6 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
           <div className="ft-bottom"><p>© 2026 Bootpaths Trekking Pvt. Ltd. All rights reserved.</p><p>Crafted for Silent Valley Wilderness</p></div>
         </div>
       </footer>
-
-      {/* FLOATING WHATSAPP / CALLBACK BUTTON */}
-      <a 
-        href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="floating-callback" 
-        title="Request a Callback on WhatsApp"
-      >
-        <div className="floating-pulse"></div>
-        <div className="floating-inner">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
-          <span className="floating-label font-outfit">Request Callback</span>
-        </div>
-      </a>
-
     </div>
   );
 }
