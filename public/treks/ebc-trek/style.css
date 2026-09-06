@@ -519,19 +519,23 @@ button {
 
 .hero-title {
   font-family: 'Open Sans', sans-serif;
-  font-size: clamp(1.4rem, 4.4vw, 3.8rem);
+  font-size: clamp(1.8rem, 5.2vw, 4.5rem);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 1.1;
   color: #ffffff;
   margin-bottom: clamp(14px, 2.5vw, 22px);
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  white-space: nowrap;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.hero-title .title-ebc {
+  white-space: nowrap;
 }
 
 .hero-title em,
 .hero-title .highlight-trek {
+  display: inline-block;
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: 700;
