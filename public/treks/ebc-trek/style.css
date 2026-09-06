@@ -475,7 +475,7 @@ button {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 860px;
+  max-width: 1150px;
   padding: 0 24px;
   animation: fadeInUp 1s ease 0.2s both;
 }
@@ -519,13 +519,14 @@ button {
 
 .hero-title {
   font-family: 'Open Sans', sans-serif;
-  font-size: clamp(2.4rem, 6.5vw, 5.5rem);
+  font-size: clamp(1.4rem, 4.4vw, 3.8rem);
   font-weight: 800;
   line-height: 1.05;
   color: #ffffff;
   margin-bottom: clamp(14px, 2.5vw, 22px);
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
