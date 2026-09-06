@@ -19,10 +19,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
-  
-  <!-- Three.js for 3D Real-Type Elevation Topography -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -39,7 +35,6 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#overview">Overview</a></li>
           <li><a href="#highlights">Highlights</a></li>
-          <li><a href="#altitude">3D Elevation</a></li>
           <li><a href="#itinerary">Itinerary</a></li>
           <li><a href="#media">Media &amp; Reels</a></li>
           <li><a href="#gallery">Gallery</a></li>
@@ -181,76 +176,7 @@
     </div>
   </section>
 
-  <!-- 3D REALTYPE ALTITUDE PROFILE -->
-  <section class="alt-section section" id="altitude">
-    <div class="container">
-      <div class="sh center">
-        <div class="stag">3D Terrain &amp; Elevation</div>
-        <h2 class="stitle">Real-Type 3D Altitude Profile</h2>
-        <p class="ssub">Explore the interactive 3D topography from KFDC Munnar Basecamp to Rhodo Valley and the 2,640m Meeshapulimala Summit</p>
-      </div>
-
-      <div class="alt-3d-card">
-        <!-- 3D Toolbar & Controls Header -->
-        <div class="alt-3d-toolbar">
-          <div class="alt-view-modes">
-            <button class="view-mode-btn active" id="btnModeTerrain" onclick="set3DMode('terrain')">
-              <span class="vm-ico">🏔️</span> 3D Mountain Valley
-            </button>
-            <button class="view-mode-btn" id="btnModeProfile" onclick="set3DMode('profile')">
-              <span class="vm-ico">📊</span> 3D Extruded Profile
-            </button>
-          </div>
-          
-          <div class="alt-cam-controls">
-            <button class="cam-btn" id="btnAutoRotate" onclick="toggle3DRotate()" title="Toggle Auto-Rotation">
-              <span id="rotateIcon">⏸️</span> <span class="cb-txt">Auto-Rotate</span>
-            </button>
-            <button class="cam-btn" onclick="reset3DCamera()" title="Reset Camera View">
-              <span>🔄</span> <span class="cb-txt">Reset</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 3D WebGL Canvas Container -->
-        <div class="alt-canvas-wrap" id="altCanvasWrap">
-          <canvas id="alt3dCanvas"></canvas>
-          
-          <!-- 3D HUD Tooltip Card -->
-          <div class="alt-hud-tooltip active" id="altHudTooltip">
-            <div class="hud-header">
-              <span class="hud-day" id="hudDay">Day 2 (7:00 AM Sunrise)</span>
-              <h4 class="hud-name" id="hudName">Meeshapulimala Summit</h4>
-            </div>
-            <div class="hud-stats">
-              <div class="hud-stat"><span>Altitude:</span> <b id="hudAlt">2,640 m (8,661 ft)</b></div>
-              <div class="hud-stat"><span>Oxygen Level:</span> <b id="hudO2">~74% sea level</b></div>
-            </div>
-            <p class="hud-desc" id="hudDesc">The crowning peak of Meeshapulimala! South India's highest trekkable summit, famous for 'mist of Charlie' &amp; 360° panoramas.</p>
-          </div>
-
-          <!-- Interaction Hint Overlay -->
-          <div class="alt-drag-hint" id="altDragHint">
-            <span>👆 Drag to rotate 3D mountain &bull; Scroll / Pinch to zoom &bull; Click pins for details</span>
-          </div>
-        </div>
-
-        <!-- Waypoint Quick Jumper Strip -->
-        <div class="alt-waypoints-strip">
-          <span class="aw-lbl">Interactive Milestones:</span>
-          <div class="aw-pills" id="awPills">
-            <button class="aw-btn" onclick="focus3DWaypoint(0)">Basecamp <span>1,850m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(1)">Checkpost <span>1,980m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(2)">Rhodo Valley <span>2,160m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(3)">Pandava Cave <span>2,300m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(4)">Peak 4 Ridge <span>2,450m</span></button>
-            <button class="aw-btn" onclick="focus3DWaypoint(5)">Peak 7 Shoulder <span>2,560m</span></button>
-            <button class="aw-btn active-selected" onclick="focus3DWaypoint(6)">Summit Peak <span>2,640m</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- ITINERARY -->
 
   <!-- ITINERARY -->
   <section class="itinerary section" id="itinerary">
@@ -1082,7 +1008,6 @@
           <ul class="f-links">
             <li><a href="#overview">About the Trek</a></li>
             <li><a href="#highlights">Key Highlights</a></li>
-            <li><a href="#altitude">3D Real-Type Elevation</a></li>
             <li><a href="#itinerary">2-Day Itinerary</a></li>
             <li><a href="#media">Media &amp; Reels Space</a></li>
             <li><a href="#gallery">Photo Gallery</a></li>
