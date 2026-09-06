@@ -210,6 +210,16 @@ export default function App() {
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
   const [expeditionViews, setExpeditionViews] = useState([]);
 
+  // Emergency preview parameter check (?preview=dev_key)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('preview') === 'dev_key') {
+        sessionStorage.setItem('dev_bypass', 'true');
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash);
@@ -810,49 +820,127 @@ export default function App() {
     setIsDashboardOpen(true); // Open dashboard to view the confirmed booking
   };
 
+  const hasDevBypass = typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true';
+
+  const isUserAdmin = isAdmin || 
+                      userRole === 'admin' || 
+                      userRole === 'developer' || 
+                      userData?.role === 'admin' || 
+                      userData?.role === 'developer' || 
+                      user?.role === 'admin' || 
+                      user?.role === 'developer' || 
+                      currentUser?.email === 'admin@bootpaths.com' ||
+                      user?.email === 'admin@bootpaths.com' ||
+                      userData?.email === 'admin@bootpaths.com';
+
+  const isMaintenanceMode = !!(featureFlags?.enableMaintenanceMode);
+  const isAdminRoute = currentHash.startsWith('#admin') || currentHash.startsWith('#dev-ops');
+  const isBypassed = isUserAdmin || isAdminRoute || hasDevBypass;
+
+  const devBanner = (isMaintenanceMode && isBypassed && !isAdminRoute) ? (
+    <div className="fixed bottom-4 right-4 z-50 bg-amber-500 text-slate-900 font-bold px-4 py-2 rounded-xl shadow-lg text-xs flex items-center gap-2 border border-amber-300">
+      <span>🚧 Maintenance Mode is Active (Bypassed for Admin)</span>
+    </div>
+  ) : null;
+
+  // Maintenance Mode Guard Check
+  if (isMaintenanceMode && !isBypassed) {
+    return (
+      <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+        {/* Background Ambient Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-amber-500/10 blur-[100px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center">
+          {/* Logo Badge */}
+          <div className="w-16 h-16 rounded-2xl bg-white/10 border border-[#F3ECDD]/20 p-3 mb-8 shadow-xl backdrop-blur-md flex items-center justify-center">
+            <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
+          </div>
+
+          <span className="px-3.5 py-1 rounded-full bg-[#C1571F]/20 text-[#C1571F] border border-[#C1571F]/40 text-xs font-black tracking-widest uppercase mb-4 flex items-center gap-2">
+            <AlertTriangle className="h-3.5 w-3.5" /> SYSTEM MAINTENANCE
+          </span>
+
+          <h1 className="font-outfit text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Under Scheduled Upgrade
+          </h1>
+
+          <p className="text-sm text-[#F3ECDD]/70 leading-relaxed mb-8 max-w-md">
+            Our expedition reservations and trail logging systems are currently undergoing planned maintenance to improve high-season performance. We will be back live shortly!
+          </p>
+
+          {/* Admin Access CTA */}
+          <button
+            onClick={() => {
+              window.location.hash = '#admin';
+            }}
+            className="h-11 px-6 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+          >
+            <span>Administrator Access</span>
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Footer info */}
+        <div className="absolute bottom-6 text-[11px] text-[#F3ECDD]/40 font-mono">
+          © {new Date().getFullYear()} BOOTpaths Ecotourism Portal
+        </div>
+      </div>
+    );
+  }
+
   if (isTermsRoute || currentHash === '#/terms' || currentHash === '#terms') {
     return (
-      <TermsOfService 
-        onClose={() => {
-          if (isTermsRoute) {
-            window.history.pushState(null, '', '/');
-            setIsTermsRoute(false);
-          } else {
-            window.location.hash = '';
-          }
-        }}
-        isFullPage={true}
-      />
+      <>
+        <TermsOfService 
+          onClose={() => {
+            if (isTermsRoute) {
+              window.history.pushState(null, '', '/');
+              setIsTermsRoute(false);
+            } else {
+              window.location.hash = '';
+            }
+          }}
+          isFullPage={true}
+        />
+        {devBanner}
+      </>
     );
   }
 
   if (isPrivacyRoute || currentHash === '#/privacy' || currentHash === '#privacy') {
     return (
-      <PrivacyPolicy 
-        onClose={() => {
-          if (isPrivacyRoute) {
-            window.history.pushState(null, '', '/');
-            setIsPrivacyRoute(false);
-          } else {
-            window.location.hash = '';
-          }
-        }}
-      />
+      <>
+        <PrivacyPolicy 
+          onClose={() => {
+            if (isPrivacyRoute) {
+              window.history.pushState(null, '', '/');
+              setIsPrivacyRoute(false);
+            } else {
+              window.location.hash = '';
+            }
+          }}
+        />
+        {devBanner}
+      </>
     );
   }
 
   if (isRefundRoute || currentHash === '#/refund' || currentHash === '#refund') {
     return (
-      <RefundPolicy 
-        onClose={() => {
-          if (isRefundRoute) {
-            window.history.pushState(null, '', '/');
-            setIsRefundRoute(false);
-          } else {
-            window.location.hash = '';
-          }
-        }}
-      />
+      <>
+        <RefundPolicy 
+          onClose={() => {
+            if (isRefundRoute) {
+              window.history.pushState(null, '', '/');
+              setIsRefundRoute(false);
+            } else {
+              window.location.hash = '';
+            }
+          }}
+        />
+        {devBanner}
+      </>
     );
   }
 
@@ -1049,6 +1137,7 @@ export default function App() {
           }}
           defaultAction={pendingAction || 'login'}
         />
+        {devBanner}
       </div>
     );
   }
@@ -1066,21 +1155,24 @@ export default function App() {
     };
 
     return (
-      <SilentValleyPage 
-        packageData={svTrek}
-        onBack={() => {
-          window.location.hash = '#upcoming-treks';
-        }}
-        onOpenBookingModal={() => {
-          setSelectedTrek(svTrek);
-          setSelectedDate(svTrek.batchDates ? svTrek.batchDates[0] : (svTrek.dates ? svTrek.dates[0] : ''));
-          setNumTrekkers(1);
-          window.location.hash = '#upcoming-treks';
-          setTimeout(() => {
-            document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
-          }, 200);
-        }}
-      />
+      <>
+        <SilentValleyPage 
+          packageData={svTrek}
+          onBack={() => {
+            window.location.hash = '#upcoming-treks';
+          }}
+          onOpenBookingModal={() => {
+            setSelectedTrek(svTrek);
+            setSelectedDate(svTrek.batchDates ? svTrek.batchDates[0] : (svTrek.dates ? svTrek.dates[0] : ''));
+            setNumTrekkers(1);
+            window.location.hash = '#upcoming-treks';
+            setTimeout(() => {
+              document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+          }}
+        />
+        {devBanner}
+      </>
     );
   }
 
@@ -2547,6 +2639,9 @@ export default function App() {
           }
         }}
       />
+
+      {/* DEVELOPER INDICATOR BANNER */}
+      {devBanner}
 
     </div>
   );

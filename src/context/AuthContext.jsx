@@ -33,7 +33,8 @@ export function AuthProvider({ children }) {
     enableLeadApplications: false,
     enableExpeditionViews: false,
     enableSocialFeeds: false,
-    enableCommunityBlogs: false
+    enableCommunityBlogs: false,
+    enableMaintenanceMode: false
   });
 
   useEffect(() => {
@@ -44,7 +45,8 @@ export function AuthProvider({ children }) {
           enableLeadApplications: !!data.enableLeadApplications,
           enableExpeditionViews: !!data.enableExpeditionViews,
           enableSocialFeeds: !!data.enableSocialFeeds,
-          enableCommunityBlogs: !!data.enableCommunityBlogs
+          enableCommunityBlogs: !!data.enableCommunityBlogs,
+          enableMaintenanceMode: !!data.enableMaintenanceMode
         });
       } else {
         // Create the document if it doesn't exist
@@ -52,7 +54,8 @@ export function AuthProvider({ children }) {
           enableLeadApplications: false,
           enableExpeditionViews: false,
           enableSocialFeeds: false,
-          enableCommunityBlogs: false
+          enableCommunityBlogs: false,
+          enableMaintenanceMode: false
         };
         setDoc(doc(db, 'app_settings', 'feature_flags'), defaultFlags).catch((err) => {
           console.warn('Failed to initialize feature flags doc:', err);

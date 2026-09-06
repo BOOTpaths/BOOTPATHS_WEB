@@ -17,7 +17,8 @@ export default function DeveloperConsole() {
     enableLeadApplications: false,
     enableExpeditionViews: false,
     enableSocialFeeds: false,
-    enableCommunityBlogs: false
+    enableCommunityBlogs: false,
+    enableMaintenanceMode: false
   });
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateStatus, setUpdateStatus] = useState('');
@@ -31,7 +32,8 @@ export default function DeveloperConsole() {
           enableLeadApplications: !!data.enableLeadApplications,
           enableExpeditionViews: !!data.enableExpeditionViews,
           enableSocialFeeds: !!data.enableSocialFeeds,
-          enableCommunityBlogs: !!data.enableCommunityBlogs
+          enableCommunityBlogs: !!data.enableCommunityBlogs,
+          enableMaintenanceMode: !!data.enableMaintenanceMode
         });
       }
     }, (err) => {
@@ -110,6 +112,12 @@ export default function DeveloperConsole() {
       title: 'Community Blogs & Content System',
       description: 'Gates client-facing adventure guides, blog entries, and markup editor consoles.',
       badge: 'Content System'
+    },
+    {
+      key: 'enableMaintenanceMode',
+      title: 'Maintenance Mode System',
+      description: 'Places public site under maintenance screen for visitors while bypassing for administrators.',
+      badge: 'System Guard'
     }
   ];
 
