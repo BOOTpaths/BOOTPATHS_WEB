@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 /* ==========================================
    BOOTPATHS – EBC TREK PAGE STYLESHEET
@@ -5450,4 +5450,56 @@ img, video, iframe, canvas {
     text-align: center;
     gap: 12px;
   }
+}
+
+/* ==========================================================================
+   STANDARDIZED OPEN SANS TYPOGRAPHY SYSTEM
+   ========================================================================== */
+* {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+html, body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #4A5568;
+}
+
+h1, .hero-title, .main-title {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+}
+
+h2, .stitle, .section-title, .dt-title {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: #1A1A18;
+}
+
+h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+
+p, ul, ol, li, .ssub, .card-desc, .overview-p, .itin-desc, .faq-answer, .faq-item p {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #4A5568;
+}
+
+.stag, .hero-badge, .badge, .pill, .tag, button, .btn, .btn-p, .btn-wa, .btn-g, .nav-cta, .nav-callback-btn, .hs b, .qi strong, .stat-val, .stat-num {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+
+.hero-title em,
+.hero-title span.highlight-trek,
+.hero-title span.trek-highlight,
+.hero-title span.highlight {
+  font-family: 'Open Sans', sans-serif !important;
+  font-style: normal;
+  font-weight: 700;
+  color: #C1571F;
 }
