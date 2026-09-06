@@ -872,14 +872,45 @@ export default function App() {
           {/* Admin Access CTA */}
           <button
             onClick={() => {
-              window.location.hash = '#admin';
+              if ((currentUser || user) && isUserAdmin) {
+                window.location.hash = '#admin';
+              } else {
+                setIsAuthModalOpen(true);
+              }
             }}
-            className="h-11 px-6 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+            className="h-11 px-6 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 active:scale-95"
           >
             <span>Administrator Access</span>
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
+
+        {/* Modal render for Admin Sign In during Maintenance Mode */}
+        <AuthModal 
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          onAuthSuccess={(newUser) => {
+            setUser(newUser);
+            setUserRole(newUser.role);
+            setContextUserRole(newUser.role);
+            setName(newUser.name);
+            setEmail(newUser.email);
+            setIsAuthModalOpen(false);
+
+            if (newUser.role === 'developer' || newUser.email === 'vzentura2026@gmail.com') {
+              window.location.hash = '#dev-ops';
+            } else if (newUser.role === 'admin' || newUser.email === 'admin@bootpaths.com') {
+              window.location.hash = '#admin';
+            } else {
+              if (pendingAction) {
+                executeAction(pendingAction);
+                setPendingAction(null);
+              } else {
+                setIsDashboardOpen(true);
+              }
+            }
+          }}
+        />
 
         {/* Footer info */}
         <div className="absolute bottom-6 text-[11px] text-[#F3ECDD]/40 font-mono">
@@ -978,10 +1009,73 @@ export default function App() {
       );
     }
     const isVzentura = currentUser?.email === 'vzentura2026@gmail.com' || user?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
-    const isAdminOrDev = (userRole === 'admin' || userData?.role === 'admin' || user?.role === 'admin' || userRole === 'developer' || userData?.role === 'developer') && !isVzentura;
+    const isAdminOrDev = (
+      userRole === 'admin' || 
+      userData?.role === 'admin' || 
+      user?.role === 'admin' || 
+      userRole === 'developer' || 
+      userData?.role === 'developer' || 
+      currentUser?.email === 'admin@bootpaths.com' || 
+      user?.email === 'admin@bootpaths.com' || 
+      userData?.email === 'admin@bootpaths.com'
+    ) && !isVzentura;
+
     if (!currentUser || !isAdminOrDev) {
-      window.location.hash = '#';
-      return null;
+      return (
+        <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
+          <div className="relative z-10 max-w-md mx-auto flex flex-col items-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 border border-[#F3ECDD]/20 p-3 mb-6 shadow-xl backdrop-blur-md flex items-center justify-center">
+              <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
+            </div>
+            <h2 className="font-outfit text-2xl sm:text-3xl font-black text-white mb-3">Admin Portal Access</h2>
+            <p className="text-xs text-[#F3ECDD]/70 mb-6 leading-relaxed">
+              Please sign in with authorized administrator credentials to access the BOOTpaths Admin Console.
+            </p>
+            <div className="flex flex-col gap-3 w-full max-w-xs">
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="h-11 w-full px-6 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+              >
+                <span>Sign In as Admin</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => { window.location.hash = ''; }}
+                className="text-xs text-[#F3ECDD]/50 hover:text-[#F3ECDD] transition-all py-1 cursor-pointer"
+              >
+                ← Return to Homepage
+              </button>
+            </div>
+          </div>
+
+          <AuthModal 
+            isOpen={isAuthModalOpen || !currentUser}
+            onClose={() => {
+              setIsAuthModalOpen(false);
+              if (!currentUser) {
+                window.location.hash = '';
+              }
+            }}
+            onAuthSuccess={(newUser) => {
+              setUser(newUser);
+              setUserRole(newUser.role);
+              setContextUserRole(newUser.role);
+              setName(newUser.name);
+              setEmail(newUser.email);
+              setIsAuthModalOpen(false);
+
+              if (newUser.role === 'developer' || newUser.email === 'vzentura2026@gmail.com') {
+                window.location.hash = '#dev-ops';
+              } else if (newUser.role === 'admin' || newUser.email === 'admin@bootpaths.com') {
+                window.location.hash = '#admin';
+              } else {
+                window.location.hash = '';
+              }
+            }}
+          />
+        </div>
+      );
     }
     return (
       <AdminConsole 
