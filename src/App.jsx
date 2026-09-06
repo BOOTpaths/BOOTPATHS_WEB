@@ -372,7 +372,7 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
-  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance, featureFlags } = useAuth();
+  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance, featureFlags, isAdmin } = useAuth();
   const isCareersEnabled = !!(featureFlags?.enableLeadApplications);
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
   const [userRole, setUserRole] = useState(null);

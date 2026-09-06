@@ -136,7 +136,12 @@ export function AuthProvider({ children }) {
       }
     });
 
+    const safetyTimer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
     return () => {
+      clearTimeout(safetyTimer);
       unsubscribeAuth();
       if (unsubscribeUserDoc) unsubscribeUserDoc();
     };
