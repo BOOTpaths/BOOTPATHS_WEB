@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Calendar, Compass } from 'lucide-react';
+import { MapPin, Clock, Compass, CheckCircle2 } from 'lucide-react';
 
 export default function TrekCard({ trek, onGetDetails, onBookNow }) {
   const handleDetailsClick = () => {
@@ -22,81 +22,145 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
       }
     }
 
-    if (trek.id === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
+    if (trek.id === 'silent-valley' || trek.slug === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
       window.location.hash = '#silent-valley';
       return;
     }
   };
 
+  const inclusionsList = (trek.inclusion && trek.inclusion.length > 0)
+    ? trek.inclusion
+    : (trek.inclusions && trek.inclusions.length > 0)
+    ? trek.inclusions
+    : ['Forest Permits', 'Certified Lead', 'Safety Gear', 'Meals Included'];
+
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#E7E7E4] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group bg-white rounded-2xl border border-[#EBEBE8] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
       {/* Image Banner */}
       <div className="relative h-56 w-full overflow-hidden bg-stone-100">
-        <img
-          src={trek.image}
-          alt={trek.title}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        {trek.tag && (
-          <div className="absolute top-4 left-4">
-            <span className={`px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full border backdrop-blur-md ${trek.tagColor || 'bg-[#C1571F]/20 text-[#C1571F] border-[#C1571F]/40'}`}>
-              {trek.tag}
+        {trek.videoEmbed ? (
+          <iframe 
+            src={trek.videoEmbed} 
+            className="h-full w-full object-cover border-0 pointer-events-none scale-[1.35]" 
+            scrolling="no" 
+            title={trek.title}
+          />
+        ) : trek.videoLocal ? (
+          <video 
+            src={trek.videoLocal} 
+            className="h-full w-full object-cover" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+          />
+        ) : (
+          <img
+            src={trek.image}
+            alt={trek.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        )}
+
+        {/* Top Overlay Badge */}
+        {(trek.tag || trek.slotsLeft) && (
+          <div className="absolute top-3.5 left-3.5">
+            <span className="bg-[#C1571F] text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-md shadow-md inline-block">
+              {trek.tag || 'LIMITED SLOTS'}
             </span>
           </div>
         )}
-        <div className="absolute bottom-3 right-3 rounded-xl bg-black/60 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md">
-          {trek.slotsLeft} slots remaining
+
+        {/* Bottom Image Chips (Duration & Difficulty) */}
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-1.5 pointer-events-none">
+          <div className="flex items-center gap-1.5">
+            {trek.duration && (
+              <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-white/80" />
+                {trek.duration}
+              </span>
+            )}
+            {trek.difficulty && (
+              <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5">
+                <Compass className="h-3.5 w-3.5 text-white/80" />
+                {trek.difficulty}
+              </span>
+            )}
+          </div>
+          {trek.slotsLeft !== undefined && (
+            <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5">
+              <span className={`h-1.5 w-1.5 rounded-full ${Number(trek.slotsLeft) <= 5 ? 'bg-red-400 animate-pulse' : 'bg-emerald-400'}`}></span>
+              {trek.slotsLeft} slots
+            </span>
+          )}
         </div>
       </div>
 
       {/* Card Content */}
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center gap-2 text-xxs font-bold uppercase tracking-wider text-[#C1571F]">
-          <MapPin className="h-3.5 w-3.5" />
-          <span>{trek.location}</span>
-        </div>
-
-        <h3 className="mt-2 font-outfit text-lg font-bold text-[#1A1A18] line-clamp-1">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        {/* Trek Title */}
+        <h3 className="text-lg md:text-xl font-bold text-[#111827] leading-snug group-hover:text-[#C1571F] transition-colors line-clamp-1">
           {trek.title}
         </h3>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 border-y border-[#E7E7E4] py-3 text-xs text-[#52524E]">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-[#C1571F]" />
-            <span>{trek.duration}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Compass className="h-4 w-4 text-[#C1571F]" />
-            <span>{trek.difficulty}</span>
-          </div>
+        {/* Altitude & Location line */}
+        <div className="text-xs font-semibold text-[#6B7280] flex items-center gap-1 mt-1.5">
+          <MapPin className="h-3.5 w-3.5 text-[#6B7280] shrink-0" />
+          <span className="truncate">{trek.location}</span>
+          {trek.altitude && (
+            <span className="shrink-0">• {trek.altitude}</span>
+          )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            <span className="text-xxs uppercase tracking-wider text-[#52524E]/60 block">Price Starts At</span>
-            <div className="flex items-baseline gap-1 mt-0.5">
-              {trek.originalPrice && (
-                <span className="text-xs text-[#52524E]/50 line-through font-semibold">₹{trek.originalPrice}</span>
-              )}
-              <span className="text-lg font-bold text-[#C1571F]">₹{trek.price}</span>
+        {/* Body Summary Paragraph */}
+        <p className="text-xs md:text-[13px] text-[#374151] leading-relaxed line-clamp-4 font-normal mt-2">
+          {trek.description || trek.summary || 'Experience pristine backcountry trails with professional guides and comprehensive logistics.'}
+        </p>
+
+        {/* Feature Checklist */}
+        <div className="mt-4 pt-3 border-t border-[#EBEBE8] grid grid-cols-2 gap-2">
+          {inclusionsList.slice(0, 4).map((inc, i) => (
+            <div key={i} className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#10B981] shrink-0" />
+              <span className="text-[11px] font-medium text-[#4B5563] truncate">{inc}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer (Price & Action Buttons) */}
+        <div className="mt-5 pt-4 border-t border-[#EBEBE8] flex flex-col gap-3.5">
+          <div className="flex items-baseline justify-between">
+            <div>
+              <span className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-bold block">
+                PRICE STARTS AT
+              </span>
+              <div className="flex items-baseline mt-0.5">
+                <span className="text-xl font-extrabold text-[#C1571F]">
+                  ₹{Number(trek.price || 0).toLocaleString('en-IN')}
+                </span>
+                {trek.originalPrice && (
+                  <span className="text-xs text-[#9CA3AF] line-through ml-1.5">
+                    ₹{Number(trek.originalPrice).toLocaleString('en-IN')}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Action Row */}
-        <div className="grid grid-cols-2 gap-3 mt-6">
-          <button
-            onClick={handleDetailsClick}
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10 cursor-pointer"
-          >
-            Get Details
-          </button>
-          <button
-            onClick={() => onBookNow && onBookNow(trek)}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#C1571F] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_4px_12px_rgba(193,87,31,0.2)] cursor-pointer"
-          >
-            Book Now
-          </button>
+          <div className="grid grid-cols-2 gap-2.5">
+            <button
+              onClick={handleDetailsClick}
+              className="bg-white border border-[#D1D5DB] text-[#374151] hover:bg-[#F9FAFB] hover:border-[#9CA3AF] font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl transition-all cursor-pointer text-center flex items-center justify-center"
+            >
+              GET DETAILS
+            </button>
+            <button
+              onClick={() => onBookNow && onBookNow(trek)}
+              className="bg-[#C1571F] hover:bg-[#A84716] text-white font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition-all cursor-pointer text-center flex items-center justify-center"
+            >
+              BOOK NOW
+            </button>
+          </div>
         </div>
       </div>
     </div>

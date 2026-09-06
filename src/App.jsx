@@ -18,6 +18,7 @@ import RefundPolicy from './components/RefundPolicy';
 import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
+import TrekCard from './components/TrekCard';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
@@ -1573,134 +1574,12 @@ export default function App() {
           ) : (
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {(showAllTreks ? treks : treks.slice(0, 3)).map((trek) => (
-                <div 
+                <TrekCard
                   key={trek.id}
-                  className="group flex flex-col overflow-hidden rounded-xl border border-autumn-bark/10 bg-[#EFE8D6]/40 backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-autumn-maple/30 hover:bg-[#EFE8D6]/70 hover:scale-[1.02] hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-                >
-                  {/* Image & Badges Container */}
-                  <div className="relative h-56 w-full overflow-hidden">
-                    {trek.videoEmbed ? (
-                      <iframe 
-                        src={trek.videoEmbed} 
-                        className="h-full w-full object-cover border-0 pointer-events-none scale-[1.35]" 
-                        scrolling="no" 
-                        title={trek.title}
-                      />
-                    ) : trek.videoLocal ? (
-                      <video 
-                        src={trek.videoLocal} 
-                        className="h-full w-full object-cover" 
-                        autoPlay 
-                        loop 
-                        muted 
-                        playsInline
-                      />
-                    ) : (
-                      <img 
-                        src={trek.image} 
-                        alt={trek.title} 
-                        className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      />
-                    )}
-                    {/* Dark Overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent pointer-events-none"></div>
-                    
-                    {/* Top Badges */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2">
-                      <span className="rounded backdrop-blur-md bg-[#EFE8D6]/40 border border-autumn-bark/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-autumn-maple transition-all duration-300 group-hover:border-autumn-maple/40 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.25)]">
-                        {trek.tag}
-                      </span>
-                    </div>
-  
-                    {/* Difficulty Badge */}
-                    <div className="absolute bottom-4 left-4 flex gap-2">
-                      <span className="inline-flex items-center gap-1 rounded bg-autumn-mist/80 px-2 py-0.5 text-xs text-autumn-bark/80 backdrop-blur-sm">
-                        <Clock className="h-3.5 w-3.5 text-autumn-maple" />
-                        {trek.duration}
-                      </span>
-                      <span className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-bold backdrop-blur-sm bg-autumn-mist/80 ${
-                        trek.difficulty === 'Challenging' ? 'text-amber-400' : 'text-autumn-maple'
-                      }`}>
-                        {trek.difficulty}
-                      </span>
-                    </div>
-                  </div>
-  
-                  {/* Card Info */}
-                  <div className="flex flex-1 flex-col p-6">
-                    
-                    {/* Title & Altitude */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="font-outfit text-xl font-bold text-autumn-bark group-hover:text-autumn-maple transition-colors">
-                          {trek.title}
-                        </h3>
-                        <span className="inline-flex items-center gap-1 text-xs text-autumn-bark/50 mt-1">
-                          <MapPin className="h-3 w-3" />
-                          {trek.location}
-                        </span>
-                      </div>
-                      <span className="shrink-0 rounded bg-stone-850/80 px-2 py-0.5 text-xxs font-mono text-autumn-bark/70">
-                        {trek.altitude}
-                      </span>
-                    </div>
-  
-                    {/* Description */}
-                    <p className="mt-4 text-xs leading-relaxed text-autumn-bark/70">
-                      {trek.description}
-                    </p>
-  
-                    {/* Quick details / inclusions */}
-                    <div className="mt-5 border-t border-autumn-bark/10 pt-4">
-                      <div className="grid grid-cols-2 gap-2 text-xxs text-autumn-bark/70">
-                        {(trek.inclusion || []).slice(0, 4).map((inc, i) => (
-                          <div key={i} className="flex items-center gap-1">
-                            <CheckCircle2 className="h-3 w-3 text-autumn-maple shrink-0" />
-                            <span>{inc}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-  
-                    {/* Slot warning label */}
-                    <div className="mt-5 flex items-center justify-between border-t border-autumn-bark/10 pt-4">
-                      <div>
-                        <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Live Slots Left</span>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className={`h-2 w-2 rounded-full ${trek.slotsLeft <= 5 ? 'bg-red-500 animate-ping' : 'bg-autumn-maple'}`}></span>
-                          <span className={`text-xs font-bold ${trek.slotsLeft <= 5 ? 'text-red-400' : 'text-autumn-bark/80'}`}>
-                            {trek.slotsLeft} slots remaining
-                          </span>
-                        </div>
-                      </div>
-  
-                      <div className="text-right">
-                        <span className="text-xxs uppercase tracking-wider text-autumn-bark/50">Price Starts At</span>
-                        <div className="mt-0.5">
-                          <span className="text-xs text-autumn-bark/50 line-through mr-1 font-semibold">₹{trek.originalPrice}</span>
-                          <span className="text-base font-bold text-autumn-maple">₹{trek.price}</span>
-                        </div>
-                      </div>
-                    </div>
-  
-                    {/* Action Row */}
-                    <div className="grid grid-cols-2 gap-3 mt-6">
-                      <button
-                        onClick={() => handleGetDetails(trek)}
-                        className="inline-flex h-11 items-center justify-center rounded-lg border border-[#6E7042] text-[#3A2A1E] font-outfit text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:bg-[#6E7042]/10 cursor-pointer"
-                      >
-                        Get Details
-                      </button>
-                      <button
-                        onClick={() => handleBookNow(trek)}
-                        className="inline-flex h-11 items-center justify-center rounded-lg bg-[#C1571F] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_4px_12px_rgba(193,87,31,0.2)]"
-                      >
-                        Book Now
-                      </button>
-                    </div>
-  
-                  </div>
-                </div>
+                  trek={trek}
+                  onGetDetails={handleGetDetails}
+                  onBookNow={handleBookNow}
+                />
               ))}
             </div>
           )}
