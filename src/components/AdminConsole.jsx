@@ -1024,7 +1024,7 @@ export default function AdminConsole({
       tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
       detailsUrl: '/treks/ebc-trek/index.html',
       description: 'The legendary trek to the foot of Mt. Everest through Sherpa villages, Tengboche monastery, and Khumbu icefall.',
-      image: '/treks/ebc-trek/Assets/hero-bg.jpg',
+      image: '/treks/ebc-trek/images/ebc_hero.jpg',
       inclusion: ['Sherpa Guides', 'Teahouse Lodging', 'TIMS Permits'],
       batchDates: ['Sep 01, 2026', 'Oct 10, 2026', 'Nov 05, 2026']
     },
