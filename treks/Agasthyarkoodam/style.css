@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+
 /* ==========================================================================
    BOOTPATHS — AGASTYARKOODAM TREK STYLESHEET
    CRISP ALPINE SLATE LIGHT THEME (EXACT MATCH TO BOOTPATHS DESIGN SYSTEM)
@@ -5,8 +7,8 @@
 
 /* ---- CSS Variables & Design Tokens ---- */
 :root {
-  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-main: 'Open Sans', sans-serif;
+  --font-serif: 'Open Sans', sans-serif;
 
   /* Theme Colors */
   --orange: #f97316;

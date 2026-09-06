@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+
 /* ==========================================
    BOOTPATHS – EBC TREK PAGE STYLESHEET
    CRISP ALPINE SLATE LIGHT THEME – MULTI-DEVICE OPTIMIZED
@@ -15,10 +17,12 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   background: #f8fafc;
   color: #4A5568;
   overflow-x: hidden;
@@ -108,9 +112,9 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--orange);
@@ -128,12 +132,12 @@ button {
 }
 
 .stitle {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: clamp(1.85rem, 4.5vw, 3.4rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.15;
   color: #1A1A18;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .stitle.light {
@@ -145,7 +149,8 @@ button {
 }
 
 .ssub {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   color: #4A5568;
   line-height: 1.7;
@@ -484,9 +489,9 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
@@ -513,7 +518,7 @@ button {
 }
 
 .hero-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: clamp(2.4rem, 6.5vw, 5.5rem);
   font-weight: 800;
   line-height: 1.05;
@@ -526,9 +531,9 @@ button {
 
 .hero-title em,
 .hero-title .highlight-trek {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #C1571F;
@@ -538,7 +543,8 @@ button {
 }
 
 .hero-sub {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   font-size: clamp(1rem, 2vw, 1.25rem);
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.7;
@@ -1434,7 +1440,7 @@ button {
 }
 
 .dt-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: clamp(1.35rem, 2.5vw, 1.85rem);
   font-weight: 800;
   color: #1A1A18;
