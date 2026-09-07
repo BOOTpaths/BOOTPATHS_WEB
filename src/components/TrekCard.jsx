@@ -74,11 +74,15 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
         )}
 
         {/* Top Status Tag */}
-        {tagText && (
+        {(trek.isVisible === false || trek.isHidden === true) ? (
+          <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded shadow-sm z-10 backdrop-blur-sm">
+            DRAFT / HIDDEN
+          </span>
+        ) : tagText ? (
           <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-wider bg-[#EB5A0D] text-white px-2 py-0.5 rounded shadow-sm z-10">
             {tagText}
           </span>
-        )}
+        ) : null}
 
         {/* Wishlist Heart Button */}
         <button

@@ -8,8 +8,12 @@ export default function UpcomingTreks({
   showAllTreks = false, 
   setShowAllTreks, 
   onGetDetails, 
-  onBookNow 
+  onBookNow,
+  userRole
 }) {
+  const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
+  const displayTreks = (treks || []).filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+
   return (
     <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1400px] mx-auto">
@@ -37,7 +41,7 @@ export default function UpcomingTreks({
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-autumn-bark/10 border-t-[#C1571F] mb-4"></div>
             <p className="text-xs text-autumn-bark/60 uppercase tracking-widest font-bold">Loading Trails...</p>
           </div>
-        ) : treks.length === 0 ? (
+        ) : displayTreks.length === 0 ? (
           <div className="mt-12 flex flex-col items-center justify-center p-8 py-16 text-center bg-[#EBE3D3]/40 rounded-3xl border border-[#3A2A1E]/10">
             <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
             <h3 className="font-outfit text-lg font-black text-[#3A2A1E] uppercase tracking-wider">No Treks Currently Available</h3>
@@ -45,7 +49,7 @@ export default function UpcomingTreks({
           </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {(showAllTreks ? treks : treks.slice(0, 4)).map((trek) => (
+            {(showAllTreks ? displayTreks : displayTreks.slice(0, 4)).map((trek) => (
               <TrekCard
                 key={trek.id}
                 trek={trek}
@@ -57,7 +61,7 @@ export default function UpcomingTreks({
         )}
 
         {/* Progressive Loading Toggle */}
-        {treks.length > 4 && (
+        {displayTreks.length > 4 && (
           <div className="mt-12 flex justify-center">
             <button 
               onClick={() => setShowAllTreks && setShowAllTreks(!showAllTreks)}

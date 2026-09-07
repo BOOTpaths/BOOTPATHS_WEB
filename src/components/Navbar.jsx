@@ -197,10 +197,13 @@ export default function Navbar({
     setActiveDropdown((prev) => (prev === menuKey ? null : menuKey));
   };
 
+  const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
+
   // Build dynamic categorized trek lists
   const westernGhatsTreks = useMemo(() => {
     const list = [...STATIC_WESTERN_GHATS];
     (treks || []).forEach(t => {
+      if (!isAdminOrDev && (t.isVisible === false || t.isHidden === true)) return;
       const title = (t.name || t.title || '').toLowerCase();
       const region = (t.region || t.location || '').toLowerCase();
       const isWG = region.includes('western') || region.includes('kerala') || region.includes('karnataka') || region.includes('tamil nadu');
@@ -209,16 +212,18 @@ export default function Navbar({
           id: t.id,
           name: t.name || t.title,
           duration: t.duration || '2-3 Days',
-          url: t.detailsUrl || '#upcoming-treks'
+          url: t.detailsUrl || '#upcoming-treks',
+          isVisible: t.isVisible
         });
       }
     });
     return list;
-  }, [treks]);
+  }, [treks, isAdminOrDev]);
 
   const himalayanTreks = useMemo(() => {
     const list = [...STATIC_HIMALAYAN_TRAILS];
     (treks || []).forEach(t => {
+      if (!isAdminOrDev && (t.isVisible === false || t.isHidden === true)) return;
       const title = (t.name || t.title || '').toLowerCase();
       const region = (t.region || t.location || '').toLowerCase();
       const isHimalayan = region.includes('himalay') || region.includes('uttarakhand') || region.includes('himachal') || region.includes('nepal');
@@ -227,16 +232,18 @@ export default function Navbar({
           id: t.id,
           name: t.name || t.title,
           duration: t.duration || '5-10 Days',
-          url: t.detailsUrl || '#upcoming-treks'
+          url: t.detailsUrl || '#upcoming-treks',
+          isVisible: t.isVisible
         });
       }
     });
     return list;
-  }, [treks]);
+  }, [treks, isAdminOrDev]);
 
   const internationalTreks = useMemo(() => {
     const list = [...STATIC_INTERNATIONAL_TREKS];
     (treks || []).forEach(t => {
+      if (!isAdminOrDev && (t.isVisible === false || t.isHidden === true)) return;
       const title = (t.name || t.title || '').toLowerCase();
       const region = (t.region || t.location || '').toLowerCase();
       const isIntl = region.includes('international') || region.includes('africa') || region.includes('tanzania') || region.includes('russia') || region.includes('europe');
@@ -245,12 +252,13 @@ export default function Navbar({
           id: t.id,
           name: t.name || t.title,
           duration: t.duration || '8-14 Days',
-          url: t.detailsUrl || '#upcoming-treks'
+          url: t.detailsUrl || '#upcoming-treks',
+          isVisible: t.isVisible
         });
       }
     });
     return list;
-  }, [treks]);
+  }, [treks, isAdminOrDev]);
 
   // Merge live treks with curated defaults for universal search indexing
   const allIndexedTreks = useMemo(() => {
@@ -259,11 +267,12 @@ export default function Navbar({
     STATIC_HIMALAYAN_TRAILS.forEach(t => map.set(t.id, { ...t, region: 'Himalayan Trails' }));
     STATIC_INTERNATIONAL_TREKS.forEach(t => map.set(t.id, { ...t, region: 'International Treks' }));
     (treks || []).forEach(t => {
+      if (!isAdminOrDev && (t.isVisible === false || t.isHidden === true)) return;
       const existing = map.get(t.id) || {};
       map.set(t.id, { ...existing, ...t });
     });
     return Array.from(map.values());
-  }, [treks]);
+  }, [treks, isAdminOrDev]);
 
   const queryClean = searchQuery.trim().toLowerCase();
 

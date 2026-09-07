@@ -1102,6 +1102,19 @@ export default function AdminConsole({
     }
   };
 
+  // Toggle Trek Visibility
+  const toggleTrekVisibility = async (trekId, nextState) => {
+    setTreks(prev => prev.map(t => t.id === trekId ? { ...t, isVisible: nextState } : t));
+    try {
+      await updateDoc(doc(db, "packages", trekId), {
+        isVisible: nextState,
+        updatedAt: new Date()
+      });
+    } catch (err) {
+      console.error("Failed to update visibility:", err);
+    }
+  };
+
   // Open Create Modal
   const handleOpenCreateModal = () => {
     setEditingTrek(null);
@@ -1117,6 +1130,7 @@ export default function AdminConsole({
       tag: 'FILLING FAST!',
       description: '',
       image: '',
+      isVisible: true,
       inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
       batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
       itineraryDocUrl: '',
@@ -1132,7 +1146,7 @@ export default function AdminConsole({
     setEditingTrek(trek);
     const existingDates = trek.batchDates || trek.dates || ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'];
     setFormData({
-      title: trek.title || '',
+      title: trek.title || trek.name || '',
       location: trek.location || '',
       altitude: trek.altitude || '',
       duration: trek.duration || '',
@@ -1143,6 +1157,7 @@ export default function AdminConsole({
       tag: trek.tag || 'FILLING FAST!',
       description: trek.description || '',
       image: trek.image || '',
+      isVisible: trek.isVisible !== false && !trek.isHidden,
       inclusion: trek.inclusion || [],
       batchDates: existingDates,
       itineraryDocUrl: trek.itineraryDocUrl || '',
@@ -1234,6 +1249,7 @@ export default function AdminConsole({
       price: Number(formData.price),
       originalPrice: Number(formData.originalPrice),
       slotsLeft: Number(formData.slotsLeft),
+      isVisible: formData.isVisible !== false,
       tagColor,
       batchDates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
       dates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
@@ -1896,8 +1912,10 @@ export default function AdminConsole({
                     </td>
                   </tr>
                 ) : (
-                  (filteredTreks || []).map((trek) => (
-                    <tr key={trek.id} className="hover:bg-[#F8F8F6] transition-colors">
+                  (filteredTreks || []).map((trek) => {
+                    const isHidden = trek.isVisible === false || trek.isHidden === true;
+                    return (
+                    <tr key={trek.id} className={`transition-colors ${isHidden ? 'opacity-60 bg-slate-50/50' : 'hover:bg-[#F8F8F6]'}`}>
                       {/* Title & Image */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
@@ -1907,7 +1925,14 @@ export default function AdminConsole({
                             className="h-10 w-10 rounded-lg object-cover border border-[#E7E7E4] shrink-0" 
                           />
                           <div>
-                            <span className="font-outfit text-sm font-bold text-autumn-bark block">{trek.title}</span>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-outfit text-sm font-bold text-autumn-bark block">{trek.title || trek.name}</span>
+                              {isHidden && (
+                                <span className="inline-block text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+                                  HIDDEN
+                                </span>
+                              )}
+                            </div>
                             <span className="text-xxs text-autumn-bark/60 block">{trek.duration}</span>
                           </div>
                         </div>
@@ -1960,6 +1985,25 @@ export default function AdminConsole({
                       {/* Actions */}
                       <td className="py-4 px-6 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {/* Visibility Toggle Button */}
+                          {isHidden ? (
+                            <button
+                              onClick={() => toggleTrekVisibility(trek.id, true)}
+                              className="h-8 w-8 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 transition-all flex items-center justify-center cursor-pointer text-sm"
+                              title="Hidden (Draft/Archived) - Click to Publish"
+                            >
+                              🙈
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => toggleTrekVisibility(trek.id, false)}
+                              className="h-8 w-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 transition-all flex items-center justify-center cursor-pointer text-sm"
+                              title="Published (Visible on site) - Click to Hide"
+                            >
+                              👁️
+                            </button>
+                          )}
+
                           <button
                             onClick={() => handleOpenEditModal(trek)}
                             className="h-8 w-8 rounded-lg bg-[#F8F8F6] hover:bg-[#C1571F] hover:text-white text-autumn-bark transition-all flex items-center justify-center border border-[#E7E7E4]"
@@ -1978,7 +2022,8 @@ export default function AdminConsole({
                         </div>
                       </td>
                     </tr>
-                  ))
+                  );
+                })
                 )}
               </tbody>
             </table>
@@ -3546,7 +3591,23 @@ export default function AdminConsole({
                 )}
               </div>
 
-               <div>
+               {/* Public Visibility Toggle Checkbox */}
+              <div className="bg-[#F8F8F6] p-3 rounded-xl border border-[#E7E7E4]">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#1A1A18] select-none">
+                  <input 
+                    type="checkbox" 
+                    checked={formData.isVisible !== false} 
+                    onChange={(e) => setFormData({ ...formData, isVisible: e.target.checked })} 
+                    className="w-4 h-4 text-[#EB5A0D] rounded border-gray-300 focus:ring-[#EB5A0D] cursor-pointer"
+                  />
+                  <span>Show this trek publicly on website (Published)</span>
+                </label>
+                <span className="text-[11px] text-autumn-bark/60 block ml-6.5 mt-0.5">
+                  When unchecked, this package is saved as Draft/Archived and hidden from the public website.
+                </span>
+              </div>
+
+              <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1">
                   Package Summary Description
                 </label>
