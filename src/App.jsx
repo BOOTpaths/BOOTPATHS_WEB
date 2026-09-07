@@ -1805,7 +1805,7 @@ export default function App() {
                 <button
                   type="submit"
                   disabled={availableBatchDates.length === 0}
-                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-autumn-maple font-outfit text-sm font-bold uppercase tracking-wider text-[#F3ECDD] transition-all duration-300 hover:bg-[#a44717] hover:shadow-[0_0_20px_rgba(193,87,31,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#EB5A0D] font-outfit text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-[#D44E08] hover:shadow-[0_0_20px_rgba(235,90,13,0.3)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {availableBatchDates.length === 0 ? 'No Batches Available' : 'Secure Reservation'}
                   <ArrowRight className="h-4 w-4" />
@@ -2538,7 +2538,7 @@ export default function App() {
                   setDetailedTrek(null);
                   handleBookNow(trek);
                 }}
-                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-[#C1571F] hover:bg-[#a44717] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 shadow-md"
+                className="flex-1 h-11 inline-flex items-center justify-center rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-outfit text-xs font-extrabold uppercase tracking-wider transition-all duration-300 shadow-md cursor-pointer"
               >
                 Book This Trek
               </button>

@@ -57,9 +57,9 @@ button {
 
 /* ---- CSS Variables & Design Tokens ---- */
 :root {
-  --orange: #f97316;
+  --orange: #EB5A0D;
   --orange-light: #fb923c;
-  --orange-dark: #ea580c;
+  --orange-dark: #D44E08;
   --green-wa: #25d366;
   --green-wa-dark: #128c7e;
   --red-accent: #e11d48;
@@ -5656,5 +5656,20 @@ p, ul, ol, li, .ssub, .card-desc, .overview-p, .itin-desc, .faq-answer, .faq-ite
   font-family: 'Open Sans', sans-serif !important;
   font-style: normal;
   font-weight: 700;
-  color: #C1571F;
+  color: #EB5A0D;
+}
+
+/* ==========================================================================
+   PRIMARY CTA BUTTON STANDARDIZATION (#EB5A0D)
+   ========================================================================== */
+.btn-p, .btn-primary, .btn-book, .nav-cta, .btn-pc-feat, .mobile-cta-btn, .btn-spc {
+  background-color: #EB5A0D !important;
+  border-color: #EB5A0D !important;
+  color: #ffffff !important;
+}
+
+.btn-p:hover, .btn-primary:hover, .btn-book:hover, .nav-cta:hover, .btn-pc-feat:hover, .mobile-cta-btn:hover, .btn-spc:hover {
+  background-color: #D44E08 !important;
+  border-color: #D44E08 !important;
+  color: #ffffff !important;
 }

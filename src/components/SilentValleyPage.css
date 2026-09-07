@@ -35,9 +35,9 @@
 }.silent-valley-page-container button {
   font-family: inherit;
 }/* ---- CSS Variables & Design Tokens ---- */.silent-valley-page-container .silent-valley-page-container {
-  --orange: #f97316;
+  --orange: #EB5A0D;
   --orange-light: #fb923c;
-  --orange-dark: #ea580c;
+  --orange-dark: #D44E08;
   --green-wa: #25d366;
   --green-wa-dark: #128c7e;
   --red-accent: #e11d48;
@@ -244,7 +244,7 @@
 }.silent-valley-page-container .nav-cta {
   display: inline-flex;
   align-items: center;
-  background: #C1571F !important;
+  background: #EB5A0D !important;
   color: #ffffff !important;
   font-weight: 700 !important;
   font-size: 0.75rem !important;
@@ -257,7 +257,7 @@
   transition: all 0.2s ease !important;
   white-space: nowrap;
 }.silent-valley-page-container .nav-cta:hover {
-  background: #A84716 !important;
+  background: #D44E08 !important;
   transform: translateY(-1px) !important;
 }.silent-valley-page-container .hamburger {
   display: none;
@@ -2788,4 +2788,19 @@
   .hero-title {
     font-size: 5.5rem;
   }
+}
+
+/* ==========================================================================
+   PRIMARY CTA BUTTON STANDARDIZATION (#EB5A0D)
+   ========================================================================== */
+.btn-p, .btn-primary, .btn-book, .nav-cta, .btn-pc-feat, .mobile-cta-btn, .btn-spc {
+  background-color: #EB5A0D !important;
+  border-color: #EB5A0D !important;
+  color: #ffffff !important;
+}
+
+.btn-p:hover, .btn-primary:hover, .btn-book:hover, .nav-cta:hover, .btn-pc-feat:hover, .mobile-cta-btn:hover, .btn-spc:hover {
+  background-color: #D44E08 !important;
+  border-color: #D44E08 !important;
+  color: #ffffff !important;
 }

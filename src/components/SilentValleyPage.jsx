@@ -159,7 +159,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
             {/* STICKY TOP BACK BUTTON */}
             <button 
               onClick={onBack}
-              className="ml-2 rounded-full border border-stone-300 hover:border-[#C1571F] bg-white text-stone-700 hover:text-[#C1571F] text-xs font-bold px-4 py-2 transition-all duration-300 shadow-sm cursor-pointer"
+              className="ml-2 rounded-full border border-stone-300 hover:border-[#EB5A0D] bg-white text-stone-700 hover:text-[#EB5A0D] text-xs font-bold px-4 py-2 transition-all duration-300 shadow-sm cursor-pointer"
             >
               ← Back to BOOTpaths
             </button>
@@ -320,21 +320,21 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
               <div className="main-accordion-body">
                 <div className="quick-it-grid">
                   <div className="qi-card">
-                    <div className="qi-card-badge bg-[#C1571F]">Day 1</div>
+                    <div className="qi-card-badge bg-[#EB5A0D]">Day 1</div>
                     <h4>Mukkali Base to Sairandhri &amp; Kunthi River</h4>
                     <p className="font-outfit">Arrival at Mukkali basecamp. Forest Department permit verification, safari jeep drive (23 km) into dense buffer zone, check-in at Sairandhri, trek down to the historic suspension bridge over Kunthi River.</p>
                     <div className="qi-stats"><span>🥾 4 km Trek</span><span>🏔️ 1,020m</span><span>⛺ Sairandhri FRH / Camp</span></div>
                   </div>
 
                   <div className="qi-card">
-                    <div className="qi-card-badge bg-[#C1571F]">Day 2</div>
+                    <div className="qi-card-badge bg-[#EB5A0D]">Day 2</div>
                     <h4>Poochipara Deep Rainforest Trail &amp; Wildlife</h4>
                     <p className="font-outfit">Early morning ascent to Sairandhri 100ft watch tower for canopy birdwatching. Full-day guided trek into Poochipara forest path, observing Lion-tailed Macaques, endemic flora, and swimming in crystal natural pools.</p>
                     <div className="qi-stats"><span>🥾 14 km Trek</span><span>🏔️ 1,150m</span><span>⛺ Forest Eco Camp</span></div>
                   </div>
 
                   <div className="qi-card">
-                    <div className="qi-card-badge bg-[#C1571F]">Day 3</div>
+                    <div className="qi-card-badge bg-[#EB5A0D]">Day 3</div>
                     <h4>Walakkad Shola Ridge &amp; Mukkali Return</h4>
                     <p className="font-outfit">Trek towards Walakkad wilderness ridge bordering the Nilgiri Biosphere sholas. Final panoramic views across Sispara Pass, descent back to Sairandhri, safari return to Mukkali, and certificate presentation.</p>
                     <div className="qi-stats"><span>🥾 10 km Trek</span><span>🏔️ 1,450m</span><span>🏁 Departure</span></div>
@@ -626,7 +626,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
       {/* 10. FAQ */}
       <section className="w-full flex flex-col items-center justify-center py-20 px-4 bg-white" id="faq">
         <div className="w-full max-w-3xl flex flex-col items-center space-y-4">
-          <span className="px-3.5 py-1 rounded-md bg-[#FFF2EA] text-[#E05A1B] text-xs font-black tracking-widest uppercase mb-3">GOT QUESTIONS?</span>
+          <span className="px-3.5 py-1 rounded-md bg-[#FFF2EA] text-[#EB5A0D] text-xs font-black tracking-widest uppercase mb-3">GOT QUESTIONS?</span>
           <h2 className="text-3xl md:text-5xl font-serif font-black text-[#1A1A18] text-center mb-3">Frequently Asked Questions</h2>
           <p className="text-sm text-[#718096] text-center max-w-xl mb-10">Everything you need to know about trekking in Silent Valley National Park</p>
 
@@ -653,17 +653,17 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
                   className="w-full flex items-center justify-between p-5 md:px-7 md:py-5 text-left focus:outline-none cursor-pointer"
                 >
                   <span className={`pr-4 font-bold text-sm md:text-base transition-colors duration-300 ${
-                    isOpen ? 'text-[#E05A1B]' : 'text-[#1A1A18]'
+                    isOpen ? 'text-[#EB5A0D]' : 'text-[#1A1A18]'
                   }`}>
                     {faq.q}
                   </span>
                   <div className="shrink-0 transition-all duration-300">
                     {isOpen ? (
-                      <div className="w-8 h-8 rounded-full bg-[#E05A1B] text-white flex items-center justify-center text-xs font-black">
+                      <div className="w-8 h-8 rounded-full bg-[#EB5A0D] text-white flex items-center justify-center text-xs font-black">
                         ✕
                       </div>
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#FFF0E6] text-[#E05A1B] flex items-center justify-center text-sm font-bold">
+                      <div className="w-8 h-8 rounded-full bg-[#FFF0E6] text-[#EB5A0D] flex items-center justify-center text-sm font-bold">
                         +
                       </div>
                     )}

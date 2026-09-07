@@ -65,7 +65,7 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
         {/* Top Overlay Badge */}
         {(trek.tag || trek.slotsLeft) && (
           <div className="absolute top-3.5 left-3.5">
-            <span className="bg-[#C1571F] text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-md shadow-md inline-block">
+            <span className="bg-[#EB5A0D] text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-md shadow-md inline-block">
               {trek.tag || 'LIMITED SLOTS'}
             </span>
           </div>
@@ -99,7 +99,7 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
       {/* Card Content */}
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         {/* Trek Title */}
-        <h3 className="text-lg md:text-xl font-bold text-[#111827] leading-snug group-hover:text-[#C1571F] transition-colors line-clamp-1">
+        <h3 className="text-lg md:text-xl font-bold text-[#111827] leading-snug group-hover:text-[#EB5A0D] transition-colors line-clamp-1">
           {trek.title}
         </h3>
 
@@ -135,7 +135,7 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
                 PRICE STARTS AT
               </span>
               <div className="flex items-baseline mt-0.5">
-                <span className="text-xl font-extrabold text-[#C1571F]">
+                <span className="text-xl font-extrabold text-[#EB5A0D]">
                   ₹{Number(trek.price || 0).toLocaleString('en-IN')}
                 </span>
                 {trek.originalPrice && (
@@ -156,7 +156,7 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
             </button>
             <button
               onClick={() => onBookNow && onBookNow(trek)}
-              className="bg-[#C1571F] hover:bg-[#A84716] text-white font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition-all cursor-pointer text-center flex items-center justify-center"
+              className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition-all cursor-pointer text-center flex items-center justify-center"
             >
               BOOK NOW
             </button>
