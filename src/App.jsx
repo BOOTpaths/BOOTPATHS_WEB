@@ -19,6 +19,7 @@ import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
 import TrekCard from './components/TrekCard';
+import { CURATED_TREKS } from './data/curatedTreks';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
@@ -266,10 +267,15 @@ export default function App() {
       snapshot.forEach((doc) => {
         docs.push({ id: doc.id, ...doc.data() });
       });
-      setTreks(docs);
+      if (docs.length === 0) {
+        setTreks(CURATED_TREKS);
+      } else {
+        setTreks(docs);
+      }
       setLoadingPackages(false);
     }, (err) => {
-      console.warn('Packages snapshot error:', err);
+      console.warn('Packages snapshot error, falling back to curated catalog:', err);
+      setTreks(CURATED_TREKS);
       setLoadingPackages(false);
     });
     return () => unsub();

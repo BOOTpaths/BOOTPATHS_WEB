@@ -1,6 +1,7 @@
 import React from 'react';
 import TrekCard from './TrekCard';
 import { Compass, Plus } from 'lucide-react';
+import { CURATED_TREKS } from '../data/curatedTreks';
 
 export default function UpcomingTreks({ 
   treks = [], 
@@ -12,7 +13,8 @@ export default function UpcomingTreks({
   userRole
 }) {
   const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
-  const displayTreks = (treks || []).filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+  const availableTreks = (treks && treks.length > 0) ? treks : CURATED_TREKS;
+  const displayTreks = availableTreks.filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
 
   return (
     <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-4 sm:px-6 lg:px-8">

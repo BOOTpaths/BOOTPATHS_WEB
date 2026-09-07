@@ -78,7 +78,7 @@ export default function AuthModal({
     setAuthErrors({});
     setIsAuthenticating(true);
 
-    try {
+    const authPromise = (async () => {
       if (authMode === 'login') {
         const res = await login(authEmail, authPassword);
         const user = res.user;
@@ -126,11 +126,23 @@ export default function AuthModal({
       setAuthPassword('');
       setAuthName('');
       onClose();
+    })();
+
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Authentication timed out. Verify Firebase API keys."));
+      }, 6000);
+    });
+
+    try {
+      await Promise.race([authPromise, timeoutPromise]);
     } catch (err) {
       if (!import.meta.env.PROD) {
         console.warn('Auth action error:', err.message);
       }
-      if (err.code === 'auth/api-key-not-valid' || (err.message && err.message.includes('api-key-not-valid'))) {
+      if (err.message && err.message.includes('Authentication timed out')) {
+        setAuthErrors({ form: 'Authentication timed out. Verify Firebase API keys.' });
+      } else if (err.code === 'auth/api-key-not-valid' || (err.message && err.message.includes('api-key-not-valid'))) {
         setAuthErrors({ form: 'Database connection configuration is updating. Please try again shortly.' });
       } else {
         setAuthErrors({ form: err.message });
