@@ -187,13 +187,46 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
           <h1 className="hero-title">Silent Valley<br/><em>Rainforest Trek</em></h1>
           <p className="hero-sub font-outfit">Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven</p>
           <div className="hero-stats">
-            <div className="hs"><span className="hs-ico">🏔️</span><div><b>2,383m</b><small>Max Altitude</small></div></div>
+            <div className="hs">
+              <span className="hs-ico">
+                <svg className="w-5 h-5 text-white/90" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14 6l-3.8 5.7 1.9 2.55L14 17l7-9.5L14 6zm-7.5 7L2 20h20l-5-7-3 4.2-3.5-4.2H6.5z"/>
+                  <path d="M8.5 7.5L5 13h4l2.5-3.5L8.5 7.5z"/>
+                </svg>
+              </span>
+              <div><b>2,383m</b><small>Max Altitude</small></div>
+            </div>
             <div className="hs-div"></div>
-            <div className="hs"><span className="hs-ico">📅</span><div><b>3 Days</b><small>Duration</small></div></div>
+            <div className="hs">
+              <span className="hs-ico">
+                <svg className="w-5 h-5 text-white/90" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </span>
+              <div><b>3 Days</b><small>Duration</small></div>
+            </div>
             <div className="hs-div"></div>
-            <div className="hs"><span className="hs-ico">🧗</span><div><b>Moderate</b><small>Difficulty</small></div></div>
+            <div className="hs">
+              <span className="hs-ico">
+                <svg className="w-5 h-5 text-white/90" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </span>
+              <div><b>Moderate</b><small>Difficulty</small></div>
+            </div>
             <div className="hs-div"></div>
-            <div className="hs"><span className="hs-ico">📍</span><div><b>Mukkali</b><small>Start Point</small></div></div>
+            <div className="hs">
+              <span className="hs-ico">
+                <svg className="w-5 h-5 text-white/90" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </span>
+              <div><b>Mukkali</b><small>Start Point</small></div>
+            </div>
           </div>
           <div className="hero-btns">
             <button onClick={onOpenBookingModal} className="btn-p border-none cursor-pointer">Book This Trek</button>
