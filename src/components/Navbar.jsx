@@ -127,6 +127,10 @@ export default function Navbar({
   const hoverTimeoutRef = useRef(null);
   const navContainerRef = useRef(null);
 
+  // User / Admin Dropdown state
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const userMenuRef = useRef(null);
+
   // Mobile Accordion state
   const [mobileUpcomingOpen, setMobileUpcomingOpen] = useState(false);
   const [mobileWesternOpen, setMobileWesternOpen] = useState(false);
@@ -150,12 +154,17 @@ export default function Navbar({
       if (navContainerRef.current && !navContainerRef.current.contains(event.target)) {
         setActiveDropdown(null);
       }
+
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
+      }
     };
 
     const handleGlobalKeyDown = (e) => {
       if (e.key === 'Escape') {
         setActiveDropdown(null);
         setIsDropdownOpen(false);
+        setUserDropdownOpen(false);
       }
     };
 
@@ -592,7 +601,7 @@ export default function Navbar({
       )}
 
       {/* Primary Navigation Bar (Tier 1) */}
-      <div className="border-b border-autumn-bark/10 bg-autumn-mist/80 backdrop-blur-md">
+      <div className="relative z-50 border-b border-autumn-bark/10 bg-autumn-mist/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl h-20 items-center justify-between px-6 md:px-12 gap-4">
           {/* Left: Brand typography */}
           <a href="/#" className="flex items-center gap-2.5 select-none hover:opacity-95 transition-opacity shrink-0">
@@ -668,45 +677,73 @@ export default function Navbar({
               Blogs
             </a>
 
-            {/* Nav CTA / User Avatar */}
+            {/* Nav CTA / User Avatar & Dropdown */}
             {user ? (
-              <div className="relative group">
-                <button className="flex items-center gap-2.5 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 p-1.5 pr-4 transition-all duration-200 hover:border-[#EB5A0D]/50 hover:bg-[#EFE8D6] focus:outline-none focus:ring-2 focus:ring-[#EB5A0D] cursor-pointer">
+              <div className="relative" ref={userMenuRef}>
+                <button 
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-2.5 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 p-1.5 pr-3.5 transition-all duration-200 hover:border-[#EB5A0D]/50 hover:bg-[#EFE8D6] focus:outline-none focus:ring-2 focus:ring-[#EB5A0D] cursor-pointer select-none"
+                  aria-expanded={userDropdownOpen}
+                >
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EB5A0D] text-sm font-bold text-white shadow-md">
                     {user.initials}
                   </div>
-                  <span className="text-xs font-bold text-autumn-bark/80 tracking-wide">{user.name}</span>
+                  <span className="text-xs font-bold text-autumn-bark/80 tracking-wide max-w-[100px] truncate">{user.name}</span>
+                  <ChevronDown className={`h-3 w-3 text-autumn-bark/60 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
                 </button>
-                {/* User Dropdown Menu */}
-                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-[#E7E7E4] bg-white p-2 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto z-50">
-                  <div className="px-3 py-1.5 border-b border-[#F0F0EE] text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
+
+                {/* Dropdown Menu */}
+                <div 
+                  className={`absolute right-0 top-full mt-2 w-52 bg-white border border-[#E7E7E4] rounded-2xl shadow-2xl py-2 z-50 overflow-hidden transition-all duration-200 ease-out origin-top-right ${
+                    userDropdownOpen 
+                      ? 'opacity-100 scale-100 pointer-events-auto' 
+                      : 'opacity-0 scale-95 pointer-events-none'
+                  }`}
+                >
+                  <div className="px-4 py-2 border-b border-[#F0F0EE] text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold truncate">
                     {user.email}
                   </div>
+
                   {user && (userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com') && (
                     <button 
-                      onClick={() => { window.location.hash = '#dev-ops'; }} 
-                      className="w-full text-left px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-500/10 transition-colors flex items-center gap-2 cursor-pointer rounded-lg mt-1"
+                      onClick={() => { 
+                        setUserDropdownOpen(false);
+                        window.location.hash = '#dev-ops'; 
+                      }} 
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] mt-1.5"
                     >
-                      🛠️ DEVELOPER CONSOLE
+                      🛠️ DEV CONSOLE
                     </button>
                   )}
+
                   {user && userRole === 'admin' && (
                     <button 
-                      onClick={() => { window.location.hash = '#admin'; }}
-                      className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider bg-[#EB5A0D] text-white hover:bg-[#D44E08] transition-colors flex items-center gap-1.5 cursor-pointer"
+                      onClick={() => { 
+                        setUserDropdownOpen(false);
+                        window.location.hash = '#admin'; 
+                      }}
+                      className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] my-1 shadow-sm"
                     >
                       ⚙️ ADMIN PORTAL
                     </button>
                   )}
+
                   <button 
-                    onClick={() => setIsDashboardOpen?.(true)}
-                    className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider text-[#EB5A0D] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                    onClick={() => { 
+                      setUserDropdownOpen(false);
+                      setIsDashboardOpen?.(true); 
+                    }}
+                    className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#52524E] hover:bg-[#FAF8F5] hover:text-[#1A1A18] transition-colors cursor-pointer w-full text-left"
                   >
                     Dashboard
                   </button>
+
                   <button 
-                    onClick={handleLogout}
-                    className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      handleLogout?.();
+                    }}
+                    className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-rose-600 hover:bg-rose-50 transition-colors border-t border-[#F3F4F6] mt-1 cursor-pointer w-full text-left"
                   >
                     Sign Out
                   </button>
@@ -736,7 +773,7 @@ export default function Navbar({
       {/* Category Sub-Navigation Bar (Tier 2 - Dynamic Dropdowns) */}
       <div 
         ref={navContainerRef}
-        className="bg-[#F8F8F6] border-b border-[#E7E7E4] text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#52524E] px-4 sm:px-8 py-2 flex items-center justify-center gap-4 sm:gap-8 overflow-visible relative font-['Open_Sans']"
+        className="relative z-20 bg-[#F8F8F6] border-b border-[#E7E7E4] text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#52524E] px-4 sm:px-8 py-2 flex items-center justify-center gap-4 sm:gap-8 overflow-visible font-['Open_Sans']"
       >
         {/* 1. UPCOMING TREKS */}
         <div 
