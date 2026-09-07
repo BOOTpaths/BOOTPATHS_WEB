@@ -140,28 +140,29 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
             </div>
           </div>
 
-          <div className="nav-actions">
+          <div className="nav-actions flex items-center gap-3">
             <a 
               href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="nav-callback-btn"
+              className="nav-callback-btn bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5"
             >
-              Request Callback
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+              REQUEST CALLBACK
             </a>
             <button 
               onClick={onOpenBookingModal} 
-              className="nav-cta border-none cursor-pointer"
+              className="nav-cta bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm border-none cursor-pointer"
             >
-              Book Now
+              BOOK NOW
             </button>
             
             {/* STICKY TOP BACK BUTTON */}
             <button 
               onClick={onBack}
-              className="ml-2 rounded-full border border-stone-300 hover:border-[#EB5A0D] bg-white text-stone-700 hover:text-[#EB5A0D] text-xs font-bold px-4 py-2 transition-all duration-300 shadow-sm cursor-pointer"
+              className="nav-back-link text-xs font-semibold text-[#52524E] hover:text-[#1A1A18] flex items-center gap-1 ml-2 transition-colors border-none bg-transparent cursor-pointer"
             >
-              ← Back to BOOTpaths
+              &larr; Back to BOOTpaths
             </button>
           </div>
 
@@ -177,16 +178,22 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
       </nav>
 
       {/* 2. HERO */}
-      <section className="hero" id="hero">
-        <div className="hero-bg">
-          <img src={silentValleyHero} alt="Silent Valley National Park" className="hero-bg-img" />
-          <div className="hero-overlay"></div>
+      <section className="hero relative flex flex-col items-center justify-center min-h-[92vh] text-center pt-28 pb-16 px-4" id="hero">
+        <div className="hero-bg absolute inset-0 overflow-hidden z-0">
+          <img src={silentValleyHero} alt="Silent Valley National Park" className="hero-bg-img w-full h-full object-cover" />
+          <div className="hero-overlay absolute inset-0 bg-black/45"></div>
         </div>
-        <div className="hero-content">
-          <div className="hero-badge"><span className="bdot"></span>Kerala • Nilgiri Biosphere Reserve</div>
-          <h1 className="hero-title">Silent Valley<br/><em>Rainforest Trek</em></h1>
-          <p className="hero-sub font-outfit">Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven</p>
-          <div className="stats-bar hero-stats bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 flex flex-wrap items-center justify-between text-white shadow-2xl gap-4">
+        <div className="hero-content relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+          <div className="hero-badge bg-white/15 backdrop-blur-md text-white/90 border border-white/20 text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block">
+            <span className="bdot inline-block w-1.5 h-1.5 rounded-full bg-[#EB5A0D] mr-2"></span>Kerala • Nilgiri Biosphere Reserve
+          </div>
+          <h1 className="hero-title font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-4 font-['Open_Sans'] text-center">
+            Silent Valley Rainforest Trek
+          </h1>
+          <p className="hero-sub text-sm md:text-base text-white/85 max-w-2xl mx-auto leading-relaxed text-center font-normal mb-10 font-['Open_Sans']">
+            Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven
+          </p>
+          <div className="stats-bar hero-stats max-w-4xl mx-auto bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl px-8 py-4 flex flex-wrap md:flex-nowrap items-center justify-between text-white shadow-2xl gap-4 my-8 w-full">
             {/* ITEM 1: MAX ALTITUDE */}
             <div className="hs flex items-center gap-3">
               <svg className="w-12 h-9 text-white shrink-0" width="48" height="36" viewBox="0 0 100 48" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
@@ -211,7 +218,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
                 <path d="M74 32 L82 22 L87 31" strokeWidth="1.2" />
                 <line x1="78" y1="37" x2="82" y2="28" strokeWidth="1" />
               </svg>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="font-extrabold text-lg md:text-xl text-white">2,383m</span>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">MAX ALTITUDE</span>
               </div>
@@ -221,7 +228,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
             <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
 
             {/* ITEM 2: DURATION */}
-            <div className="hs flex flex-col justify-center">
+            <div className="hs flex flex-col justify-center text-left md:text-center">
               <span className="font-extrabold text-lg md:text-xl text-white">3 Days</span>
               <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DURATION</span>
             </div>
@@ -238,7 +245,7 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
                 <rect x="2" y="26" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
                 <rect x="2" y="34" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
               </svg>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="font-extrabold text-lg md:text-xl text-white">Moderate</span>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DIFFICULTY</span>
               </div>
@@ -257,26 +264,27 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
                 <circle cx="17" cy="33" r="5" strokeWidth="1.5" />
                 <polygon points="17,30 18.5,33 17,36 15.5,33" fill="white" stroke="none" />
               </svg>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="font-extrabold text-lg md:text-xl text-white">Mukkali</span>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">START POINT</span>
               </div>
             </div>
           </div>
-          <div className="hero-btns">
-            <button onClick={onOpenBookingModal} className="btn-p border-none cursor-pointer">Book This Trek</button>
+          <div className="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-4">
+            <button onClick={onOpenBookingModal} className="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md border-none cursor-pointer">Book This Trek</button>
             <a 
               href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="btn-wa"
+              className="btn-wa bg-white/10 hover:bg-white/20 backdrop-blur border border-white/25 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5"
             >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.771zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
               Request a Callback
             </a>
-            <a href="#itinerary" onClick={(e) => { e.preventDefault(); document.getElementById('itinerary')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-g">View Itinerary</a>
+            <a href="#itinerary" onClick={(e) => { e.preventDefault(); document.getElementById('itinerary')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
           </div>
         </div>
-        <div className="scroll-hint"><span>Scroll to explore</span><div className="sarrow"></div></div>
+        <div className="scroll-hint text-[11px] text-white/60 tracking-wider mt-3 text-center"><span>Scroll to explore &darr;</span></div>
       </section>
 
       {/* 3. QUICK INFO BAR */}
