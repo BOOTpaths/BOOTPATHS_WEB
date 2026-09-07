@@ -186,58 +186,81 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
           <div className="hero-badge"><span className="bdot"></span>Kerala • Nilgiri Biosphere Reserve</div>
           <h1 className="hero-title">Silent Valley<br/><em>Rainforest Trek</em></h1>
           <p className="hero-sub font-outfit">Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven</p>
-                    <div className="hero-stats">
-            <div className="hs">
-              <span className="hs-ico">
-                <svg className="w-8 h-8 md:w-9 md:h-9 text-white shrink-0" width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 52h56" />
-                  <path d="M8 52l12-22 8 13" />
-                  <path d="M16.5 36.5l3.5 3 4-4" />
-                  <path d="M18 52l18-36 16 36" />
-                  <path d="M30 28l6 5 6-7" />
-                  <path d="M33 34l3 9" />
-                  <path d="M42 52l10-18 6 18" />
-                  <path d="M49 39l3 3 4-3" />
-                </svg>
-              </span>
-              <div><b>2,383m</b><small>Max Altitude</small></div>
+          <div className="stats-bar hero-stats bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 flex flex-wrap items-center justify-between text-white shadow-2xl gap-4">
+            {/* ITEM 1: MAX ALTITUDE */}
+            <div className="hs flex items-center gap-3">
+              <svg className="w-12 h-9 text-white shrink-0" width="48" height="36" viewBox="0 0 100 48" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="4" y1="44" x2="96" y2="44" strokeWidth="2.5" />
+                <path d="M6 44 L24 24 L34 35" strokeWidth="2" />
+                <path d="M16 33 L24 24 L27 30" strokeWidth="1.2" />
+                <line x1="20" y1="36" x2="24" y2="28" strokeWidth="1" />
+                <path d="M22 44 L38 16 L52 38" strokeWidth="2" />
+                <path d="M30 28 L38 16 L44 26" strokeWidth="1.2" />
+                <line x1="33" y1="34" x2="38" y2="22" strokeWidth="1" />
+                <path d="M32 44 L54 6 L76 44" strokeWidth="2.5" />
+                <path d="M43 23 L54 6 L63 21" strokeWidth="1.5" />
+                <line x1="54" y1="6" x2="55" y2="44" strokeWidth="1.5" />
+                <line x1="49" y1="16" x2="44" y2="24" strokeWidth="1.2" />
+                <line x1="51" y1="21" x2="46" y2="29" strokeWidth="1.2" />
+                <line x1="53" y1="27" x2="47" y2="35" strokeWidth="1.2" />
+                <line x1="54" y1="33" x2="49" y2="40" strokeWidth="1.2" />
+                <line x1="58" y1="14" x2="65" y2="22" strokeWidth="1.2" />
+                <line x1="57" y1="21" x2="68" y2="31" strokeWidth="1.2" />
+                <line x1="56" y1="28" x2="71" y2="39" strokeWidth="1.2" />
+                <path d="M66 44 L82 22 L94 44" strokeWidth="2" />
+                <path d="M74 32 L82 22 L87 31" strokeWidth="1.2" />
+                <line x1="78" y1="37" x2="82" y2="28" strokeWidth="1" />
+              </svg>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-lg md:text-xl text-white">2,383m</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">MAX ALTITUDE</span>
+              </div>
             </div>
-            <div className="hs-div"></div>
-            <div className="hs">
-              <span className="hs-ico">
-                <svg className="w-8 h-8 md:w-9 md:h-9 text-white shrink-0" width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="8" y="12" width="48" height="44" rx="8" />
-                  <line x1="20" y1="6" x2="20" y2="16" />
-                  <line x1="44" y1="6" x2="44" y2="16" />
-                  <line x1="8" y1="24" x2="56" y2="24" />
-                  <circle cx="24" cy="35" r="2.5" fill="currentColor" />
-                  <circle cx="40" cy="35" r="2.5" fill="currentColor" />
-                  <circle cx="24" cy="46" r="2.5" fill="currentColor" />
-                  <circle cx="40" cy="46" r="2.5" fill="currentColor" />
-                </svg>
-              </span>
-              <div><b>3 Days</b><small>Duration</small></div>
+
+            {/* Divider */}
+            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
+
+            {/* ITEM 2: DURATION */}
+            <div className="hs flex flex-col justify-center">
+              <span className="font-extrabold text-lg md:text-xl text-white">3 Days</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DURATION</span>
             </div>
-            <div className="hs-div"></div>
-            <div className="hs">
-              <span className="hs-ico">
-                <svg className="w-8 h-8 md:w-9 md:h-9 text-white shrink-0" width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="32" cy="32" r="24" />
-                  <path d="M32 14l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" />
-                  <circle cx="32" cy="32" r="3" fill="currentColor" />
-                </svg>
-              </span>
-              <div><b>Moderate</b><small>Difficulty</small></div>
+
+            {/* Divider */}
+            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
+
+            {/* ITEM 3: DIFFICULTY */}
+            <div className="hs flex items-center gap-3">
+              <svg className="w-7 h-10 text-white shrink-0" width="28" height="40" viewBox="0 0 28 42" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="24" height="5.5" rx="2.75" fill="transparent" />
+                <rect x="2" y="10" width="24" height="5.5" rx="2.75" fill="transparent" />
+                <rect x="2" y="18" width="24" height="5.5" rx="2.75" fill="transparent" />
+                <rect x="2" y="26" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
+                <rect x="2" y="34" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
+              </svg>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-lg md:text-xl text-white">Moderate</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DIFFICULTY</span>
+              </div>
             </div>
-            <div className="hs-div"></div>
-            <div className="hs">
-              <span className="hs-ico">
-                <svg className="w-8 h-8 md:w-9 md:h-9 text-white shrink-0" width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M32 8c-11 0-20 9-20 20 0 15 20 28 20 28s20-13 20-28c0-11-9-20-20-20z" />
-                  <circle cx="32" cy="28" r="7" />
-                </svg>
-              </span>
-              <div><b>Mukkali</b><small>Start Point</small></div>
+
+            {/* Divider */}
+            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
+
+            {/* ITEM 4: START POINT / TRAILHEAD */}
+            <div className="hs flex items-center gap-3">
+              <svg className="w-9 h-11 text-white shrink-0" width="36" height="44" viewBox="0 0 36 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 4 L31 7 L23 10 Z" fill="white" />
+                <line x1="23" y1="4" x2="23" y2="15" strokeWidth="2" />
+                <path d="M23 13 C 14 13, 14 19, 21 21 C 26 22, 26 26, 17 26" strokeDasharray="2 2" strokeWidth="1.8" />
+                <path d="M17 22 C 10 22, 5 27, 5 33 C 5 40, 17 46, 17 46 C 17 46, 29 40, 29 33 C 29 27, 24 22, 17 22 Z" strokeWidth="2" />
+                <circle cx="17" cy="33" r="5" strokeWidth="1.5" />
+                <polygon points="17,30 18.5,33 17,36 15.5,33" fill="white" stroke="none" />
+              </svg>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-lg md:text-xl text-white">Mukkali</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">START POINT</span>
+              </div>
             </div>
           </div>
           <div className="hero-btns">
