@@ -5,8 +5,14 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imgSrc, setImgSrc] = useState(trek.image || trek.coverImage || trek.thumbnail || '/placeholder-trek.jpg');
 
+  const isHidden = trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden';
+
   const handleDetailsClick = (e) => {
     if (e) e.stopPropagation();
+    if (isHidden) {
+      return;
+    }
+
     if (onGetDetails) {
       onGetDetails(trek);
       return;
@@ -35,6 +41,10 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
 
   const handleBookClick = (e) => {
     if (e) e.stopPropagation();
+    if (isHidden) {
+      return;
+    }
+
     if (onBookNow) {
       onBookNow(trek);
     }
@@ -45,20 +55,20 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
   const trekName = trek.name || trek.title || 'Wilderness Trail';
 
   return (
-    <div className="group bg-white border border-[#E7E7E4] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+    <div className={`group bg-white border border-[#E7E7E4] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full ${isHidden ? 'bg-slate-50/40' : ''}`}>
       {/* Top Image Container */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 rounded-t-xl">
         {trek.videoEmbed ? (
           <iframe 
             src={trek.videoEmbed} 
-            className="h-full w-full object-cover border-0 pointer-events-none scale-[1.35]" 
+            className={`h-full w-full object-cover border-0 pointer-events-none scale-[1.35] ${isHidden ? 'filter grayscale-[25%] opacity-90' : ''}`} 
             scrolling="no" 
             title={trekName}
           />
         ) : trek.videoLocal ? (
           <video 
             src={trek.videoLocal} 
-            className="h-full w-full object-cover" 
+            className={`h-full w-full object-cover ${isHidden ? 'filter grayscale-[25%] opacity-90' : ''}`} 
             autoPlay 
             loop 
             muted 
@@ -69,12 +79,12 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
             src={imgSrc}
             alt={trekName}
             onError={() => setImgSrc('/placeholder-trek.jpg')}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className={`w-full h-full object-cover transition-transform duration-300 ${isHidden ? 'filter grayscale-[25%] opacity-90' : 'group-hover:scale-105'}`}
           />
         )}
 
         {/* Top Status Tag */}
-        {(trek.isVisible === false || trek.isHidden === true) ? (
+        {isHidden ? (
           <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-wider bg-slate-900/90 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded shadow-sm z-10 backdrop-blur-sm">
             DRAFT / HIDDEN
           </span>
@@ -110,7 +120,7 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
 
         {/* Trek Title */}
         <h3 
-          className="px-4 font-bold text-sm md:text-base text-[#1A1A18] tracking-tight uppercase line-clamp-1 mt-1 font-['Open_Sans'] group-hover:text-[#EB5A0D] transition-colors" 
+          className={`px-4 font-bold text-sm md:text-base text-[#1A1A18] tracking-tight uppercase line-clamp-1 mt-1 font-['Open_Sans'] transition-colors ${isHidden ? 'text-slate-600' : 'group-hover:text-[#EB5A0D]'}`} 
           title={trekName}
         >
           {trekName}
@@ -124,18 +134,40 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
 
       {/* Compact Button Actions (Bottom Row) */}
       <div className="px-4 pb-4 pt-1 flex items-center gap-2 mt-auto">
-        <button 
-          onClick={handleDetailsClick} 
-          className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg border border-[#D1D5DB] text-[#374151] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-center bg-white"
-        >
-          Get Info
-        </button>
-        <button 
-          onClick={handleBookClick} 
-          className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none"
-        >
-          Book Now
-        </button>
+        {isHidden ? (
+          <div className="w-full">
+            <button
+              type="button"
+              disabled
+              className="w-full py-2.5 px-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed flex items-center justify-center gap-1.5 opacity-90 select-none font-['Open_Sans']"
+              title="This expedition is currently closed or in draft mode"
+            >
+              <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+              </svg>
+              <span>Currently Unavailable</span>
+            </button>
+            <p className="text-[10px] text-center text-slate-400 mt-1 font-medium font-['Open_Sans']">
+              Trail registrations temporarily suspended
+            </p>
+          </div>
+        ) : (
+          <>
+            <button 
+              onClick={handleDetailsClick} 
+              className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg border border-[#D1D5DB] text-[#374151] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-center bg-white font-['Open_Sans']"
+            >
+              GET INFO
+            </button>
+            <button 
+              onClick={handleBookClick} 
+              className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none font-['Open_Sans']"
+            >
+              BOOK NOW
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

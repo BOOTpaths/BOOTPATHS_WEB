@@ -644,11 +644,16 @@ export default function App() {
 
   // Keep compatibility with card calls
   const handleBookNow = (trek) => {
+    if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
+      return;
+    }
     handleTrigger({ type: 'book_trek', payload: trek });
   };
 
   const handleGetDetails = (trek) => {
-    if (!trek) return;
+    if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
+      return;
+    }
     const detailsUrl = trek.detailsUrl || trek.details_url;
     if (detailsUrl && detailsUrl.trim()) {
       const trimmed = detailsUrl.trim();
