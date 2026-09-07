@@ -9,154 +9,54 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Menu, 
   X, 
-  LogOut, 
-  Shield, 
   Search, 
   ChevronDown, 
   ChevronRight, 
   MapPin, 
   Calendar, 
-  BookOpen, 
-  Users, 
-  TreePine, 
-  FileText, 
-  Navigation,
   Compass,
-  Leaf
+  TreePine,
+  Sparkles
 } from 'lucide-react';
 
-const Instagram = (props) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    {...props}
-  >
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
+const STATIC_WESTERN_GHATS = [
+  { id: 'silent-valley', name: 'Silent Valley Rainforest Trek', duration: '3 Days', url: '#silent-valley', isSpecial: true },
+  { id: 'agasthyarkoodam', name: 'Agasthyarkoodam Peak', duration: '3 Days', url: '/treks/Agasthyarkoodam/Assets/index.html' },
+  { id: 'brahmagiri', name: 'Brahmagiri Coorg Trek', duration: '2 Days', url: '/treks/Brahmagiri/index.html' },
+  { id: 'meeshapulimala', name: 'Meeshapulimala Peak', duration: '2 Days', url: '/treks/Meeshapulimala/index.html' },
+  { id: 'kolukkumala', name: 'Kolukkumala Sunrise Trek', duration: '2 Days', url: '/treks/Kolukkumala/index.html' },
+  { id: 'arippa', name: 'Arippa Rainforest Trail', duration: '2 Days', url: '/treks/Arippa/index.html' },
+  { id: 'banasura', name: 'Banasura Hills Trek', duration: '2 Days', url: '/treks/Banasura/index.html' },
+  { id: 'chimmini', name: 'Chimmini Amphitheatre Walk', duration: '2 Days', url: '/treks/Chimmini-amphi/index.html' },
+  { id: 'parambikulam', name: 'Parambikulam Jungle Trek', duration: '2 Days', url: '/treks/Parambikulam/index.html' },
+  { id: 'periyar-border', name: 'Periyar Border Trail', duration: '2 Days', url: '/treks/Periyar-boarder/index.html' },
+  { id: 'thommankuthu', name: 'Thommankuthu Waterfalls', duration: '1 Day', url: '/treks/Thommankuthu/index.html' },
+  { id: 'yellapatty', name: 'Yellapatty Shola Ridge', duration: '2 Days', url: '/treks/Yellapatty/index.html' },
+  { id: 'chokkramudi', name: 'Chokramudi Peak Trail', duration: '1 Day', url: '/treks/chokkramudi/index.html' },
+  { id: 'peechimoodal', name: 'Peechimoodal Forest Walk', duration: '1 Day', url: '/treks/peechimoodal/index.html' }
+];
 
-const CURATED_DEFAULT_TREKS = [
-  {
-    id: 'silent-valley',
-    title: 'Silent Valley Rainforest Trek',
-    location: 'Palakkad, Kerala',
-    region: 'Western Ghats',
-    difficulty: 'Moderate',
-    duration: '3 Days',
-    tag: 'EXPLORATION SPECIAL',
-    price: 4000,
-    isSpecialPage: true,
-    pageHash: '#silent-valley',
-    description: "Journey into India's last undisturbed tropical rainforest & biodiversity haven."
-  },
-  {
-    id: 'netravathi',
-    title: 'Netravathi Peak Trek',
-    location: 'Chikmagalur, Karnataka',
-    region: 'Western Ghats',
-    difficulty: 'Moderate',
-    duration: '2 Days',
-    tag: 'FILLING FAST!',
-    price: 3499,
-    description: "Lush rolling shola grasslands, cloud walks and breathtaking ridge panoramas."
-  },
-  {
-    id: 'brahmagiri',
-    title: 'Brahmagiri Coorg Trek',
-    location: 'Coorg, Karnataka',
-    region: 'Western Ghats',
-    difficulty: 'Moderate',
-    duration: '2 Days',
-    tag: 'PREMIUM TRAIL',
-    price: 3899,
-    description: "Misty evergreen coffee ridge trails, Iruppu falls and pristine flora."
-  },
-  {
-    id: 'vellagavi',
-    title: 'Vellagavi Village Trek',
-    location: 'Kodaikanal, Tamil Nadu',
-    region: 'Western Ghats',
-    difficulty: 'Challenging',
-    duration: '2 Days',
-    tag: 'ANCIENT TRAIL',
-    price: 3799,
-    description: "Centuries-old hidden tribal settlement nestled within deep cardamom slopes."
-  },
-  {
-    id: 'kedarkantha',
-    title: 'Kedarkantha Winter Trek',
-    location: 'Sankri, Uttarakhand',
-    region: 'Himalayan Trails',
-    difficulty: 'Moderate',
-    duration: '5 Days',
-    tag: 'SNOW EXPEDITION',
-    price: 8999,
-    description: "Panoramic 360-degree snow peaks summit in the Garhwal Himalayas."
-  },
-  {
-    id: 'hampta-pass',
-    title: 'Hampta Pass Trek',
-    location: 'Manali to Spiti, HP',
-    region: 'Himalayan Trails',
-    difficulty: 'Challenging',
-    duration: '5 Days',
-    tag: 'CROSSOVER TRAIL',
-    price: 10499,
-    description: "Dramatic crossover from green Kullu valley to arid desert mountains of Spiti."
-  },
-  {
-    id: 'roopkund',
-    title: 'Roopkund Mystery Lake Trek',
-    location: 'Chamoli, Uttarakhand',
-    region: 'Himalayan Trails',
-    difficulty: 'Difficult',
-    duration: '6 Days',
-    tag: 'HIGH ALTITUDE',
-    price: 14500,
-    description: "Glacial lake high in the Himalayas surrounded by rock-strewn glaciers."
-  },
-  {
-    id: 'everest-base-camp',
-    title: 'Everest Base Camp (EBC)',
-    location: 'Khumbu, Nepal',
-    region: 'International Treks',
-    difficulty: 'Demanding',
-    duration: '14 Days',
-    tag: 'GLOBAL ICON',
-    price: 48000,
-    description: "The ultimate bucket-list expedition to the foot of Mt. Everest (8,848m)."
-  },
-  {
-    id: 'kilimanjaro',
-    title: 'Mt. Kilimanjaro Expedition',
-    location: 'Tanzania, Africa',
-    region: 'International Treks',
-    difficulty: 'High Altitude',
-    duration: '8 Days',
-    tag: 'SEVEN SUMMITS',
-    price: 125000,
-    description: "Stand atop the roof of Africa at Uhuru Peak (5,895m)."
-  },
-  {
-    id: 'annapurna-circuit',
-    title: 'Annapurna Circuit Trek',
-    location: 'Gandaki, Nepal',
-    region: 'International Treks',
-    difficulty: 'Challenging',
-    duration: '12 Days',
-    tag: 'ICONIC PASS',
-    price: 42000,
-    description: "Cross Thorong La Pass (5,416m) through diverse landscapes and Tibetan cultures."
-  }
+const STATIC_HIMALAYAN_TRAILS = [
+  { id: 'ebc-trek', name: 'Everest Base Camp (EBC)', duration: '14 Days', url: '/treks/ebc-trek/index.html' },
+  { id: 'goechala-pass', name: 'Goechala Pass Kanchenjunga', duration: '10 Days', url: '/treks/Goachala-pass/index.html' },
+  { id: 'valley-of-flowers', name: 'Valley of Flowers Trek', duration: '6 Days', url: '#upcoming-treks' },
+  { id: 'kedarkantha', name: 'Kedarkantha Summit Trek', duration: '5 Days', url: '#upcoming-treks' },
+  { id: 'hampta-pass', name: 'Hampta Pass Crossover', duration: '5 Days', url: '#upcoming-treks' },
+  { id: 'roopkund', name: 'Roopkund Mystery Lake', duration: '6 Days', url: '#upcoming-treks' }
+];
+
+const STATIC_INTERNATIONAL_TREKS = [
+  { id: 'kilimanjaro', name: 'Mt. Kilimanjaro Expedition', duration: '8 Days', url: '/treks/Kilimanjaro/index.html' },
+  { id: 'mt-elbrus', name: 'Mt. Elbrus Summit Expedition', duration: '9 Days', url: '/treks/Mt.Elbrus/index.html' },
+  { id: 'annapurna-circuit', name: 'Annapurna Circuit Trek', duration: '12 Days', url: '#upcoming-treks' }
+];
+
+const STATIC_UPCOMING_ITEMS = [
+  { id: 'all-batches', name: 'All Live Batches', duration: 'View All', url: '#upcoming-treks' },
+  { id: 'weekend-treks', name: 'Weekend Wilderness Escapes', duration: '2-3 Days', url: '#upcoming-treks' },
+  { id: 'small-batches', name: 'Small Group Batches (12-15 Max)', duration: 'Exclusive', url: '#upcoming-treks' },
+  { id: 'high-altitude', name: 'High Altitude Expeditions', duration: '5-14 Days', url: '#upcoming-treks' },
+  { id: 'beginner-friendly', name: 'Beginner & Solo-Friendly', duration: 'Easy-Mod', url: '#upcoming-treks' }
 ];
 
 const NAVIGATION_SECTIONS = [
@@ -221,6 +121,13 @@ export default function Navbar({
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
+  // Desktop Category Dropdowns state
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const hoverTimeoutRef = useRef(null);
+  const navContainerRef = useRef(null);
+
+  // Mobile Accordion state
   const [mobileUpcomingOpen, setMobileUpcomingOpen] = useState(false);
   const [mobileWesternOpen, setMobileWesternOpen] = useState(false);
   const [mobileHimalayanOpen, setMobileHimalayanOpen] = useState(false);
@@ -231,23 +138,117 @@ export default function Navbar({
   const desktopInputRef = useRef(null);
   const mobileInputRef = useRef(null);
 
-  // Close search dropdown on click outside
+  // Handle click outside & escape key to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const isOutsideDesktop = desktopSearchRef.current && !desktopSearchRef.current.contains(event.target);
-      const isOutsideMobile = mobileSearchRef.current && !mobileSearchRef.current.contains(event.target);
-      if (isOutsideDesktop && isOutsideMobile) {
+      const isOutsideDesktopSearch = desktopSearchRef.current && !desktopSearchRef.current.contains(event.target);
+      const isOutsideMobileSearch = mobileSearchRef.current && !mobileSearchRef.current.contains(event.target);
+      if (isOutsideDesktopSearch && isOutsideMobileSearch) {
+        setIsDropdownOpen(false);
+      }
+
+      if (navContainerRef.current && !navContainerRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    const handleGlobalKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveDropdown(null);
         setIsDropdownOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
   }, []);
 
-  // Merge live treks with curated defaults so indexing is fast and rich
+  // Dropdown hover & toggle helpers
+  const handleMouseEnter = (menuKey) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setActiveDropdown(menuKey);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 180);
+  };
+
+  const handleToggleDropdown = (menuKey) => {
+    setActiveDropdown((prev) => (prev === menuKey ? null : menuKey));
+  };
+
+  // Build dynamic categorized trek lists
+  const westernGhatsTreks = useMemo(() => {
+    const list = [...STATIC_WESTERN_GHATS];
+    (treks || []).forEach(t => {
+      const title = (t.name || t.title || '').toLowerCase();
+      const region = (t.region || t.location || '').toLowerCase();
+      const isWG = region.includes('western') || region.includes('kerala') || region.includes('karnataka') || region.includes('tamil nadu');
+      if (isWG && !list.some(item => item.name.toLowerCase() === title || item.id === t.id)) {
+        list.push({
+          id: t.id,
+          name: t.name || t.title,
+          duration: t.duration || '2-3 Days',
+          url: t.detailsUrl || '#upcoming-treks'
+        });
+      }
+    });
+    return list;
+  }, [treks]);
+
+  const himalayanTreks = useMemo(() => {
+    const list = [...STATIC_HIMALAYAN_TRAILS];
+    (treks || []).forEach(t => {
+      const title = (t.name || t.title || '').toLowerCase();
+      const region = (t.region || t.location || '').toLowerCase();
+      const isHimalayan = region.includes('himalay') || region.includes('uttarakhand') || region.includes('himachal') || region.includes('nepal');
+      if (isHimalayan && !list.some(item => item.name.toLowerCase() === title || item.id === t.id)) {
+        list.push({
+          id: t.id,
+          name: t.name || t.title,
+          duration: t.duration || '5-10 Days',
+          url: t.detailsUrl || '#upcoming-treks'
+        });
+      }
+    });
+    return list;
+  }, [treks]);
+
+  const internationalTreks = useMemo(() => {
+    const list = [...STATIC_INTERNATIONAL_TREKS];
+    (treks || []).forEach(t => {
+      const title = (t.name || t.title || '').toLowerCase();
+      const region = (t.region || t.location || '').toLowerCase();
+      const isIntl = region.includes('international') || region.includes('africa') || region.includes('tanzania') || region.includes('russia') || region.includes('europe');
+      if (isIntl && !list.some(item => item.name.toLowerCase() === title || item.id === t.id)) {
+        list.push({
+          id: t.id,
+          name: t.name || t.title,
+          duration: t.duration || '8-14 Days',
+          url: t.detailsUrl || '#upcoming-treks'
+        });
+      }
+    });
+    return list;
+  }, [treks]);
+
+  // Merge live treks with curated defaults for universal search indexing
   const allIndexedTreks = useMemo(() => {
     const map = new Map();
-    CURATED_DEFAULT_TREKS.forEach(t => map.set(t.id, t));
+    STATIC_WESTERN_GHATS.forEach(t => map.set(t.id, { ...t, region: 'Western Ghats' }));
+    STATIC_HIMALAYAN_TRAILS.forEach(t => map.set(t.id, { ...t, region: 'Himalayan Trails' }));
+    STATIC_INTERNATIONAL_TREKS.forEach(t => map.set(t.id, { ...t, region: 'International Treks' }));
     (treks || []).forEach(t => {
       const existing = map.get(t.id) || {};
       map.set(t.id, { ...existing, ...t });
@@ -263,12 +264,12 @@ export default function Navbar({
     }
 
     const matchedTreks = allIndexedTreks.filter(t => {
-      const title = (t.title || '').toLowerCase();
+      const title = (t.name || t.title || '').toLowerCase();
       const loc = (t.location || '').toLowerCase();
       const region = (t.region || '').toLowerCase();
       const diff = (t.difficulty || '').toLowerCase();
       const tag = (t.tag || '').toLowerCase();
-      const desc = (t.description || '').toLowerCase();
+      const desc = (t.description || t.shortDescription || '').toLowerCase();
       const duration = (t.duration || '').toLowerCase();
       return (
         title.includes(queryClean) ||
@@ -316,14 +317,64 @@ export default function Navbar({
   }, [queryClean, allIndexedTreks, blogs]);
 
   // Action handlers
+  const handleItemNavigate = (e, item) => {
+    setActiveDropdown(null);
+    setMobileMenuOpen?.(false);
+
+    const url = item.url || item.detailsUrl;
+    if (url) {
+      if (url.startsWith('/treks/') || url.startsWith('treks/')) {
+        const fullUrl = url.startsWith('/') ? url : `/${url}`;
+        window.open(fullUrl, '_blank');
+        e.preventDefault();
+        return;
+      }
+      if (url === '#silent-valley' || item.isSpecial || (item.name && item.name.toLowerCase().includes('silent valley'))) {
+        window.location.hash = '#silent-valley';
+        window.scrollTo(0, 0);
+        e.preventDefault();
+        return;
+      }
+      if (url.startsWith('#')) {
+        window.location.hash = url;
+        const targetId = url.replace('#', '');
+        setTimeout(() => {
+          document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        return;
+      }
+    }
+
+    if (item.id === 'silent-valley' || (item.name && item.name.toLowerCase().includes('silent valley'))) {
+      window.location.hash = '#silent-valley';
+      window.scrollTo(0, 0);
+      e.preventDefault();
+      return;
+    }
+
+    if (onSelectTrek) {
+      onSelectTrek(item);
+    } else {
+      window.location.hash = '#upcoming-treks';
+      setTimeout(() => {
+        document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
   const handleTrekClick = (trek) => {
     setIsDropdownOpen(false);
     setSearchQuery('');
     setMobileMenuOpen?.(false);
 
-    if (trek.id === 'silent-valley' || trek.pageHash === '#silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
+    if (trek.id === 'silent-valley' || trek.url === '#silent-valley' || (trek.name || trek.title || '').toLowerCase().includes('silent valley')) {
       window.location.hash = '#silent-valley';
       window.scrollTo(0, 0);
+      return;
+    }
+
+    if (trek.url && trek.url.startsWith('/treks/')) {
+      window.open(trek.url, '_blank');
       return;
     }
 
@@ -378,7 +429,7 @@ export default function Navbar({
     }
   };
 
-  // Reusable dropdown component
+  // Reusable search dropdown component
   const renderSearchResultsDropdown = () => {
     if (!isDropdownOpen || queryClean.length === 0) return null;
 
@@ -386,13 +437,13 @@ export default function Navbar({
       <div className="absolute top-full mt-2 left-0 w-full md:w-[480px] bg-white border border-[#E7E7E4] rounded-2xl shadow-xl overflow-hidden z-50 divide-y divide-[#F5F5F3] max-h-[460px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 text-left">
         {totalMatches === 0 ? (
           <div className="p-6 text-center">
-            <div className="w-10 h-10 mx-auto rounded-full bg-[#FFF2EA] text-[#C1571F] flex items-center justify-center mb-2.5">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#FFF2EA] text-[#EB5A0D] flex items-center justify-center mb-2.5">
               <Search className="h-5 w-5" />
             </div>
             <p className="font-outfit text-sm font-bold text-[#1A1A18]">
               No matching results for "{searchQuery}"
             </p>
-            <p className="text-xs text-[#52524E] mt-1">
+            <p className="text-xs text-[#52524E] mt-1 font-['Open_Sans']">
               Try searching for "Silent Valley", "Western Ghats", "Safety", or "Himalayan".
             </p>
           </div>
@@ -401,7 +452,7 @@ export default function Navbar({
             {/* 🌲 Treks & Expeditions */}
             {filteredTreks.length > 0 && (
               <div>
-                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE]">
+                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE] font-['Open_Sans']">
                   <span>🌲 Treks &amp; Expeditions</span>
                   <span className="text-[10px] font-semibold text-[#8C8C88]">
                     {filteredTreks.length} {filteredTreks.length === 1 ? 'trek' : 'treks'}
@@ -416,8 +467,8 @@ export default function Navbar({
                     >
                       <div className="flex-1 min-w-0 pr-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-outfit text-sm font-bold text-[#1A1A18] group-hover:text-[#C1571F] transition-colors truncate">
-                            {trek.title}
+                          <span className="font-['Open_Sans'] text-sm font-bold text-[#1A1A18] group-hover:text-[#EB5A0D] transition-colors truncate">
+                            {trek.name || trek.title}
                           </span>
                           {trek.difficulty && (
                             <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#EFE8D6] text-[#6B4E3D]">
@@ -425,17 +476,17 @@ export default function Navbar({
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-[#52524E] mt-0.5">
+                        <div className="flex items-center gap-3 text-xs text-[#52524E] mt-0.5 font-['Open_Sans']">
                           <span className="truncate">{trek.location || trek.region}</span>
                           {trek.duration && <span>• {trek.duration}</span>}
                           {trek.price && (
-                            <span className="font-bold text-[#C1571F]">
+                            <span className="font-bold text-[#EB5A0D]">
                               • ₹{Number(trek.price).toLocaleString('en-IN')}
                             </span>
                           )}
                         </div>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#C1571F] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#EB5A0D] group-hover:translate-x-0.5 transition-all shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -445,7 +496,7 @@ export default function Navbar({
             {/* 📝 Blogs & Stories */}
             {filteredBlogs.length > 0 && (
               <div>
-                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE]">
+                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE] font-['Open_Sans']">
                   <span>📝 Blogs &amp; Stories</span>
                   <span className="text-[10px] font-semibold text-[#8C8C88]">
                     {filteredBlogs.length} {filteredBlogs.length === 1 ? 'story' : 'stories'}
@@ -459,17 +510,17 @@ export default function Navbar({
                       className="w-full text-left px-4 py-3 hover:bg-[#F8F8F6] transition-colors flex items-center justify-between group cursor-pointer"
                     >
                       <div className="flex-1 min-w-0 pr-3">
-                        <span className="font-outfit text-sm font-bold text-[#1A1A18] group-hover:text-[#C1571F] transition-colors truncate block">
+                        <span className="font-['Open_Sans'] text-sm font-bold text-[#1A1A18] group-hover:text-[#EB5A0D] transition-colors truncate block">
                           {blog.title}
                         </span>
-                        <div className="flex items-center gap-2 text-xs text-[#52524E] mt-0.5">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#C1571F]">
+                        <div className="flex items-center gap-2 text-xs text-[#52524E] mt-0.5 font-['Open_Sans']">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#EB5A0D]">
                             {blog.category || blog.categoryTag || 'Article'}
                           </span>
                           {blog.authorName && <span>• By {blog.authorName}</span>}
                         </div>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#C1571F] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#EB5A0D] group-hover:translate-x-0.5 transition-all shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -479,7 +530,7 @@ export default function Navbar({
             {/* 🧭 Navigation & Sections */}
             {filteredSections.length > 0 && (
               <div>
-                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE]">
+                <div className="px-4 py-2 bg-[#FBFBFA] text-[11px] font-bold text-[#8C8C88] uppercase tracking-wider flex items-center justify-between border-b border-[#F0F0EE] font-['Open_Sans']">
                   <span>🧭 Navigation &amp; Sections</span>
                   <span className="text-[10px] font-semibold text-[#8C8C88]">
                     {filteredSections.length} {filteredSections.length === 1 ? 'section' : 'sections'}
@@ -494,7 +545,7 @@ export default function Navbar({
                     >
                       <div className="flex-1 min-w-0 pr-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-outfit text-sm font-bold text-[#1A1A18] group-hover:text-[#C1571F] transition-colors truncate">
+                          <span className="font-['Open_Sans'] text-sm font-bold text-[#1A1A18] group-hover:text-[#EB5A0D] transition-colors truncate">
                             {section.title}
                           </span>
                           {section.badge && (
@@ -503,11 +554,11 @@ export default function Navbar({
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-[#52524E] mt-0.5 truncate">
+                        <p className="text-xs text-[#52524E] mt-0.5 truncate font-['Open_Sans']">
                           {section.desc}
                         </p>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#C1571F] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight className="h-4 w-4 text-[#8C8C88] group-hover:text-[#EB5A0D] group-hover:translate-x-0.5 transition-all shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -523,9 +574,9 @@ export default function Navbar({
     <header className="sticky top-0 z-40 w-full transition-all duration-300">
       {/* 1. Top Announcement Strip */}
       {showAnnouncement && (
-        <div className="bg-[#C1571F] text-white text-xs font-medium py-1.5 px-4 flex justify-between items-center z-50">
-          <div className="flex-1 text-center font-outfit">
-            <span>🌲 Netravathi &amp; Brahmagiri Weekend Slots Open — Limited Batches Available! </span>
+        <div className="bg-[#EB5A0D] text-white text-xs font-medium py-1.5 px-4 flex justify-between items-center z-50 font-['Open_Sans']">
+          <div className="flex-1 text-center">
+            <span>🌲 Netravathi, Agasthyarkoodam &amp; Brahmagiri Weekend Slots Open — Limited Batches Available! </span>
             <a href="#upcoming-treks" className="underline font-bold ml-1 hover:text-orange-100 transition-colors">
               Book Now ➔
             </a>
@@ -548,8 +599,8 @@ export default function Navbar({
             <div className="w-10 h-10 rounded-full bg-white border border-[#3E2723]/30 shadow-sm flex items-center justify-center overflow-hidden p-1">
               <img src="/logo.png" alt="BOOTpaths" className="w-full h-full object-contain" />
             </div>
-            <span className="text-2xl font-black tracking-tight select-none">
-              <span className="text-[#FF6B00]">BOOT</span>
+            <span className="text-2xl font-black tracking-tight select-none font-['Open_Sans']">
+              <span className="text-[#EB5A0D]">BOOT</span>
               <span className="text-[#8B2626]">paths</span>
             </span>
           </a>
@@ -570,7 +621,7 @@ export default function Navbar({
               }}
               onFocus={() => setIsDropdownOpen(true)}
               onKeyDown={handleKeyDown}
-              className="w-full pl-10 pr-9 py-2 text-xs font-medium rounded-full bg-[#EFE8D6]/40 border border-autumn-bark/10 text-autumn-bark placeholder:text-autumn-bark/40 focus:outline-none focus:bg-[#EFE8D6]/80 focus:border-[#C1571F]/50 transition-all font-outfit"
+              className="w-full pl-10 pr-9 py-2 text-xs font-medium rounded-full bg-[#EFE8D6]/40 border border-autumn-bark/10 text-autumn-bark placeholder:text-autumn-bark/40 focus:outline-none focus:bg-[#EFE8D6]/80 focus:border-[#EB5A0D]/50 transition-all font-['Open_Sans']"
             />
             {searchQuery.length > 0 && (
               <button 
@@ -590,13 +641,13 @@ export default function Navbar({
           </div>
 
           {/* Right: Quick Links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 font-['Open_Sans']">
             {isCareersEnabled && (
-              <a href="#careers" className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors">
+              <a href="#careers" className="text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#EB5A0D] transition-colors">
                 Careers
               </a>
             )}
-            <a href="#advantage" className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors">
+            <a href="#advantage" className="text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#EB5A0D] transition-colors">
               Safety
             </a>
             <a 
@@ -612,7 +663,7 @@ export default function Navbar({
                   document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); 
                 }
               }}
-              className="font-outfit text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#C1571F] transition-colors"
+              className="text-sm font-semibold tracking-wide text-autumn-bark/80 hover:text-[#EB5A0D] transition-colors"
             >
               Blogs
             </a>
@@ -620,21 +671,21 @@ export default function Navbar({
             {/* Nav CTA / User Avatar */}
             {user ? (
               <div className="relative group">
-                <button className="flex items-center gap-2.5 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 p-1.5 pr-4 transition-all duration-200 hover:border-autumn-maple/50 hover:bg-[#EFE8D6] focus:outline-none focus:ring-2 focus:ring-autumn-maple cursor-pointer">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-autumn-maple font-outfit text-sm font-bold text-[#F3ECDD] shadow-md">
+                <button className="flex items-center gap-2.5 rounded-full border border-autumn-bark/10 bg-[#EFE8D6]/60 p-1.5 pr-4 transition-all duration-200 hover:border-[#EB5A0D]/50 hover:bg-[#EFE8D6] focus:outline-none focus:ring-2 focus:ring-[#EB5A0D] cursor-pointer">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EB5A0D] text-sm font-bold text-white shadow-md">
                     {user.initials}
                   </div>
-                  <span className="font-outfit text-xs font-bold text-autumn-bark/80 tracking-wide">{user.name}</span>
+                  <span className="text-xs font-bold text-autumn-bark/80 tracking-wide">{user.name}</span>
                 </button>
-                {/* Dropdown Menu */}
-                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-lg border border-autumn-bark/10 bg-[#EFE8D6] p-2 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto z-50">
-                  <div className="px-3 py-1.5 border-b border-autumn-bark/10 text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
+                {/* User Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-[#E7E7E4] bg-white p-2 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto z-50">
+                  <div className="px-3 py-1.5 border-b border-[#F0F0EE] text-[10px] text-autumn-bark/50 uppercase tracking-widest font-bold">
                     {user.email}
                   </div>
                   {user && (userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com') && (
                     <button 
                       onClick={() => { window.location.hash = '#dev-ops'; }} 
-                      className="w-full text-left px-4 py-2 text-xs font-bold text-amber-600 hover:bg-amber-500/10 transition-colors flex items-center gap-2 cursor-pointer"
+                      className="w-full text-left px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-500/10 transition-colors flex items-center gap-2 cursor-pointer rounded-lg mt-1"
                     >
                       🛠️ DEVELOPER CONSOLE
                     </button>
@@ -642,20 +693,20 @@ export default function Navbar({
                   {user && userRole === 'admin' && (
                     <button 
                       onClick={() => { window.location.hash = '#admin'; }}
-                      className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider bg-[#C1571F] text-white hover:bg-[#a34718] transition-colors flex items-center gap-1.5 cursor-pointer"
+                      className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider bg-[#EB5A0D] text-white hover:bg-[#D44E08] transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       ⚙️ ADMIN PORTAL
                     </button>
                   )}
                   <button 
                     onClick={() => setIsDashboardOpen?.(true)}
-                    className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider text-autumn-maple hover:bg-autumn-maple/10 transition-colors cursor-pointer"
+                    className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider text-[#EB5A0D] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                   >
                     Dashboard
                   </button>
                   <button 
                     onClick={handleLogout}
-                    className="w-full text-left rounded px-3 py-2 mt-1 text-xs font-outfit font-bold uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                    className="w-full text-left rounded-lg px-3 py-2 mt-1 text-xs font-bold uppercase tracking-wider text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
                   >
                     Sign Out
                   </button>
@@ -664,7 +715,7 @@ export default function Navbar({
             ) : (
               <button 
                 onClick={() => (onOpenAuth ? onOpenAuth('login') : setIsAuthModalOpen?.(true))}
-                className="border border-[#C1571F] text-[#C1571F] hover:bg-[#C1571F] hover:text-[#3A2A1E] font-bold text-xs uppercase tracking-wider rounded-lg px-4 py-2 transition-all duration-200 focus:outline-none cursor-pointer"
+                className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold text-xs uppercase tracking-wider rounded-lg px-4 py-2 transition-all duration-200 focus:outline-none cursor-pointer shadow-sm"
               >
                 Login
               </button>
@@ -682,85 +733,205 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* Category Sub-Navigation Bar (Tier 2) */}
-      <div className="bg-[#F8F8F6] border-b border-[#E7E7E4] text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#52524E] px-6 py-2.5 flex items-center justify-center gap-6 overflow-x-auto scrollbar-none whitespace-nowrap">
-        {/* Upcoming Treks dropdown */}
-        <div className="relative group/menu">
-          <button className="flex items-center gap-1 hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold focus:outline-none">
-            Upcoming Treks <ChevronDown className="h-3 w-3" />
+      {/* Category Sub-Navigation Bar (Tier 2 - Dynamic Dropdowns) */}
+      <div 
+        ref={navContainerRef}
+        className="bg-[#F8F8F6] border-b border-[#E7E7E4] text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#52524E] px-4 sm:px-8 py-2 flex items-center justify-center gap-4 sm:gap-8 overflow-visible relative font-['Open_Sans']"
+      >
+        {/* 1. UPCOMING TREKS */}
+        <div 
+          className="relative"
+          onMouseEnter={() => handleMouseEnter('upcoming')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button 
+            onClick={() => handleToggleDropdown('upcoming')}
+            className={`flex items-center gap-1.5 uppercase font-bold tracking-wider py-1 transition-colors cursor-pointer focus:outline-none ${activeDropdown === 'upcoming' ? 'text-[#EB5A0D]' : 'hover:text-[#EB5A0D]'}`}
+            aria-expanded={activeDropdown === 'upcoming'}
+          >
+            <span>UPCOMING TREKS</span>
+            <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === 'upcoming' ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
           </button>
-          <div className="absolute left-0 mt-2.5 w-56 bg-white border border-[#E7E7E4] rounded-xl shadow-xl py-2 hidden group-hover/menu:block z-50 text-left normal-case tracking-normal font-medium text-[#52524E]">
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs font-bold">
-              All Live Batches
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Weekend Treks
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Premium Small Batches
-            </a>
+
+          {/* Dropdown Panel */}
+          <div 
+            className={`absolute top-full left-0 mt-2 min-w-[270px] bg-white border border-[#E7E7E4] rounded-2xl shadow-xl py-2 z-50 overflow-hidden transition-all duration-200 ease-out transform ${
+              activeDropdown === 'upcoming' 
+                ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                : 'opacity-0 translate-y-2 pointer-events-none'
+            }`}
+          >
+            <div className="max-h-[360px] overflow-y-auto divide-y divide-[#F8F8F6]">
+              {STATIC_UPCOMING_ITEMS.map((item, idx) => (
+                <a 
+                  key={idx}
+                  href={item.url}
+                  onClick={(e) => handleItemNavigate(e, item)}
+                  className="flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-[#374151] hover:bg-[#FAF8F5] hover:text-[#EB5A0D] transition-colors group"
+                >
+                  <span className="truncate pr-2 group-hover:translate-x-0.5 transition-transform">{item.name}</span>
+                  <span className="text-[10px] text-[#9CA3AF] uppercase font-bold shrink-0">{item.duration}</span>
+                </a>
+              ))}
+            </div>
+            <div className="border-t border-[#F3F4F6] mt-1 pt-1">
+              <a 
+                href="#upcoming-treks" 
+                onClick={(e) => handleItemNavigate(e, { url: '#upcoming-treks' })}
+                className="block px-4 py-2 text-[11px] font-bold text-[#EB5A0D] uppercase tracking-wider hover:underline"
+              >
+                Explore All Live Expeditions →
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Western Ghats dropdown */}
-        <div className="relative group/menu">
-          <button className="flex items-center gap-1 hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold focus:outline-none">
-            Western Ghats <ChevronDown className="h-3 w-3" />
+        {/* 2. WESTERN GHATS */}
+        <div 
+          className="relative"
+          onMouseEnter={() => handleMouseEnter('western')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button 
+            onClick={() => handleToggleDropdown('western')}
+            className={`flex items-center gap-1.5 uppercase font-bold tracking-wider py-1 transition-colors cursor-pointer focus:outline-none ${activeDropdown === 'western' ? 'text-[#EB5A0D]' : 'hover:text-[#EB5A0D]'}`}
+            aria-expanded={activeDropdown === 'western'}
+          >
+            <span>WESTERN GHATS</span>
+            <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === 'western' ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
           </button>
-          <div className="absolute left-0 mt-2.5 w-56 bg-white border border-[#E7E7E4] rounded-xl shadow-xl py-2 hidden group-hover/menu:block z-50 text-left normal-case tracking-normal font-medium text-[#52524E]">
-            <a href="#silent-valley" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs font-bold">
-              Silent Valley Rainforest Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs font-bold">
-              Netravathi Peak Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Brahmagiri Coorg Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Vellagavi Village Trek
-            </a>
+
+          {/* Dropdown Panel */}
+          <div 
+            className={`absolute top-full left-0 mt-2 min-w-[280px] bg-white border border-[#E7E7E4] rounded-2xl shadow-xl py-2 z-50 overflow-hidden transition-all duration-200 ease-out transform ${
+              activeDropdown === 'western' 
+                ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                : 'opacity-0 translate-y-2 pointer-events-none'
+            }`}
+          >
+            <div className="max-h-[380px] overflow-y-auto divide-y divide-[#F8F8F6]">
+              {westernGhatsTreks.map((trek, idx) => (
+                <a 
+                  key={idx}
+                  href={trek.url || "#upcoming-treks"}
+                  onClick={(e) => handleItemNavigate(e, trek)}
+                  className="flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-[#374151] hover:bg-[#FAF8F5] hover:text-[#EB5A0D] transition-colors group"
+                >
+                  <span className="truncate pr-2 group-hover:translate-x-0.5 transition-transform">{trek.name}</span>
+                  <span className="text-[10px] text-[#9CA3AF] uppercase font-bold shrink-0">{trek.duration || "Details →"}</span>
+                </a>
+              ))}
+            </div>
+            <div className="border-t border-[#F3F4F6] mt-1 pt-1">
+              <a 
+                href="#upcoming-treks" 
+                onClick={(e) => handleItemNavigate(e, { url: '#upcoming-treks' })}
+                className="block px-4 py-2 text-[11px] font-bold text-[#EB5A0D] uppercase tracking-wider hover:underline"
+              >
+                Explore All Western Ghats Trails →
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Himalayan Trails dropdown */}
-        <div className="relative group/menu">
-          <button className="flex items-center gap-1 hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold focus:outline-none">
-            Himalayan Trails <ChevronDown className="h-3 w-3" />
+        {/* 3. HIMALAYAN TRAILS */}
+        <div 
+          className="relative"
+          onMouseEnter={() => handleMouseEnter('himalayan')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button 
+            onClick={() => handleToggleDropdown('himalayan')}
+            className={`flex items-center gap-1.5 uppercase font-bold tracking-wider py-1 transition-colors cursor-pointer focus:outline-none ${activeDropdown === 'himalayan' ? 'text-[#EB5A0D]' : 'hover:text-[#EB5A0D]'}`}
+            aria-expanded={activeDropdown === 'himalayan'}
+          >
+            <span>HIMALAYAN TRAILS</span>
+            <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === 'himalayan' ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
           </button>
-          <div className="absolute left-0 mt-2.5 w-56 bg-white border border-[#E7E7E4] rounded-xl shadow-xl py-2 hidden group-hover/menu:block z-50 text-left normal-case tracking-normal font-medium text-[#52524E]">
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs font-bold">
-              Kedarkantha Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Hampta Pass Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Roopkund Trek
-            </a>
+
+          {/* Dropdown Panel */}
+          <div 
+            className={`absolute top-full left-0 mt-2 min-w-[280px] bg-white border border-[#E7E7E4] rounded-2xl shadow-xl py-2 z-50 overflow-hidden transition-all duration-200 ease-out transform ${
+              activeDropdown === 'himalayan' 
+                ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                : 'opacity-0 translate-y-2 pointer-events-none'
+            }`}
+          >
+            <div className="max-h-[380px] overflow-y-auto divide-y divide-[#F8F8F6]">
+              {himalayanTreks.map((trek, idx) => (
+                <a 
+                  key={idx}
+                  href={trek.url || "#upcoming-treks"}
+                  onClick={(e) => handleItemNavigate(e, trek)}
+                  className="flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-[#374151] hover:bg-[#FAF8F5] hover:text-[#EB5A0D] transition-colors group"
+                >
+                  <span className="truncate pr-2 group-hover:translate-x-0.5 transition-transform">{trek.name}</span>
+                  <span className="text-[10px] text-[#9CA3AF] uppercase font-bold shrink-0">{trek.duration || "Details →"}</span>
+                </a>
+              ))}
+            </div>
+            <div className="border-t border-[#F3F4F6] mt-1 pt-1">
+              <a 
+                href="#upcoming-treks" 
+                onClick={(e) => handleItemNavigate(e, { url: '#upcoming-treks' })}
+                className="block px-4 py-2 text-[11px] font-bold text-[#EB5A0D] uppercase tracking-wider hover:underline"
+              >
+                Explore All Himalayan Trails →
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* International Treks dropdown */}
-        <div className="relative group/menu">
-          <button className="flex items-center gap-1 hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold focus:outline-none">
-            International Treks <ChevronDown className="h-3 w-3" />
+        {/* 4. INTERNATIONAL TREKS */}
+        <div 
+          className="relative"
+          onMouseEnter={() => handleMouseEnter('international')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button 
+            onClick={() => handleToggleDropdown('international')}
+            className={`flex items-center gap-1.5 uppercase font-bold tracking-wider py-1 transition-colors cursor-pointer focus:outline-none ${activeDropdown === 'international' ? 'text-[#EB5A0D]' : 'hover:text-[#EB5A0D]'}`}
+            aria-expanded={activeDropdown === 'international'}
+          >
+            <span>INTERNATIONAL TREKS</span>
+            <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeDropdown === 'international' ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
           </button>
-          <div className="absolute left-0 mt-2.5 w-56 bg-white border border-[#E7E7E4] rounded-xl shadow-xl py-2 hidden group-hover/menu:block z-50 text-left normal-case tracking-normal font-medium text-[#52524E]">
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs font-bold">
-              Mt. Kilimanjaro Expedition
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Everest Base Camp Trek
-            </a>
-            <a href="#upcoming-treks" className="block px-4 py-2 hover:bg-[#F8F8F6] hover:text-[#C1571F] transition-colors text-xs">
-              Annapurna Circuit
-            </a>
+
+          {/* Dropdown Panel */}
+          <div 
+            className={`absolute top-full left-0 mt-2 min-w-[280px] bg-white border border-[#E7E7E4] rounded-2xl shadow-xl py-2 z-50 overflow-hidden transition-all duration-200 ease-out transform ${
+              activeDropdown === 'international' 
+                ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                : 'opacity-0 translate-y-2 pointer-events-none'
+            }`}
+          >
+            <div className="max-h-[380px] overflow-y-auto divide-y divide-[#F8F8F6]">
+              {internationalTreks.map((trek, idx) => (
+                <a 
+                  key={idx}
+                  href={trek.url || "#upcoming-treks"}
+                  onClick={(e) => handleItemNavigate(e, trek)}
+                  className="flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-[#374151] hover:bg-[#FAF8F5] hover:text-[#EB5A0D] transition-colors group"
+                >
+                  <span className="truncate pr-2 group-hover:translate-x-0.5 transition-transform">{trek.name}</span>
+                  <span className="text-[10px] text-[#9CA3AF] uppercase font-bold shrink-0">{trek.duration || "Details →"}</span>
+                </a>
+              ))}
+            </div>
+            <div className="border-t border-[#F3F4F6] mt-1 pt-1">
+              <a 
+                href="#upcoming-treks" 
+                onClick={(e) => handleItemNavigate(e, { url: '#upcoming-treks' })}
+                className="block px-4 py-2 text-[11px] font-bold text-[#EB5A0D] uppercase tracking-wider hover:underline"
+              >
+                Explore All International Treks →
+              </a>
+            </div>
           </div>
         </div>
 
         {/* Eco-Initiatives */}
-        <a href="#advantage" className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold">
+        <a href="#advantage" className="hover:text-[#EB5A0D] transition-colors cursor-pointer uppercase font-bold py-1">
           Eco-Initiatives
         </a>
 
@@ -778,7 +949,7 @@ export default function Navbar({
               document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); 
             }
           }}
-          className="hover:text-[#C1571F] transition-colors cursor-pointer uppercase font-bold"
+          className="hover:text-[#EB5A0D] transition-colors cursor-pointer uppercase font-bold py-1"
         >
           Blogs
         </a>
@@ -786,7 +957,7 @@ export default function Navbar({
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full border-b border-autumn-bark/10 bg-autumn-mist/95 px-8 py-6 backdrop-blur-lg md:hidden animate-in slide-in-from-top-4 duration-200 overflow-y-auto max-h-[75vh] z-40">
+        <div className="absolute top-full left-0 w-full border-b border-autumn-bark/10 bg-autumn-mist/95 px-8 py-6 backdrop-blur-lg md:hidden animate-in slide-in-from-top-4 duration-200 overflow-y-auto max-h-[75vh] z-40 font-['Open_Sans']">
           <nav className="flex flex-col gap-5">
             {/* Search Input for Mobile */}
             <div className="relative w-full" ref={mobileSearchRef}>
@@ -804,7 +975,7 @@ export default function Navbar({
                 }}
                 onFocus={() => setIsDropdownOpen(true)}
                 onKeyDown={handleKeyDown}
-                className="w-full pl-10 pr-9 py-2 text-xs font-medium rounded-full bg-[#EFE8D6]/60 border border-autumn-bark/10 text-autumn-bark placeholder:text-autumn-bark/40 focus:outline-none font-outfit"
+                className="w-full pl-10 pr-9 py-2 text-xs font-medium rounded-full bg-[#EFE8D6]/60 border border-autumn-bark/10 text-autumn-bark placeholder:text-autumn-bark/40 focus:outline-none"
               />
               {searchQuery.length > 0 && (
                 <button 
@@ -827,16 +998,24 @@ export default function Navbar({
             <div>
               <button 
                 onClick={() => setMobileUpcomingOpen(!mobileUpcomingOpen)}
-                className="w-full flex items-center justify-between text-left font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1 cursor-pointer"
+                className="w-full flex items-center justify-between text-left text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1 cursor-pointer"
               >
-                <span>Upcoming Treks</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileUpcomingOpen ? 'rotate-180' : ''}`} />
+                <span>UPCOMING TREKS</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileUpcomingOpen ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
               </button>
               {mobileUpcomingOpen && (
                 <div className="pl-4 mt-2 flex flex-col gap-2.5 text-xs border-l border-autumn-bark/10 ml-2">
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">All Live Batches</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Weekend Treks</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Premium Small Batches</a>
+                  {STATIC_UPCOMING_ITEMS.map((item, idx) => (
+                    <a 
+                      key={idx}
+                      href={item.url} 
+                      onClick={(e) => handleItemNavigate(e, item)} 
+                      className="text-autumn-bark/70 hover:text-[#EB5A0D] transition-colors flex items-center justify-between pr-2"
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-[10px] text-[#9CA3AF] font-bold">{item.duration}</span>
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -845,17 +1024,24 @@ export default function Navbar({
             <div>
               <button 
                 onClick={() => setMobileWesternOpen(!mobileWesternOpen)}
-                className="w-full flex items-center justify-between text-left font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1 cursor-pointer"
+                className="w-full flex items-center justify-between text-left text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1 cursor-pointer"
               >
-                <span>Western Ghats</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileWesternOpen ? 'rotate-180' : ''}`} />
+                <span>WESTERN GHATS</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileWesternOpen ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
               </button>
               {mobileWesternOpen && (
                 <div className="pl-4 mt-2 flex flex-col gap-2.5 text-xs border-l border-autumn-bark/10 ml-2">
-                  <a href="#silent-valley" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors font-bold text-[#C1571F]">Silent Valley Rainforest Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Netravathi Peak Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Brahmagiri Coorg Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Vellagavi Village Trek</a>
+                  {westernGhatsTreks.map((trek, idx) => (
+                    <a 
+                      key={idx}
+                      href={trek.url || "#upcoming-treks"} 
+                      onClick={(e) => handleItemNavigate(e, trek)} 
+                      className="text-autumn-bark/70 hover:text-[#EB5A0D] transition-colors flex items-center justify-between pr-2"
+                    >
+                      <span>{trek.name}</span>
+                      <span className="text-[10px] text-[#9CA3AF] font-bold">{trek.duration}</span>
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -864,16 +1050,24 @@ export default function Navbar({
             <div>
               <button 
                 onClick={() => setMobileHimalayanOpen(!mobileHimalayanOpen)}
-                className="w-full flex items-center justify-between text-left font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1 cursor-pointer"
+                className="w-full flex items-center justify-between text-left text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1 cursor-pointer"
               >
-                <span>Himalayan Trails</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileHimalayanOpen ? 'rotate-180' : ''}`} />
+                <span>HIMALAYAN TRAILS</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileHimalayanOpen ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
               </button>
               {mobileHimalayanOpen && (
                 <div className="pl-4 mt-2 flex flex-col gap-2.5 text-xs border-l border-autumn-bark/10 ml-2">
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Kedarkantha Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Hampta Pass Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Roopkund Trek</a>
+                  {himalayanTreks.map((trek, idx) => (
+                    <a 
+                      key={idx}
+                      href={trek.url || "#upcoming-treks"} 
+                      onClick={(e) => handleItemNavigate(e, trek)} 
+                      className="text-autumn-bark/70 hover:text-[#EB5A0D] transition-colors flex items-center justify-between pr-2"
+                    >
+                      <span>{trek.name}</span>
+                      <span className="text-[10px] text-[#9CA3AF] font-bold">{trek.duration}</span>
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -882,16 +1076,24 @@ export default function Navbar({
             <div>
               <button 
                 onClick={() => setMobileInternationalOpen(!mobileInternationalOpen)}
-                className="w-full flex items-center justify-between text-left font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1 cursor-pointer"
+                className="w-full flex items-center justify-between text-left text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1 cursor-pointer"
               >
-                <span>International Treks</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileInternationalOpen ? 'rotate-180' : ''}`} />
+                <span>INTERNATIONAL TREKS</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileInternationalOpen ? 'rotate-180 text-[#EB5A0D]' : ''}`} />
               </button>
               {mobileInternationalOpen && (
                 <div className="pl-4 mt-2 flex flex-col gap-2.5 text-xs border-l border-autumn-bark/10 ml-2">
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Mt. Kilimanjaro Expedition</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Everest Base Camp Trek</a>
-                  <a href="#upcoming-treks" onClick={() => setMobileMenuOpen?.(false)} className="text-autumn-bark/70 hover:text-autumn-maple transition-colors">Annapurna Circuit</a>
+                  {internationalTreks.map((trek, idx) => (
+                    <a 
+                      key={idx}
+                      href={trek.url || "#upcoming-treks"} 
+                      onClick={(e) => handleItemNavigate(e, trek)} 
+                      className="text-autumn-bark/70 hover:text-[#EB5A0D] transition-colors flex items-center justify-between pr-2"
+                    >
+                      <span>{trek.name}</span>
+                      <span className="text-[10px] text-[#9CA3AF] font-bold">{trek.duration}</span>
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -907,7 +1109,7 @@ export default function Navbar({
                   }, 150);
                 }
               }}
-              className="font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1"
+              className="text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1"
             >
               Eco-Initiatives
             </a>
@@ -926,7 +1128,7 @@ export default function Navbar({
                   document.getElementById('blogs')?.scrollIntoView({ behavior: 'smooth' }); 
                 }
               }}
-              className="font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1"
+              className="text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1"
             >
               Blogs
             </a>
@@ -943,7 +1145,7 @@ export default function Navbar({
                     }, 150);
                   }
                 }}
-                className="font-outfit text-base font-bold text-autumn-bark/85 hover:text-autumn-maple py-1"
+                className="text-base font-bold text-autumn-bark/85 hover:text-[#EB5A0D] py-1"
               >
                 Careers
               </a>
@@ -954,7 +1156,7 @@ export default function Navbar({
             {user ? (
               <div className="flex flex-col gap-3">
                 <div className="bg-[#EBE3D3] border border-[#3A2A1E]/10 p-4 rounded-2xl flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-autumn-maple font-outfit text-md font-bold text-[#F3ECDD] shadow-md overflow-hidden shrink-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EB5A0D] text-md font-bold text-white shadow-md overflow-hidden shrink-0">
                     {user.photo ? (
                       <img src={user.photo} alt={user.name} className="h-full w-full object-cover" />
                     ) : (
@@ -962,7 +1164,7 @@ export default function Navbar({
                     )}
                   </div>
                   <div className="min-w-0">
-                    <div className="font-outfit text-sm font-bold text-[#3A2A1E] truncate">{user.name}</div>
+                    <div className="text-sm font-bold text-[#3A2A1E] truncate">{user.name}</div>
                     <div className="text-xxs text-[#3A2A1E]/60 truncate">{user.email}</div>
                   </div>
                 </div>
@@ -971,7 +1173,7 @@ export default function Navbar({
                     setIsDashboardOpen?.(true);
                     setMobileMenuOpen?.(false);
                   }}
-                  className="bg-[#C1571F] text-white font-bold py-3 w-full rounded-xl text-center font-outfit text-sm uppercase tracking-wider transition-all duration-200 hover:bg-[#a44717] focus:outline-none cursor-pointer"
+                  className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer"
                 >
                   My Dashboard
                 </button>
@@ -992,7 +1194,7 @@ export default function Navbar({
                   else setIsAuthModalOpen?.(true);
                   setMobileMenuOpen?.(false);
                 }}
-                className="bg-[#C1571F] text-white font-bold py-3 w-full rounded-xl text-center font-outfit text-sm uppercase tracking-wider transition-all duration-200 hover:bg-[#a44717] focus:outline-none cursor-pointer"
+                className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer"
               >
                 Login
               </button>
