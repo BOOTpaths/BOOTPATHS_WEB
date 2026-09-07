@@ -11,7 +11,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBAHdO0Hve_XDH1q1Re7U1XxIzPEEPSvHM",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBAHd00Hve_XDH1q1Re7U1XxIzPEEPSvHM",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "bootpaths-4b877.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "bootpaths-4b877",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "bootpaths-4b877.firebasestorage.app",

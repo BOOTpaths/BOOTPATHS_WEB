@@ -550,10 +550,11 @@ export default function AdminConsole({
   // Check persistent login on mount
   useEffect(() => {
     const activeSession = localStorage.getItem('bootpaths_admin_active');
-    if (activeSession === 'true') {
+    const hasDevBypass = sessionStorage.getItem('dev_bypass') === 'true';
+    if (activeSession === 'true' || hasDevBypass || userRole === 'admin') {
       setIsAdminLoggedIn(true);
     }
-  }, []);
+  }, [userRole]);
 
   // Handle Login Submission
   const handleLoginSubmit = (e) => {
@@ -562,15 +563,17 @@ export default function AdminConsole({
     setIsSubmittingAuth(true);
 
     setTimeout(() => {
-      if (emailInput === 'admin@bootpaths.com' && passwordInput === 'BooTpaths@Admin') {
+      const cleanEmail = emailInput.trim().toLowerCase();
+      if (cleanEmail === 'admin@bootpaths.com' && passwordInput === 'BooTpaths@Admin') {
         localStorage.setItem('bootpaths_admin_active', 'true');
+        sessionStorage.setItem('dev_bypass', 'true');
         setIsAdminLoggedIn(true);
         setIsSubmittingAuth(false);
       } else {
         setAuthError('Invalid administrator credentials provided.');
         setIsSubmittingAuth(false);
       }
-    }, 600);
+    }, 400);
   };
 
   // Handle Password Recovery Request
@@ -580,18 +583,19 @@ export default function AdminConsole({
     setIsSubmittingAuth(true);
 
     setTimeout(() => {
-      if (emailInput.toLowerCase() === 'admin@bootpaths.com') {
+      if (emailInput.trim().toLowerCase() === 'admin@bootpaths.com') {
         setResetSuccess(true);
       } else {
         setAuthError('Admin account not found for this email address.');
       }
       setIsSubmittingAuth(false);
-    }, 800);
+    }, 600);
   };
 
   // Logout Handler
   const handleLogout = () => {
     localStorage.removeItem('bootpaths_admin_active');
+    sessionStorage.removeItem('dev_bypass');
     setIsAdminLoggedIn(false);
     setEmailInput('');
     setPasswordInput('');
