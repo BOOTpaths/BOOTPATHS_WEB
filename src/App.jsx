@@ -1538,8 +1538,9 @@ export default function App() {
       </section>
 
       {/* 4. UPCOMING TREKS GALLERY */}
-      <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-6 md:px-12">
-        <div className="mx-auto max-w-7xl">
+      {/* 4. UPCOMING TREKS GALLERY */}
+      <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto">
           
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:items-end">
             <div>
@@ -1572,8 +1573,8 @@ export default function App() {
               <p className="text-xs text-[#3A2A1E]/60 max-w-sm mt-2">Check back soon for new wilderness pathways and seasonal bookings.</p>
             </div>
           ) : (
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {(showAllTreks ? treks : treks.slice(0, 3)).map((trek) => (
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {(showAllTreks ? treks : treks.slice(0, 4)).map((trek) => (
                 <TrekCard
                   key={trek.id}
                   trek={trek}
