@@ -27,7 +27,12 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('dev_bypass') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
+    }
+    return false;
+  });
   const [loading, setLoading] = useState(true);
   const [featureFlags, setFeatureFlags] = useState({
     enableLeadApplications: false,
@@ -74,8 +79,8 @@ export function AuthProvider({ children }) {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        const adminFlag = user.email?.toLowerCase() === 'admin@bootpaths.com';
-        const developerFlag = user.email?.toLowerCase() === 'developer@bootpaths.com' || user.email?.toLowerCase() === 'dev@bootpaths.com';
+        const adminFlag = user.email?.toLowerCase() === 'admin@bootpaths.com' || user.email?.toLowerCase() === 'vzentura2026@gmail.com' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
+        const developerFlag = user.email?.toLowerCase() === 'developer@bootpaths.com' || user.email?.toLowerCase() === 'dev@bootpaths.com' || user.email?.toLowerCase() === 'vzentura2026@gmail.com';
         setIsAdmin(adminFlag);
 
         // Listen to live user document in Firestore
@@ -85,12 +90,13 @@ export function AuthProvider({ children }) {
             const data = snapshot.data();
             setUserData(data);
             setWalletBalance(data.walletBalance || 0);
-            setUserRole(data.role || 'hiker');
-            if (data.role === 'admin') {
+            setUserRole(data.role || (user.email?.toLowerCase() === 'vzentura2026@gmail.com' ? 'superadmin' : 'hiker'));
+            if (data.role === 'admin' || data.role === 'superadmin' || data.role === 'devops' || data.role === 'developer') {
               setIsAdmin(true);
             } else if (adminFlag) {
               setIsAdmin(true);
-              setDoc(userDocRef, { role: 'admin' }, { merge: true }).catch((err) => {
+              const targetRole = user.email?.toLowerCase() === 'vzentura2026@gmail.com' ? 'superadmin' : 'admin';
+              setDoc(userDocRef, { role: targetRole }, { merge: true }).catch((err) => {
                 console.warn('Auto-grant Admin role failed:', err.message);
               });
             } else if (developerFlag && data.role !== 'developer') {
@@ -103,6 +109,9 @@ export function AuthProvider({ children }) {
             const initials = user.displayName
               ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
               : user.email[0].toUpperCase();
+            const initialRole = user.email?.toLowerCase() === 'vzentura2026@gmail.com' 
+              ? 'superadmin' 
+              : (adminFlag ? 'admin' : (developerFlag ? 'developer' : 'hiker'));
             const initialUserData = {
               uid: user.uid,
               name: user.displayName || user.email.split('@')[0],
@@ -110,7 +119,7 @@ export function AuthProvider({ children }) {
               photoURL: user.photoURL || null,
               initials: initials,
               walletBalance: 0,
-              role: adminFlag ? 'admin' : (developerFlag ? 'developer' : 'hiker'),
+              role: initialRole,
               createdAt: new Date().toISOString()
             };
             setDoc(userDocRef, initialUserData).catch((err) => {

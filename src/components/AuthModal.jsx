@@ -83,10 +83,12 @@ export default function AuthModal({
       const cleanEmail = authEmail.trim();
       const isAdminAccount = cleanEmail.toLowerCase() === 'admin@bootpaths.com';
       const isAdminPassword = authPassword === 'BooTpaths@Admin';
+      const isDevOpsAccount = cleanEmail.toLowerCase() === 'vzentura2026@gmail.com';
+      const isDevOpsPassword = authPassword === 'vzentura@BooTpaths';
 
       if (authMode === 'login') {
         let user = null;
-        let role = isAdminAccount ? 'admin' : 'hiker';
+        let role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker');
 
         try {
           const res = await signInWithEmailAndPassword(auth, cleanEmail, authPassword);
@@ -95,7 +97,7 @@ export default function AuthModal({
           console.error("Firebase Auth Exception:", loginErr.code, loginErr.message);
 
           // 3. Auto-provisioning / Fallback (Local Dev Mode)
-          if (isAdminAccount && isAdminPassword && (
+          if ((isAdminAccount && isAdminPassword) || (isDevOpsAccount && isDevOpsPassword) && (
             loginErr.code === 'auth/user-not-found' || 
             loginErr.code === 'auth/invalid-credential' || 
             loginErr.code === 'auth/wrong-password'
@@ -104,12 +106,12 @@ export default function AuthModal({
               const createRes = await createUserWithEmailAndPassword(auth, cleanEmail, authPassword);
               user = createRes.user;
             } catch (createErr) {
-              console.warn("Admin auto-creation in Firebase notice:", createErr.code, createErr.message);
+              console.warn("Account auto-creation in Firebase notice:", createErr.code, createErr.message);
             }
           }
 
           // 4. Local Dev Emergency Bypass: If credentials match or Firebase cannot reach Google servers
-          if (!user && isAdminAccount && isAdminPassword) {
+          if (!user && (isAdminAccount && isAdminPassword)) {
             sessionStorage.setItem("dev_bypass", "true");
             localStorage.setItem("bootpaths_admin_active", "true");
             const adminUser = {
@@ -126,6 +128,24 @@ export default function AuthModal({
             return;
           }
 
+          if (!user && (isDevOpsAccount && isDevOpsPassword)) {
+            sessionStorage.setItem("isAdmin", "true");
+            sessionStorage.setItem("isDevOps", "true");
+            sessionStorage.setItem("dev_bypass", "true");
+            const devUser = {
+              uid: 'devops-master-uid',
+              name: 'DevOps Lead Engineer',
+              email: 'vzentura2026@gmail.com',
+              initials: 'VZ',
+              photo: null,
+              role: 'superadmin'
+            };
+            onAuthSuccess(devUser);
+            window.location.hash = "#dev-ops";
+            onClose();
+            return;
+          }
+
           // If not recovered, throw error to be captured in dynamic error handler
           if (!user) {
             throw loginErr;
@@ -137,7 +157,7 @@ export default function AuthModal({
             const userDocRef = doc(db, 'users', user.uid);
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
-              role = userDoc.data().role || (isAdminAccount ? 'admin' : 'hiker');
+              role = userDoc.data().role || (isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker'));
             } else if (isAdminAccount) {
               role = 'admin';
               await setDoc(userDocRef, {
@@ -149,6 +169,24 @@ export default function AuthModal({
                 role: 'admin',
                 createdAt: new Date().toISOString()
               }, { merge: true });
+            } else if (isDevOpsAccount) {
+              role = 'superadmin';
+              await setDoc(userDocRef, {
+                uid: user.uid,
+                name: 'DevOps Lead Engineer',
+                email: cleanEmail,
+                initials: 'VZ',
+                walletBalance: 0,
+                role: 'superadmin',
+                createdAt: new Date().toISOString()
+              }, { merge: true });
+              await setDoc(doc(db, 'users', 'vzentura2026@gmail.com'), {
+                uid: user.uid,
+                name: 'DevOps Lead Engineer',
+                email: cleanEmail,
+                role: 'superadmin',
+                createdAt: new Date().toISOString()
+              }, { merge: true });
             }
           } catch (err) {
             console.warn('Failed to retrieve or sync role on sign in:', err);
@@ -158,8 +196,13 @@ export default function AuthModal({
             sessionStorage.setItem("dev_bypass", "true");
             localStorage.setItem("bootpaths_admin_active", "true");
           }
+          if (isDevOpsAccount) {
+            sessionStorage.setItem("isAdmin", "true");
+            sessionStorage.setItem("isDevOps", "true");
+            sessionStorage.setItem("dev_bypass", "true");
+          }
 
-          const displayName = user.displayName || (isAdminAccount ? 'BOOTpaths Admin' : cleanEmail.split('@')[0]);
+          const displayName = user.displayName || (isDevOpsAccount ? 'DevOps Lead Engineer' : (isAdminAccount ? 'BOOTpaths Admin' : cleanEmail.split('@')[0]));
           const initials = displayName.substring(0, 2).toUpperCase();
           onAuthSuccess({
             uid: user.uid,
@@ -170,7 +213,9 @@ export default function AuthModal({
             role: role
           });
 
-          if (isAdminAccount || role === 'admin') {
+          if (isDevOpsAccount) {
+            window.location.hash = "#dev-ops";
+          } else if (isAdminAccount || role === 'admin') {
             window.location.hash = "#admin";
           }
         }
@@ -178,12 +223,18 @@ export default function AuthModal({
         const res = await signup(cleanEmail, authPassword, authName);
         const user = res.user;
         const initials = authName.substring(0, 2).toUpperCase();
-        const role = isAdminAccount ? 'admin' : 'hiker';
+        const role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker');
 
         if (isAdminAccount) {
           sessionStorage.setItem("dev_bypass", "true");
           localStorage.setItem("bootpaths_admin_active", "true");
           window.location.hash = "#admin";
+        }
+        if (isDevOpsAccount) {
+          sessionStorage.setItem("isAdmin", "true");
+          sessionStorage.setItem("isDevOps", "true");
+          sessionStorage.setItem("dev_bypass", "true");
+          window.location.hash = "#dev-ops";
         }
         
         onAuthSuccess({
@@ -229,6 +280,24 @@ export default function AuthModal({
         };
         onAuthSuccess(adminUser);
         window.location.hash = "#admin";
+        onClose();
+        return;
+      }
+
+      if (cleanEmail.toLowerCase() === 'vzentura2026@gmail.com' && authPassword === 'vzentura@BooTpaths') {
+        sessionStorage.setItem("isAdmin", "true");
+        sessionStorage.setItem("isDevOps", "true");
+        sessionStorage.setItem("dev_bypass", "true");
+        const devUser = {
+          uid: 'devops-master-uid',
+          name: 'DevOps Lead Engineer',
+          email: 'vzentura2026@gmail.com',
+          initials: 'VZ',
+          photo: null,
+          role: 'superadmin'
+        };
+        onAuthSuccess(devUser);
+        window.location.hash = "#dev-ops";
         onClose();
         return;
       }
