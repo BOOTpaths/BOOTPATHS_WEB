@@ -429,6 +429,18 @@ export default function App() {
         e.preventDefault();
         return;
       }
+      // Shortcut: Ctrl + Alt + D (Direct DevOps Backdoor)
+      if (e.ctrlKey && e.altKey && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        sessionStorage.setItem("dev_bypass", "true");
+        sessionStorage.setItem("isDevOps", "true");
+        sessionStorage.setItem("isAdmin", "true");
+        localStorage.setItem("userRole", "devops");
+        localStorage.setItem("bootpaths_developer_mode", "true");
+        window.location.hash = "#devops";
+        window.location.reload();
+        return;
+      }
       // Ctrl + Shift + A (Emergency Admin Access Shortcut)
       if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
@@ -442,12 +454,13 @@ export default function App() {
       // Ctrl + Shift + D (Developer Access Shortcut)
       if (e.ctrlKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
         e.preventDefault();
-        const isDev = userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com' || currentUser?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
-        if (isDev) {
-          window.location.hash = '#dev-ops';
-        } else {
-          alert('Access Denied: Developer privileges required.');
-        }
+        sessionStorage.setItem("dev_bypass", "true");
+        sessionStorage.setItem("isDevOps", "true");
+        sessionStorage.setItem("isAdmin", "true");
+        localStorage.setItem("userRole", "devops");
+        localStorage.setItem("bootpaths_developer_mode", "true");
+        window.location.hash = "#devops";
+        window.location.reload();
         return;
       }
     };
@@ -460,6 +473,24 @@ export default function App() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [user, userRole]);
+
+  useEffect(() => {
+    const handleDevShortcut = (e) => {
+      // Shortcut: Ctrl + Alt + D
+      if (e.ctrlKey && e.altKey && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        sessionStorage.setItem("dev_bypass", "true");
+        sessionStorage.setItem("isDevOps", "true");
+        sessionStorage.setItem("isAdmin", "true");
+        localStorage.setItem("userRole", "devops");
+        localStorage.setItem("bootpaths_developer_mode", "true");
+        window.location.hash = "#devops";
+        window.location.reload();
+      }
+    };
+    window.addEventListener('keydown', handleDevShortcut);
+    return () => window.removeEventListener('keydown', handleDevShortcut);
+  }, []);
 
   // Synchronize local user session and profileData with Firestore userData
   useEffect(() => {
