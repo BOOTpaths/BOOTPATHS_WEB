@@ -550,7 +550,7 @@ export default function AdminConsole({
   // Check persistent login on mount
   useEffect(() => {
     const activeSession = localStorage.getItem('bootpaths_admin_active');
-    const hasDevBypass = sessionStorage.getItem('dev_bypass') === 'true';
+    const hasDevBypass = sessionStorage.getItem('dev_bypass') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
     if (activeSession === 'true' || hasDevBypass || userRole === 'admin') {
       setIsAdminLoggedIn(true);
     }

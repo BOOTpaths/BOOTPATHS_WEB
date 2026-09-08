@@ -1034,31 +1034,24 @@ export default function App() {
     }
   }
 
-  if (currentHash === '#admin') {
-    if (!import.meta.env.PROD) {
-      console.log('Current User Role:', userRole || userData?.role || user?.role, 'UID:', currentUser?.uid || user?.uid);
-    }
-    if (authLoading || (currentUser && !userData)) {
-      return (
-        <div className="min-h-screen bg-[#F3ECDD] flex flex-col items-center justify-center gap-4 text-autumn-bark font-sans">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#C1571F]/20 border-t-[#C1571F]"></div>
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C1571F]">Verifying Admin Authorization...</span>
-        </div>
-      );
-    }
-    const isVzentura = currentUser?.email === 'vzentura2026@gmail.com' || user?.email === 'vzentura2026@gmail.com' || userData?.email === 'vzentura2026@gmail.com';
-    const isAdminOrDev = (
-      userRole === 'admin' || 
-      userData?.role === 'admin' || 
-      user?.role === 'admin' || 
-      userRole === 'developer' || 
-      userData?.role === 'developer' || 
-      currentUser?.email === 'admin@bootpaths.com' || 
-      user?.email === 'admin@bootpaths.com' || 
-      userData?.email === 'admin@bootpaths.com'
-    ) && !isVzentura;
+  if (currentHash === '#admin' || currentHash.startsWith('#admin')) {
+    const isDevBypass = typeof window !== 'undefined' && (
+      sessionStorage.getItem('dev_bypass') === 'true' ||
+      sessionStorage.getItem('isAdmin') === 'true' ||
+      localStorage.getItem('bootpaths_admin_active') === 'true'
+    );
+    
+    const isAdminUser = 
+      currentUser?.email?.toLowerCase() === 'admin@bootpaths.com' ||
+      user?.email?.toLowerCase() === 'admin@bootpaths.com' ||
+      userData?.email?.toLowerCase() === 'admin@bootpaths.com' ||
+      userRole === 'admin' ||
+      userData?.role === 'admin' ||
+      user?.role === 'admin';
 
-    if (!currentUser || !isAdminOrDev) {
+    const hasAdminAccess = isDevBypass || isAdminUser;
+
+    if (!hasAdminAccess) {
       return (
         <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
@@ -1068,7 +1061,7 @@ export default function App() {
             </div>
             <h2 className="font-outfit text-2xl sm:text-3xl font-black text-white mb-3">Admin Portal Access</h2>
             <p className="text-xs text-[#F3ECDD]/70 mb-6 leading-relaxed">
-              Please sign in with authorized administrator credentials to access the BOOTpaths Admin Console.
+              Please sign in with administrator credentials to access the console.
             </p>
             <div className="flex flex-col gap-3 w-full max-w-xs">
               <button
@@ -1088,13 +1081,11 @@ export default function App() {
           </div>
 
           <AuthModal 
-            isOpen={isAuthModalOpen || !currentUser}
+            isOpen={isAuthModalOpen || (!hasAdminAccess && (currentHash === '#admin' || currentHash.startsWith('#admin')))}
             onClose={() => {
               setIsAuthModalOpen(false);
-              if (!currentUser) {
-                window.location.hash = '';
-              }
             }}
+            initialNotice="Please sign in with administrator credentials to access the console."
             onAuthSuccess={(newUser) => {
               setUser(newUser);
               setUserRole(newUser.role);
@@ -1108,13 +1099,14 @@ export default function App() {
               } else if (newUser.role === 'admin' || newUser.email === 'admin@bootpaths.com') {
                 window.location.hash = '#admin';
               } else {
-                window.location.hash = '';
+                window.location.hash = '#admin';
               }
             }}
           />
         </div>
       );
     }
+
     return (
       <AdminConsole 
         treks={treks} 

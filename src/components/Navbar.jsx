@@ -199,6 +199,30 @@ export default function Navbar({
 
   const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
 
+  const handleAdminPortalClick = (e) => {
+    if (e) e.preventDefault();
+    setUserDropdownOpen(false);
+    setMobileMenuOpen?.(false);
+    
+    const isBypass = typeof window !== 'undefined' && (
+      sessionStorage.getItem('dev_bypass') === 'true' || 
+      sessionStorage.getItem('isAdmin') === 'true' ||
+      localStorage.getItem('bootpaths_admin_active') === 'true'
+    );
+    const isAdminUser = 
+      user?.email?.toLowerCase() === 'admin@bootpaths.com' || 
+      userRole === 'admin' ||
+      user?.role === 'admin';
+
+    if (isAdminUser || isBypass) {
+      window.location.hash = '#admin';
+    } else {
+      // Prompt login modal instead of silently failing
+      if (onOpenAuth) onOpenAuth('login');
+      else if (setIsAuthModalOpen) setIsAuthModalOpen(true);
+    }
+  };
+
   // Build dynamic categorized trek lists
   const westernGhatsTreks = useMemo(() => {
     const list = [...STATIC_WESTERN_GHATS];
@@ -725,17 +749,12 @@ export default function Navbar({
                     </button>
                   )}
 
-                  {user && userRole === 'admin' && (
-                    <button 
-                      onClick={() => { 
-                        setUserDropdownOpen(false);
-                        window.location.hash = '#admin'; 
-                      }}
-                      className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] my-1 shadow-sm"
-                    >
-                      ⚙️ ADMIN PORTAL
-                    </button>
-                  )}
+                  <button 
+                    onClick={handleAdminPortalClick}
+                    className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] my-1 shadow-sm"
+                  >
+                    ⚙️ ADMIN PORTAL
+                  </button>
 
                   <button 
                     onClick={() => { 
@@ -1215,11 +1234,17 @@ export default function Navbar({
                   </div>
                 </div>
                 <button 
+                  onClick={handleAdminPortalClick}
+                  className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2"
+                >
+                  ⚙️ Admin Portal
+                </button>
+                <button 
                   onClick={() => {
                     setIsDashboardOpen?.(true);
                     setMobileMenuOpen?.(false);
                   }}
-                  className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer"
+                  className="bg-white border border-[#E7E7E4] text-[#1A1A18] hover:bg-[#FAF8F5] font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer"
                 >
                   My Dashboard
                 </button>

@@ -15,7 +15,8 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 export default function AuthModal({
   isOpen,
   onClose,
-  onAuthSuccess
+  onAuthSuccess,
+  initialNotice = ''
 }) {
   const { login, signup } = useAuth();
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
@@ -322,6 +323,13 @@ export default function AuthModal({
             </div>
 
             <div className="p-6">
+              {initialNotice && !authErrors.form && (
+                <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[#C1571F] text-xs flex items-center gap-2 font-medium">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-[#EB5A0D]" />
+                  <span>{initialNotice}</span>
+                </div>
+              )}
+
               {authErrors.form && (
                 <p className="text-red-400 text-xxs text-center mb-4 font-bold">{authErrors.form}</p>
               )}
