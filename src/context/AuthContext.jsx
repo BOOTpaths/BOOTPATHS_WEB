@@ -27,12 +27,7 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('dev_bypass') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
-    }
-    return false;
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [featureFlags, setFeatureFlags] = useState({
     enableLeadApplications: false,
@@ -79,9 +74,28 @@ export function AuthProvider({ children }) {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        const adminFlag = user.email?.toLowerCase() === 'admin@bootpaths.com' || user.email?.toLowerCase() === 'vzentura2026@gmail.com' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
-        const developerFlag = user.email?.toLowerCase() === 'developer@bootpaths.com' || user.email?.toLowerCase() === 'dev@bootpaths.com' || user.email?.toLowerCase() === 'vzentura2026@gmail.com';
-        setIsAdmin(adminFlag);
+        const emailClean = (user.email || "").trim().toLowerCase();
+        const isAuthorizedAdmin = emailClean === 'admin@bootpaths.com' || emailClean === 'vzentura2026@gmail.com';
+        const isAuthorizedDev = emailClean === 'vzentura2026@gmail.com';
+        setIsAdmin(isAuthorizedAdmin);
+
+        if (isAuthorizedAdmin) {
+          sessionStorage.setItem("isAdmin", "true");
+          sessionStorage.setItem("isDevOps", "true");
+          sessionStorage.setItem("dev_bypass", "true");
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("userRole", isAuthorizedDev ? "devops" : "admin");
+        } else {
+          // Thoroughly wipe dev & admin privilege flags for normal users
+          sessionStorage.removeItem("isAdmin");
+          sessionStorage.removeItem("isDevOps");
+          sessionStorage.removeItem("dev_bypass");
+          localStorage.removeItem("isAdmin");
+          localStorage.removeItem("isDevOps");
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("bootpaths_admin_active");
+          localStorage.removeItem("bootpaths_developer_mode");
+        }
 
         // Listen to live user document in Firestore
         const userDocRef = doc(db, 'users', user.uid);
@@ -90,31 +104,25 @@ export function AuthProvider({ children }) {
             const data = snapshot.data();
             setUserData(data);
             setWalletBalance(data.walletBalance || 0);
-            setUserRole(data.role || (user.email?.toLowerCase() === 'vzentura2026@gmail.com' ? 'superadmin' : 'hiker'));
-            if (data.role === 'admin' || data.role === 'superadmin' || data.role === 'devops' || data.role === 'developer') {
+            const resolvedRole = isAuthorizedDev 
+              ? 'superadmin' 
+              : (isAuthorizedAdmin ? 'admin' : (data.role || 'member'));
+            setUserRole(resolvedRole);
+            if (isAuthorizedAdmin) {
               setIsAdmin(true);
-            } else if (adminFlag) {
-              setIsAdmin(true);
-              const targetRole = user.email?.toLowerCase() === 'vzentura2026@gmail.com' ? 'superadmin' : 'admin';
-              setDoc(userDocRef, { role: targetRole }, { merge: true }).catch((err) => {
-                console.warn('Auto-grant Admin role failed:', err.message);
-              });
-            } else if (developerFlag && data.role !== 'developer') {
-              setDoc(userDocRef, { role: 'developer' }, { merge: true }).catch((err) => {
-                console.warn('Auto-grant Developer role failed:', err.message);
-              });
             }
           } else {
             // Create user document if it doesn't exist yet
             const initials = user.displayName
               ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-              : user.email[0].toUpperCase();
-            const initialRole = user.email?.toLowerCase() === 'vzentura2026@gmail.com' 
+              : (user.email ? user.email[0].toUpperCase() : 'EX');
+            const initialRole = isAuthorizedDev 
               ? 'superadmin' 
-              : (adminFlag ? 'admin' : (developerFlag ? 'developer' : 'hiker'));
+              : (isAuthorizedAdmin ? 'admin' : 'member');
             const initialUserData = {
               uid: user.uid,
-              name: user.displayName || user.email.split('@')[0],
+              name: user.displayName || (user.email ? user.email.split('@')[0] : 'Explorer'),
+              displayName: user.displayName || 'Explorer',
               email: user.email,
               photoURL: user.photoURL || null,
               initials: initials,
@@ -135,6 +143,14 @@ export function AuthProvider({ children }) {
         });
 
       } else {
+        sessionStorage.removeItem("isAdmin");
+        sessionStorage.removeItem("isDevOps");
+        sessionStorage.removeItem("dev_bypass");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("isDevOps");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("bootpaths_admin_active");
+        localStorage.removeItem("bootpaths_developer_mode");
         setCurrentUser(null);
         setUserData(null);
         setUserRole(null);
@@ -163,14 +179,19 @@ export function AuthProvider({ children }) {
   const signup = async (email, password, name) => {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     if (res.user) {
+      const emailClean = (email || "").trim().toLowerCase();
+      const isAuthorizedAdmin = emailClean === 'admin@bootpaths.com' || emailClean === 'vzentura2026@gmail.com';
+      const isAuthorizedDev = emailClean === 'vzentura2026@gmail.com';
+      const role = isAuthorizedDev ? 'superadmin' : (isAuthorizedAdmin ? 'admin' : 'member');
       const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
       await setDoc(doc(db, 'users', res.user.uid), {
         uid: res.user.uid,
         name: name,
+        displayName: name,
         email: email,
         initials: initials,
         walletBalance: 0,
-        role: 'hiker',
+        role: role,
         createdAt: new Date().toISOString()
       });
     }
@@ -181,19 +202,24 @@ export function AuthProvider({ children }) {
     try {
       const res = await signInWithPopup(auth, googleProvider);
       if (res.user) {
+        const emailClean = (res.user.email || "").trim().toLowerCase();
+        const isAuthorizedAdmin = emailClean === 'admin@bootpaths.com' || emailClean === 'vzentura2026@gmail.com';
+        const isAuthorizedDev = emailClean === 'vzentura2026@gmail.com';
+        const role = isAuthorizedDev ? 'superadmin' : (isAuthorizedAdmin ? 'admin' : 'member');
+
         const userDocRef = doc(db, 'users', res.user.uid);
         const initials = res.user.displayName
           ? res.user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-          : res.user.email[0].toUpperCase();
+          : (res.user.email ? res.user.email[0].toUpperCase() : 'EX');
 
         await setDoc(userDocRef, {
           uid: res.user.uid,
-          name: res.user.displayName || res.user.email.split('@')[0],
-          displayName: res.user.displayName || '',
+          name: res.user.displayName || (res.user.email ? res.user.email.split('@')[0] : 'Explorer'),
+          displayName: res.user.displayName || 'Explorer',
           email: res.user.email,
           photoURL: res.user.photoURL || null,
           initials: initials,
-          role: 'user',
+          role: role,
           updatedAt: new Date().toISOString()
         }, { merge: true });
       }
@@ -210,8 +236,17 @@ export function AuthProvider({ children }) {
     } catch (err) {
       console.warn('Firebase Logout Notice:', err.message);
     }
+    sessionStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("isDevOps");
+    sessionStorage.removeItem("dev_bypass");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("isDevOps");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("bootpaths_admin_active");
+    localStorage.removeItem("bootpaths_developer_mode");
     setCurrentUser(null);
     setUserData(null);
+    setUserRole(null);
     setWalletBalance(0);
     setIsAdmin(false);
   };

@@ -83,6 +83,15 @@ export default function AuthModal({
         if (isDevOpsAccount) {
           localStorage.setItem('bootpaths_developer_mode', 'true');
         }
+      } else {
+        sessionStorage.removeItem("isAdmin");
+        sessionStorage.removeItem("isDevOps");
+        sessionStorage.removeItem("dev_bypass");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("isDevOps");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("bootpaths_admin_active");
+        localStorage.removeItem("bootpaths_developer_mode");
       }
 
       const assignedRole = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'member');
@@ -317,14 +326,22 @@ export default function AuthModal({
             console.warn('Failed to retrieve or sync role on sign in:', err);
           }
 
-          if (isAdminAccount) {
+          if (isAdminAccount || isDevOpsAccount) {
             sessionStorage.setItem("dev_bypass", "true");
-            localStorage.setItem("bootpaths_admin_active", "true");
-          }
-          if (isDevOpsAccount) {
             sessionStorage.setItem("isAdmin", "true");
-            sessionStorage.setItem("isDevOps", "true");
-            sessionStorage.setItem("dev_bypass", "true");
+            if (isDevOpsAccount) {
+              sessionStorage.setItem("isDevOps", "true");
+            }
+            localStorage.setItem("isAdmin", "true");
+          } else {
+            sessionStorage.removeItem("isAdmin");
+            sessionStorage.removeItem("isDevOps");
+            sessionStorage.removeItem("dev_bypass");
+            localStorage.removeItem("isAdmin");
+            localStorage.removeItem("isDevOps");
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("bootpaths_admin_active");
+            localStorage.removeItem("bootpaths_developer_mode");
           }
 
           const displayName = user.displayName || (isDevOpsAccount ? 'DevOps Lead Engineer' : (isAdminAccount ? 'BOOTpaths Admin' : cleanEmail.split('@')[0]));
@@ -381,12 +398,20 @@ export default function AuthModal({
           localStorage.setItem("bootpaths_admin_active", "true");
           localStorage.setItem("isAdmin", "true");
           localStorage.setItem("userRole", "admin");
-        }
-        if (isDevOpsAccount) {
+        } else if (isDevOpsAccount) {
           sessionStorage.setItem("isAdmin", "true");
           sessionStorage.setItem("isDevOps", "true");
           sessionStorage.setItem("dev_bypass", "true");
           localStorage.setItem("userRole", "superadmin");
+        } else {
+          sessionStorage.removeItem("isAdmin");
+          sessionStorage.removeItem("isDevOps");
+          sessionStorage.removeItem("dev_bypass");
+          localStorage.removeItem("isAdmin");
+          localStorage.removeItem("isDevOps");
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("bootpaths_admin_active");
+          localStorage.removeItem("bootpaths_developer_mode");
         }
 
         if (onAuthSuccess) {
@@ -485,6 +510,14 @@ export default function AuthModal({
   };
 
   const handleContinueAsGuest = () => {
+    sessionStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("isDevOps");
+    sessionStorage.removeItem("dev_bypass");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("isDevOps");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("bootpaths_admin_active");
+    localStorage.removeItem("bootpaths_developer_mode");
     setIsAuthenticating(true);
     setTimeout(() => {
       setIsAuthenticating(false);

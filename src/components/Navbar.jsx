@@ -197,24 +197,17 @@ export default function Navbar({
     setActiveDropdown((prev) => (prev === menuKey ? null : menuKey));
   };
 
-  const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
+  const currentEmail = (user?.email || "").trim().toLowerCase();
+  const isAuthorizedAdmin = currentEmail === "vzentura2026@gmail.com" || currentEmail === "admin@bootpaths.com";
+  const isAuthorizedDev = currentEmail === "vzentura2026@gmail.com";
+  const isAdminOrDev = isAuthorizedAdmin;
 
   const handleAdminPortalClick = (e) => {
     if (e) e.preventDefault();
     setUserDropdownOpen(false);
     setMobileMenuOpen?.(false);
     
-    const isBypass = typeof window !== 'undefined' && (
-      sessionStorage.getItem('dev_bypass') === 'true' || 
-      sessionStorage.getItem('isAdmin') === 'true' ||
-      localStorage.getItem('bootpaths_admin_active') === 'true'
-    );
-    const isAdminUser = 
-      user?.email?.toLowerCase() === 'admin@bootpaths.com' || 
-      userRole === 'admin' ||
-      user?.role === 'admin';
-
-    if (isAdminUser || isBypass) {
+    if (isAuthorizedAdmin) {
       window.location.hash = '#admin';
     } else {
       // Prompt login modal instead of silently failing
@@ -737,11 +730,11 @@ export default function Navbar({
                     {user.email}
                   </div>
 
-                  {user && (userRole === 'developer' || user?.role === 'developer' || user?.email === 'vzentura2026@gmail.com') && (
+                  {user && isAuthorizedDev && (
                     <button 
                       onClick={() => { 
                         setUserDropdownOpen(false);
-                        window.location.hash = '#dev-ops'; 
+                        window.location.hash = '#devops'; 
                       }} 
                       className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] mt-1.5"
                     >
@@ -749,12 +742,14 @@ export default function Navbar({
                     </button>
                   )}
 
-                  <button 
-                    onClick={handleAdminPortalClick}
-                    className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] my-1 shadow-sm"
-                  >
-                    ⚙️ ADMIN PORTAL
-                  </button>
+                  {user && isAuthorizedAdmin && (
+                    <button 
+                      onClick={handleAdminPortalClick}
+                      className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] mx-2 rounded-xl transition-colors cursor-pointer w-[calc(100%-16px)] my-1 shadow-sm"
+                    >
+                      ⚙️ ADMIN PORTAL
+                    </button>
+                  )}
 
                   <button 
                     onClick={() => { 
@@ -1233,12 +1228,14 @@ export default function Navbar({
                     <div className="text-xxs text-[#3A2A1E]/60 truncate">{user.email}</div>
                   </div>
                 </div>
-                <button 
-                  onClick={handleAdminPortalClick}
-                  className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2"
-                >
-                  ⚙️ Admin Portal
-                </button>
+                {user && isAuthorizedAdmin && (
+                  <button 
+                    onClick={handleAdminPortalClick}
+                    className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-sm uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    ⚙️ Admin Portal
+                  </button>
+                )}
                 <button 
                   onClick={() => {
                     setIsDashboardOpen?.(true);

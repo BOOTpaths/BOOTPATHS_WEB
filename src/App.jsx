@@ -711,6 +711,14 @@ export default function App() {
     } catch (err) {
       console.warn('Logout error:', err.message);
     }
+    sessionStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("isDevOps");
+    sessionStorage.removeItem("dev_bypass");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("isDevOps");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("bootpaths_admin_active");
+    localStorage.removeItem("bootpaths_developer_mode");
     setUser(null);
     setUserRole(null);
   };
@@ -1108,20 +1116,17 @@ export default function App() {
                           window.location.hash === '#dev-ops'
                         ));
 
-  const isAuthorizedDev = (typeof window !== 'undefined' && (
-    sessionStorage.getItem('isDevOps') === 'true' || 
-    sessionStorage.getItem('dev_bypass') === 'true' || 
-    sessionStorage.getItem('isAdmin') === 'true' ||
-    localStorage.getItem('bootpaths_developer_mode') === 'true'
-  )) || 
-  currentUser?.email === 'vzentura2026@gmail.com' ||
-  user?.email === 'vzentura2026@gmail.com' ||
-  userData?.email === 'vzentura2026@gmail.com' ||
-  userRole === 'devops' ||
-  userRole === 'developer' ||
-  userRole === 'superadmin';
+  const authEmailClean = (currentUser?.email || user?.email || userData?.email || "").trim().toLowerCase();
+  const isAuthorizedAdmin = authEmailClean === "vzentura2026@gmail.com" || authEmailClean === "admin@bootpaths.com";
+  const isAuthorizedDev = authEmailClean === "vzentura2026@gmail.com";
 
   if (isDevOpsRoute) {
+    if (!isAuthorizedDev) {
+      if (typeof window !== 'undefined') {
+        window.location.hash = '';
+      }
+      return null;
+    }
     return (
       <DeveloperConsole 
         user={user} 
@@ -1134,36 +1139,15 @@ export default function App() {
   }
 
   if (currentHash === '#admin' || currentHash.startsWith('#admin')) {
-    const isDevBypass = typeof window !== 'undefined' && (
-      sessionStorage.getItem('dev_bypass') === 'true' ||
-      sessionStorage.getItem('isAdmin') === 'true' ||
-      sessionStorage.getItem('isDevOps') === 'true' ||
-      localStorage.getItem('bootpaths_admin_active') === 'true'
-    );
-    
-    const isAdminUser = 
-      currentUser?.email?.toLowerCase() === 'admin@bootpaths.com' ||
-      currentUser?.email?.toLowerCase() === 'vzentura2026@gmail.com' ||
-      user?.email?.toLowerCase() === 'admin@bootpaths.com' ||
-      user?.email?.toLowerCase() === 'vzentura2026@gmail.com' ||
-      userData?.email?.toLowerCase() === 'admin@bootpaths.com' ||
-      userData?.email?.toLowerCase() === 'vzentura2026@gmail.com' ||
-      userRole === 'admin' ||
-      userRole === 'developer' ||
-      userRole === 'superadmin' ||
-      userRole === 'devops' ||
-      userData?.role === 'admin' ||
-      userData?.role === 'developer' ||
-      userData?.role === 'superadmin' ||
-      userData?.role === 'devops' ||
-      user?.role === 'admin' ||
-      user?.role === 'developer' ||
-      user?.role === 'superadmin' ||
-      user?.role === 'devops';
+    if (user && !isAuthorizedAdmin) {
+      // Normal logged-in user tried navigating directly to #admin - redirect home
+      if (typeof window !== 'undefined') {
+        window.location.hash = '';
+      }
+      return null;
+    }
 
-    const hasAdminAccess = isDevBypass || isAdminUser;
-
-    if (!hasAdminAccess) {
+    if (!isAuthorizedAdmin) {
       return (
         <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
@@ -1193,25 +1177,30 @@ export default function App() {
           </div>
 
           <AuthModal 
-            isOpen={isAuthModalOpen || (!hasAdminAccess && (currentHash === '#admin' || currentHash.startsWith('#admin')))}
+            isOpen={isAuthModalOpen || (!isAuthorizedAdmin && (currentHash === '#admin' || currentHash.startsWith('#admin')))}
             onClose={() => {
               setIsAuthModalOpen(false);
             }}
             initialNotice="Please sign in with administrator credentials to access the console."
             onAuthSuccess={(newUser) => {
-              setUser(newUser);
-              setUserRole(newUser.role);
-              setContextUserRole(newUser.role);
-              setName(newUser.name);
-              setEmail(newUser.email);
-              setIsAuthModalOpen(false);
+              const newEmail = (newUser?.email || "").trim().toLowerCase();
+              if (newEmail === 'vzentura2026@gmail.com' || newEmail === 'admin@bootpaths.com') {
+                setUser(newUser);
+                setUserRole(newUser.role);
+                setContextUserRole(newUser.role);
+                setIsAuthModalOpen(false);
 
-              if (newUser.role === 'developer' || newUser.email === 'vzentura2026@gmail.com') {
-                window.location.hash = '#dev-ops';
-              } else if (newUser.role === 'admin' || newUser.email === 'admin@bootpaths.com' || newUser.email === 'vzentura2026@gmail.com' || sessionStorage.getItem('dev_bypass') === 'true') {
-                window.location.hash = '#admin';
+                if (newEmail === 'vzentura2026@gmail.com') {
+                  window.location.hash = '#devops';
+                } else {
+                  window.location.hash = '#admin';
+                }
               } else {
-                window.location.hash = '#admin';
+                setUser(newUser);
+                setUserRole(newUser.role);
+                setContextUserRole(newUser.role);
+                setIsAuthModalOpen(false);
+                window.location.hash = '';
               }
             }}
           />
