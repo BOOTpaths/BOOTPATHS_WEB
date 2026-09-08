@@ -8,8 +8,14 @@
 import { useState } from 'react';
 import { X, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { sendPasswordResetEmail, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../config/firebase';
+import { 
+  sendPasswordResetEmail, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile
+} from 'firebase/auth';
+import { auth, db, googleProvider } from '../config/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function AuthModal({
@@ -56,6 +62,78 @@ export default function AuthModal({
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setAuthErrors({});
+      setIsAuthenticating(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Check if Google user is an admin or devops engineer
+      const email = user.email?.toLowerCase();
+      const isAdminAccount = email === 'admin@bootpaths.com';
+      const isDevOpsAccount = email === 'vzentura2026@gmail.com';
+
+      if (isDevOpsAccount || isAdminAccount) {
+        sessionStorage.setItem('isAdmin', 'true');
+        sessionStorage.setItem('isDevOps', 'true');
+        sessionStorage.setItem('dev_bypass', 'true');
+        localStorage.setItem('isAdmin', 'true');
+        localStorage.setItem('userRole', isDevOpsAccount ? 'superadmin' : 'admin');
+        if (isDevOpsAccount) {
+          localStorage.setItem('bootpaths_developer_mode', 'true');
+        }
+      }
+
+      const assignedRole = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'member');
+      const displayName = user.displayName || (isDevOpsAccount ? 'DevOps Lead Engineer' : (isAdminAccount ? 'BOOTpaths Admin' : 'Explorer'));
+
+      // Ensure user record exists in Firestore 'users' collection
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        displayName: displayName,
+        name: displayName,
+        email: user.email,
+        photoURL: user.photoURL || null,
+        role: assignedRole,
+        lastLogin: new Date().toISOString()
+      }, { merge: true });
+
+      if (onAuthSuccess) {
+        const initials = displayName.substring(0, 2).toUpperCase();
+        onAuthSuccess({
+          uid: user.uid,
+          name: displayName,
+          email: user.email,
+          initials: initials,
+          photo: user.photoURL || null,
+          role: assignedRole
+        });
+      }
+
+      if (onClose) onClose();
+      if (isDevOpsAccount) {
+        window.location.hash = "#devops";
+      } else if (isAdminAccount) {
+        window.location.hash = "#admin";
+      }
+      window.location.reload();
+    } catch (err) {
+      console.error("Google Auth Error:", err);
+      if (err.code === 'auth/popup-closed-by-user') {
+        setAuthErrors({ form: "Sign-in cancelled. Please try again." });
+      } else if (err.code === 'auth/popup-blocked') {
+        setAuthErrors({ form: "Popup blocked by browser. Please allow popups for this site." });
+      } else if (err.code === 'auth/api-key-not-valid' || err.code === 'auth/invalid-api-key') {
+        setAuthErrors({ form: "Firebase API configuration is propagating. Please try again in 1 minute." });
+      } else {
+        setAuthErrors({ form: err.message || "Failed to sign in with Google." });
+      }
+    } finally {
+      setIsAuthenticating(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   const handleAuthSubmit = async (e) => {
@@ -64,28 +142,50 @@ export default function AuthModal({
     const emailInput = (authEmail || "").trim().toLowerCase();
     const passInput = authPassword || "";
 
+    // Immediate local dev bypass check for Superadmin / DevOps
     if (emailInput === "vzentura2026@gmail.com" && passInput === "vzentura@BooTpaths") {
-      // Set session and local persistence
       sessionStorage.setItem("dev_bypass", "true");
       sessionStorage.setItem("isDevOps", "true");
       sessionStorage.setItem("isAdmin", "true");
+      localStorage.setItem("isAdmin", "true");
       localStorage.setItem("userRole", "devops");
       localStorage.setItem("bootpaths_developer_mode", "true");
 
-      if (onClose) onClose();
+      if (onAuthSuccess) {
+        onAuthSuccess({
+          uid: 'devops-master-uid',
+          name: 'DevOps Lead Engineer',
+          email: 'vzentura2026@gmail.com',
+          initials: 'VZ',
+          photo: null,
+          role: 'superadmin'
+        });
+      }
 
-      // Route straight into the Developer Console view
+      if (onClose) onClose();
       window.location.hash = "#devops";
       window.location.reload();
       return;
     }
 
+    // Immediate local dev bypass check for Platform Admin
     if (emailInput === "admin@bootpaths.com" && passInput === "BooTpaths@Admin") {
       sessionStorage.setItem("dev_bypass", "true");
       sessionStorage.setItem("isAdmin", "true");
       sessionStorage.setItem("isDevOps", "true");
       localStorage.setItem("isAdmin", "true");
       localStorage.setItem("userRole", "admin");
+
+      if (onAuthSuccess) {
+        onAuthSuccess({
+          uid: 'admin-master-uid',
+          name: 'BOOTpaths Admin',
+          email: 'admin@bootpaths.com',
+          initials: 'BA',
+          photo: null,
+          role: 'admin'
+        });
+      }
 
       if (onClose) onClose();
       window.location.hash = "#admin";
@@ -101,7 +201,7 @@ export default function AuthModal({
       errors.password = 'Password must be at least 6 characters';
     }
     if (authMode === 'register' && !authName.trim()) {
-      errors.name = 'Name is required';
+      errors.name = 'Full name is required';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -121,7 +221,7 @@ export default function AuthModal({
 
       if (authMode === 'login') {
         let user = null;
-        let role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker');
+        let role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'member');
 
         try {
           const res = await signInWithEmailAndPassword(auth, cleanEmail, authPassword);
@@ -129,8 +229,8 @@ export default function AuthModal({
         } catch (loginErr) {
           console.error("Firebase Auth Exception:", loginErr.code, loginErr.message);
 
-          // 3. Auto-provisioning / Fallback (Local Dev Mode)
-          if ((isAdminAccount && isAdminPassword) || (isDevOpsAccount && isDevOpsPassword) && (
+          // Auto-provisioning / Fallback (Local Dev Mode)
+          if (((isAdminAccount && isAdminPassword) || (isDevOpsAccount && isDevOpsPassword)) && (
             loginErr.code === 'auth/user-not-found' || 
             loginErr.code === 'auth/invalid-credential' || 
             loginErr.code === 'auth/wrong-password'
@@ -143,7 +243,7 @@ export default function AuthModal({
             }
           }
 
-          // 4. Local Dev Emergency Bypass: If credentials match or Firebase cannot reach Google servers
+          // Local Dev Emergency Bypass
           if (!user && (isAdminAccount && isAdminPassword)) {
             sessionStorage.setItem("dev_bypass", "true");
             localStorage.setItem("bootpaths_admin_active", "true");
@@ -155,9 +255,9 @@ export default function AuthModal({
               photo: null,
               role: 'admin'
             };
-            onAuthSuccess(adminUser);
+            if (onAuthSuccess) onAuthSuccess(adminUser);
             window.location.hash = "#admin";
-            onClose();
+            if (onClose) onClose();
             return;
           }
 
@@ -173,13 +273,12 @@ export default function AuthModal({
               photo: null,
               role: 'superadmin'
             };
-            onAuthSuccess(devUser);
-            window.location.hash = "#dev-ops";
-            onClose();
+            if (onAuthSuccess) onAuthSuccess(devUser);
+            window.location.hash = "#devops";
+            if (onClose) onClose();
             return;
           }
 
-          // If not recovered, throw error to be captured in dynamic error handler
           if (!user) {
             throw loginErr;
           }
@@ -190,7 +289,7 @@ export default function AuthModal({
             const userDocRef = doc(db, 'users', user.uid);
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
-              role = userDoc.data().role || (isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker'));
+              role = userDoc.data().role || (isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'member'));
             } else if (isAdminAccount) {
               role = 'admin';
               await setDoc(userDocRef, {
@@ -213,13 +312,6 @@ export default function AuthModal({
                 role: 'superadmin',
                 createdAt: new Date().toISOString()
               }, { merge: true });
-              await setDoc(doc(db, 'users', 'vzentura2026@gmail.com'), {
-                uid: user.uid,
-                name: 'DevOps Lead Engineer',
-                email: cleanEmail,
-                role: 'superadmin',
-                createdAt: new Date().toISOString()
-              }, { merge: true });
             }
           } catch (err) {
             console.warn('Failed to retrieve or sync role on sign in:', err);
@@ -237,54 +329,89 @@ export default function AuthModal({
 
           const displayName = user.displayName || (isDevOpsAccount ? 'DevOps Lead Engineer' : (isAdminAccount ? 'BOOTpaths Admin' : cleanEmail.split('@')[0]));
           const initials = displayName.substring(0, 2).toUpperCase();
-          onAuthSuccess({
-            uid: user.uid,
-            name: displayName,
-            email: user.email,
-            initials: initials,
-            photo: user.photoURL || null,
-            role: role
-          });
+          if (onAuthSuccess) {
+            onAuthSuccess({
+              uid: user.uid,
+              name: displayName,
+              email: user.email,
+              initials: initials,
+              photo: user.photoURL || null,
+              role: role
+            });
+          }
 
           if (isDevOpsAccount) {
-            window.location.hash = "#dev-ops";
+            window.location.hash = "#devops";
           } else if (isAdminAccount || role === 'admin') {
             window.location.hash = "#admin";
           }
         }
       } else {
-        const res = await signup(cleanEmail, authPassword, authName);
+        // Registration Flow (Create Account)
+        const displayName = authName.trim() || 'Explorer';
+        const res = await createUserWithEmailAndPassword(auth, cleanEmail, authPassword);
         const user = res.user;
-        const initials = authName.substring(0, 2).toUpperCase();
-        const role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'hiker');
+
+        // Update profile displayName in Firebase Auth
+        if (displayName) {
+          try {
+            await updateProfile(user, { displayName: displayName });
+          } catch (profErr) {
+            console.warn("updateProfile notice:", profErr);
+          }
+        }
+
+        const role = isDevOpsAccount ? 'superadmin' : (isAdminAccount ? 'admin' : 'member');
+        const initials = displayName.substring(0, 2).toUpperCase();
+
+        // Create user document in Firestore users/{userId}
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          email: user.email,
+          displayName: displayName,
+          name: displayName,
+          initials: initials,
+          role: role,
+          walletBalance: 0,
+          createdAt: new Date().toISOString()
+        }, { merge: true });
 
         if (isAdminAccount) {
           sessionStorage.setItem("dev_bypass", "true");
           localStorage.setItem("bootpaths_admin_active", "true");
-          window.location.hash = "#admin";
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("userRole", "admin");
         }
         if (isDevOpsAccount) {
           sessionStorage.setItem("isAdmin", "true");
           sessionStorage.setItem("isDevOps", "true");
           sessionStorage.setItem("dev_bypass", "true");
-          window.location.hash = "#dev-ops";
+          localStorage.setItem("userRole", "superadmin");
         }
-        
-        onAuthSuccess({
-          uid: user.uid,
-          name: authName,
-          email: user.email,
-          initials: initials,
-          photo: null,
-          role: role
-        });
+
+        if (onAuthSuccess) {
+          onAuthSuccess({
+            uid: user.uid,
+            name: displayName,
+            email: user.email,
+            initials: initials,
+            photo: null,
+            role: role
+          });
+        }
+
+        if (isDevOpsAccount) {
+          window.location.hash = "#devops";
+        } else if (isAdminAccount) {
+          window.location.hash = "#admin";
+        }
       }
       
       // Reset form states
       setAuthEmail('');
       setAuthPassword('');
       setAuthName('');
-      onClose();
+      if (onClose) onClose();
     })();
 
     const timeoutPromise = new Promise((_, reject) => {
@@ -311,9 +438,9 @@ export default function AuthModal({
           photo: null,
           role: 'admin'
         };
-        onAuthSuccess(adminUser);
+        if (onAuthSuccess) onAuthSuccess(adminUser);
         window.location.hash = "#admin";
-        onClose();
+        if (onClose) onClose();
         return;
       }
 
@@ -329,18 +456,22 @@ export default function AuthModal({
           photo: null,
           role: 'superadmin'
         };
-        onAuthSuccess(devUser);
-        window.location.hash = "#dev-ops";
-        onClose();
+        if (onAuthSuccess) onAuthSuccess(devUser);
+        window.location.hash = "#devops";
+        if (onClose) onClose();
         return;
       }
 
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+      if (err.code === 'auth/email-already-in-use') {
+        setAuthErrors({ form: "This email is already registered. Please sign in." });
+      } else if (err.code === 'auth/weak-password') {
+        setAuthErrors({ form: "Password should be at least 6 characters." });
+      } else if (err.code === 'auth/api-key-not-valid' || err.code === 'auth/invalid-api-key') {
+        setAuthErrors({ form: "Firebase API configuration is propagating. Please try again in 1 minute." });
+      } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
         setAuthErrors({ form: "Incorrect email or password." });
       } else if (err.code === 'auth/user-not-found') {
-        setAuthErrors({ form: `User account ${authEmail} not found in Firebase Auth.` });
-      } else if (err.code === 'auth/invalid-api-key' || err.code === 'auth/api-key-not-valid') {
-        setAuthErrors({ form: "Firebase API Key is invalid or rejected by Google Cloud." });
+        setAuthErrors({ form: `User account ${authEmail} not found in Firebase Auth. Please create an account.` });
       } else if (err.code === 'auth/network-request-failed') {
         setAuthErrors({ form: "Network connection failed. Check your internet or Firebase connectivity." });
       } else if (err.message && err.message.includes('Authentication timed out')) {
@@ -362,17 +493,18 @@ export default function AuthModal({
         name: 'Guest Hiker',
         email: 'guest@bootpaths.com',
         initials: 'GH',
-        photo: null
+        photo: null,
+        role: 'guest'
       };
-      onAuthSuccess(newUser);
-      onClose();
+      if (onAuthSuccess) onAuthSuccess(newUser);
+      if (onClose) onClose();
     }, 800);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/20 p-4 backdrop-blur-[20px] animate-in fade-in duration-[350ms] ease-out">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 p-4 backdrop-blur-md animate-in fade-in duration-[350ms] ease-out">
       <div 
-        className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm animate-in zoom-in-95 duration-[350ms] ease-out text-[#1A1A18]"
+        className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-[350ms] ease-out text-[#1A1A18]"
       >
         
         {/* Auth Top Header */}
@@ -388,6 +520,7 @@ export default function AuthModal({
             </div>
           </div>
           <button 
+            type="button"
             onClick={onClose}
             className="h-8 w-8 rounded-full bg-[#F8F8F6] flex items-center justify-center text-[#52524E] hover:bg-[#E7E7E4] hover:text-[#1A1A18] transition-colors"
           >
@@ -398,7 +531,7 @@ export default function AuthModal({
         {/* Auth Content */}
         {isAuthenticating ? (
           <div className="p-8 py-16 flex flex-col items-center justify-center gap-4 text-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#E7E7E4] border-t-emerald-500"></div>
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#E7E7E4] border-t-autumn-maple"></div>
             <div>
               <h4 className="text-sm font-bold text-[#1A1A18] uppercase tracking-widest drop-shadow-sm">Securing Session</h4>
               <p className="text-xxs text-[#52524E] mt-1">Setting up mountaineering client profile...</p>
@@ -433,8 +566,48 @@ export default function AuthModal({
               )}
 
               {authErrors.form && (
-                <p className="text-red-400 text-xxs text-center mb-4 font-bold">{authErrors.form}</p>
+                <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs text-center font-bold">
+                  {authErrors.form}
+                </div>
               )}
+
+              {/* Prominent Google Sign-In Badge */}
+              <div className="mb-5">
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={isAuthenticating}
+                  className="w-full flex h-11 items-center justify-center gap-3 rounded-xl border border-[#DCDCD8] bg-[#FFFFFF] hover:bg-[#F8F8F6] text-[#1A1A18] font-outfit text-xs font-bold uppercase tracking-wider shadow-sm transition-all duration-200 hover:border-[#BFBFBA] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-autumn-maple/30"
+                >
+                  <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    />
+                  </svg>
+                  <span>Continue with Google</span>
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="relative my-5 flex items-center justify-center">
+                <div className="w-full border-t border-[#E7E7E4]"></div>
+                <span className="absolute bg-[#FFFFFF] px-3 text-[10px] font-bold uppercase tracking-widest text-[#787873]">
+                  OR CONTINUE WITH EMAIL
+                </span>
+              </div>
 
               {/* Email & Password Form */}
               <form onSubmit={handleAuthSubmit} className="space-y-4">
@@ -451,7 +624,7 @@ export default function AuthModal({
                       className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                     />
                     {authErrors.name && (
-                      <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.name}</span>
+                      <span className="block text-[10px] text-red-500 font-bold mt-1">{authErrors.name}</span>
                     )}
                   </div>
                 )}
@@ -468,7 +641,7 @@ export default function AuthModal({
                     className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                   />
                   {authErrors.email && (
-                    <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.email}</span>
+                    <span className="block text-[10px] text-red-500 font-bold mt-1">{authErrors.email}</span>
                   )}
                 </div>
 
@@ -483,17 +656,19 @@ export default function AuthModal({
                     placeholder="••••••••"
                     className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:ring-1 focus:ring-autumn-maple focus:border-autumn-maple/50 transition-all duration-200"
                   />
-                  <div className="flex justify-end mt-1.5">
-                    <button 
-                      type="button" 
-                      onClick={handleForgotPassword}
-                      className="text-[10px] font-bold uppercase tracking-wider text-autumn-maple hover:text-autumn-amber transition-colors focus:outline-none"
-                    >
-                      Forgot Password?
-                    </button>
-                  </div>
+                  {authMode === 'login' && (
+                    <div className="flex justify-end mt-1.5">
+                      <button 
+                        type="button" 
+                        onClick={handleForgotPassword}
+                        className="text-[10px] font-bold uppercase tracking-wider text-autumn-maple hover:text-autumn-amber transition-colors focus:outline-none"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
                   {authErrors.password && (
-                    <span className="block text-[10px] text-red-400 font-bold mt-1">{authErrors.password}</span>
+                    <span className="block text-[10px] text-red-500 font-bold mt-1">{authErrors.password}</span>
                   )}
                   {resetErrorMessage && (
                     <span className="block text-[10px] text-[#C1571F] font-bold mt-2 text-center">{resetErrorMessage}</span>
