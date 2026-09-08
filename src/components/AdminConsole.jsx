@@ -7,7 +7,7 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { db, storage } from '../config/firebase';
+import { auth, db, storage } from '../config/firebase';
 import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { CURATED_TREKS } from '../data/curatedTreks';
@@ -90,7 +90,9 @@ export default function AdminConsole({
     user?.email?.toLowerCase() === 'admin@bootpaths.com';
 
   // Session State
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => hasSessionAuth || isWhitelistedUser);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => Boolean(hasSessionAuth || isWhitelistedUser));
+  const [authReady, setAuthReady] = useState(() => Boolean(hasSessionAuth || isWhitelistedUser));
+  const [isAuthorized, setIsAuthorized] = useState(() => Boolean(hasSessionAuth || isWhitelistedUser));
   const [authView, setAuthView] = useState('login'); // 'login' | 'forgot_password'
   
   // Auth Form State
@@ -546,12 +548,53 @@ export default function AdminConsole({
 
 
 
-  // Check persistent login on mount
+  // Check persistent login and listen to auth state changes
   useEffect(() => {
-    if (hasSessionAuth || isWhitelistedUser || userRole === 'admin' || userRole === 'superadmin' || userRole === 'devops') {
+    // 1. Check synchronous session flag first
+    const sessionAdmin = (typeof window !== 'undefined') && (
+      sessionStorage.getItem('isAdmin') === 'true' || 
+      localStorage.getItem('isAdmin') === 'true' ||
+      localStorage.getItem('bootpaths_admin_active') === 'true'
+    );
+    const sessionDev = (typeof window !== 'undefined') && (
+      sessionStorage.getItem('isDevOps') === 'true' || 
+      sessionStorage.getItem('dev_bypass') === 'true' ||
+      localStorage.getItem('bootpaths_developer_mode') === 'true'
+    );
+
+    if (sessionAdmin || sessionDev) {
+      setIsAuthorized(true);
       setIsAdminLoggedIn(true);
+      setAuthReady(true);
     }
-  }, [hasSessionAuth, isWhitelistedUser, userRole, currentUser, user]);
+
+    // 2. Listen to Firebase auth state
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      const userEmail = (firebaseUser?.email || currentUser?.email || user?.email || '').trim().toLowerCase();
+      const isStaffEmail = userEmail === 'admin@bootpaths.com' || userEmail === 'vzentura2026@gmail.com';
+
+      if (isStaffEmail || sessionAdmin || sessionDev) {
+        setIsAuthorized(true);
+        setIsAdminLoggedIn(true);
+      } else {
+        // Only kick out if DEFINITIVELY neither Firebase nor session has authorized flags
+        const currentSessionAdmin = typeof window !== 'undefined' && (
+          sessionStorage.getItem('isAdmin') === 'true' || 
+          sessionStorage.getItem('dev_bypass') === 'true' ||
+          localStorage.getItem('isAdmin') === 'true'
+        );
+        if (!currentSessionAdmin) {
+          setIsAuthorized(false);
+          setIsAdminLoggedIn(false);
+          if (onReturnToSite) onReturnToSite();
+          if (typeof window !== 'undefined') window.location.hash = '';
+        }
+      }
+      setAuthReady(true);
+    });
+
+    return () => unsubscribe();
+  }, [currentUser, user, onReturnToSite]);
 
   const activeUser = currentUser || user || {
     email: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'vzentura2026@gmail.com' : 'admin@bootpaths.com',
@@ -568,9 +611,13 @@ export default function AdminConsole({
     setTimeout(() => {
       const cleanEmail = emailInput.trim().toLowerCase();
       if (cleanEmail === 'admin@bootpaths.com' && passwordInput === 'BooTpaths@Admin') {
+        localStorage.setItem('isAdmin', 'true');
         localStorage.setItem('bootpaths_admin_active', 'true');
+        localStorage.setItem('userRole', 'admin');
+        sessionStorage.setItem('isAdmin', 'true');
         sessionStorage.setItem('dev_bypass', 'true');
         setIsAdminLoggedIn(true);
+        setIsCheckingAuth(false);
         setIsSubmittingAuth(false);
       } else {
         setAuthError('Invalid administrator credentials provided.');
@@ -598,8 +645,14 @@ export default function AdminConsole({
   // Logout Handler
   const handleLogout = () => {
     localStorage.removeItem('bootpaths_admin_active');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isDevOps');
+    localStorage.removeItem('userRole');
     sessionStorage.removeItem('dev_bypass');
+    sessionStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('isDevOps');
     setIsAdminLoggedIn(false);
+    setIsCheckingAuth(false);
     setEmailInput('');
     setPasswordInput('');
     setAuthView('login');
@@ -1063,8 +1116,19 @@ export default function AdminConsole({
     (t.location || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // UNAUTHENTICATED: LOGIN / RESET SCREEN
-  if (!isAdminLoggedIn) {
+  // PREVENT FLASH OF LOGIN MODAL WHILE CHECKING:
+  if (!authReady) {
+    return (
+      <div className="min-h-screen bg-stone-900 flex items-center justify-center text-stone-300 font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm font-medium tracking-wide">Authenticating Admin Session...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthorized && !isAdminLoggedIn) {
     return (
       <div className="min-h-screen bg-[#F8F8F6] flex items-center justify-center p-4 text-autumn-bark relative overflow-hidden font-sans">
         {/* Background glow graphics */}
@@ -1299,15 +1363,6 @@ export default function AdminConsole({
           </div>
 
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => { window.location.hash = '#devops'; window.location.reload(); }}
-              className="h-9 px-3 rounded-lg border border-[#30363D] bg-[#21262D] text-xs font-bold uppercase tracking-wider text-stone-200 hover:bg-[#30363D] transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
-              title="Open DevOps & Feature Flags Console"
-            >
-              <span>🛠️</span>
-              <span className="hidden sm:inline">DevOps Console</span>
-            </button>
-
             {onReturnToSite && (
               <button 
                 onClick={onReturnToSite}

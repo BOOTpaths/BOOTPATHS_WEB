@@ -1107,6 +1107,36 @@ export default function App() {
     );
   }
 
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    // Check session bypass immediately
+    const hasSessionAccess = typeof window !== 'undefined' && (
+      sessionStorage.getItem('isAdmin') === 'true' || 
+      sessionStorage.getItem('isDevOps') === 'true' || 
+      sessionStorage.getItem('dev_bypass') === 'true' || 
+      localStorage.getItem('isAdmin') === 'true' ||
+      localStorage.getItem('bootpaths_admin_active') === 'true' ||
+      localStorage.getItem('bootpaths_developer_mode') === 'true'
+    );
+
+    const isAuthorizedEmail = 
+      currentUser?.email === 'admin@bootpaths.com' || 
+      currentUser?.email === 'vzentura2026@gmail.com' ||
+      user?.email === 'admin@bootpaths.com' ||
+      user?.email === 'vzentura2026@gmail.com';
+
+    if (hasSessionAccess || isAuthorizedEmail) {
+      setIsCheckingAuth(false);
+      return;
+    }
+
+    // Only if auth has finished loading and NO session or authorized user exists:
+    if (!authLoading && !currentUser) {
+      setIsCheckingAuth(false);
+    }
+  }, [currentUser, authLoading, user]);
+
   const isDevOpsRoute = currentHash === '#devops' || 
                         currentHash === '#dev' || 
                         currentHash === '#dev-ops' || 
@@ -1142,7 +1172,15 @@ export default function App() {
   } : null);
 
   if (isDevOpsRoute) {
-    if (!authLoading && !isAuthorized) {
+    if (isCheckingAuth || authLoading) {
+      return (
+        <div className="min-h-screen bg-[#1A1A18] flex flex-col items-center justify-center text-white font-mono">
+          <div className="w-10 h-10 border-4 border-[#C1571F] border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="text-xs uppercase tracking-widest text-[#F3ECDD]/60">Verifying DevOps credentials...</p>
+        </div>
+      );
+    }
+    if (!isAuthorized) {
       if (typeof window !== 'undefined') {
         window.location.hash = '';
       }
@@ -1160,7 +1198,16 @@ export default function App() {
   }
 
   if (currentHash === '#admin' || currentHash.startsWith('#admin')) {
-    if (!authLoading && !isAuthorized) {
+    if (isCheckingAuth || authLoading) {
+      return (
+        <div className="min-h-screen bg-[#1A1A18] flex flex-col items-center justify-center text-white font-mono">
+          <div className="w-10 h-10 border-4 border-[#C1571F] border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="text-xs uppercase tracking-widest text-[#F3ECDD]/60">Verifying Admin credentials...</p>
+        </div>
+      );
+    }
+
+    if (!isAuthorized) {
       return (
         <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
@@ -1199,11 +1246,10 @@ export default function App() {
               const newEmail = (newUser?.email || "").trim().toLowerCase();
               if (newEmail === 'vzentura2026@gmail.com' || newEmail === 'admin@bootpaths.com') {
                 setUser(newUser);
-                setUserRole(newUser.role);
-                setContextUserRole(newUser.role);
+                setUserRole(newUser.role || 'admin');
+                setContextUserRole(newUser.role || 'admin');
                 setIsAuthModalOpen(false);
                 window.location.hash = '#admin';
-                window.location.reload();
               } else {
                 setUser(newUser);
                 setUserRole(newUser.role);

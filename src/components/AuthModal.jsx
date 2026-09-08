@@ -126,7 +126,7 @@ export default function AuthModal({
       } else if (isAdminAccount) {
         window.location.hash = "#admin";
       }
-      window.location.reload();
+      return;
     } catch (err) {
       console.error("Google Auth Error:", err);
       if (err.code === 'auth/popup-closed-by-user') {
@@ -153,12 +153,16 @@ export default function AuthModal({
 
     // Immediate local dev bypass check for Superadmin / DevOps
     if (emailInput === "vzentura2026@gmail.com" && passInput === "vzentura@BooTpaths") {
-      sessionStorage.setItem("dev_bypass", "true");
-      sessionStorage.setItem("isDevOps", "true");
       sessionStorage.setItem("isAdmin", "true");
+      sessionStorage.setItem("isDevOps", "true");
+      sessionStorage.setItem("dev_bypass", "true");
       localStorage.setItem("isAdmin", "true");
       localStorage.setItem("userRole", "devops");
       localStorage.setItem("bootpaths_developer_mode", "true");
+
+      signInWithEmailAndPassword(auth, "vzentura2026@gmail.com", "vzentura@BooTpaths").catch((err) => {
+        console.warn("Background Firebase auth notice:", err.message);
+      });
 
       if (onAuthSuccess) {
         onAuthSuccess({
@@ -173,17 +177,19 @@ export default function AuthModal({
 
       if (onClose) onClose();
       window.location.hash = "#devops";
-      window.location.reload();
       return;
     }
 
     // Immediate local dev bypass check for Platform Admin
     if (emailInput === "admin@bootpaths.com" && passInput === "BooTpaths@Admin") {
-      sessionStorage.setItem("dev_bypass", "true");
       sessionStorage.setItem("isAdmin", "true");
-      sessionStorage.setItem("isDevOps", "true");
+      sessionStorage.setItem("dev_bypass", "true");
       localStorage.setItem("isAdmin", "true");
       localStorage.setItem("userRole", "admin");
+
+      signInWithEmailAndPassword(auth, "admin@bootpaths.com", "BooTpaths@Admin").catch((err) => {
+        console.warn("Background Firebase auth notice:", err.message);
+      });
 
       if (onAuthSuccess) {
         onAuthSuccess({
@@ -198,7 +204,6 @@ export default function AuthModal({
 
       if (onClose) onClose();
       window.location.hash = "#admin";
-      window.location.reload();
       return;
     }
 
