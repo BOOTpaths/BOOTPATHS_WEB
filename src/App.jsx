@@ -1746,7 +1746,33 @@ export default function App() {
           {/* Grid Layout of Destination Cards */}
           {(() => {
             const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
-            const displayTreks = (treks || []).filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+            const filteredTreks = (treks || []).filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+
+            const isUnavailable = (trek) => {
+              const badge = (trek.badge || trek.tag || "").toLowerCase();
+              const status = (trek.status || "").toLowerCase();
+              const isHidden = trek.isDraft || trek.isHidden || trek.available === false;
+              const noSlots = trek.slots === 0 || trek.availableSlots === 0;
+
+              return (
+                isHidden ||
+                status === "draft" ||
+                status === "unavailable" ||
+                badge.includes("draft") ||
+                badge.includes("hidden") ||
+                badge.includes("unavailable") ||
+                noSlots
+              );
+            };
+
+            const displayTreks = [...filteredTreks].sort((a, b) => {
+              const aUnavailable = isUnavailable(a);
+              const bUnavailable = isUnavailable(b);
+
+              if (aUnavailable && !bUnavailable) return 1;
+              if (!aUnavailable && bUnavailable) return -1;
+              return 0;
+            });
 
             if (loadingPackages) {
               return (

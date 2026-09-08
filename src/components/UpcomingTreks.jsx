@@ -14,7 +14,33 @@ export default function UpcomingTreks({
 }) {
   const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
   const availableTreks = (treks && treks.length > 0) ? treks : CURATED_TREKS;
-  const displayTreks = availableTreks.filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+  const filteredTreks = availableTreks.filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
+
+  const isUnavailable = (trek) => {
+    const badge = (trek.badge || trek.tag || "").toLowerCase();
+    const status = (trek.status || "").toLowerCase();
+    const isHidden = trek.isDraft || trek.isHidden || trek.available === false;
+    const noSlots = trek.slots === 0 || trek.availableSlots === 0;
+
+    return (
+      isHidden ||
+      status === "draft" ||
+      status === "unavailable" ||
+      badge.includes("draft") ||
+      badge.includes("hidden") ||
+      badge.includes("unavailable") ||
+      noSlots
+    );
+  };
+
+  const displayTreks = [...filteredTreks].sort((a, b) => {
+    const aUnavailable = isUnavailable(a);
+    const bUnavailable = isUnavailable(b);
+
+    if (aUnavailable && !bUnavailable) return 1;
+    if (!aUnavailable && bUnavailable) return -1;
+    return 0;
+  });
 
   return (
     <section id="upcoming-treks" className="relative bg-[#EFE8D6]/10 py-24 px-4 sm:px-6 lg:px-8">
