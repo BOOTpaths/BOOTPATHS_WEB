@@ -1296,6 +1296,15 @@ export default function AdminConsole({
           </div>
 
           <div className="flex items-center gap-3">
+            <button 
+              onClick={() => { window.location.hash = '#devops'; window.location.reload(); }}
+              className="h-9 px-3 rounded-lg border border-[#30363D] bg-[#21262D] text-xs font-bold uppercase tracking-wider text-stone-200 hover:bg-[#30363D] transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
+              title="Open DevOps & Feature Flags Console"
+            >
+              <span>🛠️</span>
+              <span className="hidden sm:inline">DevOps Console</span>
+            </button>
+
             {onReturnToSite && (
               <button 
                 onClick={onReturnToSite}

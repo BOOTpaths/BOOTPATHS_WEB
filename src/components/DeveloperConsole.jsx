@@ -651,12 +651,12 @@ export default function DeveloperConsole({ user, onExit }) {
             )}
             {isUpdating && <RefreshCw className="h-4 w-4 animate-spin text-[#C1571F]" />}
             
-            <a
-              href="#admin"
-              className="h-9 px-3.5 rounded-xl border border-[#30363D] bg-[#21262D] text-xs font-bold uppercase tracking-wider text-white hover:bg-[#30363D] transition-colors flex items-center gap-1.5 shadow-sm"
+            <button
+              onClick={() => { window.location.hash = '#admin'; window.location.reload(); }}
+              className="h-9 px-3.5 rounded-xl border border-[#30363D] bg-[#21262D] text-xs font-bold uppercase tracking-wider text-white hover:bg-[#30363D] transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
             >
-              <ExternalLink className="h-3.5 w-3.5 text-[#FF7A3D]" /> Admin Portal
-            </a>
+              <ExternalLink className="h-3.5 w-3.5 text-[#FF7A3D]" /> Admin Portal (Treks & Bookings)
+            </button>
             
             <button 
               onClick={handleDevLogout}

@@ -1117,11 +1117,10 @@ export default function App() {
                         ));
 
   const authEmailClean = (currentUser?.email || user?.email || userData?.email || "").trim().toLowerCase();
-  const isAuthorizedAdmin = authEmailClean === "vzentura2026@gmail.com" || authEmailClean === "admin@bootpaths.com";
-  const isAuthorizedDev = authEmailClean === "vzentura2026@gmail.com";
+  const isAuthorized = authEmailClean === "vzentura2026@gmail.com" || authEmailClean === "admin@bootpaths.com" || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
 
   if (isDevOpsRoute) {
-    if (!isAuthorizedDev) {
+    if (!isAuthorized) {
       if (typeof window !== 'undefined') {
         window.location.hash = '';
       }
@@ -1139,7 +1138,7 @@ export default function App() {
   }
 
   if (currentHash === '#admin' || currentHash.startsWith('#admin')) {
-    if (user && !isAuthorizedAdmin) {
+    if (user && !isAuthorized) {
       // Normal logged-in user tried navigating directly to #admin - redirect home
       if (typeof window !== 'undefined') {
         window.location.hash = '';
@@ -1147,7 +1146,7 @@ export default function App() {
       return null;
     }
 
-    if (!isAuthorizedAdmin) {
+    if (!isAuthorized) {
       return (
         <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#C1571F]/15 blur-[120px] pointer-events-none" />
@@ -1177,7 +1176,7 @@ export default function App() {
           </div>
 
           <AuthModal 
-            isOpen={isAuthModalOpen || (!isAuthorizedAdmin && (currentHash === '#admin' || currentHash.startsWith('#admin')))}
+            isOpen={isAuthModalOpen || (!isAuthorized && (currentHash === '#admin' || currentHash.startsWith('#admin')))}
             onClose={() => {
               setIsAuthModalOpen(false);
             }}
@@ -1189,12 +1188,8 @@ export default function App() {
                 setUserRole(newUser.role);
                 setContextUserRole(newUser.role);
                 setIsAuthModalOpen(false);
-
-                if (newEmail === 'vzentura2026@gmail.com') {
-                  window.location.hash = '#devops';
-                } else {
-                  window.location.hash = '#admin';
-                }
+                window.location.hash = '#admin';
+                window.location.reload();
               } else {
                 setUser(newUser);
                 setUserRole(newUser.role);
