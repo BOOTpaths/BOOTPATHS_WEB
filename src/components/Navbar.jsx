@@ -197,13 +197,27 @@ export default function Navbar({
     setActiveDropdown((prev) => (prev === menuKey ? null : menuKey));
   };
 
-  const userEmail = (user?.email || "").trim().toLowerCase();
-  const isExplicitAdmin = userEmail === "admin@bootpaths.com";
-  const isExplicitDevOps = userEmail === "vzentura2026@gmail.com";
-  const isDevOpsUser = (isExplicitDevOps || (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true')) && !isExplicitAdmin;
-  const isAdminUser = isExplicitAdmin || isDevOpsUser || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
+  const sessionAdmin = typeof window !== 'undefined' && (sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true');
+  const sessionDevOps = typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true';
+
+  const userEmail = (user?.email || (sessionAdmin ? 'admin@bootpaths.com' : '')).trim().toLowerCase();
+  const isExplicitAdmin = userEmail === "admin@bootpaths.com" || (sessionAdmin && !sessionDevOps);
+  const isExplicitDevOps = userEmail === "vzentura2026@gmail.com" || (sessionDevOps && !isExplicitAdmin);
+
+  const isDevOpsUser = isExplicitDevOps;
+  const isAdminUser = isExplicitAdmin || isExplicitDevOps || sessionAdmin;
   const isAuthorized = isAdminUser;
   const isAdminOrDev = isAuthorized;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const email = (user?.email || '').trim().toLowerCase();
+      if (email === 'admin@bootpaths.com' || (sessionStorage.getItem('isAdmin') === 'true' && email !== 'vzentura2026@gmail.com')) {
+        sessionStorage.removeItem('isDevOps');
+        localStorage.removeItem('isDevOps');
+      }
+    }
+  }, [user]);
 
   // Build dynamic categorized trek lists
   const westernGhatsTreks = useMemo(() => {
