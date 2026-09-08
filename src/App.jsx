@@ -212,6 +212,44 @@ export default function App() {
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
   const [expeditionViews, setExpeditionViews] = useState([]);
 
+  const [featureFlags, setFeatureFlags] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bootpaths_feature_flags');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+    }
+    return {
+      enableLeadApplications: false,
+      enableExpeditionViews: false,
+      enableSocialFeeds: false,
+      enableCommunityBlogs: false,
+      enableMaintenanceMode: false,
+      maintenanceMode: false
+    };
+  });
+  const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
+
+  // Realtime Live Sync for Feature Flags & Maintenance System
+  useEffect(() => {
+    const flagsDocRef = doc(db, 'app_settings', 'feature_flags');
+    const unsub = onSnapshot(flagsDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const flags = docSnap.data();
+        setFeatureFlags(flags);
+        const isMaintenance = Boolean(flags.maintenanceMode || flags.enableMaintenanceMode);
+        setIsMaintenanceMode(isMaintenance);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('bootpaths_feature_flags', JSON.stringify(flags));
+          localStorage.setItem('bootpaths_maintenance_mode', String(isMaintenance));
+        }
+      }
+    }, (err) => console.warn('Flags listener:', err));
+    return () => unsub();
+  }, []);
+
   // Emergency preview parameter check (?preview=dev_key)
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -379,7 +417,7 @@ export default function App() {
   const [formErrors, setFormErrors] = useState({});
 
   // Authentication State
-  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance, featureFlags, isAdmin } = useAuth();
+  const { currentUser, userData, userRole: contextUserRole, setUserRole: setContextUserRole, authLoading, logout, walletBalance: contextWalletBalance, isAdmin } = useAuth();
   const isCareersEnabled = !!(featureFlags?.enableLeadApplications);
   const [user, setUser] = useState(null); // { name: 'John Doe', email: 'john@example.com', initials: 'JD', photo: null }
   const [userRole, setUserRole] = useState(null);
@@ -919,18 +957,18 @@ export default function App() {
 
   const sysControls = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('bootpaths_system_controls') || '{}') : {};
   const isLockoutActive = !!(sysControls.lockout || sysControls.emergencyKillSwitch);
-  const isMaintenanceMode = !!(featureFlags?.enableMaintenanceMode) || isLockoutActive;
+  const isMaintenanceActive = isMaintenanceMode || isLockoutActive || !!(featureFlags?.enableMaintenanceMode) || !!(featureFlags?.maintenanceMode);
   const isAdminRoute = currentHash.startsWith('#admin') || currentHash.startsWith('#dev-ops') || currentHash.startsWith('#devops') || currentHash.startsWith('#dev');
   const isBypassed = isUserAdmin || isAdminRoute || hasDevBypass;
 
-  const devBanner = (isMaintenanceMode && isBypassed && !isAdminRoute) ? (
+  const devBanner = (isMaintenanceActive && isBypassed && !isAdminRoute) ? (
     <div className="fixed bottom-4 right-4 z-50 bg-amber-500 text-slate-900 font-bold px-4 py-2 rounded-xl shadow-lg text-xs flex items-center gap-2 border border-amber-300">
       <span>🚧 Maintenance Mode is Active (Bypassed for Admin)</span>
     </div>
   ) : null;
 
   // Maintenance Mode Guard Check
-  if (isMaintenanceMode && !isBypassed) {
+  if (isMaintenanceActive && !isBypassed) {
     return (
       <div className="min-h-screen bg-[#1A1A18] text-[#F3ECDD] font-sans flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
         {/* Background Ambient Glow */}

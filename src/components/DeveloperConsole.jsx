@@ -113,13 +113,24 @@ export default function DeveloperConsole({ user, onExit }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [authError, setAuthError] = useState('');
 
-  // Feature Flags State
-  const [featureFlags, setFeatureFlags] = useState({
-    enableLeadApplications: false,
-    enableExpeditionViews: false,
-    enableSocialFeeds: false,
-    enableCommunityBlogs: false,
-    enableMaintenanceMode: false
+  // Feature Flags State with local storage fallback
+  const [featureFlags, setFeatureFlags] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('bootpaths_feature_flags');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+    }
+    return {
+      enableLeadApplications: false,
+      enableExpeditionViews: false,
+      enableSocialFeeds: false,
+      enableCommunityBlogs: false,
+      enableMaintenanceMode: false,
+      maintenanceMode: false
+    };
   });
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateStatus, setUpdateStatus] = useState('');
@@ -133,16 +144,23 @@ export default function DeveloperConsole({ user, onExit }) {
 
   // Realtime Feature Flags Subscription
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'app_settings', 'feature_flags'), (snapshot) => {
+    const flagsDocRef = doc(db, 'app_settings', 'feature_flags');
+    const unsub = onSnapshot(flagsDocRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.data();
-        setFeatureFlags({
+        const merged = {
           enableLeadApplications: !!data.enableLeadApplications,
           enableExpeditionViews: !!data.enableExpeditionViews,
           enableSocialFeeds: !!data.enableSocialFeeds,
           enableCommunityBlogs: !!data.enableCommunityBlogs,
-          enableMaintenanceMode: !!data.enableMaintenanceMode
-        });
+          enableMaintenanceMode: !!(data.enableMaintenanceMode || data.maintenanceMode),
+          maintenanceMode: !!(data.enableMaintenanceMode || data.maintenanceMode)
+        };
+        setFeatureFlags(merged);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('bootpaths_feature_flags', JSON.stringify(merged));
+          localStorage.setItem('bootpaths_maintenance_mode', String(merged.maintenanceMode));
+        }
       }
     }, (err) => {
       console.warn('DeveloperConsole Feature Flags snapshot error:', err);
@@ -314,13 +332,28 @@ export default function DeveloperConsole({ user, onExit }) {
     setIsUpdating(true);
     setUpdateStatus('Saving modifications...');
 
+    const isMaintenance = flagName === 'enableMaintenanceMode' || flagName === 'maintenanceMode';
+    const nextVal = !featureFlags[flagName];
+
     const updatedFlags = {
       ...featureFlags,
-      [flagName]: !featureFlags[flagName]
+      [flagName]: nextVal,
+      ...(isMaintenance ? { enableMaintenanceMode: nextVal, maintenanceMode: nextVal } : {})
     };
 
+    // Immediate local UI state update
+    setFeatureFlags(updatedFlags);
+
+    // Persist to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("bootpaths_feature_flags", JSON.stringify(updatedFlags));
+      if (isMaintenance) {
+        localStorage.setItem("bootpaths_maintenance_mode", String(nextVal));
+      }
+    }
+
     try {
-      await setDoc(doc(db, 'app_settings', 'feature_flags'), updatedFlags);
+      await setDoc(doc(db, 'app_settings', 'feature_flags'), updatedFlags, { merge: true });
       setUpdateStatus('Persisted successfully');
       setTimeout(() => setUpdateStatus(''), 2000);
     } catch (err) {
