@@ -99,6 +99,60 @@ export default function BookingModal({
     setIsProcessing(true);
 
     try {
+      const sysControls = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('bootpaths_system_controls') || '{}') : {};
+      const isReadOnly = sysControls.readOnly === true;
+      const isMockCheckout = sysControls.mockCheckout === true;
+
+      if (isReadOnly) {
+        alert('Platform is currently in Read-Only Maintenance Mode. New bookings are temporarily paused.');
+        setIsProcessing(false);
+        return;
+      }
+
+      if (isMockCheckout) {
+        setTimeout(async () => {
+          try {
+            const bookingDoc = {
+              trekId: trek.id || 'trek-entry',
+              trekName: trekTitle,
+              title: trekTitle,
+              userName: formData.name,
+              userEmail: formData.email,
+              userPhone: formData.phone,
+              date: formData.selectedDate || 'Scheduled Batch',
+              batchDate: formData.selectedDate || 'Scheduled Batch',
+              trekkersCount: trekkers,
+              trekkers: trekkers,
+              price: totalAmount,
+              totalAmount: totalAmount,
+              paymentId: `MOCK-PAY-${Date.now()}`,
+              paymentStatus: 'SUCCESS (Dev Mode)',
+              bookingStatus: 'CONFIRMED',
+              status: 'Confirmed',
+              isDemo: true,
+              createdAt: new Date().toISOString()
+            };
+
+            const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
+            const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
+            setConfirmedBookingId(displayId);
+            setIsSuccess(true);
+            setIsProcessing(false);
+
+            if (onBookingSuccess) {
+              onBookingSuccess({ id: docRef.id, ...bookingDoc, displayId });
+            }
+          } catch (err) {
+            console.warn('Mock booking write notice:', err);
+            const displayId = `BP-TEST-${Math.floor(100000 + Math.random() * 900000)}`;
+            setConfirmedBookingId(displayId);
+            setIsSuccess(true);
+            setIsProcessing(false);
+          }
+        }, 600);
+        return;
+      }
+
       // 1. Dynamic Script Loader
       const isLoaded = await loadRazorpayScript();
       if (!isLoaded) {

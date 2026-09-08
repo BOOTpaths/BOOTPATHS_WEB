@@ -913,10 +913,13 @@ export default function App() {
                       (typeof window !== 'undefined' && (
                         sessionStorage.getItem('dev_bypass') === 'true' ||
                         sessionStorage.getItem('isAdmin') === 'true' ||
-                        sessionStorage.getItem('isDevOps') === 'true'
+                        sessionStorage.getItem('isDevOps') === 'true' ||
+                        localStorage.getItem('bootpaths_developer_mode') === 'true'
                       ));
 
-  const isMaintenanceMode = !!(featureFlags?.enableMaintenanceMode);
+  const sysControls = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('bootpaths_system_controls') || '{}') : {};
+  const isLockoutActive = !!(sysControls.lockout || sysControls.emergencyKillSwitch);
+  const isMaintenanceMode = !!(featureFlags?.enableMaintenanceMode) || isLockoutActive;
   const isAdminRoute = currentHash.startsWith('#admin') || currentHash.startsWith('#dev-ops') || currentHash.startsWith('#devops') || currentHash.startsWith('#dev');
   const isBypassed = isUserAdmin || isAdminRoute || hasDevBypass;
 

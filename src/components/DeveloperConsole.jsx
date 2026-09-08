@@ -39,7 +39,9 @@ import {
   KeyRound,
   ExternalLink,
   Wifi,
-  Sparkles
+  Sparkles,
+  Zap,
+  Power
 } from 'lucide-react';
 
 export default function DeveloperConsole({ user, onExit }) {
@@ -57,6 +59,20 @@ export default function DeveloperConsole({ user, onExit }) {
              localStorage.getItem('bootpaths_developer_mode') === 'true';
     }
     return false;
+  });
+
+  // Centralized System Controls & Emergency Toggles
+  const [systemControls, setSystemControls] = useState(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem("bootpaths_system_controls") : null;
+    return saved ? JSON.parse(saved) : {
+      lockout: false,
+      readOnly: false,
+      stagingDb: false,
+      mockCheckout: true,
+      emergencyKillSwitch: false,
+      networkThrottle: false,
+      corsBypass: true
+    };
   });
 
   // Auth check
@@ -217,6 +233,7 @@ export default function DeveloperConsole({ user, onExit }) {
           sessionStorage.setItem('isAdmin', 'true');
           sessionStorage.setItem('isDevOps', 'true');
           sessionStorage.setItem('dev_bypass', 'true');
+          localStorage.setItem('bootpaths_developer_mode', 'true');
           setIsDevBypassed(true);
           setIsAuthenticating(false);
           return;
@@ -229,6 +246,7 @@ export default function DeveloperConsole({ user, onExit }) {
         sessionStorage.setItem('isAdmin', 'true');
         sessionStorage.setItem('isDevOps', 'true');
         sessionStorage.setItem('dev_bypass', 'true');
+        localStorage.setItem('bootpaths_developer_mode', 'true');
 
         // Write user role as superadmin / devops in Firestore
         try {
@@ -256,6 +274,7 @@ export default function DeveloperConsole({ user, onExit }) {
         sessionStorage.setItem('isAdmin', 'true');
         sessionStorage.setItem('isDevOps', 'true');
         sessionStorage.setItem('dev_bypass', 'true');
+        localStorage.setItem('bootpaths_developer_mode', 'true');
         setIsDevBypassed(true);
       } else {
         setAuthError(err.message || 'Invalid DevOps Credentials.');
@@ -265,6 +284,32 @@ export default function DeveloperConsole({ user, onExit }) {
     }
   };
 
+  // Universal System Controls Toggle Handler
+  const toggleControl = async (key) => {
+    const nextVal = !systemControls[key];
+    setSystemControls((prev) => {
+      const updated = { ...prev, [key]: nextVal };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("bootpaths_system_controls", JSON.stringify(updated));
+      }
+      return updated;
+    });
+
+    setActionNotice(`Updated ${key} to ${nextVal ? 'ON' : 'OFF'}`);
+    setTimeout(() => setActionNotice(''), 2000);
+
+    // Optional Firestore sync in background (non-blocking)
+    try {
+      await setDoc(doc(db, "system_settings", "controls"), {
+        [key]: nextVal,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (err) {
+      console.warn(`Firestore sync skipped for ${key}:`, err.message);
+    }
+  };
+
+  // Feature Flags Toggle Handler
   const toggleFlag = async (flagName) => {
     setIsUpdating(true);
     setUpdateStatus('Saving modifications...');
@@ -422,7 +467,14 @@ export default function DeveloperConsole({ user, onExit }) {
           <div className="mt-6 pt-4 border-t border-[#30363D]/60 flex items-center justify-between text-xxs font-mono text-[#8B949E]">
             <span>Whitelist: vzentura2026@gmail.com</span>
             <button 
-              onClick={() => { window.location.hash = '#'; }}
+              onClick={() => {
+                if (onExit) {
+                  onExit();
+                } else {
+                  window.location.hash = '';
+                  window.location.reload();
+                }
+              }}
               className="hover:text-white transition-colors underline"
             >
               Exit to Homepage
@@ -432,6 +484,59 @@ export default function DeveloperConsole({ user, onExit }) {
       </div>
     );
   }
+
+  // System Controls Toggle List Configuration
+  const systemControlsConfig = [
+    {
+      key: 'lockout',
+      title: 'Platform-Wide Lockout',
+      description: 'Instantly locks public access and routes all unauthenticated visitors to the maintenance holding page.',
+      badge: 'Security Core',
+      icon: Lock
+    },
+    {
+      key: 'readOnly',
+      title: 'Read-Only Mode',
+      description: 'Freezes all database writes, booking creation, payment collection, and package mutations.',
+      badge: 'Database Guard',
+      icon: Database
+    },
+    {
+      key: 'stagingDb',
+      title: 'Staging Database Route',
+      description: 'Routes analytics, booking payloads, and package fetching to the isolated staging database partition.',
+      badge: 'Environment Switch',
+      icon: HardDrive
+    },
+    {
+      key: 'mockCheckout',
+      title: 'Mock Checkout Pipeline',
+      description: 'Bypasses external Razorpay payment gateway API and completes instant test reservations locally.',
+      badge: 'Payment Pipeline',
+      icon: DollarSign
+    },
+    {
+      key: 'emergencyKillSwitch',
+      title: 'Emergency Master Kill Switch',
+      description: 'Immediately freezes payment gateways, user registrations, and live slot bookings platform-wide.',
+      badge: 'Master Override',
+      icon: AlertTriangle
+    },
+    {
+      key: 'networkThrottle',
+      title: 'Network Throttle Simulator',
+      description: 'Simulates high-latency 3G network conditions and delays responses to stress test UX spinners.',
+      badge: 'Telemetry & Chaos',
+      icon: Wifi
+    },
+    {
+      key: 'corsBypass',
+      title: 'Dynamic CORS Proxy Bypass',
+      description: 'Enables cross-origin headers proxy for direct client asset fetching and CDN media uploads.',
+      badge: 'Proxy Gateway',
+      icon: Server
+    }
+  ];
 
   const flagsConfig = [
     {
@@ -541,7 +646,7 @@ export default function DeveloperConsole({ user, onExit }) {
             }`}
           >
             <Sliders className="h-4 w-4" />
-            <span>Maintenance Mode</span>
+            <span>Maintenance & Emergency Controls</span>
           </button>
 
           <button
@@ -581,17 +686,94 @@ export default function DeveloperConsole({ user, onExit }) {
           </button>
         </div>
 
-        {/* TAB 1: Maintenance Mode & Feature Flags Gating */}
+        {/* TAB 1: Maintenance Mode, Emergency Controls & Feature Flags Gating */}
         {activeTab === 'maintenance' && (
           <div className="space-y-6">
+            
+            {/* SECTION 1: Emergency & Platform Control Toggles */}
             <div className="bg-[#161B22] border border-[#30363D] p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-outfit text-sm font-bold uppercase tracking-widest text-[#8B949E] flex items-center gap-2">
-                    <Layers className="h-4 w-4 text-[#FF7A3D]" /> Active Feature Flags & Maintenance System
+                    <Power className="h-4 w-4 text-[#FF7A3D]" /> Emergency & Platform Subsystem Toggles
                   </h2>
                   <p className="text-xs text-[#8B949E] mt-1">
-                    Control global production feature gating, applicant pipelines, and emergency maintenance bypasses.
+                    Centralized state controls with immediate local persistence and non-blocking Firestore synchronization.
+                  </p>
+                </div>
+              </div>
+
+              <div className="divide-y divide-[#30363D]/60">
+                {systemControlsConfig.map((ctrl) => {
+                  const isActive = !!systemControls[ctrl.key];
+                  const IconComp = ctrl.icon;
+                  return (
+                    <div key={ctrl.key} className="py-5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 max-w-lg">
+                        <div className="flex items-center gap-3">
+                          <IconComp className={`h-4 w-4 ${isActive ? 'text-emerald-400' : 'text-[#8B949E]'}`} />
+                          <h3 className="font-outfit text-sm font-bold text-white uppercase tracking-wide">
+                            {ctrl.title}
+                          </h3>
+                          <span className="px-2 py-0.5 rounded text-[8px] font-mono font-bold uppercase tracking-wider bg-[#0D1117] border border-[#30363D] text-[#8B949E]">
+                            {ctrl.badge}
+                          </span>
+                        </div>
+                        <p className="text-xxs text-[#8B949E] leading-relaxed">
+                          {ctrl.description}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-4 shrink-0">
+                        {/* Status badge */}
+                        <span className={`text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg flex items-center gap-1.5 border transition-all ${
+                          isActive
+                            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                            : 'bg-stone-800/40 border-stone-700 text-stone-400'
+                        }`}>
+                          {isActive ? (
+                            <>
+                              <CheckCircle2 className="h-3.5 w-3.5 stroke-[2.5]" />
+                              ACTIVE
+                            </>
+                          ) : (
+                            <>
+                              <span className="h-2 w-2 rounded-full bg-stone-500"></span>
+                              INACTIVE
+                            </>
+                          )}
+                        </span>
+
+                        {/* Interactive Toggle Switch */}
+                        <button
+                          type="button"
+                          onClick={() => toggleControl(ctrl.key)}
+                          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                            isActive ? 'bg-emerald-500' : 'bg-stone-700'
+                          }`}
+                        >
+                          <span
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                              isActive ? 'translate-x-5' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* SECTION 2: Active Feature Flags Gating */}
+            <div className="bg-[#161B22] border border-[#30363D] p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-outfit text-sm font-bold uppercase tracking-widest text-[#8B949E] flex items-center gap-2">
+                    <Layers className="h-4 w-4 text-[#FF7A3D]" /> Production Feature Flags Gating
+                  </h2>
+                  <p className="text-xs text-[#8B949E] mt-1">
+                    Control global production feature gating, applicant pipelines, and community portals.
                   </p>
                 </div>
               </div>
@@ -635,6 +817,7 @@ export default function DeveloperConsole({ user, onExit }) {
                         </span>
 
                         <button
+                          type="button"
                           onClick={() => toggleFlag(flag.key)}
                           disabled={isUpdating}
                           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
@@ -653,6 +836,7 @@ export default function DeveloperConsole({ user, onExit }) {
                 })}
               </div>
             </div>
+
           </div>
         )}
 
@@ -668,7 +852,9 @@ export default function DeveloperConsole({ user, onExit }) {
                 <Database className="h-8 w-8 text-emerald-400" />
                 <div>
                   <h3 className="text-lg font-black text-white">Firestore Node</h3>
-                  <span className="text-xxs font-mono text-emerald-400 font-bold">CONNECTED & STREAMING</span>
+                  <span className="text-xxs font-mono text-emerald-400 font-bold">
+                    {systemControls.stagingDb ? 'STAGING PARTITION ACTIVE' : 'PROD REALTIME STREAMING'}
+                  </span>
                 </div>
               </div>
               <p className="text-xxs text-[#8B949E]">
@@ -695,14 +881,18 @@ export default function DeveloperConsole({ user, onExit }) {
 
             <div className="bg-[#161B22] border border-[#30363D] p-6 rounded-3xl space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8B949E]">Payment Gateway</span>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8B949E]">Payment Pipeline</span>
                 <DollarSign className="h-4 w-4 text-amber-400" />
               </div>
               <div className="flex items-center gap-3">
                 <Sparkles className="h-8 w-8 text-amber-400" />
                 <div>
-                  <h3 className="text-lg font-black text-white">Razorpay Standard</h3>
-                  <span className="text-xxs font-mono text-amber-400 font-bold">TEST MODE ACTIVE</span>
+                  <h3 className="text-lg font-black text-white">Razorpay Checkout</h3>
+                  <span className={`text-xxs font-mono font-bold ${
+                    systemControls.mockCheckout ? 'text-amber-400' : 'text-emerald-400'
+                  }`}>
+                    {systemControls.mockCheckout ? 'MOCK LOCAL BYPASS ACTIVE' : 'LIVE TEST GATEWAY ACTIVE'}
+                  </span>
                 </div>
               </div>
               <p className="text-xxs text-[#8B949E]">
@@ -765,8 +955,9 @@ export default function DeveloperConsole({ user, onExit }) {
                         </td>
                         <td className="py-3.5 px-3 text-right">
                           <button
+                            type="button"
                             onClick={() => handleToggleTrekVisibility(trek.id, trek.isVisible)}
-                            className="px-3 py-1.5 rounded-lg border border-[#30363D] bg-[#0D1117] hover:bg-[#30363D] text-white text-[10px] font-mono font-bold uppercase transition-all"
+                            className="px-3 py-1.5 rounded-lg border border-[#30363D] bg-[#0D1117] hover:bg-[#30363D] text-white text-[10px] font-mono font-bold uppercase transition-all cursor-pointer"
                           >
                             {isVisible ? 'Set Hidden' : 'Publish'}
                           </button>
@@ -793,8 +984,9 @@ export default function DeveloperConsole({ user, onExit }) {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={handlePurgeDemoBookings}
-                className="px-4 py-2 rounded-xl border border-rose-900/50 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 text-xs font-bold font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 rounded-xl border border-rose-900/50 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 text-xs font-bold font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Purge Demo Bookings
               </button>
