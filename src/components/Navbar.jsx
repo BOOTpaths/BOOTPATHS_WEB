@@ -197,8 +197,10 @@ export default function Navbar({
     setActiveDropdown((prev) => (prev === menuKey ? null : menuKey));
   };
 
-  const currentEmail = (user?.email || "").trim().toLowerCase();
-  const isAuthorized = currentEmail === "vzentura2026@gmail.com" || currentEmail === "admin@bootpaths.com" || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
+  const userEmail = (user?.email || "").trim().toLowerCase();
+  const isDevOpsUser = userEmail === "vzentura2026@gmail.com" || (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true');
+  const isAdminUser = userEmail === "admin@bootpaths.com" || isDevOpsUser || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
+  const isAuthorized = isAdminUser;
   const isAdminOrDev = isAuthorized;
 
   // Build dynamic categorized trek lists
@@ -715,29 +717,33 @@ export default function Navbar({
                     {user.email}
                   </div>
 
-                  {user && isAuthorized && (
+                  {user && (
                     <>
-                      <button
-                        onClick={() => { 
-                          setUserDropdownOpen(false);
-                          window.location.hash = '#admin'; 
-                          window.location.reload(); 
-                        }}
-                        className="w-[calc(100%-16px)] mx-2 text-left px-3 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] rounded-xl transition-colors mb-1.5 flex items-center gap-2 shadow-sm cursor-pointer"
-                      >
-                        <span>⚙️</span> ADMIN PORTAL (TREKS & BOOKINGS)
-                      </button>
+                      {isAdminUser && (
+                        <button
+                          onClick={() => { 
+                            setUserDropdownOpen(false);
+                            window.location.hash = '#admin'; 
+                            window.location.reload(); 
+                          }}
+                          className="w-[calc(100%-16px)] mx-2 text-left px-3 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#EB5A0D] hover:bg-[#D44E08] rounded-xl transition-colors mb-1.5 flex items-center gap-2 shadow-sm cursor-pointer"
+                        >
+                          <span>⚙️</span> ADMIN PORTAL (TREKS & BOOKINGS)
+                        </button>
+                      )}
 
-                      <button
-                        onClick={() => { 
-                          setUserDropdownOpen(false);
-                          window.location.hash = '#devops'; 
-                          window.location.reload(); 
-                        }}
-                        className="w-[calc(100%-16px)] mx-2 text-left px-3 py-2 text-xs font-bold uppercase tracking-wider text-stone-200 bg-[#21262D] hover:bg-[#30363D] rounded-xl transition-colors mb-1.5 flex items-center gap-2 border border-stone-700 shadow-sm cursor-pointer"
-                      >
-                        <span>🛠️</span> DEVOPS CONSOLE (FLAGS & TOGGLES)
-                      </button>
+                      {isDevOpsUser && (
+                        <button
+                          onClick={() => { 
+                            setUserDropdownOpen(false);
+                            window.location.hash = '#devops'; 
+                            window.location.reload(); 
+                          }}
+                          className="w-[calc(100%-16px)] mx-2 text-left px-3 py-2 text-xs font-bold uppercase tracking-wider text-stone-200 bg-[#21262D] hover:bg-[#30363D] rounded-xl transition-colors mb-1.5 flex items-center gap-2 border border-stone-700 shadow-sm cursor-pointer"
+                        >
+                          <span>🛠️</span> DEVOPS CONSOLE (FLAGS & TOGGLES)
+                        </button>
+                      )}
                     </>
                   )}
 
@@ -1218,26 +1224,30 @@ export default function Navbar({
                     <div className="text-xxs text-[#3A2A1E]/60 truncate">{user.email}</div>
                   </div>
                 </div>
-                {user && isAuthorized && (
+                {user && (
                   <>
-                    <button 
-                      onClick={() => {
-                        window.location.hash = '#admin';
-                        window.location.reload();
-                      }}
-                      className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-xs uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2 shadow-sm"
-                    >
-                      <span>⚙️</span> Admin Portal (Treks & Bookings)
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.location.hash = '#devops';
-                        window.location.reload();
-                      }}
-                      className="bg-[#21262D] hover:bg-[#30363D] border border-stone-700 text-stone-200 font-bold py-3 w-full rounded-xl text-center text-xs uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2 shadow-sm"
-                    >
-                      <span>🛠️</span> DevOps Console (Flags & Toggles)
-                    </button>
+                    {isAdminUser && (
+                      <button 
+                        onClick={() => {
+                          window.location.hash = '#admin';
+                          window.location.reload();
+                        }}
+                        className="bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-bold py-3 w-full rounded-xl text-center text-xs uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2 shadow-sm mb-1.5"
+                      >
+                        <span>⚙️</span> ADMIN PORTAL (TREKS & BOOKINGS)
+                      </button>
+                    )}
+                    {isDevOpsUser && (
+                      <button 
+                        onClick={() => {
+                          window.location.hash = '#devops';
+                          window.location.reload();
+                        }}
+                        className="bg-[#21262D] hover:bg-[#30363D] border border-stone-700 text-stone-200 font-bold py-3 w-full rounded-xl text-center text-xs uppercase tracking-wider transition-all duration-200 focus:outline-none cursor-pointer flex items-center justify-center gap-2 shadow-sm mb-1.5"
+                      >
+                        <span>🛠️</span> DEVOPS CONSOLE (FLAGS & TOGGLES)
+                      </button>
+                    )}
                   </>
                 )}
                 <button 
