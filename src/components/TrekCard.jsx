@@ -55,7 +55,10 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
   const trekName = trek.name || trek.title || 'Wilderness Trail';
 
   return (
-    <div className={`group bg-white border border-[#E7E7E4] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full ${isHidden ? 'bg-slate-50/40' : ''}`}>
+    <div 
+      onClick={handleDetailsClick}
+      className={`group bg-white border border-[#E7E7E4] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full ${isHidden ? 'bg-slate-50/40 cursor-default' : 'cursor-pointer'}`}
+    >
       {/* Top Image Container */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 rounded-t-xl">
         {trek.videoEmbed ? (

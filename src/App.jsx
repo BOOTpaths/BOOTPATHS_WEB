@@ -1734,12 +1734,9 @@ export default function App() {
                 Live Batches
               </span>
               <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl md:text-5xl">
-                Upcoming Western Ghats Trails
+                Upcoming experience
               </h2>
             </div>
-            <p className="max-w-md text-sm text-autumn-bark/70 md:text-right">
-              Fully approved routes with Forest Department clearance. Orderly batch structures with strict sizing of 12-15 trekkers max.
-            </p>
           </div>
           
           <div className="mx-auto mt-6 h-1 w-full rounded-full bg-[#EFE8D6]">
@@ -2053,12 +2050,6 @@ export default function App() {
                     <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
                       <span className="text-autumn-bark/50">Trek Cost (Per Trekker)</span>
                       <span className="text-autumn-bark/80 font-bold">₹{selectedTrek.price}</span>
-                    </div>
-                    <div className="flex justify-between text-xs py-1.5 border-b border-autumn-bark/10">
-                      <span className="text-autumn-bark/50">Decathlon Gear Kit</span>
-                      <span className="text-autumn-maple font-semibold flex items-center gap-1">
-                        Included <Info className="h-3 w-3 text-autumn-bark/50 hover:text-autumn-maple cursor-help" />
-                      </span>
                     </div>
                   </div>
 

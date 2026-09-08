@@ -25,12 +25,9 @@ export default function UpcomingTreks({
               Live Batches
             </span>
             <h2 className="mt-3 font-outfit text-3xl font-black tracking-tight text-autumn-bark sm:text-4xl md:text-5xl">
-              Upcoming Western Ghats Trails
+              Upcoming experience
             </h2>
           </div>
-          <p className="max-w-md text-sm text-autumn-bark/70 md:text-right">
-            Fully approved routes with Forest Department clearance. Orderly batch structures with strict sizing of 12-15 trekkers max.
-          </p>
         </div>
         
         <div className="mx-auto mt-6 h-1 w-full rounded-full bg-[#EFE8D6]">
