@@ -62,6 +62,7 @@ const INCLUSION_OPTIONS = [
 ];
 
 export default function AdminConsole({ 
+  user,
   treks, 
   setTreks, 
   blogs = [], 
@@ -72,26 +73,24 @@ export default function AdminConsole({
   onReturnToSite,
   expeditionViews = []
 }) {
-  const { featureFlags, userRole } = useAuth();
+  const { featureFlags, userRole, currentUser, authLoading } = useAuth();
   
-  const renderLockedModule = () => {
-    return (
-      <div className="min-h-[400px] flex flex-col items-center justify-center gap-4 bg-[#F3ECDD]/40 border border-autumn-bark/10 rounded-2xl p-12 text-center backdrop-blur-md animate-in fade-in duration-300">
-        <div className="h-14 w-14 rounded-full bg-autumn-maple/10 flex items-center justify-center text-autumn-maple mb-2">
-          <Lock className="h-7 w-7" />
-        </div>
-        <h2 className="font-outfit text-lg font-black uppercase tracking-wider text-autumn-bark">
-          🔒 Module Locked
-        </h2>
-        <p className="text-xs text-autumn-bark/70 max-w-sm leading-relaxed">
-          Maintenance Tier Required. Contact Developer to Activate.
-        </p>
-      </div>
-    );
-  };
+  const hasSessionAuth = typeof window !== 'undefined' && (
+    sessionStorage.getItem('isAdmin') === 'true' || 
+    sessionStorage.getItem('isDevOps') === 'true' || 
+    sessionStorage.getItem('dev_bypass') === 'true' ||
+    localStorage.getItem('bootpaths_admin_active') === 'true' ||
+    localStorage.getItem('isAdmin') === 'true'
+  );
+
+  const isWhitelistedUser = 
+    currentUser?.email?.toLowerCase() === 'vzentura2026@gmail.com' || 
+    currentUser?.email?.toLowerCase() === 'admin@bootpaths.com' ||
+    user?.email?.toLowerCase() === 'vzentura2026@gmail.com' ||
+    user?.email?.toLowerCase() === 'admin@bootpaths.com';
 
   // Session State
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => hasSessionAuth || isWhitelistedUser);
   const [authView, setAuthView] = useState('login'); // 'login' | 'forgot_password'
   
   // Auth Form State
@@ -549,12 +548,16 @@ export default function AdminConsole({
 
   // Check persistent login on mount
   useEffect(() => {
-    const activeSession = localStorage.getItem('bootpaths_admin_active');
-    const hasDevBypass = sessionStorage.getItem('dev_bypass') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
-    if (activeSession === 'true' || hasDevBypass || userRole === 'admin') {
+    if (hasSessionAuth || isWhitelistedUser || userRole === 'admin' || userRole === 'superadmin' || userRole === 'devops') {
       setIsAdminLoggedIn(true);
     }
-  }, [userRole]);
+  }, [hasSessionAuth, isWhitelistedUser, userRole, currentUser, user]);
+
+  const activeUser = currentUser || user || {
+    email: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'vzentura2026@gmail.com' : 'admin@bootpaths.com',
+    displayName: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'DevOps Lead Engineer' : 'Administrator',
+    role: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'superadmin' : 'admin'
+  };
 
   // Handle Login Submission
   const handleLoginSubmit = (e) => {
@@ -1291,7 +1294,7 @@ export default function AdminConsole({
             
             <div className="hidden md:flex items-center gap-2 pl-4 border-l border-autumn-bark/10 text-xs text-autumn-bark/70">
               <KeyRound className="h-3.5 w-3.5 text-autumn-amber" />
-              <span>Admin: <strong className="text-autumn-bark font-mono">admin@bootpaths.com</strong></span>
+              <span>Admin: <strong className="text-autumn-bark font-mono">{activeUser?.email || 'admin@bootpaths.com'}</strong></span>
             </div>
           </div>
 

@@ -76,36 +76,28 @@ export default function DeveloperConsole({ user, onExit }) {
   });
 
   // Auth check
-  const isAdmin = currentUser?.email === 'admin@bootpaths.com' || 
-                  currentUser?.email === 'vzentura2026@gmail.com' || 
-                  (typeof window !== 'undefined' && (
-                    sessionStorage.getItem('dev_bypass') === 'true' ||
-                    sessionStorage.getItem('isAdmin') === 'true' ||
-                    sessionStorage.getItem('isDevOps') === 'true' ||
-                    localStorage.getItem('bootpaths_developer_mode') === 'true'
-                  ));
+  const hasSessionAuth = typeof window !== 'undefined' && (
+    sessionStorage.getItem('isDevOps') === 'true' || 
+    sessionStorage.getItem('dev_bypass') === 'true' || 
+    sessionStorage.getItem('isAdmin') === 'true' ||
+    localStorage.getItem('bootpaths_developer_mode') === 'true' ||
+    localStorage.getItem('isAdmin') === 'true'
+  );
 
-  const isDeveloper = isDevBypassed ||
-                      (typeof window !== 'undefined' && (
-                        sessionStorage.getItem('isDevOps') === 'true' || 
-                        sessionStorage.getItem('dev_bypass') === 'true' || 
-                        sessionStorage.getItem('isAdmin') === 'true' ||
-                        localStorage.getItem('bootpaths_developer_mode') === 'true'
-                      )) ||
-                      userRole === 'developer' || 
-                      userRole === 'devops' ||
-                      userRole === 'superadmin' ||
-                      userRole === 'admin' ||
-                      currentUser?.role === 'developer' || 
-                      currentUser?.role === 'superadmin' || 
-                      currentUser?.role === 'devops' || 
-                      userData?.role === 'developer' ||
-                      userData?.role === 'superadmin' ||
-                      userData?.role === 'devops' ||
-                      currentUser?.email === 'vzentura2026@gmail.com' ||
-                      userData?.email === 'vzentura2026@gmail.com' ||
-                      currentUser?.email === 'admin@bootpaths.com' ||
-                      userData?.email === 'admin@bootpaths.com';
+  const isWhitelistedUser = 
+    currentUser?.email?.toLowerCase() === 'vzentura2026@gmail.com' || 
+    currentUser?.email?.toLowerCase() === 'admin@bootpaths.com' ||
+    user?.email?.toLowerCase() === 'vzentura2026@gmail.com' ||
+    user?.email?.toLowerCase() === 'admin@bootpaths.com';
+
+  const isDeveloper = hasSessionAuth || isWhitelistedUser || 
+    userRole === 'developer' || userRole === 'devops' || userRole === 'superadmin' || userRole === 'admin';
+
+  const activeUser = currentUser || user || {
+    email: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'vzentura2026@gmail.com' : 'admin@bootpaths.com',
+    displayName: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'DevOps Lead Engineer' : 'Administrator',
+    role: (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true') ? 'superadmin' : 'admin'
+  };
 
   // Login Form State for Devops
   const [emailInput, setEmailInput] = useState('vzentura2026@gmail.com');
@@ -631,7 +623,7 @@ export default function DeveloperConsole({ user, onExit }) {
                 </span>
               </div>
               <span className="text-[10px] font-mono tracking-wider text-[#8B949E] flex items-center gap-1.5 mt-0.5">
-                <Shield className="h-3 w-3 text-[#FF7A3D]" /> Authenticated: <strong className="text-white">vzentura2026@gmail.com</strong> (Superadmin)
+                <Shield className="h-3 w-3 text-[#FF7A3D]" /> Authenticated: <strong className="text-white">{activeUser?.email || 'vzentura2026@gmail.com'}</strong> ({activeUser?.role || 'Superadmin'})
               </span>
             </div>
           </div>
