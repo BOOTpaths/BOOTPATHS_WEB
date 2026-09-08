@@ -42,7 +42,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export default function DeveloperConsole() {
+export default function DeveloperConsole({ user, onExit }) {
   const { currentUser, userData, userRole } = useAuth();
   
   // Tab Management: 'maintenance' | 'system_health' | 'inventory' | 'bookings'
@@ -53,7 +53,8 @@ export default function DeveloperConsole() {
     if (typeof window !== 'undefined') {
       return sessionStorage.getItem('isDevOps') === 'true' || 
              sessionStorage.getItem('dev_bypass') === 'true' ||
-             sessionStorage.getItem('isAdmin') === 'true';
+             sessionStorage.getItem('isAdmin') === 'true' ||
+             localStorage.getItem('bootpaths_developer_mode') === 'true';
     }
     return false;
   });
@@ -61,9 +62,20 @@ export default function DeveloperConsole() {
   // Auth check
   const isAdmin = currentUser?.email === 'admin@bootpaths.com' || 
                   currentUser?.email === 'vzentura2026@gmail.com' || 
-                  (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
+                  (typeof window !== 'undefined' && (
+                    sessionStorage.getItem('dev_bypass') === 'true' ||
+                    sessionStorage.getItem('isAdmin') === 'true' ||
+                    sessionStorage.getItem('isDevOps') === 'true' ||
+                    localStorage.getItem('bootpaths_developer_mode') === 'true'
+                  ));
 
   const isDeveloper = isDevBypassed ||
+                      (typeof window !== 'undefined' && (
+                        sessionStorage.getItem('isDevOps') === 'true' || 
+                        sessionStorage.getItem('dev_bypass') === 'true' || 
+                        sessionStorage.getItem('isAdmin') === 'true' ||
+                        localStorage.getItem('bootpaths_developer_mode') === 'true'
+                      )) ||
                       userRole === 'developer' || 
                       userRole === 'devops' ||
                       userRole === 'superadmin' ||
@@ -314,8 +326,14 @@ export default function DeveloperConsole() {
     sessionStorage.removeItem('isAdmin');
     sessionStorage.removeItem('isDevOps');
     sessionStorage.removeItem('dev_bypass');
+    localStorage.removeItem('bootpaths_developer_mode');
     setIsDevBypassed(false);
-    window.location.hash = '#';
+    if (onExit) {
+      onExit();
+    } else {
+      window.location.hash = '';
+      window.location.reload();
+    }
   };
 
   // If Not Authorized: Render DevOps Credentials Login Screen

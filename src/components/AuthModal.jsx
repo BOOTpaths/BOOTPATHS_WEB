@@ -61,18 +61,32 @@ export default function AuthModal({
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
 
-    const emailClean = (authEmail || "").trim().toLowerCase();
-    const isAuthorizedAdmin = emailClean === "vzentura2026@gmail.com" || emailClean === "admin@bootpaths.com";
+    const emailInput = (authEmail || "").trim().toLowerCase();
+    const passInput = authPassword || "";
 
-    if (isAuthorizedAdmin && (authPassword === "vzentura@BooTpaths" || authPassword === "BooTpaths@Admin")) {
-      // Grant local session immediately
+    if (emailInput === "vzentura2026@gmail.com" && passInput === "vzentura@BooTpaths") {
+      // Set session and local persistence
+      sessionStorage.setItem("dev_bypass", "true");
+      sessionStorage.setItem("isDevOps", "true");
+      sessionStorage.setItem("isAdmin", "true");
+      localStorage.setItem("userRole", "devops");
+      localStorage.setItem("bootpaths_developer_mode", "true");
+
+      if (onClose) onClose();
+
+      // Route straight into the Developer Console view
+      window.location.hash = "#devops";
+      window.location.reload();
+      return;
+    }
+
+    if (emailInput === "admin@bootpaths.com" && passInput === "BooTpaths@Admin") {
       sessionStorage.setItem("dev_bypass", "true");
       sessionStorage.setItem("isAdmin", "true");
       sessionStorage.setItem("isDevOps", "true");
       localStorage.setItem("isAdmin", "true");
-      localStorage.setItem("userRole", "superadmin");
+      localStorage.setItem("userRole", "admin");
 
-      // Close modal and route to admin/devops console
       if (onClose) onClose();
       window.location.hash = "#admin";
       window.location.reload();

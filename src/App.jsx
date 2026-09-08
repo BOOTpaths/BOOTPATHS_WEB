@@ -886,7 +886,7 @@ export default function App() {
                       ));
 
   const isMaintenanceMode = !!(featureFlags?.enableMaintenanceMode);
-  const isAdminRoute = currentHash.startsWith('#admin') || currentHash.startsWith('#dev-ops');
+  const isAdminRoute = currentHash.startsWith('#admin') || currentHash.startsWith('#dev-ops') || currentHash.startsWith('#devops') || currentHash.startsWith('#dev');
   const isBypassed = isUserAdmin || isAdminRoute || hasDevBypass;
 
   const devBanner = (isMaintenanceMode && isBypassed && !isAdminRoute) ? (
@@ -1027,8 +1027,38 @@ export default function App() {
     );
   }
 
-  if (currentHash === '#dev-ops') {
-    return <DeveloperConsole user={user} />;
+  const isDevOpsRoute = currentHash === '#devops' || 
+                        currentHash === '#dev' || 
+                        currentHash === '#dev-ops' || 
+                        (typeof window !== 'undefined' && (
+                          window.location.hash === '#devops' || 
+                          window.location.hash === '#dev' || 
+                          window.location.hash === '#dev-ops'
+                        ));
+
+  const isAuthorizedDev = (typeof window !== 'undefined' && (
+    sessionStorage.getItem('isDevOps') === 'true' || 
+    sessionStorage.getItem('dev_bypass') === 'true' || 
+    sessionStorage.getItem('isAdmin') === 'true' ||
+    localStorage.getItem('bootpaths_developer_mode') === 'true'
+  )) || 
+  currentUser?.email === 'vzentura2026@gmail.com' ||
+  user?.email === 'vzentura2026@gmail.com' ||
+  userData?.email === 'vzentura2026@gmail.com' ||
+  userRole === 'devops' ||
+  userRole === 'developer' ||
+  userRole === 'superadmin';
+
+  if (isDevOpsRoute) {
+    return (
+      <DeveloperConsole 
+        user={user} 
+        onExit={() => { 
+          window.location.hash = ''; 
+          window.location.reload(); 
+        }} 
+      />
+    );
   }
 
   if (currentHash === '#admin' || currentHash.startsWith('#admin')) {
