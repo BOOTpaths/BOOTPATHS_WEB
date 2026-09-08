@@ -198,8 +198,10 @@ export default function Navbar({
   };
 
   const userEmail = (user?.email || "").trim().toLowerCase();
-  const isDevOpsUser = userEmail === "vzentura2026@gmail.com" || (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true');
-  const isAdminUser = userEmail === "admin@bootpaths.com" || isDevOpsUser || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
+  const isExplicitAdmin = userEmail === "admin@bootpaths.com";
+  const isExplicitDevOps = userEmail === "vzentura2026@gmail.com";
+  const isDevOpsUser = (isExplicitDevOps || (typeof window !== 'undefined' && sessionStorage.getItem('isDevOps') === 'true')) && !isExplicitAdmin;
+  const isAdminUser = isExplicitAdmin || isDevOpsUser || (typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === 'true');
   const isAuthorized = isAdminUser;
   const isAdminOrDev = isAuthorized;
 

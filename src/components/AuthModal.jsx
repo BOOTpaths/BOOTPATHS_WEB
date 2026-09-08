@@ -74,15 +74,21 @@ export default function AuthModal({
       const isAdminAccount = email === 'admin@bootpaths.com';
       const isDevOpsAccount = email === 'vzentura2026@gmail.com';
 
-      if (isDevOpsAccount || isAdminAccount) {
+      if (isDevOpsAccount) {
         sessionStorage.setItem('isAdmin', 'true');
         sessionStorage.setItem('isDevOps', 'true');
         sessionStorage.setItem('dev_bypass', 'true');
         localStorage.setItem('isAdmin', 'true');
-        localStorage.setItem('userRole', isDevOpsAccount ? 'superadmin' : 'admin');
-        if (isDevOpsAccount) {
-          localStorage.setItem('bootpaths_developer_mode', 'true');
-        }
+        localStorage.setItem('userRole', 'superadmin');
+        localStorage.setItem('bootpaths_developer_mode', 'true');
+      } else if (isAdminAccount) {
+        sessionStorage.setItem('isAdmin', 'true');
+        sessionStorage.removeItem('isDevOps');
+        sessionStorage.setItem('dev_bypass', 'true');
+        localStorage.setItem('isAdmin', 'true');
+        localStorage.removeItem('isDevOps');
+        localStorage.setItem('userRole', 'admin');
+        localStorage.removeItem('bootpaths_developer_mode');
       } else {
         sessionStorage.removeItem("isAdmin");
         sessionStorage.removeItem("isDevOps");
@@ -183,8 +189,10 @@ export default function AuthModal({
     // Immediate local dev bypass check for Platform Admin
     if (emailInput === "admin@bootpaths.com" && passInput === "BooTpaths@Admin") {
       sessionStorage.setItem("isAdmin", "true");
+      sessionStorage.removeItem("isDevOps");
       sessionStorage.setItem("dev_bypass", "true");
       localStorage.setItem("isAdmin", "true");
+      localStorage.removeItem("isDevOps");
       localStorage.setItem("userRole", "admin");
 
       signInWithEmailAndPassword(auth, "admin@bootpaths.com", "BooTpaths@Admin").catch((err) => {
