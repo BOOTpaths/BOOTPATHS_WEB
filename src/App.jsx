@@ -1787,29 +1787,35 @@ export default function App() {
             const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
             const filteredTreks = (treks || []).filter(trek => isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden));
 
-            const isUnavailable = (trek) => {
-              const badge = (trek.badge || trek.tag || "").toLowerCase();
-              const status = (trek.status || "").toLowerCase();
-              const isHidden = trek.isDraft || trek.isHidden || trek.available === false;
-              const noSlots = trek.slots === 0 || trek.availableSlots === 0;
+            const getTrekAvailabilityRank = (trek) => {
+              const badge = String(trek.badge || trek.tag || trek.badgeTag || "").toLowerCase();
+              const status = String(trek.status || "").toLowerCase();
+              const isExplicitlyDraft = Boolean(trek.isDraft || trek.isHidden || trek.draft || trek.hidden);
+              const isExplicitlyUnavailable = trek.available === false || trek.isAvailable === false;
+              const isSoldOut = Number(trek.slots ?? trek.availableSlots ?? trek.slotsLeft ?? 1) <= 0;
 
-              return (
-                isHidden ||
+              const isUnavailable =
+                isExplicitlyDraft ||
+                isExplicitlyUnavailable ||
+                isSoldOut ||
                 status === "draft" ||
+                status === "hidden" ||
                 status === "unavailable" ||
                 badge.includes("draft") ||
                 badge.includes("hidden") ||
-                badge.includes("unavailable") ||
-                noSlots
-              );
+                badge.includes("unavailable");
+
+              // Available treks get 0 (top priority), Unavailable treks get 1 (pushed to end)
+              return isUnavailable ? 1 : 0;
             };
 
             const displayTreks = [...filteredTreks].sort((a, b) => {
-              const aUnavailable = isUnavailable(a);
-              const bUnavailable = isUnavailable(b);
+              const rankA = getTrekAvailabilityRank(a);
+              const rankB = getTrekAvailabilityRank(b);
 
-              if (aUnavailable && !bUnavailable) return 1;
-              if (!aUnavailable && bUnavailable) return -1;
+              if (rankA !== rankB) {
+                return rankA - rankB;
+              }
               return 0;
             });
 
