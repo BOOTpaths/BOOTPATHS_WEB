@@ -1527,9 +1527,10 @@ export default function App() {
         ) : (
           activeHeroMedia.map((media, idx) => {
             const isActive = idx === activeHeroIndex;
-            const mediaUrl = media.mediaUrl || media.src;
-            const mediaType = media.mediaType || media.type;
-            const key = media.id || media.src;
+            const mediaUrl = media.url || media.mediaUrl || media.src;
+            const mediaType = media.type || media.mediaType || (mediaUrl && mediaUrl.toLowerCase().includes('.mp4') ? 'video' : 'image');
+            const isVideo = mediaType === 'video' || (mediaUrl && mediaUrl.toLowerCase().includes('.mp4'));
+            const key = media.id || media.url || media.src;
             return (
               <div
                 key={key}
@@ -1537,7 +1538,7 @@ export default function App() {
                   isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
               >
-                {mediaType === 'video' ? (
+                {isVideo ? (
                   <video
                     src={mediaUrl}
                     className="h-full w-full object-cover"
@@ -1549,7 +1550,7 @@ export default function App() {
                 ) : (
                   <img
                     src={mediaUrl}
-                    alt={media.title}
+                    alt={media.title || 'Expedition View'}
                     className="h-full w-full object-cover animate-in fade-in zoom-in-105 duration-1000"
                   />
                 )}
@@ -1630,20 +1631,21 @@ export default function App() {
           <div className="flex gap-2 overflow-x-auto no-scrollbar max-w-full">
             {activeHeroMedia.map((media, idx) => {
               const isActive = idx === activeHeroIndex;
-              const mediaUrl = media.mediaUrl || media.src;
-              const mediaType = media.mediaType || media.type;
-              const key = media.id || media.src;
+              const mediaUrl = media.url || media.mediaUrl || media.src;
+              const mediaType = media.type || media.mediaType || (mediaUrl && mediaUrl.toLowerCase().includes('.mp4') ? 'video' : 'image');
+              const isVideo = mediaType === 'video' || (mediaUrl && mediaUrl.toLowerCase().includes('.mp4'));
+              const key = media.id || media.url || media.src;
               return (
                 <button
                   key={key}
                   onClick={() => setActiveHeroIndex(idx)}
-                  className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-xl overflow-hidden border transition-all duration-300 group shrink-0 ${
+                  className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-xl overflow-hidden border transition-all duration-300 group shrink-0 cursor-pointer ${
                     isActive 
                       ? 'border-[#C1571F] ring-2 ring-[#C1571F] scale-105 shadow-[0_0_15px_rgba(193,87,31,0.5)]' 
                       : 'border-[#F3ECDD]/20 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  {mediaType === 'video' ? (
+                  {isVideo ? (
                     <video
                       src={mediaUrl}
                       className="h-full w-full object-cover"
@@ -1653,7 +1655,7 @@ export default function App() {
                   ) : (
                     <img
                       src={mediaUrl}
-                      alt={media.title}
+                      alt={media.title || 'View Tile'}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   )}

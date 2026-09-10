@@ -506,6 +506,9 @@ export default function AdminConsole({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [dragOver, setDragOver] = useState(false);
+  const [viewType, setViewType] = useState('image'); // 'image' | 'video'
+  const [viewInputMode, setViewInputMode] = useState('url'); // 'url' | 'upload'
+  const [viewUrl, setViewUrl] = useState('');
   const trekFileInputRef = useRef(null);
 
   const handleTrekFileChange = (e) => {
@@ -1059,12 +1062,32 @@ export default function AdminConsole({
     }
   };
 
+  const handleImageCompression = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxW = 1600;
+          const scale = Math.min(1, maxW / img.width);
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.75));
+        };
+        img.onerror = () => resolve(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleUploadView = async (e) => {
     e.preventDefault();
-    if (!selectedFile) {
-      setUploadError('Please select a local image or video file.');
-      return;
-    }
+    setUploadError('');
+
     if (!viewTitle.trim()) {
       setUploadError('Please enter a view title.');
       return;
@@ -1074,67 +1097,66 @@ export default function AdminConsole({
       return;
     }
 
-    setIsUploading(true);
-    setUploadError('');
-    setUploadProgress(0);
-
-    const storagePath = `expedition_views/${Date.now()}_${selectedFile.name}`;
-    const storageRef = ref(storage, storagePath);
-    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setUploadProgress(percent);
-      },
-      (err) => {
-        console.error('Firebase Storage upload error:', err);
-        setUploadError(`Upload failed: ${err.message}`);
-        setIsUploading(false);
-      },
-      async () => {
-        try {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          const mediaType = selectedFile.type.startsWith('video') ? 'video' : 'image';
-
-          // Store metadata in Firestore
-          await addDoc(collection(db, 'expeditionViews'), {
-            title: viewTitle.trim().toUpperCase(),
-            mediaUrl: downloadURL,
-            mediaType: mediaType,
-            order: Number(displayOrder),
-            storagePath: storagePath,
-            createdAt: serverTimestamp()
-          });
-
-          // Reset fields
-          setViewTitle('');
-          setDisplayOrder('');
-          setSelectedFile(null);
-          setUploadProgress(0);
-          setIsUploading(false);
-        } catch (dbErr) {
-          console.error('Firestore save error:', dbErr);
-          setUploadError(`Failed to save details: ${dbErr.message}`);
-          setIsUploading(false);
-        }
+    let finalMediaUrl = '';
+    if (viewInputMode === 'url') {
+      if (!viewUrl.trim()) {
+        setUploadError('Please enter a valid direct media URL.');
+        return;
       }
-    );
+      finalMediaUrl = viewUrl.trim();
+    } else {
+      if (!selectedFile) {
+        setUploadError('Please select a local image file.');
+        return;
+      }
+      setIsUploading(true);
+      try {
+        finalMediaUrl = await handleImageCompression(selectedFile);
+      } catch (err) {
+        setUploadError(`Compression error: ${err.message}`);
+        setIsUploading(false);
+        return;
+      }
+    }
+
+    setIsUploading(true);
+    try {
+      const docId = viewTitle.trim().toLowerCase().replace(/[^a-z0-9]/g, '-') || `view-${Date.now()}`;
+      const finalType = viewType || (finalMediaUrl.endsWith('.mp4') ? 'video' : 'image');
+
+      const docData = {
+        id: docId,
+        title: viewTitle.trim().toUpperCase(),
+        order: Number(displayOrder) || 1,
+        type: finalType,
+        mediaType: finalType,
+        url: finalMediaUrl,
+        mediaUrl: finalMediaUrl,
+        src: finalMediaUrl,
+        createdAt: new Date().toISOString()
+      };
+
+      await setDoc(doc(db, 'expeditionViews', docId), docData, { merge: true });
+
+      // Reset fields
+      setViewTitle('');
+      setDisplayOrder('');
+      setViewUrl('');
+      setSelectedFile(null);
+      setUploadProgress(0);
+      setIsUploading(false);
+    } catch (dbErr) {
+      console.error('Firestore save view error:', dbErr);
+      setUploadError(`Failed to save view: ${dbErr.message}`);
+      setIsUploading(false);
+    }
   };
 
   const handleDeleteView = async (record) => {
     if (!window.confirm(`Are you sure you want to delete "${record.title}"?`)) return;
 
     try {
-      // 1. Delete from Firestore
       await deleteDoc(doc(db, 'expeditionViews', record.id));
-
-      // 2. Clean up from Storage
-      if (record.storagePath) {
-        const fileRef = ref(storage, record.storagePath);
-        await deleteObject(fileRef);
-      }
     } catch (err) {
       console.error('Delete view error:', err);
       alert(`Delete failed: ${err.message}`);
@@ -2379,7 +2401,7 @@ export default function AdminConsole({
                         value={viewTitle}
                         onChange={(e) => setViewTitle(e.target.value)}
                         className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F]/60 transition-all"
-                        placeholder="e.g. NETRAVATHI"
+                        placeholder="e.g. SANDAKPHU"
                         disabled={isUploading}
                       />
                     </div>
@@ -2392,86 +2414,136 @@ export default function AdminConsole({
                         value={displayOrder}
                         onChange={(e) => setDisplayOrder(e.target.value)}
                         className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F]/60 transition-all"
-                        placeholder="e.g. 1"
+                        placeholder="e.g. 4"
                         disabled={isUploading}
                       />
                     </div>
 
+                    {/* Format Selector: Image vs Video */}
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Select Media File</label>
-                      <label 
-                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                        onDragLeave={() => setDragOver(false)}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          setDragOver(false);
-                          const file = e.dataTransfer.files[0];
-                          if (file) setSelectedFile(file);
-                        }}
-                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer block transition-all ${
-                          dragOver 
-                            ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
-                            : selectedFile 
-                              ? 'border-emerald-500/40 bg-emerald-500/5' 
-                              : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
-                        }`}
-                      >
-                        <input 
-                          type="file" 
-                          accept="image/*,video/*" 
-                          onChange={(e) => {
-                            const file = e.target.files[0];
-                            if (file) setSelectedFile(file);
-                          }}
-                          className="hidden"
-                          disabled={isUploading}
-                        />
-                        
-                        {selectedFile ? (
-                          <div className="space-y-2">
-                            <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto" />
-                            <div className="text-xs font-bold text-autumn-bark truncate max-w-[200px] mx-auto">
-                              {selectedFile.name}
-                            </div>
-                            <div className="text-[10px] text-autumn-bark/50">
-                              {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • {selectedFile.type.split('/')[0].toUpperCase()}
-                            </div>
-                            <div className="text-[10px] text-[#C1571F] font-semibold hover:underline">Click to change file</div>
-                          </div>
-                        ) : (
-                          <div className="space-y-2">
-                            <Upload className="h-8 w-8 text-[#C1571F]/60 mx-auto" />
-                            <div className="text-xs font-bold text-autumn-bark">Drag and drop here</div>
-                            <div className="text-[10px] text-autumn-bark/50">or click to browse local files</div>
-                          </div>
-                        )}
-                      </label>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">Media Format</label>
+                      <div className="flex gap-4 text-xs font-semibold">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="viewType" 
+                            value="image" 
+                            checked={viewType === 'image'}
+                            onChange={() => setViewType('image')}
+                            className="accent-[#C1571F]"
+                          />
+                          <span>Image</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="viewType" 
+                            value="video" 
+                            checked={viewType === 'video'}
+                            onChange={() => setViewType('video')}
+                            className="accent-[#C1571F]"
+                          />
+                          <span>Looping Video (.mp4)</span>
+                        </label>
+                      </div>
                     </div>
 
-                    {isUploading && (
-                      <div className="space-y-2 pt-2">
-                        <div className="flex justify-between text-[10px] font-bold text-[#C1571F] uppercase tracking-wider">
-                          <span>Uploading View...</span>
-                          <span>{uploadProgress}%</span>
-                        </div>
-                        <div className="w-full bg-autumn-bark/10 h-2 rounded-full overflow-hidden">
-                          <div 
-                            className="bg-[#C1571F] h-full rounded-full transition-all duration-300"
-                            style={{ width: `${uploadProgress}%` }}
-                          ></div>
-                        </div>
+                    {/* Source Selector: Direct URL vs Upload */}
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-2">Media Source</label>
+                      <div className="flex gap-4 text-xs font-semibold mb-3">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="viewInputMode" 
+                            value="url" 
+                            checked={viewInputMode === 'url'}
+                            onChange={() => setViewInputMode('url')}
+                            className="accent-[#C1571F]"
+                          />
+                          <span>Direct Media URL</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="viewInputMode" 
+                            value="upload" 
+                            checked={viewInputMode === 'upload'}
+                            onChange={() => setViewInputMode('upload')}
+                            className="accent-[#C1571F]"
+                          />
+                          <span>Upload Local Image</span>
+                        </label>
                       </div>
-                    )}
+
+                      {viewInputMode === 'url' ? (
+                        <input 
+                          type="url"
+                          value={viewUrl}
+                          onChange={(e) => setViewUrl(e.target.value)}
+                          placeholder="Direct URL (https://... MP4 / WebP / JPG)"
+                          className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F]/60 transition-all"
+                        />
+                      ) : (
+                        <label 
+                          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                          onDragLeave={() => setDragOver(false)}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            setDragOver(false);
+                            const file = e.dataTransfer.files[0];
+                            if (file) setSelectedFile(file);
+                          }}
+                          className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer block transition-all ${
+                            dragOver 
+                              ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
+                              : selectedFile 
+                                ? 'border-emerald-500/40 bg-emerald-500/5' 
+                                : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
+                          }`}
+                        >
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) setSelectedFile(file);
+                            }}
+                            className="hidden"
+                            disabled={isUploading}
+                          />
+                          
+                          {selectedFile ? (
+                            <div className="space-y-2">
+                              <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto" />
+                              <div className="text-xs font-bold text-autumn-bark truncate max-w-[200px] mx-auto">
+                                {selectedFile.name}
+                              </div>
+                              <div className="text-[10px] text-autumn-bark/50">
+                                {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • Auto-compressed &lt; 700KB
+                              </div>
+                              <div className="text-[10px] text-[#C1571F] font-semibold hover:underline">Click to change file</div>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <Upload className="h-8 w-8 text-[#C1571F]/60 mx-auto" />
+                              <div className="text-xs font-bold text-autumn-bark">Drag and drop local image</div>
+                              <div className="text-[10px] text-autumn-bark/50">Auto-resizes &amp; compresses Base64</div>
+                            </div>
+                          )}
+                        </label>
+                      )}
+                    </div>
 
                     <button
                       type="submit"
-                      disabled={isUploading || !selectedFile || !viewTitle.trim() || !displayOrder.trim()}
-                      className="w-full h-12 bg-[#C1571F] hover:bg-[#A84310] disabled:bg-stone-300 text-white font-outfit text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 mt-4"
+                      disabled={isUploading || !viewTitle.trim() || !displayOrder.trim() || (viewInputMode === 'url' ? !viewUrl.trim() : !selectedFile)}
+                      className="w-full h-12 bg-[#C1571F] hover:bg-[#A84310] disabled:bg-stone-300 text-white font-outfit text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 mt-4 cursor-pointer"
                     >
                       {isUploading ? (
                         <>
                           <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                          Uploading...
+                          Saving View...
                         </>
                       ) : (
                         <>
