@@ -211,6 +211,35 @@ export default function App() {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
   const [expeditionViews, setExpeditionViews] = useState([]);
+  const [heroImage, setHeroImage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('bootpaths_hero_banner') || null;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const cached = typeof window !== 'undefined' ? localStorage.getItem('bootpaths_hero_banner') : null;
+    if (cached) setHeroImage(cached);
+
+    const unsub = onSnapshot(doc(db, 'app_settings', 'hero_banner'), (snap) => {
+      if (snap.exists() && snap.data()?.imageUrl) {
+        const url = snap.data().imageUrl;
+        setHeroImage(url);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('bootpaths_hero_banner', url);
+        }
+      } else if (snap.exists() && snap.data()?.imageUrl === '') {
+        setHeroImage(null);
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('bootpaths_hero_banner');
+        }
+      }
+    }, (err) => {
+      console.warn('Hero banner snapshot notice:', err);
+    });
+    return () => unsub();
+  }, []);
 
   const [featureFlags, setFeatureFlags] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -1487,37 +1516,47 @@ export default function App() {
 
       {/* 2. HERO SECTION */}
       <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden py-16 px-6 md:px-12">
-        {activeHeroMedia.map((media, idx) => {
-          const isActive = idx === activeHeroIndex;
-          const mediaUrl = media.mediaUrl || media.src;
-          const mediaType = media.mediaType || media.type;
-          const key = media.id || media.src;
-          return (
-            <div
-              key={key}
-              className={`absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out z-0 ${
-                isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }`}
-            >
-              {mediaType === 'video' ? (
-                <video
-                  src={mediaUrl}
-                  className="h-full w-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={mediaUrl}
-                  alt={media.title}
-                  className="h-full w-full object-cover animate-in fade-in zoom-in-105 duration-1000"
-                />
-              )}
-            </div>
-          );
-        })}
+        {heroImage ? (
+          <div className="absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out z-0 opacity-100">
+            <img
+              src={heroImage}
+              alt="BOOTpaths Custom Hero Banner"
+              className="h-full w-full object-cover animate-in fade-in duration-500"
+            />
+          </div>
+        ) : (
+          activeHeroMedia.map((media, idx) => {
+            const isActive = idx === activeHeroIndex;
+            const mediaUrl = media.mediaUrl || media.src;
+            const mediaType = media.mediaType || media.type;
+            const key = media.id || media.src;
+            return (
+              <div
+                key={key}
+                className={`absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out z-0 ${
+                  isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                {mediaType === 'video' ? (
+                  <video
+                    src={mediaUrl}
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={mediaUrl}
+                    alt={media.title}
+                    className="h-full w-full object-cover animate-in fade-in zoom-in-105 duration-1000"
+                  />
+                )}
+              </div>
+            );
+          })
+        )}
         {/* Advanced Gradient Overlays - Light Uniform Tint */}
         <div className="absolute inset-0 z-10 bg-stone-950/20"></div>
 

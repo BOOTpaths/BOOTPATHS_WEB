@@ -11,6 +11,7 @@ import { auth, db, storage } from '../config/firebase';
 import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { CURATED_TREKS } from '../data/curatedTreks';
+import AdminPortal from './AdminPortal';
 import { 
   Plus, 
   Edit2, 
@@ -1460,7 +1461,21 @@ export default function AdminConsole({
               Social Feeds
             </button>
           )}
+          <button
+            onClick={() => setActiveTab('banner')}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === 'banner' 
+                ? 'border-[#C1571F] text-[#C1571F]' 
+                : 'border-transparent text-autumn-bark/60 hover:text-autumn-bark'
+            }`}
+          >
+            Hero Banner
+          </button>
         </div>
+
+        {activeTab === 'banner' && (
+          <AdminPortal onReturnToSite={onReturnToSite} />
+        )}
 
         {activeTab === 'inventory' && (
           <>
