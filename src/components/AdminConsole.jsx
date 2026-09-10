@@ -509,15 +509,34 @@ export default function AdminConsole({
   const trekFileInputRef = useRef(null);
 
   const handleTrekFileChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file.');
+      alert('Please select a valid image file (JPG, PNG, WebP).');
       return;
     }
     const reader = new FileReader();
     reader.onload = (event) => {
-      setFormData(prev => ({ ...prev, image: event.target.result }));
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxWidth = 1200; // Optimal for trek card banners
+        const scale = Math.min(1, maxWidth / img.width);
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const optimizedDataUrl = canvas.toDataURL("image/jpeg", 0.75);
+
+        setFormData(prev => ({ 
+          ...prev, 
+          image: optimizedDataUrl,
+          imageUrl: optimizedDataUrl,
+          bannerImage: optimizedDataUrl
+        }));
+      };
     };
     reader.readAsDataURL(file);
   };
@@ -534,15 +553,34 @@ export default function AdminConsole({
   const handleAdminDrop = (e) => {
     e.preventDefault();
     setIsAdminDragOver(false);
-    const file = e.dataTransfer.files[0];
+    const file = e.dataTransfer.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file.');
+      alert('Please select a valid image file (JPG, PNG, WebP).');
       return;
     }
     const reader = new FileReader();
     reader.onload = (event) => {
-      setFormData(prev => ({ ...prev, image: event.target.result }));
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxWidth = 1200;
+        const scale = Math.min(1, maxWidth / img.width);
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const optimizedDataUrl = canvas.toDataURL("image/jpeg", 0.75);
+
+        setFormData(prev => ({ 
+          ...prev, 
+          image: optimizedDataUrl,
+          imageUrl: optimizedDataUrl,
+          bannerImage: optimizedDataUrl
+        }));
+      };
     };
     reader.readAsDataURL(file);
   };
@@ -852,8 +890,9 @@ export default function AdminConsole({
   // Save (Create or Update) Trek
   const handleSaveTrek = async (e) => {
     e.preventDefault();
-    if (!formData.image) {
-      alert('Please upload a banner image for the trek package.');
+    const trekImage = formData.image || formData.imageUrl || formData.bannerImage || '';
+    if (!trekImage) {
+      alert('Please provide a banner image URL or upload a photo for the trek package.');
       return;
     }
 
@@ -878,13 +917,17 @@ export default function AdminConsole({
 
     const payload = {
       ...formData,
+      image: trekImage,
+      imageUrl: trekImage,
+      bannerImage: trekImage,
       price: Number(formData.price),
       originalPrice: Number(formData.originalPrice),
       slotsLeft: Number(formData.slotsLeft),
       isVisible: formData.isVisible !== false,
       tagColor,
       batchDates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
-      dates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+      dates: formData.batchDates && formData.batchDates.length > 0 ? formData.batchDates : ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
+      updatedAt: new Date().toISOString()
     };
 
     if (editingTrek) {
@@ -3202,59 +3245,77 @@ export default function AdminConsole({
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70 mb-1.5">
+              <div className="space-y-3">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-autumn-bark/70">
                   Trek Banner Image
                 </label>
                 
-                {formData.image ? (
-                  <div className="relative rounded-xl overflow-hidden border border-[#E7E7E4] bg-[#F8F8F6] p-3 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={formData.image} 
-                        alt="Trek Preview" 
-                        className="h-14 w-24 object-cover rounded-lg border border-[#E7E7E4]"
-                      />
-                      <div>
-                        <span className="text-xs font-semibold text-autumn-bark">Banner Selected</span>
-                        <span className="text-[10px] text-autumn-bark/50 block">Ready to save</span>
-                      </div>
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                      className="h-8 w-8 rounded-lg bg-[#8C2B2A]/10 hover:bg-[#8C2B2A] text-[#8C2B2A] hover:text-white flex items-center justify-center transition-colors border border-[#8C2B2A]/20"
-                      title="Remove Image"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    onDragOver={handleAdminDragOver}
-                    onDragLeave={handleAdminDragLeave}
-                    onDrop={handleAdminDrop}
-                    onClick={() => trekFileInputRef.current?.click()}
-                    className={`border-2 border-dashed transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 ${
-                      isAdminDragOver 
-                        ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
-                        : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
-                    }`}
-                  >
-                    <input 
-                      type="file"
-                      ref={trekFileInputRef}
-                      onChange={handleTrekFileChange}
-                      accept="image/*"
-                      className="hidden"
+                {/* Live Thumbnail Preview */}
+                {(formData.image || formData.imageUrl) && (
+                  <div className="relative w-full h-36 rounded-xl overflow-hidden border border-[#E7E7E4] bg-stone-900 group">
+                    <img 
+                      src={formData.image || formData.imageUrl} 
+                      alt="Trek Preview" 
+                      className="w-full h-full object-cover"
                     />
-                    <Upload className="h-5 w-5 text-autumn-maple" />
-                    <div className="text-xs text-autumn-bark/85 font-medium">
-                      Click or drag trek banner photo from local device
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex items-end justify-between">
+                      <span className="text-[10px] text-white font-bold uppercase tracking-wider bg-black/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-white/20">
+                        {(formData.image || formData.imageUrl).startsWith('data:') ? 'Local Base64 Compressed' : 'Direct Image URL'}
+                      </span>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, image: '', imageUrl: '', bannerImage: '' }))}
+                        className="h-8 px-3 rounded-lg bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
+                        title="Remove Image"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        <span>Remove Image</span>
+                      </button>
                     </div>
-                    <span className="text-[9px] text-autumn-bark/40">Supports PNG, JPG, JPEG, WEBP</span>
                   </div>
                 )}
+
+                {/* Option A: Direct Image URL Input */}
+                <div className="flex gap-2">
+                  <input 
+                    type="url" 
+                    placeholder="Paste direct image URL (https://...)"
+                    value={formData.image || formData.imageUrl || ''}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      image: e.target.value, 
+                      imageUrl: e.target.value,
+                      bannerImage: e.target.value
+                    }))}
+                    className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-[#C1571F]"
+                  />
+                </div>
+
+                {/* Option B: Local File Picker Dropzone */}
+                <div
+                  onDragOver={handleAdminDragOver}
+                  onDragLeave={handleAdminDragLeave}
+                  onDrop={handleAdminDrop}
+                  onClick={() => trekFileInputRef.current?.click()}
+                  className={`border-2 border-dashed transition-all rounded-xl p-4 text-center cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                    isAdminDragOver 
+                      ? 'border-[#C1571F] bg-[#F8F8F6] scale-[0.99]' 
+                      : 'border-[#E7E7E4] bg-[#F8F8F6] hover:border-[#C1571F]'
+                  }`}
+                >
+                  <input 
+                    type="file"
+                    ref={trekFileInputRef}
+                    onChange={handleTrekFileChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <Upload className="h-5 w-5 text-autumn-maple" />
+                  <div className="text-xs text-autumn-bark/85 font-medium">
+                    Or click/drag an image from your device to upload
+                  </div>
+                  <span className="text-[9px] text-autumn-bark/40">Auto-compressed JPG/PNG &lt; 1MB (Free Plan Mode)</span>
+                </div>
               </div>
 
                {/* Public Visibility Toggle Checkbox */}
