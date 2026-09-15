@@ -902,7 +902,7 @@ export default function App() {
   const handleProceedToPay = () => {
     const payableAmount = finalPayablePrice;
     const amountInPaise = Math.round(payableAmount * 100);
-    const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TZOR1bH6I8CVFp';
+    const razorpayKey = (import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TcJLNqT26Th7Rg').trim();
 
     const options = {
       key: razorpayKey,

@@ -921,7 +921,7 @@ export default function DeveloperConsole({ user, onExit }) {
                 </div>
               </div>
               <p className="text-xxs text-[#8B949E]">
-                Client ID: <strong className="text-white font-mono">rzp_test_TZOR1bH6I8CVFp</strong>
+                Client ID: <strong className="text-white font-mono">{import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TcJLNqT26Th7Rg'}</strong>
               </p>
             </div>
           </div>

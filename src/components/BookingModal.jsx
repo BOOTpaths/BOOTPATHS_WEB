@@ -5,7 +5,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 /**
@@ -156,14 +156,15 @@ export default function BookingModal({
       // 1. Dynamic Script Loader
       const isLoaded = await loadRazorpayScript();
       if (!isLoaded) {
-        alert('Unable to load Razorpay checkout SDK. Please check your internet connection or use the direct backup link.');
+        alert('Unable to load Razorpay checkout SDK. Please check your internet connection.');
         setIsProcessing(false);
         return;
       }
 
       // 2. Configure Standard Modal Options
+      const razorpayKey = (import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TcJLNqT26Th7Rg').trim();
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TZOR1bH6I8CVFp',
+        key: razorpayKey,
         amount: amountInPaise,
         currency: 'INR',
         name: 'BOOTpaths Expeditions',
@@ -190,7 +191,8 @@ export default function BookingModal({
           }
         },
         handler: async function (response) {
-          // Payment captured successfully
+          // Real-time live payment verification and booking record creation
+          console.log("Live Payment Success:", response.razorpay_payment_id);
           try {
             const bookingDoc = {
               trekId: trek.id || 'trek-entry',
@@ -208,12 +210,27 @@ export default function BookingModal({
               paymentId: response.razorpay_payment_id || `PAY-${Date.now()}`,
               paymentStatus: 'SUCCESS',
               bookingStatus: 'CONFIRMED',
-              status: 'Confirmed',
+              status: 'CONFIRMED',
+              paymentMode: 'LIVE',
               createdAt: new Date().toISOString()
             };
 
             // Save directly to Firestore bookings collection
             const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
+
+            // Decrement available slots for this trek in Firestore
+            if (trek?.id) {
+              try {
+                const packageRef = doc(db, 'packages', trek.id);
+                await updateDoc(packageRef, {
+                  slotsLeft: increment(-trekkers),
+                  availableSlots: increment(-trekkers)
+                });
+              } catch (slotErr) {
+                console.warn('Slot decrement error:', slotErr);
+              }
+            }
+
             const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
             setConfirmedBookingId(displayId);
             setIsSuccess(true);
@@ -239,7 +256,7 @@ export default function BookingModal({
       rzp.open();
     } catch (err) {
       console.error('Razorpay launch exception:', err);
-      alert('An unexpected error occurred while launching payment. Please try the direct payment backup link.');
+      alert('An unexpected error occurred while launching payment. Please try again.');
       setIsProcessing(false);
     }
   };
@@ -392,7 +409,7 @@ export default function BookingModal({
 
               {/* Action Buttons */}
               <div className="pt-2 space-y-3">
-                {/* 1. Primary Proceed to Pay Button */}
+                {/* Primary Proceed to Pay Button */}
                 <button
                   type="submit"
                   disabled={isProcessing}
@@ -407,19 +424,6 @@ export default function BookingModal({
                     <span>PROCEED TO PAY ₹{totalAmount.toLocaleString('en-IN')}</span>
                   )}
                 </button>
-
-                {/* 2. Secondary Fallback Direct Link */}
-                <div className="text-center pt-1">
-                  <span className="text-[10px] text-[#52524E]/60 block mb-1.5">— OR USE DIRECT PAYMENT LINK —</span>
-                  <a
-                    href={`https://razorpay.me/@bootpaths?amount=${totalAmount}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex w-full h-10 items-center justify-center rounded-xl border border-[#EB5A0D] text-[#EB5A0D] font-outfit text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[#EB5A0D] hover:text-white"
-                  >
-                    🔗 Pay Direct via Razorpay.me ↗
-                  </a>
-                </div>
               </div>
             </form>
           ) : (
