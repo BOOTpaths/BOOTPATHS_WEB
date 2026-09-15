@@ -62,35 +62,57 @@ export default function UserDashboard({
     try {
       const userRef = doc(db, "users", auth.currentUser.uid);
       
-      const updatedProfile = {
-        profile: {
-          fullName: profileData.fullName?.trim() || "",
-          mobile: profileData.mobile?.trim() || "",
-          bloodGroup: profileData.bloodGroup || "",
-          emergencyContact: profileData.emergencyContact?.trim() || "",
-          medicalConditions: profileData.medicalConditions?.trim() || ""
-        },
-        name: profileData.fullName?.trim() || auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+      const profileDataToSave = {
+        fullName: (profileData.fullName || user.name || "").trim(),
+        email: (profileData.email || user.email || "").trim(),
+        age: Number(profileData.age) || 0,
+        gender: profileData.gender || "",
+        whatsapp: (profileData.whatsapp || profileData.mobile || "").trim(),
+        mobile: (profileData.whatsapp || profileData.mobile || "").trim(),
+        hometown: (profileData.hometown || "").trim(),
+        dietary: profileData.dietary || "",
+        fitnessLevel: profileData.fitnessLevel || "",
+        idCardNumber: (profileData.idCardNumber || "").trim(),
+        emergencyName: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
+        emergencyContact: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
+        emergencyPhone: (profileData.emergencyPhone || "").trim(),
+        isProfileComplete: Boolean(
+          (profileData.fullName || user.name)?.trim() &&
+          profileData.age &&
+          profileData.gender &&
+          (profileData.whatsapp || profileData.mobile)?.trim() &&
+          profileData.hometown?.trim() &&
+          profileData.dietary &&
+          profileData.fitnessLevel &&
+          profileData.idCardNumber?.trim() &&
+          (profileData.emergencyName || profileData.emergencyContact)?.trim() &&
+          profileData.emergencyPhone?.trim()
+        ),
         updatedAt: new Date().toISOString()
       };
 
       // Security Guard: Prevent any local role escalation attempts
-      if ('role' in updatedProfile) {
-        delete updatedProfile.role;
-      }
-      if (updatedProfile.profile && 'role' in updatedProfile.profile) {
-        delete updatedProfile.profile.role;
+      if ('role' in profileDataToSave) {
+        delete profileDataToSave.role;
       }
 
       // Merge update into Firestore
-      await setDoc(userRef, updatedProfile, { merge: true });
+      await setDoc(userRef, {
+        ...profileDataToSave,
+        profile: profileDataToSave,
+        name: profileDataToSave.fullName || user.name
+      }, { merge: true });
+
+      if (setProfileData) {
+        setProfileData(prev => ({ ...prev, ...profileDataToSave }));
+      }
 
       // Visual Feedback
       setSuccessMessage("Hiker Vital Credentials saved successfully!");
       setIsSaved(true);
       setTimeout(() => {
         setIsSaved(false);
-      }, 2000);
+      }, 2500);
     } catch (error) {
       if (!import.meta.env.PROD) {
         console.error("Error updating profile credentials:", error);
@@ -361,94 +383,244 @@ export default function UserDashboard({
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Safety Credentials</span>
                 <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Hiker Vital Profile</h2>
-                <p className="text-xs text-[#52524E] mt-0.5">Manage your wilderness credentials and emergency medical protocols.</p>
+                <p className="text-xs text-[#52524E] mt-0.5">Manage your wilderness credentials, forest permit details, and emergency protocols.</p>
               </div>
 
-              <form onSubmit={handleSaveProfile} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {/* Clearance Notice */}
+              <div className="bg-[#C1571F]/10 border border-[#C1571F]/25 p-4 rounded-2xl text-xs text-[#1A1A18] flex items-start gap-3">
+                <ShieldCheck className="h-4 w-4 text-[#C1571F] shrink-0 mt-0.5" />
+                <span className="leading-relaxed font-medium">
+                  <strong>Forest Clearance Protocol:</strong> Forest department clearance and safety protocols require all details before batch reservation.
+                </span>
+              </div>
+
+              <form onSubmit={handleSaveProfile} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  
+                  {/* Row 1: Full Name | Email ID */}
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Legal Full Name</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
                     <input 
                       type="text"
-                      value={profileData.fullName || user.name}
+                      required
+                      value={profileData.fullName ?? user.name ?? ''}
                       onChange={(e) => setProfileData({...profileData, fullName: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
                       placeholder="As per Government ID"
                     />
                   </div>
+
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Contact Mobile</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Email ID <span className="text-red-500">*</span>
+                    </label>
                     <input 
-                      type="tel"
-                      value={profileData.mobile}
-                      onChange={(e) => setProfileData({...profileData, mobile: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
-                      placeholder="+91 98765 43210"
+                      type="email"
+                      required
+                      value={profileData.email || user.email || ''}
+                      onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="Email for booking passes"
                     />
                   </div>
+
+                  {/* Row 2: Age | Gender */}
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Blood Group</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Age <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="number"
+                      min="10"
+                      max="80"
+                      required
+                      value={profileData.age || ''}
+                      onChange={(e) => setProfileData({...profileData, age: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="Age (10–80 years)"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Gender <span className="text-red-500">*</span>
+                    </label>
                     <div className="relative">
                       <select 
-                        value={profileData.bloodGroup}
-                        onChange={(e) => setProfileData({...profileData, bloodGroup: e.target.value})}
-                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] focus:outline-none focus:border-autumn-maple transition-all appearance-none"
+                        required
+                        value={profileData.gender || ''}
+                        onChange={(e) => setProfileData({...profileData, gender: e.target.value})}
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] focus:outline-none focus:border-[#C1571F] transition-all appearance-none cursor-pointer"
                       >
-                        <option value="" disabled>Select Blood Type</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
+                        <option value="" disabled>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-binary / Other">Non-binary / Other</option>
                       </select>
                       <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
                     </div>
                   </div>
+
+                  {/* Row 3: WhatsApp Number | Hometown / District */}
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Emergency Contact</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      WhatsApp Number <span className="text-red-500">*</span>
+                    </label>
                     <input 
                       type="tel"
-                      value={profileData.emergencyContact}
-                      onChange={(e) => setProfileData({...profileData, emergencyContact: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all"
-                      placeholder="Family or Guardian Mobile"
+                      required
+                      value={profileData.whatsapp || profileData.mobile || ''}
+                      onChange={(e) => setProfileData({...profileData, whatsapp: e.target.value, mobile: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="10-digit WhatsApp Number"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Hometown / District <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="text"
+                      required
+                      value={profileData.hometown || ''}
+                      onChange={(e) => setProfileData({...profileData, hometown: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="e.g. Bangalore, Karnataka"
+                    />
+                  </div>
+
+                  {/* Row 4: Dietary Option | Fitness Level */}
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Dietary Option <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        required
+                        value={profileData.dietary || ''}
+                        onChange={(e) => setProfileData({...profileData, dietary: e.target.value})}
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] focus:outline-none focus:border-[#C1571F] transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled>Select Dietary Preference</option>
+                        <option value="Standard Veg">Standard Veg</option>
+                        <option value="Non-Veg">Non-Veg</option>
+                        <option value="Jain / Pure Veg">Jain / Pure Veg</option>
+                        <option value="Vegan">Vegan</option>
+                      </select>
+                      <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Fitness Level <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        required
+                        value={profileData.fitnessLevel || ''}
+                        onChange={(e) => setProfileData({...profileData, fitnessLevel: e.target.value})}
+                        className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] focus:outline-none focus:border-[#C1571F] transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled>Select Fitness Level</option>
+                        <option value="Beginner (5k walk)">Beginner (5k walk)</option>
+                        <option value="Moderate (Regular jog/workout)">Moderate (Regular jog/workout)</option>
+                        <option value="Advanced (Endurance runner/trekker)">Advanced (Endurance runner/trekker)</option>
+                      </select>
+                      <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* Row 5: ID Card Number (Govt ID) | Forest Permit Info */}
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      ID Card Number (Govt ID) <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="text"
+                      required
+                      value={profileData.idCardNumber || ''}
+                      onChange={(e) => setProfileData({...profileData, idCardNumber: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all font-mono"
+                      placeholder="Aadhaar / DL / Passport Number"
+                    />
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="w-full bg-[#FFFFFF] border border-[#E7E7E4] rounded-xl p-3 flex items-center gap-2.5 text-[11px] text-[#52524E]">
+                      <Info className="h-4 w-4 text-[#C1571F] shrink-0" />
+                      <span>Govt ID is mandatory for state forest department transit permits and base camp manifests.</span>
+                    </div>
+                  </div>
+
+                  {/* Row 6: Emergency Contact Name | Emergency Contact Number */}
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Emergency Contact Name <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="text"
+                      required
+                      value={profileData.emergencyName || profileData.emergencyContact || ''}
+                      onChange={(e) => setProfileData({...profileData, emergencyName: e.target.value, emergencyContact: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="Parent, Spouse or Guardian Name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
+                      Emergency Contact Number <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="tel"
+                      required
+                      value={profileData.emergencyPhone || ''}
+                      onChange={(e) => setProfileData({...profileData, emergencyPhone: e.target.value})}
+                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                      placeholder="Emergency 10-digit Phone"
+                    />
+                  </div>
+
+                </div>
+
+                <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[#E7E7E4]">
+                  <div className="text-[11px] text-[#52524E]">
+                    {profileData.isProfileComplete ? (
+                      <span className="text-emerald-700 font-bold flex items-center gap-1">
+                        <CheckCircle2 className="h-3.5 w-3.5" /> Vital Profile Complete &amp; Verified for Bookings
+                      </span>
+                    ) : (
+                      <span className="text-amber-700 font-bold">
+                        ⚠️ Please fill all required fields to enable instant trek bookings.
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <button
+                      type="submit"
+                      disabled={isSaving}
+                      className={`w-full sm:w-auto flex h-11 items-center justify-center gap-2 rounded-xl px-7 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-sm cursor-pointer disabled:opacity-50 ${
+                        isSaved 
+                          ? 'bg-emerald-600 hover:bg-emerald-700' 
+                          : 'bg-[#C1571F] hover:bg-[#A84310]'
+                      }`}
+                    >
+                      {isSaved ? 'SAVED ✓' : isSaving ? 'Synchronizing...' : 'Save Hiker Credentials'}
+                    </button>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-2">Medical Conditions / Allergies</label>
-                  <textarea 
-                    rows="3"
-                    value={profileData.medicalConditions}
-                    onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
-                    className="w-full p-4 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-autumn-maple transition-all resize-none"
-                    placeholder="List any history of AMS, asthma, heart conditions, or severe insect/drug allergies."
-                  ></textarea>
-                </div>
-
-                <div className="pt-2 flex flex-col items-end gap-2">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className={`flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-xs font-bold uppercase tracking-wider text-white transition-all shadow-sm disabled:opacity-50 ${
-                      isSaved 
-                        ? 'bg-emerald-600 hover:bg-emerald-700' 
-                        : 'bg-[#C1571F] hover:bg-[#A84310]'
-                    }`}
-                  >
-                    {isSaved ? 'SAVED ✓' : isSaving ? 'Synchronizing...' : 'Save Hiker Credentials'}
-                  </button>
-                  {successMessage && (
-                    <p className="text-xxs font-bold text-emerald-700 mt-2">{successMessage}</p>
-                  )}
-                  {errorMessage && (
-                    <p className="text-xxs font-bold text-[#C1571F] mt-2">{errorMessage}</p>
-                  )}
-                </div>
+                {successMessage && (
+                  <p className="text-xxs font-bold text-emerald-700 text-right">{successMessage}</p>
+                )}
+                {errorMessage && (
+                  <p className="text-xxs font-bold text-red-600 text-right">{errorMessage}</p>
+                )}
               </form>
             </div>
           )}

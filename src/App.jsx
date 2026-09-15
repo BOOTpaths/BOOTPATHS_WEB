@@ -463,10 +463,19 @@ export default function App() {
   const [useWalletCredit, setUseWalletCredit] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: '',
+    email: '',
+    age: '',
+    gender: '',
+    whatsapp: '',
     mobile: '',
-    bloodGroup: '',
+    hometown: '',
+    dietary: '',
+    fitnessLevel: '',
+    idCardNumber: '',
+    emergencyName: '',
     emergencyContact: '',
-    medicalConditions: ''
+    emergencyPhone: '',
+    isProfileComplete: false
   });
 
   // Client Security Guard
@@ -571,21 +580,53 @@ export default function App() {
         role: userData.role || 'hiker'
       });
       setUserRole(userData.role || 'hiker');
-      if (userData.profile) {
+      if (userData.profile || userData.fullName) {
+        const prof = userData.profile || userData;
+        const isComplete = Boolean(
+          (prof.fullName || userData.name)?.trim() &&
+          prof.age &&
+          prof.gender &&
+          (prof.whatsapp || prof.mobile)?.trim() &&
+          prof.hometown?.trim() &&
+          prof.dietary &&
+          prof.fitnessLevel &&
+          prof.idCardNumber?.trim() &&
+          (prof.emergencyName || prof.emergencyContact)?.trim() &&
+          prof.emergencyPhone?.trim()
+        );
+
         setProfileData({
-          fullName: userData.profile.fullName || '',
-          mobile: userData.profile.mobile || '',
-          bloodGroup: userData.profile.bloodGroup || '',
-          emergencyContact: userData.profile.emergencyContact || '',
-          medicalConditions: userData.profile.medicalConditions || ''
+          fullName: prof.fullName || userData.name || '',
+          email: prof.email || userData.email || '',
+          age: prof.age || '',
+          gender: prof.gender || '',
+          whatsapp: prof.whatsapp || prof.mobile || '',
+          mobile: prof.whatsapp || prof.mobile || '',
+          hometown: prof.hometown || '',
+          dietary: prof.dietary || '',
+          fitnessLevel: prof.fitnessLevel || '',
+          idCardNumber: prof.idCardNumber || '',
+          emergencyName: prof.emergencyName || prof.emergencyContact || '',
+          emergencyContact: prof.emergencyName || prof.emergencyContact || '',
+          emergencyPhone: prof.emergencyPhone || '',
+          isProfileComplete: isComplete
         });
       } else {
         setProfileData({
           fullName: userData.name || '',
+          email: userData.email || '',
+          age: '',
+          gender: '',
+          whatsapp: '',
           mobile: '',
-          bloodGroup: '',
+          hometown: '',
+          dietary: '',
+          fitnessLevel: '',
+          idCardNumber: '',
+          emergencyName: '',
           emergencyContact: '',
-          medicalConditions: ''
+          emergencyPhone: '',
+          isProfileComplete: false
         });
       }
     } else if (!currentUser) {
@@ -593,6 +634,21 @@ export default function App() {
       setUserRole(null);
     }
   }, [currentUser, userData]);
+
+  // Auto-fill booking form credentials from Hiker Vital Profile
+  useEffect(() => {
+    if (profileData) {
+      if (profileData.fullName) setName(profileData.fullName);
+      else if (user?.name) setName(user.name);
+
+      if (profileData.email) setEmail(profileData.email);
+      else if (user?.email) setEmail(user.email);
+
+      if (profileData.whatsapp || profileData.mobile) {
+        setPhone(profileData.whatsapp || profileData.mobile);
+      }
+    }
+  }, [profileData, user]);
 
   // Synchronize wallet balance with Firestore for logged-in users
   useEffect(() => {
@@ -786,9 +842,36 @@ export default function App() {
     setDetailedTrek(trek);
   };
 
-  // Start Razorpay Checkout Simulation
+  // Start Razorpay Checkout Simulation with Mandatory Profile Gate Check
   const handleCheckoutInit = (e) => {
     e.preventDefault();
+
+    if (!user || !user.uid || user.uid.startsWith('guest-')) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    const prof = profileData || {};
+    const isComplete = Boolean(
+      (prof.fullName || user.name)?.trim() &&
+      prof.age &&
+      prof.gender &&
+      (prof.whatsapp || prof.mobile)?.trim() &&
+      prof.hometown?.trim() &&
+      prof.dietary &&
+      prof.fitnessLevel &&
+      prof.idCardNumber?.trim() &&
+      (prof.emergencyName || prof.emergencyContact)?.trim() &&
+      prof.emergencyPhone?.trim()
+    );
+
+    if (!isComplete) {
+      alert("Please complete your Hiker Vital Profile credentials before booking a trek slot.");
+      setDashboardTab('profile');
+      setIsDashboardOpen(true);
+      return;
+    }
+
     const errors = {};
     if (!name.trim()) errors.name = 'Full name is required';
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errors.email = 'Valid email is required';
@@ -2864,15 +2947,42 @@ export default function App() {
           if (!user || !user.uid) return;
           setIsSavingProfile(true);
           try {
+            const profilePayload = {
+              fullName: (profileData.fullName || user.name || '').trim(),
+              email: (profileData.email || user.email || '').trim(),
+              age: Number(profileData.age) || 0,
+              gender: profileData.gender || '',
+              whatsapp: (profileData.whatsapp || profileData.mobile || '').trim(),
+              mobile: (profileData.whatsapp || profileData.mobile || '').trim(),
+              hometown: (profileData.hometown || '').trim(),
+              dietary: profileData.dietary || '',
+              fitnessLevel: profileData.fitnessLevel || '',
+              idCardNumber: (profileData.idCardNumber || '').trim(),
+              emergencyName: (profileData.emergencyName || profileData.emergencyContact || '').trim(),
+              emergencyContact: (profileData.emergencyName || profileData.emergencyContact || '').trim(),
+              emergencyPhone: (profileData.emergencyPhone || '').trim(),
+              isProfileComplete: Boolean(
+                (profileData.fullName || user.name)?.trim() &&
+                profileData.age &&
+                profileData.gender &&
+                (profileData.whatsapp || profileData.mobile)?.trim() &&
+                profileData.hometown?.trim() &&
+                profileData.dietary &&
+                profileData.fitnessLevel &&
+                profileData.idCardNumber?.trim() &&
+                (profileData.emergencyName || profileData.emergencyContact)?.trim() &&
+                profileData.emergencyPhone?.trim()
+              ),
+              updatedAt: new Date().toISOString()
+            };
+
             await setDoc(doc(db, 'users', user.uid), {
-              profile: {
-                fullName: profileData.fullName || '',
-                mobile: profileData.mobile || '',
-                bloodGroup: profileData.bloodGroup || '',
-                emergencyContact: profileData.emergencyContact || '',
-                medicalConditions: profileData.medicalConditions || ''
-              }
+              ...profilePayload,
+              profile: profilePayload,
+              name: profilePayload.fullName || user.name
             }, { merge: true });
+
+            setProfileData(prev => ({ ...prev, ...profilePayload }));
           } catch (err) {
             console.warn('Profile save error:', err.message);
           } finally {

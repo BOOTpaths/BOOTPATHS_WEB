@@ -5,7 +5,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
-import { collection, addDoc, doc, updateDoc, increment, runTransaction } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc, increment, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
 import { db } from '../config/firebase';
 
@@ -39,7 +39,8 @@ export default function BookingModal({
   trek,
   selectedDate: initialDate,
   currentUser,
-  onBookingSuccess
+  onBookingSuccess,
+  onOpenProfileModal
 }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -59,13 +60,38 @@ export default function BookingModal({
   // Sync initial user details and dates when modal opens
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        name: currentUser?.displayName || currentUser?.name || '',
-        email: currentUser?.email || '',
-        phone: currentUser?.phone || '',
-        selectedDate: initialDate || (trek?.batchDates && trek.batchDates[0]) || '',
-        numberOfTrekkers: 1
-      });
+      const loadProfile = async () => {
+        let nameVal = currentUser?.displayName || currentUser?.name || '';
+        let emailVal = currentUser?.email || '';
+        let phoneVal = currentUser?.phone || '';
+
+        if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
+          try {
+            const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+            if (userSnap.exists()) {
+              const data = userSnap.data();
+              const prof = data.profile || data;
+              if (prof.fullName || data.fullName) nameVal = prof.fullName || data.fullName;
+              if (prof.email || data.email) emailVal = prof.email || data.email;
+              if (prof.whatsapp || prof.mobile || data.whatsapp || data.mobile) {
+                phoneVal = prof.whatsapp || prof.mobile || data.whatsapp || data.mobile;
+              }
+            }
+          } catch (err) {
+            console.warn('User profile fetch in BookingModal notice:', err);
+          }
+        }
+
+        setFormData({
+          name: nameVal,
+          email: emailVal,
+          phone: phoneVal,
+          selectedDate: initialDate || (trek?.batchDates && trek.batchDates[0]) || '',
+          numberOfTrekkers: 1
+        });
+      };
+
+      loadProfile();
       setFormErrors({});
       setIsSuccess(false);
       setIsProcessing(false);
@@ -100,6 +126,38 @@ export default function BookingModal({
   const handleProceedToPay = async (e) => {
     if (e) e.preventDefault();
     if (!validateForm()) return;
+
+    // Enforce Booking Gate Check: Mandatory Hiker Vital Profile
+    if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
+      try {
+        const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+        const data = userSnap.data() || {};
+        const prof = data.profile || data;
+
+        const isComplete = Boolean(
+          (prof.fullName || data.fullName || formData.name)?.trim() &&
+          (prof.age || data.age) &&
+          (prof.gender || data.gender) &&
+          (prof.whatsapp || prof.mobile || data.whatsapp || formData.phone)?.trim() &&
+          (prof.hometown || data.hometown)?.trim() &&
+          (prof.dietary || data.dietary) &&
+          (prof.fitnessLevel || data.fitnessLevel) &&
+          (prof.idCardNumber || data.idCardNumber)?.trim() &&
+          (prof.emergencyName || prof.emergencyContact || data.emergencyName)?.trim() &&
+          (prof.emergencyPhone || data.emergencyPhone)?.trim()
+        );
+
+        if (!isComplete) {
+          alert("Please complete your Hiker Vital Profile credentials before booking a trek slot.");
+          if (onOpenProfileModal) {
+            onOpenProfileModal();
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn('Profile validation check notice:', err);
+      }
+    }
 
     setIsProcessing(true);
 
