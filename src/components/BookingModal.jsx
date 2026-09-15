@@ -33,45 +33,45 @@ const loadRazorpayScript = () => {
   });
 };
 
+const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+
 /**
  * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
  */
-const syncBookingToGoogleSheet = async (bookingData) => {
-  const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
-
+const syncBookingToGoogleSheet = async (bookingData, userProfile) => {
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-    bookingId: bookingData.bookingId || bookingData.displayId,
-    fullName: bookingData.fullName || bookingData.name || bookingData.userName || "Trekker",
-    email: bookingData.email || bookingData.userEmail || "",
-    age: bookingData.age || "",
-    gender: bookingData.gender || "",
-    whatsapp: bookingData.whatsapp || bookingData.phone || bookingData.userPhone || "",
-    hometown: bookingData.hometown || "",
-    dietary: bookingData.dietary || "",
-    fitnessLevel: bookingData.fitnessLevel || "",
-    idCardNumber: bookingData.idCardNumber || "",
-    emergencyName: bookingData.emergencyName || bookingData.emergencyContact || "",
-    emergencyPhone: bookingData.emergencyPhone || "",
-    trekTitle: bookingData.trekTitle || bookingData.title || "Expedition",
-    batchDate: bookingData.batchDate || bookingData.date || "",
-    trekkersCount: bookingData.trekkersCount || bookingData.trekkers || 1,
-    amountPaid: bookingData.amountPaid || bookingData.totalAmount || bookingData.price || 0,
+    bookingId: bookingData.bookingId || bookingData.displayId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
+    fullName: userProfile?.fullName || bookingData.payerName || bookingData.fullName || bookingData.name || "Trekker",
+    email: userProfile?.email || bookingData.payerEmail || bookingData.email || "",
+    age: userProfile?.age || bookingData.age || "",
+    gender: userProfile?.gender || bookingData.gender || "",
+    whatsapp: userProfile?.whatsapp || userProfile?.mobile || bookingData.payerPhone || bookingData.whatsapp || bookingData.phone || "",
+    hometown: userProfile?.hometown || bookingData.hometown || "",
+    dietary: userProfile?.dietary || bookingData.dietary || "Standard Veg",
+    fitnessLevel: userProfile?.fitnessLevel || bookingData.fitnessLevel || "Moderate",
+    idCardNumber: userProfile?.idCardNumber || bookingData.idCardNumber || "",
+    emergencyName: userProfile?.emergencyName || userProfile?.emergencyContact || bookingData.emergencyName || "",
+    emergencyPhone: userProfile?.emergencyPhone || bookingData.emergencyPhone || "",
+    trekTitle: bookingData.trekTitle || bookingData.title || "General Trek",
+    batchDate: bookingData.selectedDate || bookingData.batchDate || bookingData.date || "",
+    trekkersCount: Number(bookingData.trekkerCount || bookingData.trekkersCount || bookingData.trekkers || 1),
+    amountPaid: Number(bookingData.payableAmount || bookingData.amountPaid || bookingData.totalAmount || bookingData.price || 1),
     status: "CONFIRMED"
   };
 
   try {
-    await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+    await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
       method: "POST",
-      mode: "no-cors",
+      mode: "no-cors", // Required for Google Apps Script redirects
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
-    console.log("Booking successfully synchronized to Google Sheet.");
+    console.log("Successfully sent payload to Google Sheets webhook.");
   } catch (err) {
-    console.warn("Google Sheet sync warning:", err);
+    console.error("Failed to sync with Google Sheet:", err);
   }
 };
 
@@ -400,34 +400,32 @@ export default function BookingModal({
 
             // Dispatch Booking & Hiker Vital Profile to Google Sheets Webhook
             try {
-              let userProfile = {};
+              let userProfileData = {};
               if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
                 const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
                 if (userSnap.exists()) {
                   const data = userSnap.data();
-                  userProfile = data?.profile || data || {};
+                  userProfileData = data?.profile || data || {};
                 }
               }
 
-              await syncBookingToGoogleSheet({
+              const currentBooking = {
                 bookingId: displayId,
-                fullName: userProfile.fullName || formData.name,
-                email: userProfile.email || formData.email,
-                age: userProfile.age || '',
-                gender: userProfile.gender || '',
-                whatsapp: userProfile.whatsapp || userProfile.mobile || formData.phone,
-                hometown: userProfile.hometown || '',
-                dietary: userProfile.dietary || '',
-                fitnessLevel: userProfile.fitnessLevel || '',
-                idCardNumber: userProfile.idCardNumber || '',
-                emergencyName: userProfile.emergencyName || userProfile.emergencyContact || '',
-                emergencyPhone: userProfile.emergencyPhone || '',
+                displayId: displayId,
+                payerName: formData.name,
+                payerEmail: formData.email,
+                payerPhone: formData.phone,
                 trekTitle: trekTitle,
+                selectedDate: formData.selectedDate || 'Scheduled Batch',
                 batchDate: formData.selectedDate || 'Scheduled Batch',
+                trekkerCount: trekkers,
                 trekkersCount: trekkers,
+                payableAmount: totalAmount,
                 amountPaid: totalAmount,
                 paymentId: response.razorpay_payment_id
-              });
+              };
+
+              await syncBookingToGoogleSheet(currentBooking, userProfileData);
             } catch (sheetErr) {
               console.warn('Google Sheet webhook sync notice:', sheetErr);
             }
