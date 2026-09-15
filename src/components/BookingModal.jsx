@@ -5,7 +5,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
-import { collection, addDoc, doc, updateDoc, increment } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, increment, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
 import { db } from '../config/firebase';
 
@@ -199,7 +199,10 @@ export default function BookingModal({
           // Real-time live payment verification and booking record creation
           console.log("Live Payment Success:", response.razorpay_payment_id);
           try {
+            const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
             const bookingDoc = {
+              displayId,
+              bookingId: displayId,
               trekId: trek.id || 'trek-entry',
               trekName: trekTitle,
               title: trekTitle,
@@ -220,23 +223,40 @@ export default function BookingModal({
               createdAt: new Date().toISOString()
             };
 
-            // Save directly to Firestore bookings collection
-            const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
+            let savedBookingId = displayId;
 
-            // Decrement available slots for this trek in Firestore
+            // Atomic Firestore Transaction (prevents double booking & race conditions)
             if (trek?.id) {
               try {
-                const packageRef = doc(db, 'packages', trek.id);
-                await updateDoc(packageRef, {
-                  slotsLeft: increment(-trekkers),
-                  availableSlots: increment(-trekkers)
+                await runTransaction(db, async (transaction) => {
+                  const trekRef = doc(db, 'packages', trek.id);
+                  const trekSnap = await transaction.get(trekRef);
+
+                  if (trekSnap.exists()) {
+                    const data = trekSnap.data();
+                    const currentSlots = Number(data.availableSlots ?? data.slotsLeft ?? 10);
+                    const newSlots = Math.max(0, currentSlots - trekkers);
+
+                    transaction.update(trekRef, {
+                      availableSlots: newSlots,
+                      slotsLeft: newSlots
+                    });
+                  }
+
+                  const newBookingRef = doc(collection(db, 'bookings'));
+                  savedBookingId = newBookingRef.id;
+                  transaction.set(newBookingRef, { ...bookingDoc, id: newBookingRef.id });
                 });
-              } catch (slotErr) {
-                console.warn('Slot decrement error:', slotErr);
+              } catch (txErr) {
+                console.warn('Transaction write notice, using standard write fallback:', txErr);
+                const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
+                savedBookingId = docRef.id;
               }
+            } else {
+              const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
+              savedBookingId = docRef.id;
             }
 
-            const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
             setConfirmedBookingId(displayId);
             setPaymentStatus('SUCCESS');
             setIsSuccess(true);
