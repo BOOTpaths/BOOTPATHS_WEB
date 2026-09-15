@@ -53,6 +53,8 @@ export default function BookingModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmedBookingId, setConfirmedBookingId] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('IDLE'); // 'IDLE' | 'SUCCESS' | 'FAILED'
+  const [paymentError, setPaymentError] = useState(null);
 
   // Sync initial user details and dates when modal opens
   useEffect(() => {
@@ -68,6 +70,8 @@ export default function BookingModal({
       setIsSuccess(false);
       setIsProcessing(false);
       setConfirmedBookingId('');
+      setPaymentStatus('IDLE');
+      setPaymentError(null);
     }
   }, [isOpen, initialDate, trek, currentUser]);
 
@@ -234,6 +238,7 @@ export default function BookingModal({
 
             const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
             setConfirmedBookingId(displayId);
+            setPaymentStatus('SUCCESS');
             setIsSuccess(true);
             setIsProcessing(false);
 
@@ -286,16 +291,33 @@ export default function BookingModal({
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', function (response) {
-        console.error('Payment failure event:', response.error);
-        alert('Payment failed: ' + (response.error?.description || 'Transaction declined.'));
+        console.error("Payment Failed:", response.error);
+        setPaymentStatus('FAILED');
         setIsProcessing(false);
+        setPaymentError({
+          code: response.error?.code || 'PAYMENT_FAILED',
+          description: response.error?.description || 'Your transaction could not be completed. Any deducted funds will be refunded by your bank within 3-5 business days.',
+          source: response.error?.source,
+          step: response.error?.step,
+          reason: response.error?.reason
+        });
       });
       rzp.open();
     } catch (err) {
       console.error('Razorpay launch exception:', err);
-      alert('An unexpected error occurred while launching payment. Please try again.');
+      setPaymentStatus('FAILED');
+      setPaymentError({
+        code: 'GATEWAY_ERROR',
+        description: 'An unexpected error occurred while launching payment. Please try again or check your network.'
+      });
       setIsProcessing(false);
     }
+  };
+
+  const handleRetryPayment = () => {
+    setPaymentStatus('IDLE');
+    setPaymentError(null);
+    handleProceedToPay();
   };
 
   return (
@@ -331,7 +353,51 @@ export default function BookingModal({
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
-          {!isSuccess ? (
+          {paymentStatus === 'FAILED' ? (
+            /* Dedicated Payment Failed Screen */
+            <div className="text-center py-6 px-4 animate-in fade-in duration-300 space-y-4">
+              <div className="w-14 h-14 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold border border-red-200">
+                ✕
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 block">
+                  Transaction Incomplete
+                </span>
+                <h3 className="text-xl font-bold text-stone-900 dark:text-white mt-0.5 font-outfit">
+                  Payment Failed
+                </h3>
+                <p className="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto mt-1.5">
+                  {paymentError?.description || "Your transaction could not be completed. Any deducted funds will be refunded by your bank within 3-5 business days."}
+                </p>
+              </div>
+
+              <div className="bg-stone-100 dark:bg-stone-800 p-3 rounded-xl text-xs font-mono text-stone-500 border border-[#E7E7E4] dark:border-stone-700">
+                Error Ref: {paymentError?.code || "PAYMENT_CANCELLED"}
+              </div>
+
+              <div className="flex flex-col gap-2.5 pt-2">
+                <button
+                  type="button"
+                  onClick={handleRetryPayment}
+                  className="w-full flex h-11 items-center justify-center rounded-xl bg-[#EB5A0D] hover:bg-[#D44E08] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                >
+                  Try Payment Again
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPaymentStatus('IDLE');
+                    setPaymentError(null);
+                  }}
+                  className="w-full py-2 px-4 text-[#52524E] hover:text-[#1A1A18] text-xs font-medium cursor-pointer transition-colors"
+                >
+                  Cancel &amp; Back to Details
+                </button>
+              </div>
+            </div>
+          ) : !isSuccess && paymentStatus !== 'SUCCESS' ? (
             <form onSubmit={handleProceedToPay} className="space-y-4">
               {/* Trek & Bill Summary Card */}
               <div className="rounded-xl bg-[#F8F8F6] border border-[#E7E7E4] p-4 space-y-2">
