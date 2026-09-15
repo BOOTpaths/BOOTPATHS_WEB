@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
 import { collection, addDoc, doc, updateDoc, increment } from 'firebase/firestore';
+import emailjs from '@emailjs/browser';
 import { db } from '../config/firebase';
 
 /**
@@ -236,6 +237,42 @@ export default function BookingModal({
             setIsSuccess(true);
             setIsProcessing(false);
 
+            // Automated Email Dispatch via EmailJS
+            try {
+              const emailServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_bootpaths';
+              const emailTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_booking_conf';
+              const emailPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_EMAILJS_PUBLIC_KEY';
+
+              const bookingDetails = {
+                booking_id: displayId,
+                to_name: formData.name,
+                to_email: formData.email,
+                to_phone: formData.phone,
+                trek_title: trekTitle,
+                batch_date: formData.selectedDate || 'Scheduled Batch',
+                trekkers_count: trekkers,
+                amount_paid: totalAmount,
+                payment_id: response.razorpay_payment_id
+              };
+
+              if (emailPublicKey && emailPublicKey !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+                emailjs.send(
+                  emailServiceId,
+                  emailTemplateId,
+                  bookingDetails,
+                  emailPublicKey
+                ).then(() => {
+                  console.log('Confirmation email sent successfully.');
+                }).catch((err) => {
+                  console.error('Email dispatch error:', err);
+                });
+              } else {
+                console.info('EmailJS key placeholder detected. To enable live email dispatch, define VITE_EMAILJS_PUBLIC_KEY in .env.');
+              }
+            } catch (emailErr) {
+              console.error('EmailJS invocation error:', emailErr);
+            }
+
             if (onBookingSuccess) {
               onBookingSuccess({ id: docRef.id, ...bookingDoc, displayId });
             }
@@ -465,8 +502,31 @@ export default function BookingModal({
               </div>
 
               <div className="text-[11px] text-[#52524E] bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 leading-relaxed text-left">
-                📢 <span className="font-bold text-emerald-900">Next Steps:</span> Confirmation details &amp; packing checklist have been logged. Our expedition team will connect on WhatsApp prior to batch departure.
+                📢 <span className="font-bold text-emerald-900">Next Steps:</span> A confirmation summary has been dispatched to your registered email and WhatsApp. Our mountaineering crew will contact you shortly.
               </div>
+
+              {/* WhatsApp Confirmation & Support Button */}
+              <a
+                href={`https://wa.me/${(() => {
+                  const raw = (formData.phone || '').replace(/\D/g, '');
+                  if (raw.startsWith('91') && raw.length === 12) return raw;
+                  if (raw.length === 10) return `91${raw}`;
+                  return raw || '919876543210';
+                })()}?text=${encodeURIComponent(
+                  `🏔️ *BOOTpaths Expeditions - Booking Confirmed*\n\n` +
+                  `Hello ${formData.name || 'Explorer'},\nYour booking for *${trekTitle}* is confirmed!\n\n` +
+                  `• Booking ID: ${confirmedBookingId}\n` +
+                  `• Batch Date: ${formData.selectedDate || 'Upcoming Batch'}\n` +
+                  `• Trekkers: ${trekkers}\n` +
+                  `• Total Paid: ₹${totalAmount.toLocaleString('en-IN')}\n\n` +
+                  `Our trek lead will coordinate meetup points prior to departure.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+              >
+                <span className="text-sm">💬</span> Receive Ticket / Chat on WhatsApp
+              </a>
 
               <button
                 onClick={onClose}
