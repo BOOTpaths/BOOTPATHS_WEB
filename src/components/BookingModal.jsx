@@ -760,34 +760,35 @@ export default function BookingModal({
                 📢 <span className="font-bold text-emerald-900">Next Steps:</span> A confirmation summary has been dispatched to your registered email and WhatsApp. Our mountaineering crew will contact you shortly.
               </div>
 
-              {/* WhatsApp Confirmation & Support Button */}
+              {/* WhatsApp Confirmation & Ticket Button */}
               <a
-                href={`https://wa.me/${(() => {
+                href={`https://wa.me/91${(() => {
                   const raw = (formData.phone || '').replace(/\D/g, '');
-                  if (raw.startsWith('91') && raw.length === 12) return raw;
-                  if (raw.length === 10) return `91${raw}`;
-                  return raw || '919876543210';
+                  if (raw.startsWith('91') && raw.length === 12) return raw.slice(2);
+                  return raw;
                 })()}?text=${encodeURIComponent(
-                  `🏔️ *BOOTpaths Expeditions - Booking Confirmed*\n\n` +
-                  `Hello ${formData.name || 'Explorer'},\nYour booking for *${trekTitle}* is confirmed!\n\n` +
-                  `• Booking ID: ${confirmedBookingId}\n` +
-                  `• Batch Date: ${formData.selectedDate || 'Upcoming Batch'}\n` +
-                  `• Trekkers: ${trekkers}\n` +
-                  `• Total Paid: ₹${totalAmount.toLocaleString('en-IN')}\n\n` +
-                  `Our trek lead will coordinate meetup points prior to departure.`
+                  `🏔️ *BOOTpaths Expeditions — Booking Confirmation*\n\n` +
+                  `Hello ${formData.name || currentUser?.displayName || 'Trekker'},\n` +
+                  `Your reservation for *${trekTitle}* is confirmed!\n\n` +
+                  `• *Booking ID:* ${confirmedBookingId}\n` +
+                  `• *Batch Date:* ${formData.selectedDate || 'Upcoming Batch'}\n` +
+                  `• *Trekkers:* ${trekkers}\n` +
+                  `• *Amount Paid:* ₹${totalAmount.toLocaleString('en-IN')}\n` +
+                  `• *Status:* CONFIRMED\n\n` +
+                  `A receipt has also been dispatched to your email. See you on the trail!`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                className="w-full mt-3 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 shadow-sm transition cursor-pointer"
               >
-                <span className="text-sm">💬</span> Receive Ticket / Chat on WhatsApp
+                <span>💬</span> Get Confirmation Ticket on WhatsApp
               </a>
 
               <button
                 onClick={onClose}
                 className="w-full flex h-11 items-center justify-center rounded-xl bg-[#1A1A18] hover:bg-[#3E2723] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
               >
-                Close &amp; Return to Exploration
+                CLOSE &amp; BACK TO SITE
               </button>
             </div>
           )}
