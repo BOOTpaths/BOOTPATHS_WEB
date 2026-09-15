@@ -33,6 +33,48 @@ const loadRazorpayScript = () => {
   });
 };
 
+/**
+ * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
+ */
+const syncBookingToGoogleSheet = async (bookingData) => {
+  const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+
+  const payload = {
+    timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+    bookingId: bookingData.bookingId || bookingData.displayId,
+    fullName: bookingData.fullName || bookingData.name || bookingData.userName || "Trekker",
+    email: bookingData.email || bookingData.userEmail || "",
+    age: bookingData.age || "",
+    gender: bookingData.gender || "",
+    whatsapp: bookingData.whatsapp || bookingData.phone || bookingData.userPhone || "",
+    hometown: bookingData.hometown || "",
+    dietary: bookingData.dietary || "",
+    fitnessLevel: bookingData.fitnessLevel || "",
+    idCardNumber: bookingData.idCardNumber || "",
+    emergencyName: bookingData.emergencyName || bookingData.emergencyContact || "",
+    emergencyPhone: bookingData.emergencyPhone || "",
+    trekTitle: bookingData.trekTitle || bookingData.title || "Expedition",
+    batchDate: bookingData.batchDate || bookingData.date || "",
+    trekkersCount: bookingData.trekkersCount || bookingData.trekkers || 1,
+    amountPaid: bookingData.amountPaid || bookingData.totalAmount || bookingData.price || 0,
+    status: "CONFIRMED"
+  };
+
+  try {
+    await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    console.log("Booking successfully synchronized to Google Sheet.");
+  } catch (err) {
+    console.warn("Google Sheet sync warning:", err);
+  }
+};
+
 export default function BookingModal({
   isOpen,
   onClose,
@@ -356,8 +398,42 @@ export default function BookingModal({
               console.error('EmailJS invocation error:', emailErr);
             }
 
+            // Dispatch Booking & Hiker Vital Profile to Google Sheets Webhook
+            try {
+              let userProfile = {};
+              if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
+                const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+                if (userSnap.exists()) {
+                  const data = userSnap.data();
+                  userProfile = data?.profile || data || {};
+                }
+              }
+
+              await syncBookingToGoogleSheet({
+                bookingId: displayId,
+                fullName: userProfile.fullName || formData.name,
+                email: userProfile.email || formData.email,
+                age: userProfile.age || '',
+                gender: userProfile.gender || '',
+                whatsapp: userProfile.whatsapp || userProfile.mobile || formData.phone,
+                hometown: userProfile.hometown || '',
+                dietary: userProfile.dietary || '',
+                fitnessLevel: userProfile.fitnessLevel || '',
+                idCardNumber: userProfile.idCardNumber || '',
+                emergencyName: userProfile.emergencyName || userProfile.emergencyContact || '',
+                emergencyPhone: userProfile.emergencyPhone || '',
+                trekTitle: trekTitle,
+                batchDate: formData.selectedDate || 'Scheduled Batch',
+                trekkersCount: trekkers,
+                amountPaid: totalAmount,
+                paymentId: response.razorpay_payment_id
+              });
+            } catch (sheetErr) {
+              console.warn('Google Sheet webhook sync notice:', sheetErr);
+            }
+
             if (onBookingSuccess) {
-              onBookingSuccess({ id: docRef.id, ...bookingDoc, displayId });
+              onBookingSuccess({ id: savedBookingId, ...bookingDoc, displayId });
             }
           } catch (error) {
             console.error('Firestore booking write failed:', error);
