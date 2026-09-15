@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
 import { collection, addDoc, doc, getDoc, updateDoc, increment, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
-import { db } from '../config/firebase';
+import { db, auth } from '../config/firebase';
 
 /**
  * Dynamically injects and loads the Razorpay standard checkout script.
@@ -38,40 +38,66 @@ const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKe
 /**
  * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
  */
-const syncBookingToGoogleSheet = async (bookingData, userProfile) => {
+const syncBookingToGoogleSheet = async (bookingData) => {
+  // 1. Fetch complete Hiker Profile directly from Firestore
+  let profile = {};
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (userSnap.exists()) {
+        const rawData = userSnap.data();
+        profile = rawData?.profile || rawData || {};
+      }
+    } catch (e) {
+      console.warn("Could not fetch user profile for sheets sync:", e);
+    }
+  }
+
+  // 2. Resolve destination title
+  const destinationTitle =
+    bookingData?.trekTitle ||
+    bookingData?.destination ||
+    bookingData?.title ||
+    bookingData?.trekName ||
+    "Mount Elbrus Summit Expedition";
+
+  // 3. Assemble complete payload
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
     bookingId: bookingData.bookingId || bookingData.displayId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
-    fullName: userProfile?.fullName || bookingData.payerName || bookingData.fullName || bookingData.name || "Trekker",
-    email: userProfile?.email || bookingData.payerEmail || bookingData.email || "",
-    age: userProfile?.age || bookingData.age || "",
-    gender: userProfile?.gender || bookingData.gender || "",
-    whatsapp: userProfile?.whatsapp || userProfile?.mobile || bookingData.payerPhone || bookingData.whatsapp || bookingData.phone || "",
-    hometown: userProfile?.hometown || bookingData.hometown || "",
-    dietary: userProfile?.dietary || bookingData.dietary || "Standard Veg",
-    fitnessLevel: userProfile?.fitnessLevel || bookingData.fitnessLevel || "Moderate",
-    idCardNumber: userProfile?.idCardNumber || bookingData.idCardNumber || "",
-    emergencyName: userProfile?.emergencyName || userProfile?.emergencyContact || bookingData.emergencyName || "",
-    emergencyPhone: userProfile?.emergencyPhone || bookingData.emergencyPhone || "",
-    trekTitle: bookingData.trekTitle || bookingData.title || "General Trek",
-    batchDate: bookingData.selectedDate || bookingData.batchDate || bookingData.date || "",
-    trekkersCount: Number(bookingData.trekkerCount || bookingData.trekkersCount || bookingData.trekkers || 1),
-    amountPaid: Number(bookingData.payableAmount || bookingData.amountPaid || bookingData.totalAmount || bookingData.price || 1),
+    fullName: profile.fullName || user?.displayName || bookingData.payerName || bookingData.userName || "Trekker",
+    email: profile.email || user?.email || bookingData.payerEmail || bookingData.userEmail || "",
+    age: profile.age || bookingData.age || "",
+    gender: profile.gender || bookingData.gender || "",
+    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.payerPhone || bookingData.userPhone || "",
+    hometown: profile.hometown || bookingData.hometown || "",
+    dietary: profile.dietary || bookingData.dietary || "Standard Veg",
+    fitnessLevel: profile.fitnessLevel || bookingData.fitnessLevel || "Moderate",
+    idCardNumber: profile.idCardNumber || bookingData.idCardNumber || "",
+    emergencyName: profile.emergencyName || profile.emergencyContact || bookingData.emergencyName || "",
+    emergencyPhone: profile.emergencyPhone || bookingData.emergencyPhone || "",
+    trekTitle: destinationTitle,
+    batchDate: bookingData.batchDate || bookingData.selectedDate || bookingData.date || "",
+    trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || bookingData.trekkers || 1),
+    amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || bookingData.totalAmount || bookingData.price || 1),
     status: "CONFIRMED"
   };
+
+  console.log("Dispatching full payload to Google Sheets:", payload);
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
       method: "POST",
-      mode: "no-cors", // Required for Google Apps Script redirects
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
-    console.log("Successfully sent payload to Google Sheets webhook.");
+    console.log("Sheet updated successfully.");
   } catch (err) {
-    console.error("Failed to sync with Google Sheet:", err);
+    console.error("Sheet sync error:", err);
   }
 };
 
@@ -244,6 +270,27 @@ export default function BookingModal({
             setIsSuccess(true);
             setIsProcessing(false);
 
+            try {
+              const activeTrekTitle =
+                trek?.title ||
+                trek?.name ||
+                trekTitle ||
+                "Mount Elbrus Summit Expedition";
+
+              await syncBookingToGoogleSheet({
+                bookingId: displayId,
+                trekTitle: activeTrekTitle,
+                batchDate: formData.selectedDate || 'Scheduled Batch',
+                trekkersCount: trekkers,
+                amountPaid: totalAmount,
+                payerName: currentUser?.displayName || formData.name,
+                payerEmail: currentUser?.email || formData.email,
+                payerPhone: formData.phone
+              });
+            } catch (syncErr) {
+              console.warn('Mock Google Sheet sync notice:', syncErr);
+            }
+
             if (onBookingSuccess) {
               onBookingSuccess({ id: docRef.id, ...bookingDoc, displayId });
             }
@@ -400,32 +447,22 @@ export default function BookingModal({
 
             // Dispatch Booking & Hiker Vital Profile to Google Sheets Webhook
             try {
-              let userProfileData = {};
-              if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
-                const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
-                if (userSnap.exists()) {
-                  const data = userSnap.data();
-                  userProfileData = data?.profile || data || {};
-                }
-              }
+              const activeTrekTitle =
+                trek?.title ||
+                trek?.name ||
+                trekTitle ||
+                "Mount Elbrus Summit Expedition";
 
-              const currentBooking = {
+              await syncBookingToGoogleSheet({
                 bookingId: displayId,
-                displayId: displayId,
-                payerName: formData.name,
-                payerEmail: formData.email,
-                payerPhone: formData.phone,
-                trekTitle: trekTitle,
-                selectedDate: formData.selectedDate || 'Scheduled Batch',
+                trekTitle: activeTrekTitle,
                 batchDate: formData.selectedDate || 'Scheduled Batch',
-                trekkerCount: trekkers,
                 trekkersCount: trekkers,
-                payableAmount: totalAmount,
                 amountPaid: totalAmount,
-                paymentId: response.razorpay_payment_id
-              };
-
-              await syncBookingToGoogleSheet(currentBooking, userProfileData);
+                payerName: currentUser?.displayName || formData.name,
+                payerEmail: currentUser?.email || formData.email,
+                payerPhone: formData.phone
+              });
             } catch (sheetErr) {
               console.warn('Google Sheet webhook sync notice:', sheetErr);
             }
