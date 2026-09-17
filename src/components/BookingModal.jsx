@@ -39,12 +39,24 @@ const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKe
  * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
  */
 const syncBookingToGoogleSheet = async (bookingData) => {
-  // 1. Fetch complete Hiker Profile directly from Firestore
+  const GOOGLE_SHEETS_WEBHOOK_URL =
+    "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+
+  // Read cached profile instantly from localStorage
   let profile = {};
-  const user = auth.currentUser;
-  if (user) {
+  try {
+    const cached = localStorage.getItem("bootpaths_hiker_profile");
+    if (cached) {
+      profile = JSON.parse(cached);
+    }
+  } catch (err) {
+    console.warn("Could not read cached profile:", err);
+  }
+
+  // Fallback to live Firestore profile if cached profile is empty
+  if (!profile.fullName && auth.currentUser) {
     try {
-      const userSnap = await getDoc(doc(db, "users", user.uid));
+      const userSnap = await getDoc(doc(db, "users", auth.currentUser.uid));
       if (userSnap.exists()) {
         const rawData = userSnap.data();
         profile = rawData?.profile || rawData || {};
@@ -54,37 +66,36 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     }
   }
 
-  // 2. Resolve destination title
-  const destinationTitle =
+  // Ensure correct trek title is extracted
+  const resolvedTrekTitle =
     bookingData?.trekTitle ||
     bookingData?.destination ||
     bookingData?.title ||
     bookingData?.trekName ||
-    "Mount Elbrus Summit Expedition";
+    "Mountain Expedition";
 
-  // 3. Assemble complete payload
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-    bookingId: bookingData.bookingId || bookingData.displayId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
-    fullName: profile.fullName || user?.displayName || bookingData.payerName || bookingData.userName || "Trekker",
-    email: profile.email || user?.email || bookingData.payerEmail || bookingData.userEmail || "",
-    age: profile.age || bookingData.age || "",
-    gender: profile.gender || bookingData.gender || "",
-    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.payerPhone || bookingData.userPhone || "",
-    hometown: profile.hometown || bookingData.hometown || "",
-    dietary: profile.dietary || bookingData.dietary || "Standard Veg",
-    fitnessLevel: profile.fitnessLevel || bookingData.fitnessLevel || "Moderate",
-    idCardNumber: profile.idCardNumber || bookingData.idCardNumber || "",
-    emergencyName: profile.emergencyName || profile.emergencyContact || bookingData.emergencyName || "",
-    emergencyPhone: profile.emergencyPhone || bookingData.emergencyPhone || "",
-    trekTitle: destinationTitle,
-    batchDate: bookingData.batchDate || bookingData.selectedDate || bookingData.date || "",
-    trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || bookingData.trekkers || 1),
-    amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || bookingData.totalAmount || bookingData.price || 1),
+    bookingId: bookingData.bookingId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
+    fullName: profile.fullName || bookingData.payerName || auth.currentUser?.displayName || "Trekker",
+    email: profile.email || bookingData.payerEmail || auth.currentUser?.email || "",
+    age: profile.age || "",
+    gender: profile.gender || "",
+    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.payerPhone || "",
+    hometown: profile.hometown || "",
+    dietary: profile.dietary || "Standard Veg",
+    fitnessLevel: profile.fitnessLevel || "Moderate",
+    idCardNumber: profile.idCardNumber || "",
+    emergencyName: profile.emergencyName || profile.emergencyContact || "",
+    emergencyPhone: profile.emergencyPhone || "",
+    trekTitle: resolvedTrekTitle,
+    batchDate: bookingData.batchDate || bookingData.selectedDate || "Upcoming Batch",
+    trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || 1),
+    amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || 1),
     status: "CONFIRMED"
   };
 
-  console.log("Dispatching full payload to Google Sheets:", payload);
+  console.log("Sending complete payload to Google Sheets:", payload);
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -95,7 +106,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
       },
       body: JSON.stringify(payload)
     });
-    console.log("Sheet updated successfully.");
+    console.log("Google Sheets and Email dispatcher triggered successfully.");
   } catch (err) {
     console.error("Sheet sync error:", err);
   }
@@ -198,9 +209,17 @@ export default function BookingModal({
     // Enforce Booking Gate Check: Mandatory Hiker Vital Profile
     if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
       try {
+        let prof = {};
+        try {
+          const cached = localStorage.getItem("bootpaths_hiker_profile");
+          if (cached) prof = JSON.parse(cached);
+        } catch (e) {
+          console.warn("Cached profile read error:", e);
+        }
+
         const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
         const data = userSnap.data() || {};
-        const prof = data.profile || data;
+        prof = { ...data, ...(data.profile || {}), ...prof };
 
         const isComplete = Boolean(
           (prof.fullName || data.fullName || formData.name)?.trim() &&

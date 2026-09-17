@@ -103,6 +103,13 @@ export default function UserDashboard({
         name: profileDataToSave.fullName || user.name
       }, { merge: true });
 
+      // Cache in localStorage for instant checkout access
+      try {
+        localStorage.setItem("bootpaths_hiker_profile", JSON.stringify(profileDataToSave));
+      } catch (cacheErr) {
+        console.warn("Could not cache profile in localStorage:", cacheErr);
+      }
+
       if (setProfileData) {
         setProfileData(prev => ({ ...prev, ...profileDataToSave }));
       }

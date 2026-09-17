@@ -2982,6 +2982,12 @@ export default function App() {
               name: profilePayload.fullName || user.name
             }, { merge: true });
 
+            try {
+              localStorage.setItem("bootpaths_hiker_profile", JSON.stringify(profilePayload));
+            } catch (cacheErr) {
+              console.warn("Could not cache profile in localStorage:", cacheErr);
+            }
+
             setProfileData(prev => ({ ...prev, ...profilePayload }));
           } catch (err) {
             console.warn('Profile save error:', err.message);
