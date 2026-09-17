@@ -59,7 +59,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
   const GOOGLE_SHEETS_WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
 
-  // Read cached profile instantly from localStorage
+  // 1. Read cached profile instantly from localStorage
   let profile = {};
   try {
     const cached = localStorage.getItem("bootpaths_hiker_profile");
@@ -70,48 +70,56 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     console.warn("Could not read cached profile:", err);
   }
 
-  // Fallback to live Firestore profile if cached profile is empty
-  if (!profile.fullName && auth.currentUser) {
+  // 2. Fallback to live Firestore profile if cached profile is missing fields
+  const activeUser = auth.currentUser;
+  if (activeUser?.uid && (!profile.fullName || !profile.age || !profile.gender || !profile.idCardNumber)) {
     try {
-      const userSnap = await getDoc(doc(db, "users", auth.currentUser.uid));
+      const userSnap = await getDoc(doc(db, "users", activeUser.uid));
       if (userSnap.exists()) {
         const rawData = userSnap.data();
-        profile = rawData?.profile || rawData || {};
+        const firestoreProf = rawData?.profile || rawData || {};
+        profile = { ...firestoreProf, ...profile };
       }
     } catch (e) {
       console.warn("Could not fetch user profile for sheets sync:", e);
     }
   }
 
-  const activeTitle = getResolvedTrekTitle(bookingData);
+  // 3. Resolve destination title
+  const resolvedTrekTitle = getResolvedTrekTitle(bookingData);
 
+  // 4. Resolve exact Amount Paid in Rupees
+  const resolvedAmount = Number(
+    bookingData.amountPaid ??
+    bookingData.payableAmount ??
+    bookingData.totalAmount ??
+    bookingData.price ??
+    1
+  );
+
+  // 5. Assemble comprehensive payload matching exact Apps Script expectations
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
     bookingId: bookingData.bookingId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
-    fullName: profile.fullName || bookingData.payerName || auth.currentUser?.displayName || "Trekker",
-    email: profile.email || bookingData.payerEmail || auth.currentUser?.email || "",
-    age: profile.age || "",
-    gender: profile.gender || "",
-    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.payerPhone || "",
-    hometown: profile.hometown || "",
-    dietary: profile.dietary || "Standard Veg",
-    fitnessLevel: profile.fitnessLevel || "Moderate",
-    idCardNumber: profile.idCardNumber || "",
-    emergencyName: profile.emergencyName || profile.emergencyContact || "",
-    emergencyPhone: profile.emergencyPhone || "",
-    trekTitle: activeTitle, // Guarantees the actual trek title is sent
+    fullName: profile.fullName || bookingData.payerName || bookingData.fullName || activeUser?.displayName || "Trekker",
+    email: profile.email || bookingData.payerEmail || bookingData.email || activeUser?.email || "",
+    age: profile.age || bookingData.age || "",
+    gender: profile.gender || bookingData.gender || "",
+    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.whatsappNumber || bookingData.payerPhone || bookingData.phone || "",
+    hometown: profile.hometown || bookingData.hometownDistrict || bookingData.hometown || "",
+    dietary: profile.dietary || bookingData.dietaryOption || bookingData.dietary || "Standard Veg",
+    fitnessLevel: profile.fitnessLevel || bookingData.fitnessLevel || "Moderate",
+    idCardNumber: profile.idCardNumber || bookingData.govId || bookingData.idCardNumber || "",
+    emergencyName: profile.emergencyName || profile.emergencyContact || bookingData.emergencyContactName || bookingData.emergencyName || "",
+    emergencyPhone: profile.emergencyPhone || bookingData.emergencyContactPhone || bookingData.emergencyPhone || "",
+    trekTitle: resolvedTrekTitle,
     batchDate: bookingData.batchDate || bookingData.selectedDate || "Upcoming Batch",
     trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || 1),
-    amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || 1),
+    amountPaid: resolvedAmount,
     status: "CONFIRMED"
   };
 
-  console.log("➡️ Google Sheet Payload Dispatch:", {
-    trekTitle: payload.trekTitle,
-    fullName: payload.fullName,
-    age: payload.age,
-    gender: payload.gender
-  });
+  console.log("FINAL WEBHOOK PAYLOAD:", payload);
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -223,43 +231,44 @@ export default function BookingModal({
     if (!validateForm()) return;
 
     // Enforce Booking Gate Check: Mandatory Hiker Vital Profile
-    if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
+    try {
+      let prof = {};
       try {
-        let prof = {};
-        try {
-          const cached = localStorage.getItem("bootpaths_hiker_profile");
-          if (cached) prof = JSON.parse(cached);
-        } catch (e) {
-          console.warn("Cached profile read error:", e);
-        }
-
-        const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
-        const data = userSnap.data() || {};
-        prof = { ...data, ...(data.profile || {}), ...prof };
-
-        const isComplete = Boolean(
-          (prof.fullName || data.fullName || formData.name)?.trim() &&
-          (prof.age || data.age) &&
-          (prof.gender || data.gender) &&
-          (prof.whatsapp || prof.mobile || data.whatsapp || formData.phone)?.trim() &&
-          (prof.hometown || data.hometown)?.trim() &&
-          (prof.dietary || data.dietary) &&
-          (prof.fitnessLevel || data.fitnessLevel) &&
-          (prof.idCardNumber || data.idCardNumber)?.trim() &&
-          (prof.emergencyName || prof.emergencyContact || data.emergencyName)?.trim() &&
-          (prof.emergencyPhone || data.emergencyPhone)?.trim()
-        );
-
-        if (!isComplete) {
-          alert("Please complete your Hiker Vital Profile credentials before booking a trek slot.");
-          if (onOpenProfileModal) {
-            onOpenProfileModal();
-          }
-          return;
-        }
-      } catch (err) {
-        console.warn('Profile validation check notice:', err);
+        const cached = localStorage.getItem("bootpaths_hiker_profile");
+        if (cached) prof = JSON.parse(cached);
+      } catch (e) {
+        console.warn("Cached profile read error:", e);
       }
+
+      const activeUser = auth.currentUser || currentUser;
+      if (activeUser?.uid && !activeUser.uid.startsWith('guest-')) {
+        const userSnap = await getDoc(doc(db, 'users', activeUser.uid));
+        if (userSnap.exists()) {
+          const data = userSnap.data() || {};
+          const firestoreProf = data.profile || data;
+          prof = { ...firestoreProf, ...prof };
+        }
+      }
+
+      const hasAge = Boolean(prof.age && Number(prof.age) >= 10);
+      const hasGender = Boolean(prof.gender && String(prof.gender).trim().length > 0);
+      const hasGovtId = Boolean((prof.idCardNumber || prof.govId)?.trim());
+      const hasEmergency = Boolean(
+        (prof.emergencyName || prof.emergencyContact || prof.emergencyContactName)?.trim() &&
+        (prof.emergencyPhone || prof.emergencyContactPhone)?.trim()
+      );
+
+      const isComplete = hasAge && hasGender && hasGovtId && hasEmergency;
+
+      if (!isComplete) {
+        alert("⚠️ Mandatory Hiker Profile Incomplete\n\nPlease complete all Hiker Vital Profile details (Age, Gender, Govt ID, Emergency Contact) before proceeding to pay.");
+        if (onOpenProfileModal) {
+          onOpenProfileModal();
+        }
+        return;
+      }
+    } catch (err) {
+      console.warn('Profile validation check notice:', err);
     }
 
     setIsProcessing(true);
