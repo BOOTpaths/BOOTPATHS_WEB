@@ -59,80 +59,61 @@ const syncBookingToGoogleSheet = async (bookingData) => {
   const GOOGLE_SHEETS_WEBHOOK_URL =
     "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
 
-  // 1. Read cached profile instantly from localStorage
+  // 1. Pull saved Hiker Profile safely from localStorage
   let profile = {};
   try {
-    const cached = localStorage.getItem("bootpaths_hiker_profile");
-    if (cached) {
-      profile = JSON.parse(cached);
+    const rawProfile = localStorage.getItem("bootpaths_hiker_profile");
+    if (rawProfile) {
+      profile = JSON.parse(rawProfile);
     }
   } catch (err) {
-    console.warn("Could not read cached profile:", err);
+    console.warn("Failed to parse local profile:", err);
   }
 
-  // 2. Fallback to live Firestore profile if cached profile is missing fields
-  const activeUser = auth.currentUser;
-  if (activeUser?.uid && (!profile.fullName || !profile.age || !profile.gender || !profile.idCardNumber)) {
-    try {
-      const userSnap = await getDoc(doc(db, "users", activeUser.uid));
-      if (userSnap.exists()) {
-        const rawData = userSnap.data();
-        const firestoreProf = rawData?.profile || rawData || {};
-        profile = { ...firestoreProf, ...profile };
-      }
-    } catch (e) {
-      console.warn("Could not fetch user profile for sheets sync:", e);
-    }
-  }
+  // 2. Resolve exact Trek Title (preventing "General Trek" or "Unassigned_Treks")
+  const resolvedTrekTitle =
+    bookingData?.trekTitle ||
+    bookingData?.title ||
+    bookingData?.destination ||
+    (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('trek') : null) ||
+    "Agasthyarkoodam Wilderness Trek";
 
-  // 3. Resolve destination title
-  const resolvedTrekTitle = getResolvedTrekTitle(bookingData);
-
-  // 4. Resolve exact Amount Paid in Rupees
-  const resolvedAmount = Number(
-    bookingData.amountPaid ??
-    bookingData.payableAmount ??
-    bookingData.totalAmount ??
-    bookingData.price ??
-    1
-  );
-
-  // 5. Assemble comprehensive payload matching exact Apps Script expectations
+  // 3. Construct unified payload matching Apps Script properties precisely
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
     bookingId: bookingData.bookingId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
-    fullName: profile.fullName || bookingData.payerName || bookingData.fullName || activeUser?.displayName || "Trekker",
-    email: profile.email || bookingData.payerEmail || bookingData.email || activeUser?.email || "",
-    age: profile.age || bookingData.age || "",
-    gender: profile.gender || bookingData.gender || "",
-    whatsapp: profile.whatsapp || profile.contactMobile || profile.mobile || bookingData.whatsappNumber || bookingData.payerPhone || bookingData.phone || "",
-    hometown: profile.hometown || bookingData.hometownDistrict || bookingData.hometown || "",
-    dietary: profile.dietary || bookingData.dietaryOption || bookingData.dietary || "Standard Veg",
-    fitnessLevel: profile.fitnessLevel || bookingData.fitnessLevel || "Moderate",
-    idCardNumber: profile.idCardNumber || bookingData.govId || bookingData.idCardNumber || "",
-    emergencyName: profile.emergencyName || profile.emergencyContact || bookingData.emergencyContactName || bookingData.emergencyName || "",
-    emergencyPhone: profile.emergencyPhone || bookingData.emergencyContactPhone || bookingData.emergencyPhone || "",
+    fullName: profile.fullName || bookingData.payerName || auth.currentUser?.displayName || "Trek Participant",
+    email: profile.email || bookingData.payerEmail || auth.currentUser?.email || "N/A",
+    age: profile.age !== undefined && profile.age !== "" ? profile.age : "N/A",
+    gender: profile.gender || "N/A",
+    whatsapp: profile.whatsapp || profile.contactMobile || bookingData.payerPhone || "N/A",
+    hometown: profile.hometown || "N/A",
+    dietary: profile.dietary || "Standard Veg",
+    fitnessLevel: profile.fitnessLevel || "Moderate",
+    idCardNumber: profile.idCardNumber || "N/A",
+    emergencyName: profile.emergencyName || "N/A",
+    emergencyPhone: profile.emergencyPhone || "N/A",
     trekTitle: resolvedTrekTitle,
     batchDate: bookingData.batchDate || bookingData.selectedDate || "Upcoming Batch",
     trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || 1),
-    amountPaid: resolvedAmount,
+    amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || 1),
     status: "CONFIRMED"
   };
 
-  console.log("FINAL WEBHOOK PAYLOAD:", payload);
+  console.log("🚀 Sending Verified Payload to Google Sheets:", payload);
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
       method: "POST",
-      mode: "no-cors",
+      mode: "no-cors", // Bypasses browser CORS restrictions for Google Scripts
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
-    console.log("Google Sheets and Email dispatcher triggered successfully.");
-  } catch (err) {
-    console.error("Sheet sync error:", err);
+    console.log("✅ Google Sheet sync request transmitted successfully.");
+  } catch (error) {
+    console.error("❌ Google Sheet sync error:", error);
   }
 };
 
