@@ -36,6 +36,23 @@ const loadRazorpayScript = () => {
 const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
 
 /**
+ * Resolves reliable Trek Title across multiple property keys and objects with robust fallback.
+ */
+const getResolvedTrekTitle = (candidateObj) => {
+  const candidate =
+    candidateObj?.trekTitle ||
+    candidateObj?.title ||
+    candidateObj?.trekName ||
+    candidateObj?.name ||
+    candidateObj?.destination ||
+    candidateObj?.packageTitle ||
+    "";
+
+  const trimmed = String(candidate || "").trim();
+  return trimmed.length > 0 ? trimmed : "Agasthyarkoodam Wilderness Trek";
+};
+
+/**
  * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
  */
 const syncBookingToGoogleSheet = async (bookingData) => {
@@ -66,13 +83,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     }
   }
 
-  // Ensure correct trek title is extracted
-  const resolvedTrekTitle =
-    bookingData?.trekTitle ||
-    bookingData?.destination ||
-    bookingData?.title ||
-    bookingData?.trekName ||
-    "Mountain Expedition";
+  const activeTitle = getResolvedTrekTitle(bookingData);
 
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
@@ -88,14 +99,19 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     idCardNumber: profile.idCardNumber || "",
     emergencyName: profile.emergencyName || profile.emergencyContact || "",
     emergencyPhone: profile.emergencyPhone || "",
-    trekTitle: resolvedTrekTitle,
+    trekTitle: activeTitle, // Guarantees the actual trek title is sent
     batchDate: bookingData.batchDate || bookingData.selectedDate || "Upcoming Batch",
     trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || 1),
     amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || 1),
     status: "CONFIRMED"
   };
 
-  console.log("Sending complete payload to Google Sheets:", payload);
+  console.log("➡️ Google Sheet Payload Dispatch:", {
+    trekTitle: payload.trekTitle,
+    fullName: payload.fullName,
+    age: payload.age,
+    gender: payload.gender
+  });
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -187,7 +203,7 @@ export default function BookingModal({
   const trekkers = Number(formData.numberOfTrekkers || 1);
   const totalAmount = unitPrice * trekkers;
   const amountInPaise = totalAmount * 100;
-  const trekTitle = trek.name || trek.title || 'Wilderness Expedition';
+  const trekTitle = getResolvedTrekTitle(trek);
 
   const validateForm = () => {
     const errors = {};
@@ -290,11 +306,7 @@ export default function BookingModal({
             setIsProcessing(false);
 
             try {
-              const activeTrekTitle =
-                trek?.title ||
-                trek?.name ||
-                trekTitle ||
-                "Mount Elbrus Summit Expedition";
+              const activeTrekTitle = getResolvedTrekTitle(trek);
 
               await syncBookingToGoogleSheet({
                 bookingId: displayId,
@@ -466,11 +478,7 @@ export default function BookingModal({
 
             // Dispatch Booking & Hiker Vital Profile to Google Sheets Webhook
             try {
-              const activeTrekTitle =
-                trek?.title ||
-                trek?.name ||
-                trekTitle ||
-                "Mount Elbrus Summit Expedition";
+              const activeTrekTitle = getResolvedTrekTitle(trek);
 
               await syncBookingToGoogleSheet({
                 bookingId: displayId,
