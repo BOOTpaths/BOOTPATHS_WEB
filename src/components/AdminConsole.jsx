@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { auth, db, storage } from '../config/firebase';
-import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot, getDocs } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { CURATED_TREKS } from '../data/curatedTreks';
 import AdminPortal from './AdminPortal';
@@ -381,47 +381,85 @@ export default function AdminConsole({
     document.body.removeChild(link);
   };
 
-  // Force Sync All Past & Current Bookings to Google Sheets
-  const handleSyncAllToSheets = async () => {
-    const listToSync = displayBookings;
-    if (listToSync.length === 0) {
-      alert('No booking records available to sync.');
+  // Force Sync All Past & Current Bookings to Google Sheets (Joined with Hiker Profile Data)
+  const handleSyncAllBookingsToSheets = async () => {
+    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+
+    if (!window.confirm("This will push all confirmed bookings into Google Sheets and organize them into individual trek tabs. Continue?")) {
       return;
     }
 
-    if (!window.confirm(`Force sync all ${listToSync.length} booking records to Google Sheets?`)) return;
-
     setIsSyncingSheets(true);
-    let syncedCount = 0;
-
     try {
-      for (const b of listToSync) {
-        await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      // 1. Fetch all bookings
+      const bookingsSnap = await getDocs(collection(db, "bookings"));
+      const allBookings = bookingsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // 2. Fetch all user profiles for instant lookup
+      const usersSnap = await getDocs(collection(db, "users"));
+      const usersMap = {};
+      usersSnap.docs.forEach(doc => {
+        const data = doc.data() || {};
+        const profileData = { ...data, ...(data.profile || {}) };
+        usersMap[doc.id] = profileData;
+        if (data.email) {
+          usersMap[data.email] = profileData;
+          usersMap[data.email.toLowerCase()] = profileData;
+        }
+        if (profileData.email) {
+          usersMap[profileData.email] = profileData;
+          usersMap[profileData.email.toLowerCase()] = profileData;
+        }
+      });
+
+      let syncedCount = 0;
+
+      for (const booking of allBookings) {
+        const userEmailKey = (booking.userEmail || booking.email || booking.payerEmail || "").toLowerCase();
+        const profile = usersMap[booking.userId] || usersMap[booking.userEmail] || usersMap[booking.email] || usersMap[userEmailKey] || {};
+
+        const payload = {
+          timestamp: booking.createdAt || booking.timestamp || new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+          bookingId: booking.bookingId || booking.displayId || booking.id,
+          fullName: profile.fullName || booking.userName || booking.payerName || booking.name || "Trekker",
+          email: profile.email || booking.userEmail || booking.payerEmail || booking.email || "N/A",
+          age: profile.age !== undefined && profile.age !== "" ? profile.age : (booking.age || "N/A"),
+          gender: profile.gender || booking.gender || "N/A",
+          whatsapp: profile.whatsapp || profile.contactMobile || booking.userPhone || booking.payerPhone || booking.phone || "N/A",
+          hometown: profile.hometown || booking.hometown || "N/A",
+          dietary: profile.dietary || booking.dietary || "Standard Veg",
+          fitnessLevel: profile.fitnessLevel || booking.fitnessLevel || "Moderate",
+          idCardNumber: profile.idCardNumber || booking.idCardNumber || "N/A",
+          emergencyName: profile.emergencyName || profile.emergencyContact || booking.emergencyName || "N/A",
+          emergencyPhone: profile.emergencyPhone || booking.emergencyPhone || "N/A",
+          trekTitle: booking.trekTitle || booking.title || booking.trekName || booking.destination || "General Trek",
+          batchDate: booking.batchDate || booking.selectedDate || booking.date || "Upcoming Batch",
+          trekkersCount: Number(booking.trekkersCount || booking.trekkers || booking.trekkerCount || 1),
+          amountPaid: Number(booking.amountPaid || booking.payableAmount || booking.price || booking.totalPrice || 0),
+          status: (booking.status || "CONFIRMED").toUpperCase(),
+          skipEmail: true // Prevents firing duplicate emails during batch sync
+        };
+
+        await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bookingId: b.id || b.bookingId || "BP-REF",
-            fullName: b.userName || b.fullName || b.name || "Trek Participant",
-            email: b.userEmail || b.email || "N/A",
-            phone: b.userPhone || b.phone || "N/A",
-            trekName: b.title || b.trekName || b.destination || "N/A",
-            batchDate: b.date || b.batchDate || "N/A",
-            trekkersCount: b.trekkers || b.trekkersCount || b.slots || 1,
-            totalPrice: b.price || b.totalPrice || b.amount || 0,
-            status: (b.status || "CONFIRMED").toUpperCase()
-          })
-        }).catch((err) => console.error("Sheet Sync item error:", err));
+          body: JSON.stringify(payload)
+        });
+
         syncedCount++;
       }
-      alert(`Google Sheet successfully synced with all ${syncedCount} past and current bookings!`);
+
+      alert(`Successfully synchronized ${syncedCount} bookings to Google Sheets with dedicated trek tabs!`);
     } catch (err) {
-      console.error("Sheet Sync All error:", err);
-      alert(`Sync process completed with notice: ${err.message}`);
+      console.error("Sync error:", err);
+      alert("Failed to sync bookings: " + err.message);
     } finally {
       setIsSyncingSheets(false);
     }
   };
+
+  const handleSyncAllToSheets = handleSyncAllBookingsToSheets;
 
   const handleThumbnailFileChange = (file) => {
     if (!file) return;
@@ -1788,7 +1826,7 @@ export default function AdminConsole({
               <span>📊 Open Google Spreadsheet</span>
             </button>
             <button
-              onClick={handleSyncAllToSheets}
+              onClick={handleSyncAllBookingsToSheets}
               disabled={isSyncingSheets}
               className="bg-white border border-[#E7E7E4] hover:bg-[#FAF8F5] text-[#1A1A18] px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit disabled:opacity-50"
               title="Export all past and current Firestore bookings to Google Sheets"
