@@ -548,37 +548,44 @@ export default function AdminConsole({
   const [viewUrl, setViewUrl] = useState('');
   const trekFileInputRef = useRef(null);
 
-  const handleTrekFileChange = (e) => {
-    const file = e.target.files?.[0];
+  const handleImageUpload = (file) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       alert('Please select a valid image file (JPG, PNG, WebP).');
       return;
     }
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = (e) => {
       const img = new Image();
-      img.src = event.target.result;
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const maxWidth = 1200; // Optimal for trek card banners
-        const scale = Math.min(1, maxWidth / img.width);
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
+        const MAX_WIDTH = 800; // Optimal for cards and hero previews
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * (scaleSize < 1 ? scaleSize : 1);
 
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const optimizedDataUrl = canvas.toDataURL("image/jpeg", 0.75);
 
-        setFormData(prev => ({ 
-          ...prev, 
-          image: optimizedDataUrl,
-          imageUrl: optimizedDataUrl,
-          bannerImage: optimizedDataUrl
+        // Compress to JPEG with 0.65 quality (well under 150KB)
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.65);
+        
+        setFormData((prev) => ({
+          ...prev,
+          image: compressedBase64,
+          imageUrl: compressedBase64,
+          bannerImage: compressedBase64,
+          cardImage: compressedBase64
         }));
       };
+      img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleTrekFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) handleImageUpload(file);
   };
 
   const handleAdminDragOver = (e) => {
@@ -594,35 +601,7 @@ export default function AdminConsole({
     e.preventDefault();
     setIsAdminDragOver(false);
     const file = e.dataTransfer.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file (JPG, PNG, WebP).');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const maxWidth = 1200;
-        const scale = Math.min(1, maxWidth / img.width);
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const optimizedDataUrl = canvas.toDataURL("image/jpeg", 0.75);
-
-        setFormData(prev => ({ 
-          ...prev, 
-          image: optimizedDataUrl,
-          imageUrl: optimizedDataUrl,
-          bannerImage: optimizedDataUrl
-        }));
-      };
-    };
-    reader.readAsDataURL(file);
+    if (file) handleImageUpload(file);
   };
 
 
@@ -840,6 +819,9 @@ export default function AdminConsole({
       tag: 'FILLING FAST!',
       description: '',
       image: '',
+      imageUrl: '',
+      bannerImage: '',
+      cardImage: '',
       isVisible: true,
       inclusion: ['Quechua Gear', 'Forest Permits', 'Certified Lead'],
       batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
@@ -855,6 +837,7 @@ export default function AdminConsole({
   const handleOpenEditModal = (trek) => {
     setEditingTrek(trek);
     const existingDates = trek.batchDates || trek.dates || ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'];
+    const trekImg = trek.imageUrl || trek.image || trek.bannerImage || trek.cardImage || '';
     setFormData({
       title: trek.title || trek.name || '',
       location: trek.location || '',
@@ -866,7 +849,10 @@ export default function AdminConsole({
       slotsLeft: trek.slotsLeft !== undefined ? String(trek.slotsLeft) : '0',
       tag: trek.tag || 'FILLING FAST!',
       description: trek.description || '',
-      image: trek.image || '',
+      image: trekImg,
+      imageUrl: trekImg,
+      bannerImage: trekImg,
+      cardImage: trekImg,
       isVisible: trek.isVisible !== false && !trek.isHidden,
       inclusion: trek.inclusion || [],
       batchDates: existingDates,
@@ -927,11 +913,11 @@ export default function AdminConsole({
     }
   };
 
-  // Save (Create or Update) Trek
+  // Save (Create or Update) Trek Package
   const handleSaveTrek = async (e) => {
-    e.preventDefault();
-    const trekImage = formData.image || formData.imageUrl || formData.bannerImage || '';
-    if (!trekImage) {
+    if (e?.preventDefault) e.preventDefault();
+    const targetImage = formData.image || formData.imageUrl || formData.bannerImage || formData.cardImage || '';
+    if (!targetImage) {
       alert('Please provide a banner image URL or upload a photo for the trek package.');
       return;
     }
@@ -957,9 +943,10 @@ export default function AdminConsole({
 
     const payload = {
       ...formData,
-      image: trekImage,
-      imageUrl: trekImage,
-      bannerImage: trekImage,
+      image: targetImage,
+      imageUrl: targetImage,
+      bannerImage: targetImage,
+      cardImage: targetImage,
       price: Number(formData.price),
       originalPrice: Number(formData.originalPrice),
       slotsLeft: Number(formData.slotsLeft),
@@ -970,31 +957,38 @@ export default function AdminConsole({
       updatedAt: new Date().toISOString()
     };
 
-    if (editingTrek) {
-      // UPDATE
-      setTreks(prev => prev.map(t => t.id === editingTrek.id ? { ...t, ...payload } : t));
-      try {
-        await setDoc(doc(db, 'packages', editingTrek.id), payload, { merge: true });
-      } catch (err) {
-        if (!import.meta.env.PROD) {
-          console.warn('Firestore package update notice:', err.message);
-        }
-      }
-    } else {
-      // CREATE
-      const newId = `trek-${Date.now()}`;
-      const newTrek = { id: newId, ...payload };
-      setTreks(prev => [newTrek, ...prev]);
-      try {
+    try {
+      if (editingTrek && editingTrek.id) {
+        // UPDATE
+        setTreks(prev => prev.map(t => t.id === editingTrek.id ? { ...t, ...payload } : t));
+        await updateDoc(doc(db, 'packages', editingTrek.id), payload);
+        alert('Trek package and card image updated successfully!');
+      } else {
+        // CREATE
+        const newId = `trek-${Date.now()}`;
+        const newTrek = { id: newId, ...payload };
+        setTreks(prev => [newTrek, ...prev]);
         await setDoc(doc(db, 'packages', newId), payload);
-      } catch (err) {
-        if (!import.meta.env.PROD) {
-          console.warn('Firestore package create notice:', err.message);
+        alert('New trek package created successfully!');
+      }
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Failed to save trek changes:', err);
+      if (editingTrek && editingTrek.id) {
+        try {
+          await setDoc(doc(db, 'packages', editingTrek.id), payload, { merge: true });
+          alert('Trek package and card image updated successfully!');
+          setIsModalOpen(false);
+        } catch (setErr) {
+          alert('Error updating trek: ' + setErr.message);
         }
+      } else {
+        alert('Error saving trek: ' + err.message);
       }
     }
-    setIsModalOpen(false);
   };
+
+  const handleSaveChanges = handleSaveTrek;
 
   // Delete Trek
   const handleConfirmDelete = () => {
@@ -1665,8 +1659,8 @@ export default function AdminConsole({
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
                           <img 
-                            src={trek.image} 
-                            alt={trek.title}
+                            src={trek.imageUrl || trek.image || trek.bannerImage || trek.cardImage || "/placeholder-trek.jpg"} 
+                            alt={trek.title || trek.name || "Trek"}
                             className="h-10 w-10 rounded-lg object-cover border border-[#E7E7E4] shrink-0" 
                           />
                           <div>
@@ -3346,20 +3340,20 @@ export default function AdminConsole({
                 </label>
                 
                 {/* Live Thumbnail Preview */}
-                {(formData.image || formData.imageUrl) && (
+                {(formData.image || formData.imageUrl || formData.bannerImage || formData.cardImage) && (
                   <div className="relative w-full h-36 rounded-xl overflow-hidden border border-[#E7E7E4] bg-stone-900 group">
                     <img 
-                      src={formData.image || formData.imageUrl} 
+                      src={formData.imageUrl || formData.image || formData.bannerImage || formData.cardImage} 
                       alt="Trek Preview" 
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex items-end justify-between">
                       <span className="text-[10px] text-white font-bold uppercase tracking-wider bg-black/60 px-2.5 py-1 rounded-md backdrop-blur-sm border border-white/20">
-                        {(formData.image || formData.imageUrl).startsWith('data:') ? 'Local Base64 Compressed' : 'Direct Image URL'}
+                        {(formData.imageUrl || formData.image || '').startsWith('data:') ? 'Local Base64 Compressed' : 'Direct Image URL'}
                       </span>
                       <button 
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, image: '', imageUrl: '', bannerImage: '' }))}
+                        onClick={() => setFormData(prev => ({ ...prev, image: '', imageUrl: '', bannerImage: '', cardImage: '' }))}
                         className="h-8 px-3 rounded-lg bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
                         title="Remove Image"
                       >
@@ -3375,12 +3369,13 @@ export default function AdminConsole({
                   <input 
                     type="url" 
                     placeholder="Paste direct image URL (https://...)"
-                    value={formData.image || formData.imageUrl || ''}
+                    value={formData.imageUrl || formData.image || formData.bannerImage || formData.cardImage || ''}
                     onChange={(e) => setFormData(prev => ({ 
                       ...prev, 
                       image: e.target.value, 
                       imageUrl: e.target.value,
-                      bannerImage: e.target.value
+                      bannerImage: e.target.value,
+                      cardImage: e.target.value
                     }))}
                     className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs text-autumn-bark placeholder-autumn-bark/40 focus:outline-none focus:border-[#C1571F]"
                   />
