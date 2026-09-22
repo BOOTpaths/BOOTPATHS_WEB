@@ -8,6 +8,75 @@ import { X, ShieldCheck, User, Phone, Mail, MapPin, Heart, AlertCircle, CheckCir
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 
+const HEALTH_ASSESSMENT_OPTIONS = [
+  "Fit and prepared for high-altitude trek",
+  "Reasonably fit; need basic guidance",
+  "Has health concerns to discuss",
+  "On regular medication",
+  "Have special needs / support required",
+  "Other:"
+];
+
+const ID_TYPE_OPTIONS = [
+  "Aadhaar Card",
+  "Passport",
+  "Driving Licence",
+  "Voter ID"
+];
+
+const parseProfileData = (data = {}) => {
+  let healthAssessment = data.healthAssessment || '';
+  let healthOtherDetails = data.healthOtherDetails || '';
+  
+  if (!healthAssessment && data.fitnessLevel) {
+    if (data.fitnessLevel.startsWith('Other:')) {
+      healthAssessment = 'Other:';
+      healthOtherDetails = data.fitnessLevel.replace(/^Other:\s*/, '').trim();
+    } else if (HEALTH_ASSESSMENT_OPTIONS.includes(data.fitnessLevel)) {
+      healthAssessment = data.fitnessLevel;
+    } else {
+      healthAssessment = 'Other:';
+      healthOtherDetails = data.fitnessLevel;
+    }
+  }
+
+  if (!HEALTH_ASSESSMENT_OPTIONS.includes(healthAssessment)) {
+    if (healthAssessment) {
+      healthOtherDetails = healthAssessment;
+      healthAssessment = 'Other:';
+    } else {
+      healthAssessment = 'Fit and prepared for high-altitude trek';
+    }
+  }
+
+  let idType = data.idType || '';
+  let idNumber = data.idNumber || '';
+  const rawIdCard = data.idCardNumber || data.govId || '';
+
+  if (!idType || !idNumber) {
+    let found = false;
+    for (const t of ID_TYPE_OPTIONS) {
+      if (rawIdCard.toLowerCase().startsWith(t.toLowerCase() + ':')) {
+        idType = t;
+        idNumber = rawIdCard.slice(t.length + 1).trim();
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      idType = idType || 'Aadhaar Card';
+      idNumber = idNumber || rawIdCard;
+    }
+  }
+
+  return {
+    healthAssessment,
+    healthOtherDetails,
+    idType,
+    idNumber
+  };
+};
+
 export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved }) {
   const [form, setForm] = useState({
     fullName: '',
@@ -17,7 +86,11 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
     whatsapp: '',
     hometown: '',
     dietary: 'Standard Veg',
-    fitnessLevel: 'Moderate',
+    healthAssessment: 'Fit and prepared for high-altitude trek',
+    healthOtherDetails: '',
+    fitnessLevel: 'Fit and prepared for high-altitude trek',
+    idType: 'Aadhaar Card',
+    idNumber: '',
     idCardNumber: '',
     emergencyName: '',
     emergencyPhone: ''
@@ -42,6 +115,7 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
 
     const currentUser = auth.currentUser || user;
     if (currentUser) {
+      const parsedCached = parseProfileData(initialData);
       setForm((prev) => ({
         ...prev,
         fullName: initialData.fullName || currentUser.displayName || currentUser.name || '',
@@ -51,7 +125,11 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
         whatsapp: initialData.whatsapp || initialData.mobile || '',
         hometown: initialData.hometown || '',
         dietary: initialData.dietary || 'Standard Veg',
-        fitnessLevel: initialData.fitnessLevel || 'Moderate',
+        healthAssessment: parsedCached.healthAssessment,
+        healthOtherDetails: parsedCached.healthOtherDetails,
+        fitnessLevel: initialData.fitnessLevel || parsedCached.healthAssessment,
+        idType: parsedCached.idType,
+        idNumber: parsedCached.idNumber,
         idCardNumber: initialData.idCardNumber || '',
         emergencyName: initialData.emergencyName || initialData.emergencyContact || '',
         emergencyPhone: initialData.emergencyPhone || ''
@@ -64,6 +142,7 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
             if (snap.exists()) {
               const data = snap.data();
               const prof = data.profile || data;
+              const parsedFirestore = parseProfileData(prof);
               setForm((prev) => ({
                 ...prev,
                 fullName: prof.fullName || prev.fullName,
@@ -73,7 +152,11 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
                 whatsapp: prof.whatsapp || prof.mobile || prev.whatsapp,
                 hometown: prof.hometown || prev.hometown,
                 dietary: prof.dietary || prev.dietary,
-                fitnessLevel: prof.fitnessLevel || prev.fitnessLevel,
+                healthAssessment: parsedFirestore.healthAssessment || prev.healthAssessment,
+                healthOtherDetails: parsedFirestore.healthOtherDetails || prev.healthOtherDetails,
+                fitnessLevel: prof.fitnessLevel || parsedFirestore.healthAssessment || prev.fitnessLevel,
+                idType: parsedFirestore.idType || prev.idType,
+                idNumber: parsedFirestore.idNumber || prev.idNumber,
                 idCardNumber: prof.idCardNumber || prev.idCardNumber,
                 emergencyName: prof.emergencyName || prof.emergencyContact || prev.emergencyName,
                 emergencyPhone: prof.emergencyPhone || prev.emergencyPhone
@@ -99,8 +182,24 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
       return;
     }
 
+    if (form.healthAssessment === 'Other:' && !form.healthOtherDetails?.trim()) {
+      alert('Please provide details for your health assessment selection.');
+      return;
+    }
+
+    if (!form.idNumber?.trim()) {
+      alert('Please enter your Govt ID document number.');
+      return;
+    }
+
     setIsSaving(true);
     setSavedSuccess(false);
+
+    const resolvedFitnessLevel = form.healthAssessment === "Other:" && form.healthOtherDetails?.trim()
+      ? `Other: ${form.healthOtherDetails.trim()}`
+      : form.healthAssessment;
+
+    const formattedIdCard = `${form.idType || "Aadhaar Card"}: ${form.idNumber.trim()}`;
 
     const profileData = {
       fullName: form.fullName?.trim() || "",
@@ -110,11 +209,29 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
       whatsapp: form.whatsapp?.trim() || "",
       hometown: form.hometown?.trim() || "",
       dietary: form.dietary || "Standard Veg",
-      fitnessLevel: form.fitnessLevel || "Moderate",
-      idCardNumber: form.idCardNumber?.trim() || "",
+      healthAssessment: form.healthAssessment || "Fit and prepared for high-altitude trek",
+      healthOtherDetails: form.healthOtherDetails?.trim() || "",
+      fitnessLevel: resolvedFitnessLevel,
+      idType: form.idType || "Aadhaar Card",
+      idNumber: form.idNumber.trim(),
+      idCardNumber: formattedIdCard,
       emergencyName: form.emergencyName?.trim() || "",
       emergencyPhone: form.emergencyPhone?.trim() || "",
-      isProfileComplete: true,
+      isProfileComplete: Boolean(
+        form.fullName?.trim() &&
+        form.email?.trim() &&
+        form.age &&
+        Number(form.age) >= 10 &&
+        form.gender &&
+        form.whatsapp?.trim() &&
+        form.hometown?.trim() &&
+        form.dietary &&
+        form.healthAssessment &&
+        (form.healthAssessment !== "Other:" || form.healthOtherDetails?.trim()) &&
+        form.idNumber.trim() &&
+        form.emergencyName?.trim() &&
+        form.emergencyPhone?.trim()
+      ),
       updatedAt: new Date().toISOString()
     };
 
@@ -279,34 +396,63 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
                 </select>
               </div>
 
-              <div>
+              <div className={form.healthAssessment === 'Other:' ? 'sm:col-span-2' : ''}>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1">
-                  Fitness Level <span className="text-red-500">*</span>
+                  Health Assessment <span className="text-red-500">*</span>
                 </label>
                 <select
                   required
-                  value={form.fitnessLevel}
-                  onChange={(e) => setForm({ ...form, fitnessLevel: e.target.value })}
+                  value={form.healthAssessment}
+                  onChange={(e) => setForm({ ...form, healthAssessment: e.target.value })}
                   className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs focus:outline-none focus:border-[#C1571F]"
                 >
-                  <option value="Beginner (5k walk)">Beginner (5k walk)</option>
-                  <option value="Moderate">Moderate (Regular jog/workout)</option>
-                  <option value="Advanced (Endurance runner/trekker)">Advanced (Endurance runner/trekker)</option>
+                  {HEALTH_ASSESSMENT_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
                 </select>
+
+                {form.healthAssessment === 'Other:' && (
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      required
+                      value={form.healthOtherDetails}
+                      onChange={(e) => setForm({ ...form, healthOtherDetails: e.target.value })}
+                      placeholder="Please specify your health details / condition..."
+                      className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs focus:outline-none focus:border-[#C1571F]"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="sm:col-span-2">
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1">
                   ID Card Number (Govt ID) <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.idCardNumber}
-                  onChange={(e) => setForm({ ...form, idCardNumber: e.target.value })}
-                  placeholder="Aadhaar / Driving License / Passport"
-                  className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs font-mono focus:outline-none focus:border-[#C1571F]"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="sm:col-span-1">
+                    <select
+                      required
+                      value={form.idType}
+                      onChange={(e) => setForm({ ...form, idType: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs focus:outline-none focus:border-[#C1571F]"
+                    >
+                      {ID_TYPE_OPTIONS.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <input
+                      type="text"
+                      required
+                      value={form.idNumber}
+                      onChange={(e) => setForm({ ...form, idNumber: e.target.value })}
+                      placeholder="Enter Document / Card Number"
+                      className="w-full h-10 px-3 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs font-mono focus:outline-none focus:border-[#C1571F]"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -353,3 +499,4 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
     </div>
   );
 }
+

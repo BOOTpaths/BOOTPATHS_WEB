@@ -589,8 +589,8 @@ export default function App() {
           (prof.whatsapp || prof.mobile)?.trim() &&
           prof.hometown?.trim() &&
           prof.dietary &&
-          prof.fitnessLevel &&
-          prof.idCardNumber?.trim() &&
+          (prof.healthAssessment || prof.fitnessLevel) &&
+          (prof.idCardNumber || prof.idNumber)?.trim() &&
           (prof.emergencyName || prof.emergencyContact)?.trim() &&
           prof.emergencyPhone?.trim()
         );
@@ -604,7 +604,11 @@ export default function App() {
           mobile: prof.whatsapp || prof.mobile || '',
           hometown: prof.hometown || '',
           dietary: prof.dietary || '',
-          fitnessLevel: prof.fitnessLevel || '',
+          healthAssessment: prof.healthAssessment || prof.fitnessLevel || '',
+          healthOtherDetails: prof.healthOtherDetails || '',
+          fitnessLevel: prof.fitnessLevel || prof.healthAssessment || '',
+          idType: prof.idType || 'Aadhaar Card',
+          idNumber: prof.idNumber || '',
           idCardNumber: prof.idCardNumber || '',
           emergencyName: prof.emergencyName || prof.emergencyContact || '',
           emergencyContact: prof.emergencyName || prof.emergencyContact || '',
@@ -859,8 +863,8 @@ export default function App() {
       (prof.whatsapp || prof.mobile)?.trim() &&
       prof.hometown?.trim() &&
       prof.dietary &&
-      prof.fitnessLevel &&
-      prof.idCardNumber?.trim() &&
+      (prof.healthAssessment || prof.fitnessLevel) &&
+      (prof.idCardNumber || prof.idNumber)?.trim() &&
       (prof.emergencyName || prof.emergencyContact)?.trim() &&
       prof.emergencyPhone?.trim()
     );

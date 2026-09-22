@@ -79,6 +79,15 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     "Agasthyarkoodam Wilderness Trek";
 
   // 3. Construct unified payload matching Apps Script properties precisely
+  const resolvedHealth =
+    profile.healthAssessment === "Other:" && profile.healthOtherDetails
+      ? `Other: ${profile.healthOtherDetails.trim()}`
+      : (profile.healthAssessment || profile.fitnessLevel || "Fit and prepared for high-altitude trek");
+
+  const resolvedIdCard =
+    profile.idCardNumber ||
+    (profile.idType && profile.idNumber ? `${profile.idType}: ${profile.idNumber}` : (profile.idNumber || profile.govId || "N/A"));
+
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
     bookingId: bookingData.bookingId || `BP-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -89,8 +98,9 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     whatsapp: profile.whatsapp || profile.contactMobile || bookingData.payerPhone || "N/A",
     hometown: profile.hometown || "N/A",
     dietary: profile.dietary || "Standard Veg",
-    fitnessLevel: profile.fitnessLevel || "Moderate",
-    idCardNumber: profile.idCardNumber || "N/A",
+    fitnessLevel: resolvedHealth,
+    healthAssessment: resolvedHealth,
+    idCardNumber: resolvedIdCard,
     emergencyName: profile.emergencyName || "N/A",
     emergencyPhone: profile.emergencyPhone || "N/A",
     trekTitle: resolvedTrekTitle,
@@ -233,16 +243,17 @@ export default function BookingModal({
 
       const hasAge = Boolean(prof.age && Number(prof.age) >= 10);
       const hasGender = Boolean(prof.gender && String(prof.gender).trim().length > 0);
-      const hasGovtId = Boolean((prof.idCardNumber || prof.govId)?.trim());
+      const hasHealth = Boolean((prof.healthAssessment || prof.fitnessLevel) && String(prof.healthAssessment || prof.fitnessLevel).trim().length > 0);
+      const hasGovtId = Boolean((prof.idCardNumber || prof.idNumber || prof.govId)?.trim());
       const hasEmergency = Boolean(
         (prof.emergencyName || prof.emergencyContact || prof.emergencyContactName)?.trim() &&
         (prof.emergencyPhone || prof.emergencyContactPhone)?.trim()
       );
 
-      const isComplete = hasAge && hasGender && hasGovtId && hasEmergency;
+      const isComplete = hasAge && hasGender && hasHealth && hasGovtId && hasEmergency;
 
       if (!isComplete) {
-        alert("⚠️ Mandatory Hiker Profile Incomplete\n\nPlease complete all Hiker Vital Profile details (Age, Gender, Govt ID, Emergency Contact) before proceeding to pay.");
+        alert("⚠️ Mandatory Hiker Profile Incomplete\n\nPlease complete all Hiker Vital Profile details (Age, Gender, Health Assessment, Govt ID, Emergency Contact) before proceeding to pay.");
         if (onOpenProfileModal) {
           onOpenProfileModal();
         }

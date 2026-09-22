@@ -417,6 +417,15 @@ export default function AdminConsole({
         const userEmailKey = (booking.userEmail || booking.email || booking.payerEmail || "").toLowerCase();
         const profile = usersMap[booking.userId] || usersMap[booking.userEmail] || usersMap[booking.email] || usersMap[userEmailKey] || {};
 
+        const resolvedHealth =
+          profile.healthAssessment === "Other:" && profile.healthOtherDetails
+            ? `Other: ${profile.healthOtherDetails.trim()}`
+            : (profile.healthAssessment || profile.fitnessLevel || booking.healthAssessment || booking.fitnessLevel || "Fit and prepared for high-altitude trek");
+
+        const resolvedIdCard =
+          profile.idCardNumber ||
+          (profile.idType && profile.idNumber ? `${profile.idType}: ${profile.idNumber}` : (profile.idNumber || booking.idCardNumber || "N/A"));
+
         const payload = {
           timestamp: booking.createdAt || booking.timestamp || new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
           bookingId: booking.bookingId || booking.displayId || booking.id,
@@ -427,8 +436,9 @@ export default function AdminConsole({
           whatsapp: profile.whatsapp || profile.contactMobile || booking.userPhone || booking.payerPhone || booking.phone || "N/A",
           hometown: profile.hometown || booking.hometown || "N/A",
           dietary: profile.dietary || booking.dietary || "Standard Veg",
-          fitnessLevel: profile.fitnessLevel || booking.fitnessLevel || "Moderate",
-          idCardNumber: profile.idCardNumber || booking.idCardNumber || "N/A",
+          fitnessLevel: resolvedHealth,
+          healthAssessment: resolvedHealth,
+          idCardNumber: resolvedIdCard,
           emergencyName: profile.emergencyName || profile.emergencyContact || booking.emergencyName || "N/A",
           emergencyPhone: profile.emergencyPhone || booking.emergencyPhone || "N/A",
           trekTitle: booking.trekTitle || booking.title || booking.trekName || booking.destination || "General Trek",
