@@ -25,6 +25,22 @@ import {
 import { db, auth } from '../config/firebase';
 import { collection, query, where, onSnapshot, doc, setDoc } from 'firebase/firestore';
 
+const HEALTH_ASSESSMENT_OPTIONS = [
+  "Fit and prepared for high-altitude trek",
+  "Reasonably fit; need basic guidance",
+  "Has health concerns to discuss",
+  "On regular medication",
+  "Have special needs / support required",
+  "Other:"
+];
+
+const ID_TYPE_OPTIONS = [
+  "Aadhaar Card",
+  "Passport",
+  "Driving Licence",
+  "Voter ID"
+];
+
 export default function UserDashboard({
   isOpen,
   onClose,
@@ -51,6 +67,37 @@ export default function UserDashboard({
   const [errorMessage, setErrorMessage] = useState('');
   const [isSaved, setIsSaved] = useState(false);
 
+  const currentHealth = profileData.healthAssessment || (
+    profileData.fitnessLevel && HEALTH_ASSESSMENT_OPTIONS.includes(profileData.fitnessLevel)
+      ? profileData.fitnessLevel
+      : (profileData.fitnessLevel?.startsWith('Other:') ? 'Other:' : (profileData.fitnessLevel ? 'Other:' : 'Fit and prepared for high-altitude trek'))
+  );
+
+  const currentHealthOther = profileData.healthOtherDetails || (
+    profileData.fitnessLevel?.startsWith('Other:')
+      ? profileData.fitnessLevel.replace(/^Other:\s*/, '')
+      : (!HEALTH_ASSESSMENT_OPTIONS.includes(profileData.fitnessLevel || '') ? (profileData.fitnessLevel || '') : '')
+  );
+
+  let currentIdType = profileData.idType;
+  let currentIdNumber = profileData.idNumber;
+  if (!currentIdType || currentIdNumber === undefined) {
+    const rawCard = profileData.idCardNumber || '';
+    let found = false;
+    for (const t of ID_TYPE_OPTIONS) {
+      if (rawCard.toLowerCase().startsWith(t.toLowerCase() + ':')) {
+        currentIdType = t;
+        currentIdNumber = rawCard.slice(t.length + 1).trim();
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      currentIdType = currentIdType || 'Aadhaar Card';
+      currentIdNumber = currentIdNumber !== undefined ? currentIdNumber : rawCard;
+    }
+  }
+
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     if (!auth.currentUser) return;
@@ -62,6 +109,16 @@ export default function UserDashboard({
     try {
       const userRef = doc(db, "users", auth.currentUser.uid);
       
+      const selectedHealth = profileData.healthAssessment || currentHealth || "Fit and prepared for high-altitude trek";
+      const selectedHealthOther = profileData.healthOtherDetails !== undefined ? profileData.healthOtherDetails : currentHealthOther;
+      const resolvedFitness = selectedHealth === "Other:" && selectedHealthOther?.trim()
+        ? `Other: ${selectedHealthOther.trim()}`
+        : selectedHealth;
+
+      const selectedIdType = profileData.idType || currentIdType || "Aadhaar Card";
+      const selectedIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (currentIdNumber || profileData.idCardNumber || "")).trim();
+      const formattedIdCard = `${selectedIdType}: ${selectedIdNum}`;
+
       const profileDataToSave = {
         fullName: (profileData.fullName || user.name || "").trim(),
         email: (profileData.email || user.email || "").trim(),
@@ -70,21 +127,27 @@ export default function UserDashboard({
         whatsapp: (profileData.whatsapp || profileData.mobile || "").trim(),
         mobile: (profileData.whatsapp || profileData.mobile || "").trim(),
         hometown: (profileData.hometown || "").trim(),
-        dietary: profileData.dietary || "",
-        fitnessLevel: profileData.fitnessLevel || "",
-        idCardNumber: (profileData.idCardNumber || "").trim(),
+        dietary: profileData.dietary || "Standard Veg",
+        healthAssessment: selectedHealth,
+        healthOtherDetails: selectedHealthOther?.trim() || "",
+        fitnessLevel: resolvedFitness,
+        idType: selectedIdType,
+        idNumber: selectedIdNum,
+        idCardNumber: formattedIdCard,
         emergencyName: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
         emergencyContact: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
         emergencyPhone: (profileData.emergencyPhone || "").trim(),
         isProfileComplete: Boolean(
           (profileData.fullName || user.name)?.trim() &&
           profileData.age &&
+          Number(profileData.age) >= 10 &&
           profileData.gender &&
           (profileData.whatsapp || profileData.mobile)?.trim() &&
           profileData.hometown?.trim() &&
           profileData.dietary &&
-          profileData.fitnessLevel &&
-          profileData.idCardNumber?.trim() &&
+          selectedHealth &&
+          (selectedHealth !== "Other:" || selectedHealthOther?.trim()) &&
+          selectedIdNum &&
           (profileData.emergencyName || profileData.emergencyContact)?.trim() &&
           profileData.emergencyPhone?.trim()
         ),
@@ -521,42 +584,96 @@ export default function UserDashboard({
                     </div>
                   </div>
 
-                  <div>
+                  {/* Health Assessment Dropdown & Optional Other Details */}
+                  <div className={(profileData.healthAssessment || currentHealth) === 'Other:' ? 'sm:col-span-2' : ''}>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
-                      Fitness Level <span className="text-red-500">*</span>
+                      Health Assessment <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select 
                         required
-                        value={profileData.fitnessLevel || ''}
-                        onChange={(e) => setProfileData({...profileData, fitnessLevel: e.target.value})}
+                        value={profileData.healthAssessment || currentHealth}
+                        onChange={(e) => setProfileData({
+                          ...profileData, 
+                          healthAssessment: e.target.value,
+                          fitnessLevel: e.target.value === 'Other:' ? (profileData.healthOtherDetails ? `Other: ${profileData.healthOtherDetails}` : 'Other:') : e.target.value
+                        })}
                         className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] focus:outline-none focus:border-[#C1571F] transition-all appearance-none cursor-pointer"
                       >
-                        <option value="" disabled>Select Fitness Level</option>
-                        <option value="Beginner (5k walk)">Beginner (5k walk)</option>
-                        <option value="Moderate (Regular jog/workout)">Moderate (Regular jog/workout)</option>
-                        <option value="Advanced (Endurance runner/trekker)">Advanced (Endurance runner/trekker)</option>
+                        {HEALTH_ASSESSMENT_OPTIONS.map((opt) => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
                       </select>
                       <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
                     </div>
+
+                    {(profileData.healthAssessment || currentHealth) === 'Other:' && (
+                      <div className="mt-2.5">
+                        <input 
+                          type="text"
+                          required
+                          value={profileData.healthOtherDetails !== undefined ? profileData.healthOtherDetails : currentHealthOther}
+                          onChange={(e) => setProfileData({
+                            ...profileData, 
+                            healthOtherDetails: e.target.value,
+                            fitnessLevel: `Other: ${e.target.value}`
+                          })}
+                          className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all"
+                          placeholder="Please specify your health details / condition..."
+                        />
+                      </div>
+                    )}
                   </div>
 
-                  {/* Row 5: ID Card Number (Govt ID) | Forest Permit Info */}
-                  <div>
+                  {/* Split Govt ID: ID Type Dropdown + ID Number Field */}
+                  <div className="sm:col-span-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
                       ID Card Number (Govt ID) <span className="text-red-500">*</span>
                     </label>
-                    <input 
-                      type="text"
-                      required
-                      value={profileData.idCardNumber || ''}
-                      onChange={(e) => setProfileData({...profileData, idCardNumber: e.target.value})}
-                      className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all font-mono"
-                      placeholder="Aadhaar / DL / Passport Number"
-                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      <div className="sm:col-span-1 relative">
+                        <select
+                          required
+                          value={profileData.idType || currentIdType}
+                          onChange={(e) => {
+                            const newType = e.target.value;
+                            const num = profileData.idNumber !== undefined ? profileData.idNumber : (currentIdNumber || '');
+                            setProfileData({
+                              ...profileData,
+                              idType: newType,
+                              idCardNumber: `${newType}: ${num}`
+                            });
+                          }}
+                          className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] focus:outline-none focus:border-[#C1571F] transition-all appearance-none cursor-pointer"
+                        >
+                          {ID_TYPE_OPTIONS.map((type) => (
+                            <option key={type} value={type}>{type}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-[#52524E] pointer-events-none" />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <input 
+                          type="text"
+                          required
+                          value={profileData.idNumber !== undefined ? profileData.idNumber : currentIdNumber}
+                          onChange={(e) => {
+                            const newNum = e.target.value;
+                            const type = profileData.idType || currentIdType || 'Aadhaar Card';
+                            setProfileData({
+                              ...profileData,
+                              idNumber: newNum,
+                              idCardNumber: `${type}: ${newNum}`
+                            });
+                          }}
+                          className="w-full h-11 px-4 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#C1571F] transition-all font-mono"
+                          placeholder="Enter Document / Card Number"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex items-center">
+                  <div className="sm:col-span-2 flex items-center">
                     <div className="w-full bg-[#FFFFFF] border border-[#E7E7E4] rounded-xl p-3 flex items-center gap-2.5 text-[11px] text-[#52524E]">
                       <Info className="h-4 w-4 text-[#C1571F] shrink-0" />
                       <span>Govt ID is mandatory for state forest department transit permits and base camp manifests.</span>

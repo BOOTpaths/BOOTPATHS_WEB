@@ -2951,6 +2951,16 @@ export default function App() {
           if (!user || !user.uid) return;
           setIsSavingProfile(true);
           try {
+            const selectedHealth = profileData.healthAssessment || profileData.fitnessLevel || "Fit and prepared for high-altitude trek";
+            const selectedHealthOther = profileData.healthOtherDetails?.trim() || "";
+            const resolvedFitness = selectedHealth === "Other:" && selectedHealthOther
+              ? `Other: ${selectedHealthOther}`
+              : selectedHealth;
+
+            const selectedIdType = profileData.idType || "Aadhaar Card";
+            const selectedIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (profileData.idCardNumber || "")).trim();
+            const formattedIdCard = `${selectedIdType}: ${selectedIdNum}`;
+
             const profilePayload = {
               fullName: (profileData.fullName || user.name || '').trim(),
               email: (profileData.email || user.email || '').trim(),
@@ -2959,21 +2969,27 @@ export default function App() {
               whatsapp: (profileData.whatsapp || profileData.mobile || '').trim(),
               mobile: (profileData.whatsapp || profileData.mobile || '').trim(),
               hometown: (profileData.hometown || '').trim(),
-              dietary: profileData.dietary || '',
-              fitnessLevel: profileData.fitnessLevel || '',
-              idCardNumber: (profileData.idCardNumber || '').trim(),
+              dietary: profileData.dietary || 'Standard Veg',
+              healthAssessment: selectedHealth,
+              healthOtherDetails: selectedHealthOther,
+              fitnessLevel: resolvedFitness,
+              idType: selectedIdType,
+              idNumber: selectedIdNum,
+              idCardNumber: formattedIdCard,
               emergencyName: (profileData.emergencyName || profileData.emergencyContact || '').trim(),
               emergencyContact: (profileData.emergencyName || profileData.emergencyContact || '').trim(),
               emergencyPhone: (profileData.emergencyPhone || '').trim(),
               isProfileComplete: Boolean(
                 (profileData.fullName || user.name)?.trim() &&
                 profileData.age &&
+                Number(profileData.age) >= 10 &&
                 profileData.gender &&
                 (profileData.whatsapp || profileData.mobile)?.trim() &&
                 profileData.hometown?.trim() &&
                 profileData.dietary &&
-                profileData.fitnessLevel &&
-                profileData.idCardNumber?.trim() &&
+                selectedHealth &&
+                (selectedHealth !== "Other:" || selectedHealthOther) &&
+                selectedIdNum &&
                 (profileData.emergencyName || profileData.emergencyContact)?.trim() &&
                 profileData.emergencyPhone?.trim()
               ),
