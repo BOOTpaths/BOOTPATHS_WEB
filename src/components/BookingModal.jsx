@@ -16,7 +16,7 @@ const HEALTH_ASSESSMENT_OPTIONS = [
   "Has health concerns to discuss",
   "On regular medication",
   "Have special needs / support required",
-  "Other:"
+  "Other"
 ];
 
 const ID_TYPE_OPTIONS = [
@@ -36,19 +36,8 @@ const DIETARY_OPTIONS = [
 const GENDER_OPTIONS = [
   "Male",
   "Female",
-  "Non-binary / Other"
+  "Other"
 ];
-
-const createEmptyCoTrekker = () => ({
-  fullName: '',
-  age: '',
-  gender: 'Male',
-  idType: 'Aadhaar Card',
-  idNumber: '',
-  dietary: 'Standard Veg',
-  healthAssessment: 'Fit and prepared for high-altitude trek',
-  healthOtherDetails: ''
-});
 
 /**
  * Dynamically injects and loads the Razorpay standard checkout script.
@@ -112,7 +101,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     console.warn("Failed to parse local profile:", err);
   }
 
-  // 2. Resolve exact Trek Title (preventing "General Trek" or "Unassigned_Treks")
+  // 2. Resolve exact Trek Title
   const resolvedTrekTitle =
     bookingData?.trekTitle ||
     bookingData?.title ||
@@ -210,7 +199,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
       method: "POST",
-      mode: "no-cors", // Bypasses browser CORS restrictions for Google Scripts
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json"
       },
@@ -239,10 +228,10 @@ export default function BookingModal({
     numberOfTrekkers: 1
   });
 
-  const [trekkersList, setTrekkersList] = useState([]);
+  const [trekkerCount, setTrekkerCount] = useState(1);
+  const [trekkersList, setTrekkersList] = useState([]); // Co-trekkers (length = trekkerCount - 1)
   const [leadProfile, setLeadProfile] = useState({});
   const [formErrors, setFormErrors] = useState({});
-  const [coTrekkerErrors, setCoTrekkerErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmedBookingId, setConfirmedBookingId] = useState('');
@@ -287,25 +276,8 @@ export default function BookingModal({
         }
 
         setLeadProfile(fullProf);
-
-        const initialLead = {
-          fullName: nameVal,
-          name: nameVal,
-          email: emailVal,
-          whatsapp: phoneVal,
-          age: fullProf.age || '',
-          gender: fullProf.gender || 'Male',
-          idType: fullProf.idType || 'Aadhaar Card',
-          idNumber: fullProf.idNumber || fullProf.idCardNumber || '',
-          dietary: fullProf.dietary || 'Standard Veg',
-          healthAssessment: fullProf.healthAssessment || fullProf.fitnessLevel || 'Fit and prepared for high-altitude trek',
-          healthOtherDetails: fullProf.healthOtherDetails || '',
-          emergencyName: fullProf.emergencyName || '',
-          emergencyPhone: fullProf.emergencyPhone || '',
-          isLead: true
-        };
-
-        setTrekkersList([initialLead]);
+        setTrekkerCount(1);
+        setTrekkersList([]);
 
         setFormData({
           name: nameVal,
@@ -318,7 +290,6 @@ export default function BookingModal({
 
       loadProfile();
       setFormErrors({});
-      setCoTrekkerErrors({});
       setIsSuccess(false);
       setIsProcessing(false);
       setConfirmedBookingId('');
@@ -331,47 +302,39 @@ export default function BookingModal({
 
   // Dynamic Price and Amount Calculation
   const unitPrice = Number(String(trek.price || 0).replace(/[^0-9]/g, '')) || 0;
-  const trekkers = Number(formData.numberOfTrekkers || 1);
+  const trekkers = Number(trekkerCount || formData.numberOfTrekkers || 1);
   const totalAmount = unitPrice * trekkers;
   const amountInPaise = totalAmount * 100;
   const trekTitle = getResolvedTrekTitle(trek);
 
   const handleUpdateTrekkersCount = (newCount) => {
     const targetCount = Math.max(1, Math.min(15, Number(newCount) || 1));
+    setTrekkerCount(targetCount);
     setFormData(prev => ({ ...prev, numberOfTrekkers: targetCount }));
 
+    const coTrekkerCount = targetCount - 1;
     setTrekkersList(prev => {
-      const currentList = [...prev];
-      if (currentList.length === 0) {
-        currentList.push({
-          fullName: formData.name || leadProfile.fullName || '',
-          name: formData.name || leadProfile.fullName || '',
-          email: formData.email || leadProfile.email || '',
-          whatsapp: formData.phone || leadProfile.whatsapp || '',
-          age: leadProfile.age || '',
-          gender: leadProfile.gender || 'Male',
-          idType: leadProfile.idType || 'Aadhaar Card',
-          idNumber: leadProfile.idNumber || '',
-          dietary: leadProfile.dietary || 'Standard Veg',
-          healthAssessment: leadProfile.healthAssessment || 'Fit and prepared for high-altitude trek',
-          healthOtherDetails: leadProfile.healthOtherDetails || '',
-          isLead: true
-        });
-      }
-      if (currentList.length < targetCount) {
+      if (prev.length === coTrekkerCount) return prev;
+      if (prev.length < coTrekkerCount) {
         const added = [];
-        for (let i = currentList.length; i < targetCount; i++) {
-          added.push(createEmptyCoTrekker());
+        for (let i = prev.length; i < coTrekkerCount; i++) {
+          added.push({
+            fullName: "",
+            age: "",
+            gender: "Male",
+            idType: "Aadhaar Card",
+            idNumber: "",
+            dietary: "Standard Veg",
+            healthAssessment: "Fit and prepared for high-altitude trek"
+          });
         }
-        return [...currentList, ...added];
-      } else if (currentList.length > targetCount) {
-        return currentList.slice(0, targetCount);
+        return [...prev, ...added];
       }
-      return currentList;
+      return prev.slice(0, coTrekkerCount);
     });
   };
 
-  const handleCoTrekkerChange = (index, field, value) => {
+  const updateTrekker = (index, field, value) => {
     setTrekkersList(prev => {
       const updated = [...prev];
       if (updated[index]) {
@@ -382,32 +345,13 @@ export default function BookingModal({
       }
       return updated;
     });
-
-    if (coTrekkerErrors[`${index}_${field}`]) {
-      setCoTrekkerErrors(prev => {
-        const copy = { ...prev };
-        delete copy[`${index}_${field}`];
-        return copy;
-      });
-    }
   };
 
   const handleLeadFieldChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    setTrekkersList(prev => {
-      if (prev.length === 0) return prev;
-      const updated = [...prev];
-      if (field === 'name') {
-        updated[0].fullName = value;
-        updated[0].name = value;
-      }
-      if (field === 'email') updated[0].email = value;
-      if (field === 'phone') updated[0].whatsapp = value;
-      return updated;
-    });
   };
 
-  const validateForm = () => {
+  const validateLeadForm = () => {
     const errors = {};
     if (!formData.name.trim()) errors.name = 'Full name is required';
     if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
@@ -417,38 +361,23 @@ export default function BookingModal({
       errors.phone = '10-digit mobile number is required';
     }
     setFormErrors(errors);
-
-    const coErrors = {};
-    if (trekkersList.length > 1) {
-      for (let i = 1; i < trekkersList.length; i++) {
-        const t = trekkersList[i];
-        if (!t.fullName || !t.fullName.trim()) {
-          coErrors[`${i}_fullName`] = `Full name is required for Trekker #${i + 1}`;
-        }
-        if (!t.age || Number(t.age) < 5 || Number(t.age) > 95) {
-          coErrors[`${i}_age`] = `Valid age (5-95) is required`;
-        }
-        if (!t.gender || !String(t.gender).trim()) {
-          coErrors[`${i}_gender`] = `Gender is required`;
-        }
-        if (!t.idNumber || !t.idNumber.trim()) {
-          coErrors[`${i}_idNumber`] = `Govt ID number is required for permits`;
-        }
-        if (t.healthAssessment === 'Other:' && (!t.healthOtherDetails || !t.healthOtherDetails.trim())) {
-          coErrors[`${i}_healthOtherDetails`] = `Please specify health details`;
-        }
-      }
-    }
-    setCoTrekkerErrors(coErrors);
-
-    return Object.keys(errors).length === 0 && Object.keys(coErrors).length === 0;
+    return Object.keys(errors).length === 0;
   };
 
   const handleProceedToPay = async (e) => {
     if (e) e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateLeadForm()) return;
 
-    // Enforce Booking Gate Check: Mandatory Hiker Vital Profile for Lead Trekker
+    // 1. Validation Gate on Co-Trekkers
+    for (let i = 0; i < trekkersList.length; i++) {
+      const t = trekkersList[i];
+      if (!t.fullName || !t.fullName.trim() || !t.age || !t.idNumber || !t.idNumber.trim()) {
+        alert(`Please enter all required details for Trekker #${i + 2} before proceeding to payment.`);
+        return;
+      }
+    }
+
+    // 2. Enforce Booking Gate Check: Mandatory Hiker Vital Profile for Lead Trekker
     try {
       let prof = {};
       try {
@@ -490,36 +419,40 @@ export default function BookingModal({
       console.warn('Profile validation check notice:', err);
     }
 
-    // Build resolved trekkers array for saving and webhook sync
-    const resolvedTrekkers = trekkersList.map((t, idx) => {
-      const isLead = idx === 0;
-      const tHealth = t.healthAssessment === 'Other:' && t.healthOtherDetails
-        ? `Other: ${t.healthOtherDetails.trim()}`
-        : (t.healthAssessment || (isLead ? (leadProfile.healthAssessment || 'Fit and prepared for high-altitude trek') : 'Fit and prepared for high-altitude trek'));
+    // 3. Build Full Roster (Lead + Co-Trekkers)
+    const leadTrekker = {
+      fullName: formData.name || leadProfile.fullName || currentUser?.displayName || "Lead Trekker",
+      name: formData.name || leadProfile.fullName || currentUser?.displayName || "Lead Trekker",
+      email: formData.email || leadProfile.email || currentUser?.email || "N/A",
+      whatsapp: formData.phone || leadProfile.whatsapp || "N/A",
+      age: leadProfile.age || "N/A",
+      gender: leadProfile.gender || "Male",
+      idType: leadProfile.idType || "Aadhaar Card",
+      idNumber: leadProfile.idNumber || leadProfile.idCardNumber || "",
+      idCardNumber: leadProfile.idCardNumber || (leadProfile.idType && leadProfile.idNumber ? `${leadProfile.idType}: ${leadProfile.idNumber}` : leadProfile.idNumber || "N/A"),
+      dietary: leadProfile.dietary || "Standard Veg",
+      healthAssessment: leadProfile.healthAssessment || "Fit and prepared for high-altitude trek",
+      emergencyName: leadProfile.emergencyName || "N/A",
+      emergencyPhone: leadProfile.emergencyPhone || "N/A",
+      role: "Lead Trekker",
+      isLead: true
+    };
 
-      const tIdCard = isLead
-        ? (leadProfile.idCardNumber || (leadProfile.idType && leadProfile.idNumber ? `${leadProfile.idType}: ${leadProfile.idNumber}` : leadProfile.idNumber || t.idNumber))
-        : (t.idType && t.idNumber ? `${t.idType}: ${t.idNumber}` : t.idNumber);
+    const coTrekkersFormatted = trekkersList.map((t, idx) => ({
+      fullName: t.fullName.trim(),
+      name: t.fullName.trim(),
+      age: t.age,
+      gender: t.gender || "Male",
+      idType: t.idType || "Aadhaar Card",
+      idNumber: t.idNumber.trim(),
+      idCardNumber: `${t.idType || "Aadhaar Card"}: ${t.idNumber.trim()}`,
+      dietary: t.dietary || "Standard Veg",
+      healthAssessment: t.healthAssessment || "Fit and prepared for high-altitude trek",
+      role: `Co-Trekker #${idx + 2}`,
+      isLead: false
+    }));
 
-      return {
-        fullName: isLead ? (formData.name || t.fullName) : t.fullName,
-        name: isLead ? (formData.name || t.fullName) : t.fullName,
-        email: isLead ? (formData.email || t.email) : (t.email || ''),
-        whatsapp: isLead ? (formData.phone || t.whatsapp) : (t.whatsapp || formData.phone),
-        age: isLead ? (leadProfile.age || t.age) : t.age,
-        gender: isLead ? (leadProfile.gender || t.gender) : t.gender,
-        idType: t.idType || 'Aadhaar Card',
-        idNumber: isLead ? (leadProfile.idNumber || t.idNumber) : t.idNumber,
-        idCardNumber: tIdCard,
-        dietary: isLead ? (leadProfile.dietary || t.dietary || 'Standard Veg') : (t.dietary || 'Standard Veg'),
-        healthAssessment: tHealth,
-        fitnessLevel: tHealth,
-        emergencyName: isLead ? (leadProfile.emergencyName || 'N/A') : (leadProfile.emergencyName || 'N/A'),
-        emergencyPhone: isLead ? (leadProfile.emergencyPhone || 'N/A') : (leadProfile.emergencyPhone || 'N/A'),
-        role: isLead ? 'Lead Trekker' : `Co-Trekker #${idx + 1}`,
-        isLead
-      };
-    });
+    const resolvedTrekkers = [leadTrekker, ...coTrekkersFormatted];
 
     setIsProcessing(true);
 
@@ -597,7 +530,7 @@ export default function BookingModal({
         return;
       }
 
-      // 1. Dynamic Script Loader
+      // Dynamic Script Loader
       const isLoaded = await loadRazorpayScript();
       if (!isLoaded) {
         alert('Unable to load Razorpay checkout SDK. Please check your internet connection.');
@@ -605,7 +538,7 @@ export default function BookingModal({
         return;
       }
 
-      // 2. Configure Standard Modal Options
+      // Configure Standard Modal Options
       const razorpayKey = (import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TcJLNqT26Th7Rg').trim();
       const options = {
         key: razorpayKey,
@@ -635,7 +568,6 @@ export default function BookingModal({
           }
         },
         handler: async function (response) {
-          // Real-time live payment verification and booking record creation
           console.log("Live Payment Success:", response.razorpay_payment_id);
           try {
             const displayId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -665,7 +597,7 @@ export default function BookingModal({
 
             let savedBookingId = displayId;
 
-            // Atomic Firestore Transaction (prevents double booking & race conditions)
+            // Atomic Firestore Transaction
             if (trek?.id) {
               try {
                 await runTransaction(db, async (transaction) => {
@@ -688,7 +620,7 @@ export default function BookingModal({
                   transaction.set(newBookingRef, { ...bookingDoc, id: newBookingRef.id });
                 });
               } catch (txErr) {
-                console.warn('Transaction write notice, using standard write fallback:', txErr);
+                console.warn('Transaction write notice, using standard fallback:', txErr);
                 const docRef = await addDoc(collection(db, 'bookings'), bookingDoc);
                 savedBookingId = docRef.id;
               }
@@ -731,8 +663,6 @@ export default function BookingModal({
                 }).catch((err) => {
                   console.error('Email dispatch error:', err);
                 });
-              } else {
-                console.info('EmailJS key placeholder detected. To enable live email dispatch, define VITE_EMAILJS_PUBLIC_KEY in .env.');
               }
             } catch (emailErr) {
               console.error('EmailJS invocation error:', emailErr);
@@ -801,7 +731,7 @@ export default function BookingModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className={`relative w-full ${trekkers > 1 ? 'max-w-xl' : 'max-w-lg'} transition-all duration-300 overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92vh] flex flex-col`}>
+      <div className={`relative w-full ${trekkers > 1 ? 'max-w-2xl' : 'max-w-lg'} transition-all duration-300 overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92vh] flex flex-col`}>
 
         {/* Header */}
         <div className="bg-[#F8F8F6] px-6 py-4 flex items-center justify-between border-b border-[#E7E7E4] shrink-0">
@@ -911,17 +841,17 @@ export default function BookingModal({
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => handleUpdateTrekkersCount(trekkers - 1)}
+                      onClick={() => handleUpdateTrekkersCount(trekkerCount - 1)}
                       className="w-7 h-7 rounded-lg bg-white border border-[#E7E7E4] text-[#1A1A18] font-bold hover:bg-[#FAF8F5] flex items-center justify-center cursor-pointer"
                     >
                       -
                     </button>
                     <span className="w-6 text-center font-bold text-[#1A1A18] text-sm">
-                      {trekkers}
+                      {trekkerCount}
                     </span>
                     <button
                       type="button"
-                      onClick={() => handleUpdateTrekkersCount(trekkers + 1)}
+                      onClick={() => handleUpdateTrekkersCount(trekkerCount + 1)}
                       className="w-7 h-7 rounded-lg bg-white border border-[#E7E7E4] text-[#1A1A18] font-bold hover:bg-[#FAF8F5] flex items-center justify-center cursor-pointer"
                     >
                       +
@@ -944,7 +874,7 @@ export default function BookingModal({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
-                    Lead Participant Details (Trekker #1)
+                    Lead Trekker Details (Trekker #1)
                   </span>
                   <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-medium">
                     Auto-filled from Profile
@@ -956,7 +886,8 @@ export default function BookingModal({
                     <User className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="text"
-                      placeholder="Full Name (Lead Payer)"
+                      placeholder="Full Legal Name (Lead Payer) *"
+                      required
                       value={formData.name}
                       onChange={(e) => handleLeadFieldChange('name', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.name ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
@@ -970,7 +901,8 @@ export default function BookingModal({
                     <Mail className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="email"
-                      placeholder="Email Address (for Tickets & Receipts)"
+                      placeholder="Email Address (for Tickets & Receipts) *"
+                      required
                       value={formData.email}
                       onChange={(e) => handleLeadFieldChange('email', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.email ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
@@ -984,7 +916,8 @@ export default function BookingModal({
                     <Phone className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="tel"
-                      placeholder="WhatsApp / Mobile Number"
+                      placeholder="WhatsApp / Mobile Number *"
+                      required
                       value={formData.phone}
                       onChange={(e) => handleLeadFieldChange('phone', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.phone ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
@@ -994,203 +927,89 @@ export default function BookingModal({
                 </div>
               </div>
 
-              {/* Dynamic Co-Trekkers Roster (when Number of Trekkers > 1) */}
-              {trekkersList.length > 1 && (
-                <div className="space-y-4 pt-3 border-t border-[#E7E7E4]">
+              {/* Dynamic Co-Trekkers Form Cards */}
+              {trekkersList.map((trekker, index) => (
+                <div key={index} className="mt-4 p-4 border border-[#E7E7E4] rounded-xl bg-[#F8F8F6] space-y-3 shadow-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#EB5A0D] flex items-center gap-1.5">
-                      <Users className="h-3.5 w-3.5" /> Co-Trekker Roster ({trekkersList.length - 1} {trekkersList.length - 1 === 1 ? 'Participant' : 'Participants'})
-                    </span>
-                    <span className="text-[9px] text-[#52524E] bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full font-medium">
-                      Required for Forest Passes
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#EB5A0D]">
+                      Trekker #{index + 2} Credentials
+                    </h4>
+                    <span className="text-[10px] text-[#52524E] bg-white border border-[#E7E7E4] px-2 py-0.5 rounded-md font-medium">
+                      Required for Forest Permit
                     </span>
                   </div>
 
-                  <div className="space-y-3.5">
-                    {trekkersList.slice(1).map((trekker, idx) => {
-                      const actualIndex = idx + 1;
-                      const trekkerNum = idx + 2;
-                      return (
-                        <div
-                          key={actualIndex}
-                          className="rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] p-3.5 space-y-3 shadow-xs"
-                        >
-                          <div className="flex items-center justify-between pb-2 border-b border-[#E7E7E4]">
-                            <div className="flex items-center gap-2">
-                              <span className="w-5 h-5 rounded-full bg-[#EB5A0D] text-white flex items-center justify-center text-[10px] font-bold">
-                                {trekkerNum}
-                              </span>
-                              <span className="font-outfit font-bold text-xs text-[#1A1A18]">
-                                Trekker #{trekkerNum} Credentials
-                              </span>
-                            </div>
-                            {trekker.fullName ? (
-                              <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 truncate max-w-[140px]">
-                                {trekker.fullName}
-                              </span>
-                            ) : (
-                              <span className="text-[10px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                                Pending Details
-                              </span>
-                            )}
-                          </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Full Legal Name *"
+                      required
+                      value={trekker.fullName}
+                      onChange={(e) => updateTrekker(index, "fullName", e.target.value)}
+                      className="w-full px-3 py-2 text-xs border border-[#E7E7E4] bg-white text-[#1A1A18] rounded-lg focus:outline-none focus:border-[#EB5A0D]"
+                    />
 
-                          {/* Full Name */}
-                          <div>
-                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                              Full Name (as per Govt ID) <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                              <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#52524E]/50" />
-                              <input
-                                type="text"
-                                placeholder={`e.g. Anand Varma (Trekker #${trekkerNum})`}
-                                value={trekker.fullName || ''}
-                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'fullName', e.target.value)}
-                                className={`w-full h-9 pl-8 pr-3 rounded-lg border ${
-                                  coTrekkerErrors[`${actualIndex}_fullName`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
-                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
-                              />
-                            </div>
-                            {coTrekkerErrors[`${actualIndex}_fullName`] && (
-                              <span className="text-[10px] text-red-500 font-medium block mt-0.5">
-                                {coTrekkerErrors[`${actualIndex}_fullName`]}
-                              </span>
-                            )}
-                          </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="number"
+                        placeholder="Age *"
+                        min="10"
+                        max="80"
+                        required
+                        value={trekker.age}
+                        onChange={(e) => updateTrekker(index, "age", e.target.value)}
+                        className="w-full px-3 py-2 text-xs border border-[#E7E7E4] bg-white text-[#1A1A18] rounded-lg focus:outline-none focus:border-[#EB5A0D]"
+                      />
+                      <select
+                        value={trekker.gender}
+                        onChange={(e) => updateTrekker(index, "gender", e.target.value)}
+                        className="w-full px-3 py-2 text-xs border border-[#E7E7E4] rounded-lg bg-white text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
 
-                          {/* Age & Gender Grid */}
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                                Age <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="number"
-                                min="5"
-                                max="95"
-                                placeholder="e.g. 26"
-                                value={trekker.age || ''}
-                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'age', e.target.value)}
-                                className={`w-full h-9 px-3 rounded-lg border ${
-                                  coTrekkerErrors[`${actualIndex}_age`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
-                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
-                              />
-                              {coTrekkerErrors[`${actualIndex}_age`] && (
-                                <span className="text-[10px] text-red-500 font-medium block mt-0.5">
-                                  {coTrekkerErrors[`${actualIndex}_age`]}
-                                </span>
-                              )}
-                            </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <select
+                        value={trekker.idType}
+                        onChange={(e) => updateTrekker(index, "idType", e.target.value)}
+                        className="w-full px-3 py-2 text-xs border border-[#E7E7E4] rounded-lg bg-white text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                      >
+                        <option value="Aadhaar Card">Aadhaar Card</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Driving Licence">Driving Licence</option>
+                        <option value="Voter ID">Voter ID</option>
+                      </select>
+                      <input
+                        type="text"
+                        placeholder="ID Number *"
+                        required
+                        value={trekker.idNumber}
+                        onChange={(e) => updateTrekker(index, "idNumber", e.target.value)}
+                        className="w-full px-3 py-2 text-xs border border-[#E7E7E4] bg-white text-[#1A1A18] rounded-lg focus:outline-none focus:border-[#EB5A0D]"
+                      />
+                    </div>
 
-                            <div>
-                              <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                                Gender <span className="text-red-500">*</span>
-                              </label>
-                              <select
-                                value={trekker.gender || 'Male'}
-                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'gender', e.target.value)}
-                                className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
-                              >
-                                {GENDER_OPTIONS.map((g) => (
-                                  <option key={g} value={g}>{g}</option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Govt ID Type + ID Number Grid */}
-                          <div>
-                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                              Govt ID (For Forest Entry Pass) <span className="text-red-500">*</span>
-                            </label>
-                            <div className="grid grid-cols-5 gap-2">
-                              <select
-                                value={trekker.idType || 'Aadhaar Card'}
-                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'idType', e.target.value)}
-                                className="col-span-2 h-9 px-2 rounded-lg border border-[#E7E7E4] bg-white text-[11px] font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
-                              >
-                                {ID_TYPE_OPTIONS.map((t) => (
-                                  <option key={t} value={t}>{t}</option>
-                                ))}
-                              </select>
-
-                              <input
-                                type="text"
-                                placeholder="ID / Document Number *"
-                                value={trekker.idNumber || ''}
-                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'idNumber', e.target.value)}
-                                className={`col-span-3 h-9 px-3 rounded-lg border ${
-                                  coTrekkerErrors[`${actualIndex}_idNumber`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
-                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
-                              />
-                            </div>
-                            {coTrekkerErrors[`${actualIndex}_idNumber`] && (
-                              <span className="text-[10px] text-red-500 font-medium block mt-0.5">
-                                {coTrekkerErrors[`${actualIndex}_idNumber`]}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Dietary Preference */}
-                          <div>
-                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                              Dietary Preference
-                            </label>
-                            <select
-                              value={trekker.dietary || 'Standard Veg'}
-                              onChange={(e) => handleCoTrekkerChange(actualIndex, 'dietary', e.target.value)}
-                              className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
-                            >
-                              {DIETARY_OPTIONS.map((d) => (
-                                <option key={d} value={d}>{d}</option>
-                              ))}
-                            </select>
-                          </div>
-
-                          {/* Health Assessment */}
-                          <div>
-                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
-                              Health Assessment / Fitness Level
-                            </label>
-                            <select
-                              value={trekker.healthAssessment || 'Fit and prepared for high-altitude trek'}
-                              onChange={(e) => handleCoTrekkerChange(actualIndex, 'healthAssessment', e.target.value)}
-                              className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
-                            >
-                              {HEALTH_ASSESSMENT_OPTIONS.map((opt) => (
-                                <option key={opt} value={opt}>{opt}</option>
-                              ))}
-                            </select>
-                            {trekker.healthAssessment === 'Other:' && (
-                              <div className="mt-1.5">
-                                <input
-                                  type="text"
-                                  placeholder="Specify health conditions or medications *"
-                                  value={trekker.healthOtherDetails || ''}
-                                  onChange={(e) => handleCoTrekkerChange(actualIndex, 'healthOtherDetails', e.target.value)}
-                                  className={`w-full h-9 px-3 rounded-lg border ${
-                                    coTrekkerErrors[`${actualIndex}_healthOtherDetails`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
-                                  } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
-                                />
-                                {coTrekkerErrors[`${actualIndex}_healthOtherDetails`] && (
-                                  <span className="text-[10px] text-red-500 font-medium block mt-0.5">
-                                    {coTrekkerErrors[`${actualIndex}_healthOtherDetails`]}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                    <select
+                      value={trekker.healthAssessment}
+                      onChange={(e) => updateTrekker(index, "healthAssessment", e.target.value)}
+                      className="w-full px-3 py-2 text-xs border border-[#E7E7E4] rounded-lg bg-white text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                    >
+                      <option value="Fit and prepared for high-altitude trek">Fit and prepared for high-altitude trek</option>
+                      <option value="Reasonably fit; need basic guidance">Reasonably fit; need basic guidance</option>
+                      <option value="Has health concerns to discuss">Has health concerns to discuss</option>
+                      <option value="On regular medication">On regular medication</option>
+                      <option value="Have special needs / support required">Have special needs / support required</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
-              )}
+              ))}
 
-              {/* Action Buttons */}
+              {/* Action Button */}
               <div className="pt-2 space-y-3">
-                {/* Primary Proceed to Pay Button */}
                 <button
                   type="submit"
                   disabled={isProcessing}
@@ -1202,7 +1021,7 @@ export default function BookingModal({
                       <span>Initiating Checkout...</span>
                     </>
                   ) : (
-                    <span>PROCEED TO PAY ₹{totalAmount.toLocaleString('en-IN')}</span>
+                    <span>SECURE RESERVATION • ₹{totalAmount.toLocaleString('en-IN')}</span>
                   )}
                 </button>
               </div>
@@ -1240,15 +1059,19 @@ export default function BookingModal({
                   <span className="font-bold text-[#1A1A18]">{trekkers} {trekkers === 1 ? 'Person' : 'Persons'}</span>
                 </div>
 
-                {trekkersList.length > 1 && (
+                {trekkersList.length > 0 && (
                   <div className="pt-2 border-t border-[#E7E7E4]/80 space-y-1">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
                       Registered Roster:
                     </span>
+                    <div className="flex items-center justify-between text-[11px] text-[#52524E]">
+                      <span>1. {formData.name || leadProfile.fullName || 'Lead Trekker'} (Lead)</span>
+                      <span className="font-mono text-[10px] text-[#1A1A18] font-medium">Permit Verified</span>
+                    </div>
                     {trekkersList.map((t, idx) => (
                       <div key={idx} className="flex items-center justify-between text-[11px] text-[#52524E]">
-                        <span>{idx + 1}. {t.fullName || t.name || `Trekker #${idx + 1}`} {idx === 0 ? '(Lead)' : ''}</span>
-                        <span className="font-mono text-[10px] text-[#1A1A18] font-medium">{t.idType ? `${t.idType}: ${t.idNumber || 'Verified'}` : 'Permit Verified'}</span>
+                        <span>{idx + 2}. {t.fullName || `Trekker #${idx + 2}`}</span>
+                        <span className="font-mono text-[10px] text-[#1A1A18] font-medium">{t.idType}: {t.idNumber}</span>
                       </div>
                     ))}
                   </div>
