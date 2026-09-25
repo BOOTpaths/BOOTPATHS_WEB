@@ -2,12 +2,53 @@
  * Copyright (c) 2026 BOOTpaths. All Rights Reserved.
  *
  * Razorpay Standard Web Checkout Modal for BOOTpaths Expeditions.
+ * Supports Lead Trekker + Dynamic Co-Trekker Roster Pattern.
  */
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
 import { collection, addDoc, doc, getDoc, updateDoc, increment, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
 import { db, auth } from '../config/firebase';
+
+const HEALTH_ASSESSMENT_OPTIONS = [
+  "Fit and prepared for high-altitude trek",
+  "Reasonably fit; need basic guidance",
+  "Has health concerns to discuss",
+  "On regular medication",
+  "Have special needs / support required",
+  "Other:"
+];
+
+const ID_TYPE_OPTIONS = [
+  "Aadhaar Card",
+  "Passport",
+  "Driving Licence",
+  "Voter ID"
+];
+
+const DIETARY_OPTIONS = [
+  "Standard Veg",
+  "Non-Veg",
+  "Jain / Pure Veg",
+  "Vegan"
+];
+
+const GENDER_OPTIONS = [
+  "Male",
+  "Female",
+  "Non-binary / Other"
+];
+
+const createEmptyCoTrekker = () => ({
+  fullName: '',
+  age: '',
+  gender: 'Male',
+  idType: 'Aadhaar Card',
+  idNumber: '',
+  dietary: 'Standard Veg',
+  healthAssessment: 'Fit and prepared for high-altitude trek',
+  healthOtherDetails: ''
+});
 
 /**
  * Dynamically injects and loads the Razorpay standard checkout script.
@@ -54,6 +95,7 @@ const getResolvedTrekTitle = (candidateObj) => {
 
 /**
  * Dispatches verified booking and Hiker Vital Profile credentials directly to Google Sheets Webhook.
+ * Sends both root lead fields and full multi-trekker roster array.
  */
 const syncBookingToGoogleSheet = async (bookingData) => {
   const GOOGLE_SHEETS_WEBHOOK_URL =
@@ -78,7 +120,7 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('trek') : null) ||
     "Agasthyarkoodam Wilderness Trek";
 
-  // 3. Construct unified payload matching Apps Script properties precisely
+  // 3. Construct unified Lead info matching Apps Script properties precisely
   const resolvedHealth =
     profile.healthAssessment === "Other:" && profile.healthOtherDetails
       ? `Other: ${profile.healthOtherDetails.trim()}`
@@ -87,6 +129,44 @@ const syncBookingToGoogleSheet = async (bookingData) => {
   const resolvedIdCard =
     profile.idCardNumber ||
     (profile.idType && profile.idNumber ? `${profile.idType}: ${profile.idNumber}` : (profile.idNumber || profile.govId || "N/A"));
+
+  // 4. Format multi-trekker roster array
+  const rawTrekkers = Array.isArray(bookingData.trekkers) && bookingData.trekkers.length > 0
+    ? bookingData.trekkers
+    : [];
+
+  const formattedTrekkers = rawTrekkers.map((t, idx) => {
+    const isLead = idx === 0;
+    const tHealth = t.healthAssessment === "Other:" && t.healthOtherDetails
+      ? `Other: ${t.healthOtherDetails.trim()}`
+      : (t.healthAssessment || (isLead ? resolvedHealth : "Fit and prepared for high-altitude trek"));
+
+    const tId = t.idType && t.idNumber
+      ? `${t.idType}: ${t.idNumber}`
+      : (t.idNumber || t.idCardNumber || (isLead ? resolvedIdCard : "N/A"));
+
+    const tName = t.fullName || t.name || (isLead ? (profile.fullName || bookingData.payerName || auth.currentUser?.displayName || "Lead Trekker") : `Trekker #${idx + 1}`);
+
+    return {
+      fullName: tName,
+      name: tName,
+      age: t.age !== undefined && t.age !== "" ? t.age : (isLead ? (profile.age || "N/A") : "N/A"),
+      gender: t.gender || (isLead ? (profile.gender || "N/A") : "Male"),
+      whatsapp: t.whatsapp || (isLead ? (profile.whatsapp || bookingData.payerPhone || "N/A") : (profile.whatsapp || bookingData.payerPhone || "N/A")),
+      email: t.email || (isLead ? (profile.email || bookingData.payerEmail || auth.currentUser?.email || "N/A") : "N/A"),
+      idType: t.idType || "Aadhaar Card",
+      idNumber: t.idNumber || "",
+      idCard: tId,
+      idCardNumber: tId,
+      dietary: t.dietary || (isLead ? (profile.dietary || "Standard Veg") : "Standard Veg"),
+      healthAssessment: tHealth,
+      fitnessLevel: tHealth,
+      emergencyName: isLead ? (profile.emergencyName || "N/A") : (t.emergencyName || profile.emergencyName || "N/A"),
+      emergencyPhone: isLead ? (profile.emergencyPhone || "N/A") : (t.emergencyPhone || profile.emergencyPhone || "N/A"),
+      isLead: isLead,
+      role: isLead ? "Lead Trekker" : `Co-Trekker #${idx + 1}`
+    };
+  });
 
   const payload = {
     timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
@@ -105,12 +185,27 @@ const syncBookingToGoogleSheet = async (bookingData) => {
     emergencyPhone: profile.emergencyPhone || "N/A",
     trekTitle: resolvedTrekTitle,
     batchDate: bookingData.batchDate || bookingData.selectedDate || "Upcoming Batch",
-    trekkersCount: Number(bookingData.trekkersCount || bookingData.trekkerCount || 1),
+    trekkersCount: Number(bookingData.trekkersCount || (formattedTrekkers.length > 0 ? formattedTrekkers.length : 1)),
     amountPaid: Number(bookingData.amountPaid || bookingData.payableAmount || 1),
-    status: "CONFIRMED"
+    status: "CONFIRMED",
+    trekkers: formattedTrekkers.length > 0 ? formattedTrekkers : [
+      {
+        fullName: profile.fullName || bookingData.payerName || "Lead Trekker",
+        name: profile.fullName || bookingData.payerName || "Lead Trekker",
+        age: profile.age || "N/A",
+        gender: profile.gender || "N/A",
+        whatsapp: profile.whatsapp || bookingData.payerPhone || "N/A",
+        email: profile.email || bookingData.payerEmail || "N/A",
+        idCardNumber: resolvedIdCard,
+        dietary: profile.dietary || "Standard Veg",
+        healthAssessment: resolvedHealth,
+        role: "Lead Trekker",
+        isLead: true
+      }
+    ]
   };
 
-  console.log("🚀 Sending Verified Payload to Google Sheets:", payload);
+  console.log("🚀 Sending Verified Multi-Trekker Payload to Google Sheets:", payload);
 
   try {
     await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -144,20 +239,33 @@ export default function BookingModal({
     numberOfTrekkers: 1
   });
 
+  const [trekkersList, setTrekkersList] = useState([]);
+  const [leadProfile, setLeadProfile] = useState({});
   const [formErrors, setFormErrors] = useState({});
+  const [coTrekkerErrors, setCoTrekkerErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmedBookingId, setConfirmedBookingId] = useState('');
   const [paymentStatus, setPaymentStatus] = useState('IDLE'); // 'IDLE' | 'SUCCESS' | 'FAILED'
   const [paymentError, setPaymentError] = useState(null);
 
-  // Sync initial user details and dates when modal opens
+  // Sync initial user details, profile, and dates when modal opens
   useEffect(() => {
     if (isOpen) {
       const loadProfile = async () => {
         let nameVal = currentUser?.displayName || currentUser?.name || '';
         let emailVal = currentUser?.email || '';
         let phoneVal = currentUser?.phone || '';
+        let cachedProf = {};
+
+        try {
+          const cached = localStorage.getItem("bootpaths_hiker_profile");
+          if (cached) cachedProf = JSON.parse(cached);
+        } catch (e) {
+          console.warn("Cached profile parse error:", e);
+        }
+
+        let fullProf = { ...cachedProf };
 
         if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
           try {
@@ -165,16 +273,39 @@ export default function BookingModal({
             if (userSnap.exists()) {
               const data = userSnap.data();
               const prof = data.profile || data;
-              if (prof.fullName || data.fullName) nameVal = prof.fullName || data.fullName;
-              if (prof.email || data.email) emailVal = prof.email || data.email;
-              if (prof.whatsapp || prof.mobile || data.whatsapp || data.mobile) {
-                phoneVal = prof.whatsapp || prof.mobile || data.whatsapp || data.mobile;
-              }
+              fullProf = { ...fullProf, ...prof };
             }
           } catch (err) {
             console.warn('User profile fetch in BookingModal notice:', err);
           }
         }
+
+        if (fullProf.fullName) nameVal = fullProf.fullName;
+        if (fullProf.email) emailVal = fullProf.email;
+        if (fullProf.whatsapp || fullProf.mobile || fullProf.phone) {
+          phoneVal = fullProf.whatsapp || fullProf.mobile || fullProf.phone;
+        }
+
+        setLeadProfile(fullProf);
+
+        const initialLead = {
+          fullName: nameVal,
+          name: nameVal,
+          email: emailVal,
+          whatsapp: phoneVal,
+          age: fullProf.age || '',
+          gender: fullProf.gender || 'Male',
+          idType: fullProf.idType || 'Aadhaar Card',
+          idNumber: fullProf.idNumber || fullProf.idCardNumber || '',
+          dietary: fullProf.dietary || 'Standard Veg',
+          healthAssessment: fullProf.healthAssessment || fullProf.fitnessLevel || 'Fit and prepared for high-altitude trek',
+          healthOtherDetails: fullProf.healthOtherDetails || '',
+          emergencyName: fullProf.emergencyName || '',
+          emergencyPhone: fullProf.emergencyPhone || '',
+          isLead: true
+        };
+
+        setTrekkersList([initialLead]);
 
         setFormData({
           name: nameVal,
@@ -187,6 +318,7 @@ export default function BookingModal({
 
       loadProfile();
       setFormErrors({});
+      setCoTrekkerErrors({});
       setIsSuccess(false);
       setIsProcessing(false);
       setConfirmedBookingId('');
@@ -204,6 +336,77 @@ export default function BookingModal({
   const amountInPaise = totalAmount * 100;
   const trekTitle = getResolvedTrekTitle(trek);
 
+  const handleUpdateTrekkersCount = (newCount) => {
+    const targetCount = Math.max(1, Math.min(15, Number(newCount) || 1));
+    setFormData(prev => ({ ...prev, numberOfTrekkers: targetCount }));
+
+    setTrekkersList(prev => {
+      const currentList = [...prev];
+      if (currentList.length === 0) {
+        currentList.push({
+          fullName: formData.name || leadProfile.fullName || '',
+          name: formData.name || leadProfile.fullName || '',
+          email: formData.email || leadProfile.email || '',
+          whatsapp: formData.phone || leadProfile.whatsapp || '',
+          age: leadProfile.age || '',
+          gender: leadProfile.gender || 'Male',
+          idType: leadProfile.idType || 'Aadhaar Card',
+          idNumber: leadProfile.idNumber || '',
+          dietary: leadProfile.dietary || 'Standard Veg',
+          healthAssessment: leadProfile.healthAssessment || 'Fit and prepared for high-altitude trek',
+          healthOtherDetails: leadProfile.healthOtherDetails || '',
+          isLead: true
+        });
+      }
+      if (currentList.length < targetCount) {
+        const added = [];
+        for (let i = currentList.length; i < targetCount; i++) {
+          added.push(createEmptyCoTrekker());
+        }
+        return [...currentList, ...added];
+      } else if (currentList.length > targetCount) {
+        return currentList.slice(0, targetCount);
+      }
+      return currentList;
+    });
+  };
+
+  const handleCoTrekkerChange = (index, field, value) => {
+    setTrekkersList(prev => {
+      const updated = [...prev];
+      if (updated[index]) {
+        updated[index] = {
+          ...updated[index],
+          [field]: value
+        };
+      }
+      return updated;
+    });
+
+    if (coTrekkerErrors[`${index}_${field}`]) {
+      setCoTrekkerErrors(prev => {
+        const copy = { ...prev };
+        delete copy[`${index}_${field}`];
+        return copy;
+      });
+    }
+  };
+
+  const handleLeadFieldChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    setTrekkersList(prev => {
+      if (prev.length === 0) return prev;
+      const updated = [...prev];
+      if (field === 'name') {
+        updated[0].fullName = value;
+        updated[0].name = value;
+      }
+      if (field === 'email') updated[0].email = value;
+      if (field === 'phone') updated[0].whatsapp = value;
+      return updated;
+    });
+  };
+
   const validateForm = () => {
     const errors = {};
     if (!formData.name.trim()) errors.name = 'Full name is required';
@@ -214,14 +417,38 @@ export default function BookingModal({
       errors.phone = '10-digit mobile number is required';
     }
     setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+
+    const coErrors = {};
+    if (trekkersList.length > 1) {
+      for (let i = 1; i < trekkersList.length; i++) {
+        const t = trekkersList[i];
+        if (!t.fullName || !t.fullName.trim()) {
+          coErrors[`${i}_fullName`] = `Full name is required for Trekker #${i + 1}`;
+        }
+        if (!t.age || Number(t.age) < 5 || Number(t.age) > 95) {
+          coErrors[`${i}_age`] = `Valid age (5-95) is required`;
+        }
+        if (!t.gender || !String(t.gender).trim()) {
+          coErrors[`${i}_gender`] = `Gender is required`;
+        }
+        if (!t.idNumber || !t.idNumber.trim()) {
+          coErrors[`${i}_idNumber`] = `Govt ID number is required for permits`;
+        }
+        if (t.healthAssessment === 'Other:' && (!t.healthOtherDetails || !t.healthOtherDetails.trim())) {
+          coErrors[`${i}_healthOtherDetails`] = `Please specify health details`;
+        }
+      }
+    }
+    setCoTrekkerErrors(coErrors);
+
+    return Object.keys(errors).length === 0 && Object.keys(coErrors).length === 0;
   };
 
   const handleProceedToPay = async (e) => {
     if (e) e.preventDefault();
     if (!validateForm()) return;
 
-    // Enforce Booking Gate Check: Mandatory Hiker Vital Profile
+    // Enforce Booking Gate Check: Mandatory Hiker Vital Profile for Lead Trekker
     try {
       let prof = {};
       try {
@@ -263,6 +490,37 @@ export default function BookingModal({
       console.warn('Profile validation check notice:', err);
     }
 
+    // Build resolved trekkers array for saving and webhook sync
+    const resolvedTrekkers = trekkersList.map((t, idx) => {
+      const isLead = idx === 0;
+      const tHealth = t.healthAssessment === 'Other:' && t.healthOtherDetails
+        ? `Other: ${t.healthOtherDetails.trim()}`
+        : (t.healthAssessment || (isLead ? (leadProfile.healthAssessment || 'Fit and prepared for high-altitude trek') : 'Fit and prepared for high-altitude trek'));
+
+      const tIdCard = isLead
+        ? (leadProfile.idCardNumber || (leadProfile.idType && leadProfile.idNumber ? `${leadProfile.idType}: ${leadProfile.idNumber}` : leadProfile.idNumber || t.idNumber))
+        : (t.idType && t.idNumber ? `${t.idType}: ${t.idNumber}` : t.idNumber);
+
+      return {
+        fullName: isLead ? (formData.name || t.fullName) : t.fullName,
+        name: isLead ? (formData.name || t.fullName) : t.fullName,
+        email: isLead ? (formData.email || t.email) : (t.email || ''),
+        whatsapp: isLead ? (formData.phone || t.whatsapp) : (t.whatsapp || formData.phone),
+        age: isLead ? (leadProfile.age || t.age) : t.age,
+        gender: isLead ? (leadProfile.gender || t.gender) : t.gender,
+        idType: t.idType || 'Aadhaar Card',
+        idNumber: isLead ? (leadProfile.idNumber || t.idNumber) : t.idNumber,
+        idCardNumber: tIdCard,
+        dietary: isLead ? (leadProfile.dietary || t.dietary || 'Standard Veg') : (t.dietary || 'Standard Veg'),
+        healthAssessment: tHealth,
+        fitnessLevel: tHealth,
+        emergencyName: isLead ? (leadProfile.emergencyName || 'N/A') : (leadProfile.emergencyName || 'N/A'),
+        emergencyPhone: isLead ? (leadProfile.emergencyPhone || 'N/A') : (leadProfile.emergencyPhone || 'N/A'),
+        role: isLead ? 'Lead Trekker' : `Co-Trekker #${idx + 1}`,
+        isLead
+      };
+    });
+
     setIsProcessing(true);
 
     try {
@@ -289,7 +547,8 @@ export default function BookingModal({
               date: formData.selectedDate || 'Scheduled Batch',
               batchDate: formData.selectedDate || 'Scheduled Batch',
               trekkersCount: trekkers,
-              trekkers: trekkers,
+              trekkers: resolvedTrekkers,
+              trekkersList: resolvedTrekkers,
               price: totalAmount,
               totalAmount: totalAmount,
               paymentId: `MOCK-PAY-${Date.now()}`,
@@ -317,7 +576,8 @@ export default function BookingModal({
                 amountPaid: totalAmount,
                 payerName: currentUser?.displayName || formData.name,
                 payerEmail: currentUser?.email || formData.email,
-                payerPhone: formData.phone
+                payerPhone: formData.phone,
+                trekkers: resolvedTrekkers
               });
             } catch (syncErr) {
               console.warn('Mock Google Sheet sync notice:', syncErr);
@@ -391,7 +651,8 @@ export default function BookingModal({
               date: formData.selectedDate || 'Scheduled Batch',
               batchDate: formData.selectedDate || 'Scheduled Batch',
               trekkersCount: trekkers,
-              trekkers: trekkers,
+              trekkers: resolvedTrekkers,
+              trekkersList: resolvedTrekkers,
               price: totalAmount,
               totalAmount: totalAmount,
               paymentId: response.razorpay_payment_id || `PAY-${Date.now()}`,
@@ -477,7 +738,7 @@ export default function BookingModal({
               console.error('EmailJS invocation error:', emailErr);
             }
 
-            // Dispatch Booking & Hiker Vital Profile to Google Sheets Webhook
+            // Dispatch Booking & Multi-Trekker Roster to Google Sheets Webhook
             try {
               const activeTrekTitle = getResolvedTrekTitle(trek);
 
@@ -489,7 +750,8 @@ export default function BookingModal({
                 amountPaid: totalAmount,
                 payerName: currentUser?.displayName || formData.name,
                 payerEmail: currentUser?.email || formData.email,
-                payerPhone: formData.phone
+                payerPhone: formData.phone,
+                trekkers: resolvedTrekkers
               });
             } catch (sheetErr) {
               console.warn('Google Sheet webhook sync notice:', sheetErr);
@@ -539,14 +801,14 @@ export default function BookingModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92vh] flex flex-col">
-        
+      <div className={`relative w-full ${trekkers > 1 ? 'max-w-xl' : 'max-w-lg'} transition-all duration-300 overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92vh] flex flex-col`}>
+
         {/* Header */}
         <div className="bg-[#F8F8F6] px-6 py-4 flex items-center justify-between border-b border-[#E7E7E4] shrink-0">
           <div className="flex items-center gap-3">
-            <img 
-              src="/logo.png" 
-              alt="BOOTpaths" 
+            <img
+              src="/logo.png"
+              alt="BOOTpaths"
               className="h-7 w-auto object-contain"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
@@ -649,7 +911,7 @@ export default function BookingModal({
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, numberOfTrekkers: Math.max(1, Number(prev.numberOfTrekkers) - 1) }))}
+                      onClick={() => handleUpdateTrekkersCount(trekkers - 1)}
                       className="w-7 h-7 rounded-lg bg-white border border-[#E7E7E4] text-[#1A1A18] font-bold hover:bg-[#FAF8F5] flex items-center justify-center cursor-pointer"
                     >
                       -
@@ -659,7 +921,7 @@ export default function BookingModal({
                     </span>
                     <button
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, numberOfTrekkers: Math.min(15, Number(prev.numberOfTrekkers) + 1) }))}
+                      onClick={() => handleUpdateTrekkersCount(trekkers + 1)}
                       className="w-7 h-7 rounded-lg bg-white border border-[#E7E7E4] text-[#1A1A18] font-bold hover:bg-[#FAF8F5] flex items-center justify-center cursor-pointer"
                     >
                       +
@@ -678,20 +940,25 @@ export default function BookingModal({
                 </div>
               </div>
 
-              {/* Participant Contact Info */}
+              {/* Lead Participant Contact Info */}
               <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
-                  Lead Participant Details
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
+                    Lead Participant Details (Trekker #1)
+                  </span>
+                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-medium">
+                    Auto-filled from Profile
+                  </span>
+                </div>
 
                 <div>
                   <div className="relative">
                     <User className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="text"
-                      placeholder="Full Name"
+                      placeholder="Full Name (Lead Payer)"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) => handleLeadFieldChange('name', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.name ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
                     />
                   </div>
@@ -703,9 +970,9 @@ export default function BookingModal({
                     <Mail className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="email"
-                      placeholder="Email Address"
+                      placeholder="Email Address (for Tickets & Receipts)"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => handleLeadFieldChange('email', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.email ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
                     />
                   </div>
@@ -719,13 +986,207 @@ export default function BookingModal({
                       type="tel"
                       placeholder="WhatsApp / Mobile Number"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => handleLeadFieldChange('phone', e.target.value)}
                       className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.phone ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
                     />
                   </div>
                   {formErrors.phone && <span className="text-[10px] text-red-500 font-medium block mt-1">{formErrors.phone}</span>}
                 </div>
               </div>
+
+              {/* Dynamic Co-Trekkers Roster (when Number of Trekkers > 1) */}
+              {trekkersList.length > 1 && (
+                <div className="space-y-4 pt-3 border-t border-[#E7E7E4]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#EB5A0D] flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5" /> Co-Trekker Roster ({trekkersList.length - 1} {trekkersList.length - 1 === 1 ? 'Participant' : 'Participants'})
+                    </span>
+                    <span className="text-[9px] text-[#52524E] bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full font-medium">
+                      Required for Forest Passes
+                    </span>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    {trekkersList.slice(1).map((trekker, idx) => {
+                      const actualIndex = idx + 1;
+                      const trekkerNum = idx + 2;
+                      return (
+                        <div
+                          key={actualIndex}
+                          className="rounded-xl border border-[#E7E7E4] bg-[#F8F8F6] p-3.5 space-y-3 shadow-xs"
+                        >
+                          <div className="flex items-center justify-between pb-2 border-b border-[#E7E7E4]">
+                            <div className="flex items-center gap-2">
+                              <span className="w-5 h-5 rounded-full bg-[#EB5A0D] text-white flex items-center justify-center text-[10px] font-bold">
+                                {trekkerNum}
+                              </span>
+                              <span className="font-outfit font-bold text-xs text-[#1A1A18]">
+                                Trekker #{trekkerNum} Credentials
+                              </span>
+                            </div>
+                            {trekker.fullName ? (
+                              <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 truncate max-w-[140px]">
+                                {trekker.fullName}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                                Pending Details
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Full Name */}
+                          <div>
+                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                              Full Name (as per Govt ID) <span className="text-red-500">*</span>
+                            </label>
+                            <div className="relative">
+                              <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#52524E]/50" />
+                              <input
+                                type="text"
+                                placeholder={`e.g. Anand Varma (Trekker #${trekkerNum})`}
+                                value={trekker.fullName || ''}
+                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'fullName', e.target.value)}
+                                className={`w-full h-9 pl-8 pr-3 rounded-lg border ${
+                                  coTrekkerErrors[`${actualIndex}_fullName`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
+                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
+                              />
+                            </div>
+                            {coTrekkerErrors[`${actualIndex}_fullName`] && (
+                              <span className="text-[10px] text-red-500 font-medium block mt-0.5">
+                                {coTrekkerErrors[`${actualIndex}_fullName`]}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Age & Gender Grid */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                                Age <span className="text-red-500">*</span>
+                              </label>
+                              <input
+                                type="number"
+                                min="5"
+                                max="95"
+                                placeholder="e.g. 26"
+                                value={trekker.age || ''}
+                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'age', e.target.value)}
+                                className={`w-full h-9 px-3 rounded-lg border ${
+                                  coTrekkerErrors[`${actualIndex}_age`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
+                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
+                              />
+                              {coTrekkerErrors[`${actualIndex}_age`] && (
+                                <span className="text-[10px] text-red-500 font-medium block mt-0.5">
+                                  {coTrekkerErrors[`${actualIndex}_age`]}
+                                </span>
+                              )}
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                                Gender <span className="text-red-500">*</span>
+                              </label>
+                              <select
+                                value={trekker.gender || 'Male'}
+                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'gender', e.target.value)}
+                                className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                              >
+                                {GENDER_OPTIONS.map((g) => (
+                                  <option key={g} value={g}>{g}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          {/* Govt ID Type + ID Number Grid */}
+                          <div>
+                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                              Govt ID (For Forest Entry Pass) <span className="text-red-500">*</span>
+                            </label>
+                            <div className="grid grid-cols-5 gap-2">
+                              <select
+                                value={trekker.idType || 'Aadhaar Card'}
+                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'idType', e.target.value)}
+                                className="col-span-2 h-9 px-2 rounded-lg border border-[#E7E7E4] bg-white text-[11px] font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                              >
+                                {ID_TYPE_OPTIONS.map((t) => (
+                                  <option key={t} value={t}>{t}</option>
+                                ))}
+                              </select>
+
+                              <input
+                                type="text"
+                                placeholder="ID / Document Number *"
+                                value={trekker.idNumber || ''}
+                                onChange={(e) => handleCoTrekkerChange(actualIndex, 'idNumber', e.target.value)}
+                                className={`col-span-3 h-9 px-3 rounded-lg border ${
+                                  coTrekkerErrors[`${actualIndex}_idNumber`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
+                                } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
+                              />
+                            </div>
+                            {coTrekkerErrors[`${actualIndex}_idNumber`] && (
+                              <span className="text-[10px] text-red-500 font-medium block mt-0.5">
+                                {coTrekkerErrors[`${actualIndex}_idNumber`]}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Dietary Preference */}
+                          <div>
+                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                              Dietary Preference
+                            </label>
+                            <select
+                              value={trekker.dietary || 'Standard Veg'}
+                              onChange={(e) => handleCoTrekkerChange(actualIndex, 'dietary', e.target.value)}
+                              className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                            >
+                              {DIETARY_OPTIONS.map((d) => (
+                                <option key={d} value={d}>{d}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* Health Assessment */}
+                          <div>
+                            <label className="text-[10px] font-semibold text-[#52524E] block mb-1">
+                              Health Assessment / Fitness Level
+                            </label>
+                            <select
+                              value={trekker.healthAssessment || 'Fit and prepared for high-altitude trek'}
+                              onChange={(e) => handleCoTrekkerChange(actualIndex, 'healthAssessment', e.target.value)}
+                              className="w-full h-9 px-2.5 rounded-lg border border-[#E7E7E4] bg-white text-xs font-medium text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
+                            >
+                              {HEALTH_ASSESSMENT_OPTIONS.map((opt) => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                            </select>
+                            {trekker.healthAssessment === 'Other:' && (
+                              <div className="mt-1.5">
+                                <input
+                                  type="text"
+                                  placeholder="Specify health conditions or medications *"
+                                  value={trekker.healthOtherDetails || ''}
+                                  onChange={(e) => handleCoTrekkerChange(actualIndex, 'healthOtherDetails', e.target.value)}
+                                  className={`w-full h-9 px-3 rounded-lg border ${
+                                    coTrekkerErrors[`${actualIndex}_healthOtherDetails`] ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-white'
+                                  } text-xs text-[#1A1A18] placeholder-[#52524E]/40 focus:outline-none focus:border-[#EB5A0D]`}
+                                />
+                                {coTrekkerErrors[`${actualIndex}_healthOtherDetails`] && (
+                                  <span className="text-[10px] text-red-500 font-medium block mt-0.5">
+                                    {coTrekkerErrors[`${actualIndex}_healthOtherDetails`]}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Action Buttons */}
               <div className="pt-2 space-y-3">
@@ -778,6 +1239,21 @@ export default function BookingModal({
                   <span className="text-[#52524E]">Trekkers:</span>
                   <span className="font-bold text-[#1A1A18]">{trekkers} {trekkers === 1 ? 'Person' : 'Persons'}</span>
                 </div>
+
+                {trekkersList.length > 1 && (
+                  <div className="pt-2 border-t border-[#E7E7E4]/80 space-y-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
+                      Registered Roster:
+                    </span>
+                    {trekkersList.map((t, idx) => (
+                      <div key={idx} className="flex items-center justify-between text-[11px] text-[#52524E]">
+                        <span>{idx + 1}. {t.fullName || t.name || `Trekker #${idx + 1}`} {idx === 0 ? '(Lead)' : ''}</span>
+                        <span className="font-mono text-[10px] text-[#1A1A18] font-medium">{t.idType ? `${t.idType}: ${t.idNumber || 'Verified'}` : 'Permit Verified'}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="flex justify-between pt-2 border-t border-[#E7E7E4]">
                   <span className="text-[#52524E]">Amount Paid:</span>
                   <span className="font-bold text-[#EB5A0D]">₹{totalAmount.toLocaleString('en-IN')}</span>
@@ -785,7 +1261,7 @@ export default function BookingModal({
               </div>
 
               <div className="text-[11px] text-[#52524E] bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 leading-relaxed text-left">
-                📢 <span className="font-bold text-emerald-900">Next Steps:</span> A confirmation summary has been dispatched to your registered email and WhatsApp. Our mountaineering crew will contact you shortly.
+                📢 <span className="font-bold text-emerald-900">Next Steps:</span> A confirmation summary and forest permit pass details have been dispatched to your registered email and WhatsApp. Our mountaineering crew will contact you shortly.
               </div>
 
               {/* WhatsApp Confirmation & Ticket Button */}

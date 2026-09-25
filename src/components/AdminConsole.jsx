@@ -446,7 +446,8 @@ export default function AdminConsole({
           trekkersCount: Number(booking.trekkersCount || booking.trekkers || booking.trekkerCount || 1),
           amountPaid: Number(booking.amountPaid || booking.payableAmount || booking.price || booking.totalPrice || 0),
           status: (booking.status || "CONFIRMED").toUpperCase(),
-          skipEmail: true // Prevents firing duplicate emails during batch sync
+          skipEmail: true, // Prevents firing duplicate emails during batch sync
+          trekkers: Array.isArray(booking.trekkers) ? booking.trekkers : (Array.isArray(booking.trekkersList) ? booking.trekkersList : undefined)
         };
 
         await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
