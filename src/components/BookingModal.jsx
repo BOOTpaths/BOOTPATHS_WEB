@@ -6,7 +6,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
-import { collection, addDoc, doc, getDoc, updateDoc, increment, runTransaction } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
 import { db, auth } from '../config/firebase';
 
