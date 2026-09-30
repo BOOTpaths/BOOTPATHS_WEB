@@ -663,6 +663,8 @@ export default function BookingModal({
                 }).catch((err) => {
                   console.error('Email dispatch error:', err);
                 });
+              } else {
+                console.info('EmailJS key placeholder detected. To enable live email dispatch, define VITE_EMAILJS_PUBLIC_KEY in .env.');
               }
             } catch (emailErr) {
               console.error('EmailJS invocation error:', emailErr);
@@ -874,7 +876,7 @@ export default function BookingModal({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#52524E] block">
-                    Lead Trekker Details (Trekker #1)
+                    LEAD TREKKER DETAILS
                   </span>
                   <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-medium">
                     Auto-filled from Profile
@@ -1007,6 +1009,19 @@ export default function BookingModal({
                   </div>
                 </div>
               ))}
+
+              {/* Terms of Service Checkbox */}
+              <label className="flex items-start gap-2 text-[11px] text-[#52524E] cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  required
+                  defaultChecked
+                  className="mt-0.5 rounded border-[#E7E7E4] text-[#EB5A0D] focus:ring-[#EB5A0D]"
+                />
+                <span>
+                  I agree to the <a href="#terms" className="text-[#EB5A0D] underline font-medium">Terms of Service</a> &amp; expedition fitness guidelines.
+                </span>
+              </label>
 
               {/* Action Button */}
               <div className="pt-2 space-y-3">
