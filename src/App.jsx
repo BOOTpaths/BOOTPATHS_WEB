@@ -428,8 +428,93 @@ export default function App() {
   const [selectedTrek, setSelectedTrek] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
 
+  // Handle URL query parameter (?book=<trekId> or ?trek=<trekId> or #book=<trekId>) to preselect trek & scroll to booking widget
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const checkUrlForBooking = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let bookQuery = urlParams.get('book') || urlParams.get('trek');
+
+      if (!bookQuery && window.location.hash) {
+        const hashStr = window.location.hash.replace(/^#\/?/, '');
+        if (hashStr.startsWith('book=')) {
+          bookQuery = hashStr.replace('book=', '');
+        } else if (hashStr.startsWith('book/')) {
+          bookQuery = hashStr.replace('book/', '');
+        } else if (hashStr.startsWith('booking=')) {
+          bookQuery = hashStr.replace('booking=', '');
+        }
+      }
+
+      if (bookQuery) {
+        const cleanQuery = bookQuery.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+        const candidateList = (treks && treks.length > 0) ? treks : CURATED_TREKS;
+        
+        const matched = candidateList.find(t => {
+          const idClean = String(t.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const slugClean = String(t.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const titleClean = String(t.title || t.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          
+          return idClean === cleanQuery || 
+                 slugClean === cleanQuery || 
+                 idClean.includes(cleanQuery) || 
+                 cleanQuery.includes(idClean) ||
+                 titleClean.includes(cleanQuery);
+        });
+
+        if (matched) {
+          setSelectedTrek(matched);
+          const trekDates = matched.batchDates || matched.dates || [];
+          setSelectedDate(trekDates.length > 0 ? trekDates[0] : '');
+          setNumTrekkers(1);
+          setCoTrekkers([]);
+
+          setTimeout(() => {
+            const widget = document.getElementById('booking-widget') || document.getElementById('trek-select');
+            if (widget) {
+              widget.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 350);
+        }
+      }
+    };
+
+    checkUrlForBooking();
+    window.addEventListener('popstate', checkUrlForBooking);
+    window.addEventListener('hashchange', checkUrlForBooking);
+    return () => {
+      window.removeEventListener('popstate', checkUrlForBooking);
+      window.removeEventListener('hashchange', checkUrlForBooking);
+    };
+  }, [treks]);
+
   useEffect(() => {
     if (treks.length > 0 && !selectedTrek) {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        let bookQuery = urlParams.get('book') || urlParams.get('trek');
+        if (!bookQuery && window.location.hash) {
+          const hashStr = window.location.hash.replace(/^#\/?/, '');
+          if (hashStr.startsWith('book=')) bookQuery = hashStr.replace('book=', '');
+          else if (hashStr.startsWith('book/')) bookQuery = hashStr.replace('book/', '');
+        }
+        if (bookQuery) {
+          const cleanQuery = bookQuery.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+          const matched = treks.find(t => {
+            const idClean = String(t.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const slugClean = String(t.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const titleClean = String(t.title || t.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            return idClean === cleanQuery || slugClean === cleanQuery || idClean.includes(cleanQuery) || cleanQuery.includes(idClean) || titleClean.includes(cleanQuery);
+          });
+          if (matched) {
+            setSelectedTrek(matched);
+            const trekDates = matched.batchDates || matched.dates || [];
+            setSelectedDate(trekDates.length > 0 ? trekDates[0] : '');
+            return;
+          }
+        }
+      }
       setSelectedTrek(treks[0]);
     }
   }, [treks, selectedTrek]);
