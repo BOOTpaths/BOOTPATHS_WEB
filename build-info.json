@@ -1,5 +1,9 @@
 {
-  "buildTime": "2026-09-30T11:52:00.000Z",
-  "version": "1.2.1",
-  "description": "Multi-Trekker Roster Full Verification & Production Build"
+  "version": "2.4.2",
+  "buildTime": "2026-09-30T12:09:30+05:30",
+  "features": [
+    "Dynamic Lead & Co-Trekker Roster",
+    "Forest Permit Participant Credentials",
+    "Razorpay Web Checkout Integration"
+  ]
 }
