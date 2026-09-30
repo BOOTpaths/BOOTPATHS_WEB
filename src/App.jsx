@@ -435,6 +435,7 @@ export default function App() {
   }, [treks, selectedTrek]);
 
   const [numTrekkers, setNumTrekkers] = useState(1);
+  const [coTrekkers, setCoTrekkers] = useState([]);
   const [isRazorpayModalOpen, setIsRazorpayModalOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -744,6 +745,33 @@ export default function App() {
     }
   }, [selectedTrek ? selectedTrek.id : null, availableBatchDates, selectedDate]);
 
+  // Stepper handlers for the on-page reservation widget
+  const handleWidgetIncrement = () => {
+    if (currentSlotsLeft > 0 && numTrekkers >= currentSlotsLeft) return;
+    const nextCount = numTrekkers + 1;
+    setNumTrekkers(nextCount);
+    setCoTrekkers(prev => [
+      ...prev,
+      {
+        fullName: '',
+        age: '',
+        gender: 'Male',
+        idType: 'Aadhaar Card',
+        idNumber: '',
+        dietary: 'Standard Veg',
+        healthAssessment: 'Fit and prepared for high-altitude trek'
+      }
+    ]);
+  };
+
+  const handleWidgetDecrement = () => {
+    if (numTrekkers > 1) {
+      const nextCount = numTrekkers - 1;
+      setNumTrekkers(nextCount);
+      setCoTrekkers(prev => prev.slice(0, -1));
+    }
+  };
+
   // Handle trek change in the widget
   const handleTrekChange = (trekId) => {
     const trek = treks.find(t => t.id === trekId);
@@ -752,6 +780,7 @@ export default function App() {
       const trekDates = trek.batchDates || trek.dates || [];
       setSelectedDate(trekDates.length > 0 ? trekDates[0] : '');
       setNumTrekkers(1);
+      setCoTrekkers([]);
     }
   };
 
@@ -771,6 +800,7 @@ export default function App() {
       setSelectedTrek(action.payload);
       setSelectedDate(action.payload.batchDates ? action.payload.batchDates[0] : (action.payload.dates ? action.payload.dates[0] : ''));
       setNumTrekkers(1);
+      setCoTrekkers([]);
       const widget = document.getElementById('booking-widget');
       if (widget) {
         setTimeout(() => {
@@ -887,6 +917,15 @@ export default function App() {
       return;
     }
 
+    // Validation check on all co-trekkers
+    for (let i = 0; i < coTrekkers.length; i++) {
+      const t = coTrekkers[i];
+      if (!t.fullName || !t.fullName.trim() || !t.age || !t.idNumber || !t.idNumber.trim()) {
+        alert(`Please enter all required details for Trekker #${i + 2} before proceeding to payment.`);
+        return;
+      }
+    }
+
     setFormErrors({});
     setIsRazorpayModalOpen(true);
     setIsProcessingPayment(true);
@@ -901,21 +940,62 @@ export default function App() {
   const handleBookingSuccess = async ({ paymentId, amount }) => {
     setIsProcessingPayment(true);
     
+    // Construct full roster
+    const leadTrekker = {
+      fullName: name || user?.name || profileData?.fullName || 'Lead Trekker',
+      name: name || user?.name || profileData?.fullName || 'Lead Trekker',
+      email: email || user?.email || profileData?.email || 'N/A',
+      whatsapp: phone || user?.phone || profileData?.whatsapp || 'N/A',
+      age: profileData?.age || 'N/A',
+      gender: profileData?.gender || 'Male',
+      idType: profileData?.idType || 'Aadhaar Card',
+      idNumber: profileData?.idNumber || profileData?.idCardNumber || '',
+      idCardNumber: profileData?.idCardNumber || (profileData?.idType && profileData?.idNumber ? `${profileData.idType}: ${profileData.idNumber}` : profileData?.idNumber || 'N/A'),
+      dietary: profileData?.dietary || 'Standard Veg',
+      healthAssessment: profileData?.healthAssessment || 'Fit and prepared for high-altitude trek',
+      role: 'Lead Trekker',
+      isLead: true
+    };
+
+    const coTrekkersFormatted = coTrekkers.map((t, idx) => ({
+      fullName: t.fullName.trim(),
+      name: t.fullName.trim(),
+      age: t.age,
+      gender: t.gender || 'Male',
+      idType: t.idType || 'Aadhaar Card',
+      idNumber: t.idNumber.trim(),
+      idCardNumber: `${t.idType || 'Aadhaar Card'}: ${t.idNumber.trim()}`,
+      dietary: t.dietary || 'Standard Veg',
+      healthAssessment: t.healthAssessment || 'Fit and prepared for high-altitude trek',
+      role: `Co-Trekker #${idx + 2}`,
+      isLead: false
+    }));
+
+    const resolvedTrekkers = [leadTrekker, ...coTrekkersFormatted];
+
     // Register new confirmed booking record
     const newBookingId = `BP-${Math.floor(100000 + Math.random() * 900000)}`;
     const newRecord = {
       id: newBookingId,
+      bookingId: newBookingId,
+      displayId: newBookingId,
       trekId: selectedTrek?.id || 'silent-valley',
       title: selectedTrek?.title || 'Wilderness Trek',
+      trekName: selectedTrek?.title || 'Wilderness Trek',
       date: selectedDate || (selectedTrek?.batchDates ? selectedTrek.batchDates[0] : (selectedTrek?.dates ? selectedTrek.dates[0] : '')),
+      batchDate: selectedDate || (selectedTrek?.batchDates ? selectedTrek.batchDates[0] : (selectedTrek?.dates ? selectedTrek.dates[0] : '')),
       trekkers: numTrekkers,
       trekkersCount: numTrekkers,
+      trekkersList: resolvedTrekkers,
       price: amount,
       totalPrice: amount,
+      totalAmount: amount,
       userName: name || user?.name || 'Trek Participant',
       userEmail: email || user?.email || '',
       userPhone: phone || user?.phone || '',
       status: 'Confirmed',
+      bookingStatus: 'CONFIRMED',
+      paymentStatus: 'SUCCESS',
       paymentId: paymentId || 'Simulated'
     };
     
@@ -2054,9 +2134,9 @@ export default function App() {
                     <div className="flex h-12 items-center rounded-lg border border-autumn-bark/10 bg-autumn-mist px-2">
                       <button 
                         type="button"
-                        onClick={() => setNumTrekkers(prev => Math.max(1, prev - 1))}
+                        onClick={handleWidgetDecrement}
                         disabled={numTrekkers <= 1 || availableBatchDates.length === 0}
-                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30 cursor-pointer"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
@@ -2065,9 +2145,9 @@ export default function App() {
                       </span>
                       <button 
                         type="button"
-                        onClick={() => setNumTrekkers(prev => Math.min(currentSlotsLeft, prev + 1))}
-                        disabled={numTrekkers >= currentSlotsLeft || availableBatchDates.length === 0}
-                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30"
+                        onClick={handleWidgetIncrement}
+                        disabled={(currentSlotsLeft > 0 && numTrekkers >= currentSlotsLeft) || availableBatchDates.length === 0}
+                        className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8D6] text-autumn-bark/80 transition-colors hover:bg-[#EFE8D6]/70 hover:text-white disabled:opacity-30 cursor-pointer"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
@@ -2137,6 +2217,106 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+
+                {/* Dynamic Co-Trekkers Form Cards */}
+                {coTrekkers.length > 0 && (
+                  <div className="space-y-4 my-4">
+                    {coTrekkers.map((trekker, index) => (
+                      <div key={index} className="p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-orange-600">
+                          Trekker #{index + 2} Credentials
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <input
+                            type="text"
+                            placeholder="Full Legal Name *"
+                            value={trekker.fullName}
+                            onChange={(e) => {
+                              const updated = [...coTrekkers];
+                              updated[index].fullName = e.target.value;
+                              setCoTrekkers(updated);
+                            }}
+                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                            required
+                          />
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="number"
+                              placeholder="Age *"
+                              min="10"
+                              max="80"
+                              value={trekker.age}
+                              onChange={(e) => {
+                                const updated = [...coTrekkers];
+                                updated[index].age = e.target.value;
+                                setCoTrekkers(updated);
+                              }}
+                              className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                              required
+                            />
+                            <select
+                              value={trekker.gender}
+                              onChange={(e) => {
+                                const updated = [...coTrekkers];
+                                updated[index].gender = e.target.value;
+                                setCoTrekkers(updated);
+                              }}
+                              className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                            >
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Other">Other</option>
+                            </select>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <select
+                              value={trekker.idType}
+                              onChange={(e) => {
+                                const updated = [...coTrekkers];
+                                updated[index].idType = e.target.value;
+                                setCoTrekkers(updated);
+                              }}
+                              className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                            >
+                              <option value="Aadhaar Card">Aadhaar Card</option>
+                              <option value="Passport">Passport</option>
+                              <option value="Driving Licence">Driving Licence</option>
+                              <option value="Voter ID">Voter ID</option>
+                            </select>
+                            <input
+                              type="text"
+                              placeholder="Govt ID Number *"
+                              value={trekker.idNumber}
+                              onChange={(e) => {
+                                const updated = [...coTrekkers];
+                                updated[index].idNumber = e.target.value;
+                                setCoTrekkers(updated);
+                              }}
+                              className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                              required
+                            />
+                          </div>
+                          <select
+                            value={trekker.healthAssessment}
+                            onChange={(e) => {
+                              const updated = [...coTrekkers];
+                              updated[index].healthAssessment = e.target.value;
+                              setCoTrekkers(updated);
+                            }}
+                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                          >
+                            <option value="Fit and prepared for high-altitude trek">Fit and prepared for high-altitude trek</option>
+                            <option value="Reasonably fit; need basic guidance">Reasonably fit; need basic guidance</option>
+                            <option value="Has health concerns to discuss">Has health concerns to discuss</option>
+                            <option value="On regular medication">On regular medication</option>
+                            <option value="Have special needs / support required">Have special needs / support required</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Terms of Service Checkbox */}
                 <div className="mt-4">
