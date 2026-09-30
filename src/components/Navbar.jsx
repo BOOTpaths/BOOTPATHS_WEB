@@ -21,7 +21,7 @@ import {
 
 const STATIC_WESTERN_GHATS = [
   { id: 'silent-valley', name: 'Silent Valley Rainforest Trek', duration: '3 Days', url: '#silent-valley', isSpecial: true },
-  { id: 'agasthyarkoodam', name: 'Agasthyarkoodam Peak', duration: '3 Days', url: '/treks/Agasthyarkoodam/Assets/index.html' },
+  { id: 'agasthyarkoodam', name: 'Agasthyarkoodam Peak', duration: '3 Days', url: '/treks/Agasthyarkoodam/index.html' },
   { id: 'brahmagiri', name: 'Brahmagiri Coorg Trek', duration: '2 Days', url: '/treks/Brahmagiri/index.html' },
   { id: 'meeshapulimala', name: 'Meeshapulimala Peak', duration: '2 Days', url: '/treks/Meeshapulimala/index.html' },
   { id: 'kolukkumala', name: 'Kolukkumala Sunrise Trek', duration: '2 Days', url: '/treks/Kolukkumala/index.html' },
