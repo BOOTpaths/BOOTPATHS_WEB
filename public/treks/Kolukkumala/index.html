@@ -21,6 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
@@ -93,100 +95,73 @@
         Ascend above the clouds at 7,130 ft (2,170m) aboard rugged 4x4 off-road mountain jeeps and hike across the planet's highest organic tea plantations to witness the mythical Western Ghats sea-of-clouds sunrise.
       </p>
       
-      <div class="stats-bar hero-stats max-w-4xl mx-auto bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl px-8 py-4 flex flex-wrap md:flex-nowrap items-center justify-between text-white shadow-2xl gap-4 my-8 w-full">
-        <!-- ITEM 1: MAX ALTITUDE -->
-        <div class="hs flex items-center gap-3">
-          <svg class="w-12 h-9 text-white shrink-0" width="48" height="36" viewBox="0 0 100 48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Baseline -->
-          <line x1="4" y1="44" x2="96" y2="44" stroke-width="2.5" />
-          <!-- Small Left Ridge -->
-          <path d="M6 44 L24 24 L34 35" stroke-width="2" />
-          <path d="M16 33 L24 24 L27 30" stroke-width="1.2" />
-          <line x1="20" y1="36" x2="24" y2="28" stroke-width="1" />
-          <!-- Mid Left Ridge -->
-          <path d="M22 44 L38 16 L52 38" stroke-width="2" />
-          <path d="M30 28 L38 16 L44 26" stroke-width="1.2" />
-          <line x1="33" y1="34" x2="38" y2="22" stroke-width="1" />
-          <!-- Center Main Peak -->
-          <path d="M32 44 L54 6 L76 44" stroke-width="2.5" />
-          <path d="M43 23 L54 6 L63 21" stroke-width="1.5" />
-          <line x1="54" y1="6" x2="55" y2="44" stroke-width="1.5" />
-          <!-- Etched Ridge Shadows (Main Peak) -->
-          <line x1="49" y1="16" x2="44" y2="24" stroke-width="1.2" />
-          <line x1="51" y1="21" x2="46" y2="29" stroke-width="1.2" />
-          <line x1="53" y1="27" x2="47" y2="35" stroke-width="1.2" />
-          <line x1="54" y1="33" x2="49" y2="40" stroke-width="1.2" />
-          <line x1="58" y1="14" x2="65" y2="22" stroke-width="1.2" />
-          <line x1="57" y1="21" x2="68" y2="31" stroke-width="1.2" />
-          <line x1="56" y1="28" x2="71" y2="39" stroke-width="1.2" />
-          <!-- Right Ridge -->
-          <path d="M66 44 L82 22 L94 44" stroke-width="2" />
-          <path d="M74 32 L82 22 L87 31" stroke-width="1.2" />
-          <line x1="78" y1="37" x2="82" y2="28" stroke-width="1" />
-        </svg>
-          <div class="flex flex-col text-left">
-            <span class="font-extrabold text-lg md:text-xl text-white">1,800m</span>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-white/70">MAX ALTITUDE</span>
+      <div class="max-w-5xl mx-auto my-8 px-4 w-full">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 bg-stone-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl divide-y md:divide-y-0 md:divide-x divide-white/10 text-left">
+          
+          <!-- Stat 1: Max Altitude -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Max Altitude</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">2,170 m <span class="text-xs font-normal text-stone-300">/ 7,119 ft</span></p>
+            </div>
           </div>
-        </div>
 
-        <!-- Divider -->
-        <div class="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-        <!-- ITEM 2: DURATION -->
-        <div class="hs flex flex-col justify-center text-left md:text-center">
-          <span class="font-extrabold text-lg md:text-xl text-white">2 Days</span>
-          <span class="text-[11px] font-bold uppercase tracking-wider text-white/70">DURATION</span>
-        </div>
-
-        <!-- Divider -->
-        <div class="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-        <!-- ITEM 3: DIFFICULTY -->
-        <div class="hs flex items-center gap-3">
-          <svg class="w-7 h-10 text-white shrink-0" width="28" height="40" viewBox="0 0 28 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Level 5 (Top) -->
-          <rect x="2" y="2" width="24" height="5.5" rx="2.75" fill="transparent" />
-          <!-- Level 4 -->
-          <rect x="2" y="10" width="24" height="5.5" rx="2.75" fill="transparent" />
-          <!-- Level 3 -->
-          <rect x="2" y="18" width="24" height="5.5" rx="2.75" fill="transparent" />
-          <!-- Level 2 -->
-          <rect x="2" y="26" width="24" height="5.5" rx="2.75" fill="white" class="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
-          <!-- Level 1 (Bottom - filled with white glow) -->
-          <rect x="2" y="34" width="24" height="5.5" rx="2.75" fill="white" class="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
-        </svg>
-          <div class="flex flex-col text-left">
-            <span class="font-extrabold text-lg md:text-xl text-white">Moderate</span>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-white/70">DIFFICULTY</span>
+          <!-- Stat 2: Duration -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Duration</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">2 Days <span class="text-xs font-normal text-stone-300">/ 1 Night</span></p>
+            </div>
           </div>
-        </div>
 
-        <!-- Divider -->
-        <div class="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-        <!-- ITEM 4: START POINT / TRAILHEAD -->
-        <div class="hs flex items-center gap-3">
-          <svg class="w-9 h-11 text-white shrink-0" width="36" height="44" viewBox="0 0 36 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Waving Flag at destination -->
-          <path d="M23 4 L31 7 L23 10 Z" fill="white" />
-          <line x1="23" y1="4" x2="23" y2="15" stroke-width="2" />
-          <!-- Winding S-curve trail -->
-          <path d="M23 13 C 14 13, 14 19, 21 21 C 26 22, 26 26, 17 26" stroke-dasharray="2 2" stroke-width="1.8" />
-          <!-- Map Pin Shape -->
-          <path d="M17 22 C 10 22, 5 27, 5 33 C 5 40, 17 46, 17 46 C 17 46, 29 40, 29 33 C 29 27, 24 22, 17 22 Z" stroke-width="2" />
-          <!-- Inner Compass Circle & Dial -->
-          <circle cx="17" cy="33" r="5" stroke-width="1.5" />
-          <polygon points="17,30 18.5,33 17,36 15.5,33" fill="white" stroke="none" />
-        </svg>
-          <div class="flex flex-col text-left">
-            <span class="font-extrabold text-lg md:text-xl text-white">Base Camp</span>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-white/70">START POINT</span>
+          <!-- Stat 3: Difficulty -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Difficulty</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">Moderate</p>
+              <p class="text-[10px] text-orange-400 font-medium">Sunrise & 4x4 Off-Road</p>
+            </div>
           </div>
+
+          <!-- Stat 4: Base Camp / Trailhead -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Base Camp &amp; Trailhead</p>
+              <a href="https://maps.google.com/?q=Suryanelli+Munnar" target="_blank" rel="noopener noreferrer" class="text-xs md:text-sm font-semibold text-white hover:text-orange-400 transition-colors flex items-center gap-1 group">
+          <span>Suryanelli Base Camp</span>
+          <svg class="w-3 h-3 text-stone-400 group-hover:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+              <p class="text-[10px] text-stone-400">Elev. ~1,600 m</p>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div class="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-4">
+      <div class="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-6">
         <a href="/?book=kolukkumala" class="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md">Book This Trek</a>
         <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kolukkumala%20Cloud%20Bed%20Peak%20Trek%20trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-white/10 hover:bg-white/20 backdrop-blur border border-white/25 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
@@ -195,9 +170,7 @@
         <a href="#itinerary" class="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
       </div>
 
-      <div class="scroll-hint text-[11px] text-white/60 tracking-wider mt-3 text-center">
-        <span>Scroll to explore &darr;</span>
-      </div>
+      
     </div>
   </section>
 
