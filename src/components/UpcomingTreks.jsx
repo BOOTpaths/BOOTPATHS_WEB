@@ -80,7 +80,7 @@ export default function UpcomingTreks({
           </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {(showAllTreks ? displayTreks : displayTreks.slice(0, 4)).map((trek) => (
+            {(showAllTreks ? displayTreks : displayTreks.slice(0, 8)).map((trek) => (
               <TrekCard
                 key={trek.id}
                 trek={trek}
@@ -92,7 +92,7 @@ export default function UpcomingTreks({
         )}
 
         {/* Progressive Loading Toggle */}
-        {displayTreks.length > 4 && (
+        {displayTreks.length > 8 && (
           <div className="mt-12 flex justify-center">
             <button 
               onClick={() => setShowAllTreks && setShowAllTreks(!showAllTreks)}
