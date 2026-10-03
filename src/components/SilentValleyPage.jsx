@@ -193,84 +193,67 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
           <p className="hero-sub text-sm md:text-base text-white/85 max-w-2xl mx-auto leading-relaxed text-center font-normal mb-10 font-['Open_Sans']">
             Journey into India's last undisturbed evergreen tropical rainforest &amp; virgin biodiversity haven
           </p>
-          <div className="stats-bar hero-stats max-w-4xl mx-auto bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl px-8 py-4 flex flex-wrap md:flex-nowrap items-center justify-between text-white shadow-2xl gap-4 my-8 w-full">
-            {/* ITEM 1: MAX ALTITUDE */}
-            <div className="hs flex items-center gap-3">
-              <svg className="w-12 h-9 text-white shrink-0" width="48" height="36" viewBox="0 0 100 48" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="4" y1="44" x2="96" y2="44" strokeWidth="2.5" />
-                <path d="M6 44 L24 24 L34 35" strokeWidth="2" />
-                <path d="M16 33 L24 24 L27 30" strokeWidth="1.2" />
-                <line x1="20" y1="36" x2="24" y2="28" strokeWidth="1" />
-                <path d="M22 44 L38 16 L52 38" strokeWidth="2" />
-                <path d="M30 28 L38 16 L44 26" strokeWidth="1.2" />
-                <line x1="33" y1="34" x2="38" y2="22" strokeWidth="1" />
-                <path d="M32 44 L54 6 L76 44" strokeWidth="2.5" />
-                <path d="M43 23 L54 6 L63 21" strokeWidth="1.5" />
-                <line x1="54" y1="6" x2="55" y2="44" strokeWidth="1.5" />
-                <line x1="49" y1="16" x2="44" y2="24" strokeWidth="1.2" />
-                <line x1="51" y1="21" x2="46" y2="29" strokeWidth="1.2" />
-                <line x1="53" y1="27" x2="47" y2="35" strokeWidth="1.2" />
-                <line x1="54" y1="33" x2="49" y2="40" strokeWidth="1.2" />
-                <line x1="58" y1="14" x2="65" y2="22" strokeWidth="1.2" />
-                <line x1="57" y1="21" x2="68" y2="31" strokeWidth="1.2" />
-                <line x1="56" y1="28" x2="71" y2="39" strokeWidth="1.2" />
-                <path d="M66 44 L82 22 L94 44" strokeWidth="2" />
-                <path d="M74 32 L82 22 L87 31" strokeWidth="1.2" />
-                <line x1="78" y1="37" x2="82" y2="28" strokeWidth="1" />
-              </svg>
-              <div className="flex flex-col text-left">
-                <span className="font-extrabold text-lg md:text-xl text-white">2,383m</span>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">MAX ALTITUDE</span>
+          <div className="max-w-5xl mx-auto my-8 px-4 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 bg-stone-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl divide-y md:divide-y-0 md:divide-x divide-white/10 text-left">
+              
+              {/* Stat 1: Max Altitude */}
+              <div className="flex items-center space-x-3 px-3 py-2 md:py-0">
+                <div className="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Max Altitude</p>
+                  <p className="text-sm md:text-base font-bold text-white tracking-tight">2,383 m <span className="text-xs font-normal text-stone-300">/ 7,818 ft</span></p>
+                </div>
               </div>
-            </div>
 
-            {/* Divider */}
-            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-            {/* ITEM 2: DURATION */}
-            <div className="hs flex flex-col justify-center text-left md:text-center">
-              <span className="font-extrabold text-lg md:text-xl text-white">3 Days</span>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DURATION</span>
-            </div>
-
-            {/* Divider */}
-            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-            {/* ITEM 3: DIFFICULTY */}
-            <div className="hs flex items-center gap-3">
-              <svg className="w-7 h-10 text-white shrink-0" width="28" height="40" viewBox="0 0 28 42" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="24" height="5.5" rx="2.75" fill="transparent" />
-                <rect x="2" y="10" width="24" height="5.5" rx="2.75" fill="transparent" />
-                <rect x="2" y="18" width="24" height="5.5" rx="2.75" fill="transparent" />
-                <rect x="2" y="26" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
-                <rect x="2" y="34" width="24" height="5.5" rx="2.75" fill="white" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
-              </svg>
-              <div className="flex flex-col text-left">
-                <span className="font-extrabold text-lg md:text-xl text-white">Moderate</span>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">DIFFICULTY</span>
+              {/* Stat 2: Duration */}
+              <div className="flex items-center space-x-3 px-3 py-2 md:py-0">
+                <div className="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Duration</p>
+                  <p className="text-sm md:text-base font-bold text-white tracking-tight">3 Days <span className="text-xs font-normal text-stone-300">/ 2 Nights</span></p>
+                </div>
               </div>
-            </div>
 
-            {/* Divider */}
-            <div className="hs-div hidden md:block w-px h-10 bg-white/20"></div>
-
-            {/* ITEM 4: START POINT / TRAILHEAD */}
-            <div className="hs flex items-center gap-3">
-              <svg className="w-9 h-11 text-white shrink-0" width="36" height="44" viewBox="0 0 36 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 4 L31 7 L23 10 Z" fill="white" />
-                <line x1="23" y1="4" x2="23" y2="15" strokeWidth="2" />
-                <path d="M23 13 C 14 13, 14 19, 21 21 C 26 22, 26 26, 17 26" strokeDasharray="2 2" strokeWidth="1.8" />
-                <path d="M17 22 C 10 22, 5 27, 5 33 C 5 40, 17 46, 17 46 C 17 46, 29 40, 29 33 C 29 27, 24 22, 17 22 Z" strokeWidth="2" />
-                <circle cx="17" cy="33" r="5" strokeWidth="1.5" />
-                <polygon points="17,30 18.5,33 17,36 15.5,33" fill="white" stroke="none" />
-              </svg>
-              <div className="flex flex-col text-left">
-                <span className="font-extrabold text-lg md:text-xl text-white">Mukkali</span>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/70">START POINT</span>
+              {/* Stat 3: Difficulty */}
+              <div className="flex items-center space-x-3 px-3 py-2 md:py-0">
+                <div className="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Difficulty</p>
+                  <p className="text-sm md:text-base font-bold text-white tracking-tight">Moderate</p>
+                  <p className="text-[10px] text-orange-400 font-medium">Challenging Terrain</p>
+                </div>
               </div>
+
+              {/* Stat 4: Base Camp / Trailhead */}
+              <div className="flex items-center space-x-3 px-3 py-2 md:py-0">
+                <div className="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-wider uppercase text-stone-400">Base Camp &amp; Trailhead</p>
+                  <p className="text-xs md:text-sm font-semibold text-white tracking-tight">Mukkali Picket Station</p>
+                  <p className="text-[10px] text-stone-400">Palakkad, Kerala</p>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div className="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-4">
+          <div className="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-6">
             <button onClick={onOpenBookingModal} className="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md border-none cursor-pointer">Book This Trek</button>
             <a 
               href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Silent%20Valley%20trek." 
@@ -284,7 +267,6 @@ export default function SilentValleyPage({ onBack, onOpenBookingModal, packageDa
             <a href="#itinerary" onClick={(e) => { e.preventDefault(); document.getElementById('itinerary')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
           </div>
         </div>
-        <div className="scroll-hint text-[11px] text-white/60 tracking-wider mt-3 text-center"><span>Scroll to explore &darr;</span></div>
       </section>
 
       {/* 3. QUICK INFO BAR */}
