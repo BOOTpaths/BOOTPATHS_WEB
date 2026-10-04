@@ -766,43 +766,63 @@ export default function AdminConsole({
   const SEED_TREKS_DATA = CURATED_TREKS;
   const CANONICAL_TREK_IDS = new Set(CURATED_TREKS.map(t => t.id));
 
-  const handleSeedAllTreks = async () => {
-    if (!window.confirm(`Auto-populate all ${SEED_TREKS_DATA.length} static trek packages into Firestore database? Existing packages with matching IDs will be updated.`)) return;
-
-    setIsSeeding(true);
-    let count = 0;
-
+  const handleSeedAllPackages = async () => {
     try {
-      for (const trekItem of SEED_TREKS_DATA) {
-        await setDoc(doc(db, 'packages', trekItem.id), {
-          ...trekItem,
-          isVisible: true
-        }, { merge: true });
-        count++;
+      setIsSeeding(true);
+
+      // 1. Fetch all existing trek documents currently in Firestore
+      const snapshot = await getDocs(collection(db, "packages"));
+      const existingPackages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // Create a quick lookup map of existing IDs, titles, slugs, and folder names
+      const existingKeys = new Set(
+        existingPackages.flatMap(p => [
+          (p.id || "").toLowerCase().trim(),
+          (p.title || p.name || "").toLowerCase().trim(),
+          (p.slug || "").toLowerCase().trim(),
+          (p.folderName || "").toLowerCase().trim()
+        ]).filter(Boolean)
+      );
+
+      let addedCount = 0;
+      let skippedCount = 0;
+
+      // 2. Iterate through canonical codebase treks list
+      for (const seedTrek of SEED_TREKS_DATA) {
+        const normalizedId = (seedTrek.id || "").toLowerCase().trim();
+        const normalizedTitle = (seedTrek.title || "").toLowerCase().trim();
+        const normalizedSlug = (seedTrek.slug || "").toLowerCase().trim();
+
+        // 3. STRICT CHECK: If it already exists in inventory, SKIP IT completely
+        if (
+          existingKeys.has(normalizedId) ||
+          existingKeys.has(normalizedTitle) || 
+          (normalizedSlug && existingKeys.has(normalizedSlug))
+        ) {
+          skippedCount++;
+          continue; // Do NOT touch, overwrite, or reset customized dates/images/prices
+        }
+
+        // 4. If it's genuinely a new trek from the codebase, add it as a new document
+        await setDoc(doc(db, "packages", seedTrek.id), {
+          ...seedTrek,
+          isVisible: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+        addedCount++;
       }
 
-      setTreks?.(prev => {
-        const merged = [...(prev || []).filter(t => CANONICAL_TREK_IDS.has(t.id))];
-        SEED_TREKS_DATA.forEach(sItem => {
-          const withVis = { ...sItem, isVisible: true };
-          const idx = merged.findIndex(t => t.id === sItem.id);
-          if (idx >= 0) {
-            merged[idx] = { ...merged[idx], ...withVis };
-          } else {
-            merged.push(withVis);
-          }
-        });
-        return merged;
-      });
-
-      alert(`Successfully populated ${count} trek packages to Firestore!`);
-    } catch (err) {
-      console.error("Seed treks error:", err);
-      alert(`Seeding notice: ${err.message}`);
+      alert(`Sync Complete!\n• ${addedCount} new trek(s) enrolled.\n• ${skippedCount} existing trek(s) preserved with their custom images, dates, and prices intact.`);
+    } catch (error) {
+      console.error("Error running additive seed:", error);
+      alert("Failed to seed trek packages: " + error.message);
     } finally {
       setIsSeeding(false);
     }
   };
+
+  const handleSeedAllTreks = handleSeedAllPackages;
 
   const handlePurgeObsoletePackages = async () => {
     if (!window.confirm('Purge and delete all extra/legacy trek packages in Firestore that do not match the 21 codebase trek pages in public/treks/?')) return;
