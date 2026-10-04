@@ -428,7 +428,7 @@ export default function App() {
   }, []);
 
   const [detailedTrek, setDetailedTrek] = useState(null);
-  const [viewerModalTrek, setViewerModalTrek] = useState(null);
+  const [activePreviewTrek, setActivePreviewTrek] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
@@ -963,48 +963,43 @@ export default function App() {
     handleTrigger({ type: 'book_trek', payload: targetTrek });
   };
 
-  const handleGetDetails = (trek) => {
+  const handleOpenTrekPreview = (trek) => {
     if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
       return;
     }
 
-    // Resolve sub-page URL for in-page overlay viewer
-    const detailsUrl = trek.detailsUrl || trek.details_url;
-    let targetUrl = '';
-    if (detailsUrl && detailsUrl.trim()) {
-      const trimmed = detailsUrl.trim();
-      if (trimmed.startsWith('/treks/') || trimmed.startsWith('treks/')) {
-        targetUrl = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+    // Match folder name from detailsLink, detailsUrl, slug, or title
+    const details = trek.detailsLink || trek.detailsUrl || trek.details_url;
+    let formattedUrl = '';
+
+    if (details && details.trim()) {
+      const trimmed = details.trim();
+      if (trimmed.startsWith('http') || trimmed.startsWith('/treks/')) {
+        formattedUrl = trimmed;
+      } else if (trimmed.startsWith('treks/')) {
+        formattedUrl = `/${trimmed}`;
       } else if (trimmed.startsWith('#')) {
         window.location.hash = trimmed;
         return;
-      } else if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-        targetUrl = trimmed;
       }
     }
 
-    if (!targetUrl && trek.id) {
+    if (!formattedUrl) {
       const matchCurated = CURATED_TREKS.find(c => c.id === trek.id || c.slug === trek.id || (c.title && trek.title && c.title.toLowerCase() === trek.title.toLowerCase()));
       if (matchCurated?.detailsUrl) {
-        targetUrl = matchCurated.detailsUrl;
+        formattedUrl = matchCurated.detailsUrl;
+      } else {
+        const folder = trek.detailsLink || trek.slug || trek.folderName || (trek.title || trek.name || '').toLowerCase().replace(/\s+/g, '-');
+        formattedUrl = folder.startsWith('http') || folder.startsWith('/treks/')
+          ? folder
+          : `/treks/${folder}/index.html`;
       }
     }
 
-    if (targetUrl) {
-      setViewerModalTrek({
-        url: targetUrl,
-        title: trek.title || trek.name || 'Expedition Details',
-        trek: trek
-      });
-      return;
-    }
-
-    if (trek.id === 'silent-valley' || trek.slug === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
-      window.location.hash = '#silent-valley';
-      return;
-    }
-    setDetailedTrek(trek);
+    setActivePreviewTrek({ ...trek, previewUrl: formattedUrl });
   };
+
+  const handleGetDetails = handleOpenTrekPreview;
 
   // Start Razorpay Checkout Simulation with Mandatory Profile Gate Check
   const handleCheckoutInit = (e) => {
@@ -2144,6 +2139,7 @@ export default function App() {
                     <TrekCard
                       key={trek.id}
                       trek={trek}
+                      onOpenTrekPreview={handleOpenTrekPreview}
                       onGetDetails={handleGetDetails}
                       onBookNow={handleBookNow}
                     />
@@ -3215,13 +3211,13 @@ export default function App() {
 
       {/* IN-PAGE INTERACTIVE TREK VIEWER OVERLAY MODAL */}
       <TrekViewerModal 
-        isOpen={!!viewerModalTrek}
-        onClose={() => setViewerModalTrek(null)}
-        trekUrl={viewerModalTrek?.url}
-        trekTitle={viewerModalTrek?.title}
-        onBookNow={(trekOrTitle) => {
-          const target = trekOrTitle || viewerModalTrek?.trek;
-          setViewerModalTrek(null);
+        isOpen={!!activePreviewTrek} 
+        onClose={() => setActivePreviewTrek(null)} 
+        trekTitle={activePreviewTrek?.title || activePreviewTrek?.name || "Expedition Details"} 
+        trekUrl={activePreviewTrek?.previewUrl}
+        onBookNow={(trekOrSlug) => {
+          const target = trekOrSlug || activePreviewTrek;
+          setActivePreviewTrek(null);
           handleBookNow(target);
         }}
       />

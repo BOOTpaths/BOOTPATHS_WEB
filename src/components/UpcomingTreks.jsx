@@ -9,6 +9,7 @@ export default function UpcomingTreks({
   showAllTreks = false, 
   setShowAllTreks, 
   onGetDetails, 
+  onOpenTrekPreview,
   onBookNow,
   userRole
 }) {
@@ -89,7 +90,8 @@ export default function UpcomingTreks({
               <TrekCard
                 key={trek.id}
                 trek={trek}
-                onGetDetails={onGetDetails}
+                onGetDetails={onGetDetails || onOpenTrekPreview}
+                onOpenTrekPreview={onOpenTrekPreview || onGetDetails}
                 onBookNow={onBookNow}
               />
             ))}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Heart } from 'lucide-react';
 
-export default function TrekCard({ trek, onGetDetails, onBookNow }) {
+export default function TrekCard({ trek, onGetDetails, onOpenTrekPreview, onBookNow }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imgSrc, setImgSrc] = useState(trek.image || trek.coverImage || trek.thumbnail || '/placeholder-trek.jpg');
 
@@ -13,28 +13,13 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
       return;
     }
 
-    if (onGetDetails) {
-      onGetDetails(trek);
+    if (onOpenTrekPreview) {
+      onOpenTrekPreview(trek);
       return;
     }
 
-    const detailsUrl = trek.detailsUrl || trek.details_url;
-    if (detailsUrl && detailsUrl.trim()) {
-      const trimmed = detailsUrl.trim();
-      if (trimmed.startsWith('/treks/') || trimmed.startsWith('treks/')) {
-        const fullUrl = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-        window.open(fullUrl, '_blank');
-        return;
-      }
-      if (trimmed.startsWith('#')) {
-        window.location.hash = trimmed;
-        return;
-      }
-    }
-
-    const trekTitle = (trek.name || trek.title || '').toLowerCase();
-    if (trek.id === 'silent-valley' || trek.slug === 'silent-valley' || trekTitle.includes('silent valley')) {
-      window.location.hash = '#silent-valley';
+    if (onGetDetails) {
+      onGetDetails(trek);
       return;
     }
   };
@@ -158,14 +143,16 @@ export default function TrekCard({ trek, onGetDetails, onBookNow }) {
         ) : (
           <>
             <button 
+              type="button"
               onClick={handleDetailsClick} 
-              className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg border border-[#D1D5DB] text-[#374151] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-center bg-white font-['Open_Sans']"
+              className="flex-1 py-2 text-xs font-semibold uppercase tracking-wider text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors cursor-pointer text-center font-['Open_Sans'] border border-stone-200"
             >
               GET INFO
             </button>
             <button 
+              type="button"
               onClick={handleBookClick} 
-              className="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none font-['Open_Sans']"
+              className="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none font-['Open_Sans']"
             >
               BOOK NOW
             </button>
