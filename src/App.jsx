@@ -19,6 +19,7 @@ import UserDashboard from './components/UserDashboard';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
 import TrekCard from './components/TrekCard';
+import TrekViewerModal from './components/TrekViewerModal';
 import { CURATED_TREKS } from './data/curatedTreks';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
@@ -427,6 +428,7 @@ export default function App() {
   }, []);
 
   const [detailedTrek, setDetailedTrek] = useState(null);
+  const [viewerModalTrek, setViewerModalTrek] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
@@ -933,30 +935,70 @@ export default function App() {
 
 
   // Keep compatibility with card calls
-  const handleBookNow = (trek) => {
-    if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
+  const handleBookNow = (trekOrSlug) => {
+    if (!trekOrSlug) return;
+
+    let targetTrek = null;
+    if (typeof trekOrSlug === 'object' && trekOrSlug !== null) {
+      targetTrek = trekOrSlug;
+    } else if (typeof trekOrSlug === 'string') {
+      const clean = trekOrSlug.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+      const candidateList = (treks && treks.length > 0) ? treks : CURATED_TREKS;
+      targetTrek = candidateList.find(t => {
+        const idClean = String(t.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const slugClean = String(t.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const titleClean = String(t.title || t.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return idClean === clean || slugClean === clean || idClean.includes(clean) || clean.includes(idClean) || titleClean.includes(clean);
+      });
+    }
+
+    if (!targetTrek) {
+      targetTrek = (treks && treks.length > 0) ? treks[0] : CURATED_TREKS[0];
+    }
+
+    if (targetTrek.isVisible === false || targetTrek.isHidden === true || targetTrek.status === 'draft' || targetTrek.status === 'hidden') {
       return;
     }
-    handleTrigger({ type: 'book_trek', payload: trek });
+
+    handleTrigger({ type: 'book_trek', payload: targetTrek });
   };
 
   const handleGetDetails = (trek) => {
     if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
       return;
     }
+
+    // Resolve sub-page URL for in-page overlay viewer
     const detailsUrl = trek.detailsUrl || trek.details_url;
+    let targetUrl = '';
     if (detailsUrl && detailsUrl.trim()) {
       const trimmed = detailsUrl.trim();
       if (trimmed.startsWith('/treks/') || trimmed.startsWith('treks/')) {
-        const fullUrl = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-        window.open(fullUrl, '_blank');
-        return;
-      }
-      if (trimmed.startsWith('#')) {
+        targetUrl = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+      } else if (trimmed.startsWith('#')) {
         window.location.hash = trimmed;
         return;
+      } else if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+        targetUrl = trimmed;
       }
     }
+
+    if (!targetUrl && trek.id) {
+      const matchCurated = CURATED_TREKS.find(c => c.id === trek.id || c.slug === trek.id || (c.title && trek.title && c.title.toLowerCase() === trek.title.toLowerCase()));
+      if (matchCurated?.detailsUrl) {
+        targetUrl = matchCurated.detailsUrl;
+      }
+    }
+
+    if (targetUrl) {
+      setViewerModalTrek({
+        url: targetUrl,
+        title: trek.title || trek.name || 'Expedition Details',
+        trek: trek
+      });
+      return;
+    }
+
     if (trek.id === 'silent-valley' || trek.slug === 'silent-valley' || trek.title?.toLowerCase().includes('silent valley')) {
       window.location.hash = '#silent-valley';
       return;
@@ -3170,6 +3212,19 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* IN-PAGE INTERACTIVE TREK VIEWER OVERLAY MODAL */}
+      <TrekViewerModal 
+        isOpen={!!viewerModalTrek}
+        onClose={() => setViewerModalTrek(null)}
+        trekUrl={viewerModalTrek?.url}
+        trekTitle={viewerModalTrek?.title}
+        onBookNow={(trekOrTitle) => {
+          const target = trekOrTitle || viewerModalTrek?.trek;
+          setViewerModalTrek(null);
+          handleBookNow(target);
+        }}
+      />
 
       {/* CONDITIONAL AUTHENTICATION MODAL COMPONENT */}
       <AuthModal 
