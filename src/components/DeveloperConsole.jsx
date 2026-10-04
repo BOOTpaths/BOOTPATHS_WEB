@@ -170,8 +170,11 @@ export default function DeveloperConsole({ user, onExit }) {
       try {
         const snap = await getDocs(collection(db, 'packages'));
         if (!snap.empty) {
-          const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-          setInventoryList(list);
+          const CANONICAL_IDS = new Set(CURATED_TREKS.map(t => t.id));
+          const list = snap.docs
+            .filter(d => CANONICAL_IDS.has(d.id))
+            .map(d => ({ id: d.id, ...d.data() }));
+          setInventoryList(list.length > 0 ? list : CURATED_TREKS);
         } else {
           setInventoryList(CURATED_TREKS);
         }

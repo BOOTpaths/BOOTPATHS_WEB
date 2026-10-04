@@ -329,10 +329,13 @@ export default function App() {
 
   // Subscribe to live packages collection in Firestore
   useEffect(() => {
+    const CANONICAL_IDS = new Set(CURATED_TREKS.map(t => t.id));
     const unsub = onSnapshot(collection(db, 'packages'), (snapshot) => {
       const docs = [];
       snapshot.forEach((doc) => {
-        docs.push({ id: doc.id, ...doc.data() });
+        if (CANONICAL_IDS.has(doc.id)) {
+          docs.push({ id: doc.id, ...doc.data() });
+        }
       });
       if (docs.length === 0) {
         setTreks(CURATED_TREKS);

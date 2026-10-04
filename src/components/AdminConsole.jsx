@@ -761,11 +761,13 @@ export default function AdminConsole({
   });
 
   const [isSeeding, setIsSeeding] = useState(false);
+  const [isPurging, setIsPurging] = useState(false);
 
   const SEED_TREKS_DATA = CURATED_TREKS;
+  const CANONICAL_TREK_IDS = new Set(CURATED_TREKS.map(t => t.id));
 
   const handleSeedAllTreks = async () => {
-    if (!window.confirm('Auto-populate all 22 static trek packages into Firestore database? Existing packages with matching IDs will be updated.')) return;
+    if (!window.confirm(`Auto-populate all ${SEED_TREKS_DATA.length} static trek packages into Firestore database? Existing packages with matching IDs will be updated.`)) return;
 
     setIsSeeding(true);
     let count = 0;
@@ -779,15 +781,15 @@ export default function AdminConsole({
         count++;
       }
 
-      setTreks(prev => {
-        const merged = [...prev];
+      setTreks?.(prev => {
+        const merged = [...(prev || []).filter(t => CANONICAL_TREK_IDS.has(t.id))];
         SEED_TREKS_DATA.forEach(sItem => {
           const withVis = { ...sItem, isVisible: true };
           const idx = merged.findIndex(t => t.id === sItem.id);
           if (idx >= 0) {
             merged[idx] = { ...merged[idx], ...withVis };
           } else {
-            merged.unshift(withVis);
+            merged.push(withVis);
           }
         });
         return merged;
@@ -799,6 +801,29 @@ export default function AdminConsole({
       alert(`Seeding notice: ${err.message}`);
     } finally {
       setIsSeeding(false);
+    }
+  };
+
+  const handlePurgeObsoletePackages = async () => {
+    if (!window.confirm('Purge and delete all extra/legacy trek packages in Firestore that do not match the 21 codebase trek pages in public/treks/?')) return;
+
+    setIsPurging(true);
+    try {
+      const snap = await getDocs(collection(db, 'packages'));
+      let deleted = 0;
+      for (const d of snap.docs) {
+        if (!CANONICAL_TREK_IDS.has(d.id)) {
+          await deleteDoc(doc(db, 'packages', d.id));
+          deleted++;
+        }
+      }
+      setTreks?.(prev => (prev || []).filter(t => CANONICAL_TREK_IDS.has(t.id)));
+      alert(`Clean-up complete: Removed ${deleted} extra/obsolete packages. Total inventory synchronized to ${CANONICAL_TREK_IDS.size} canonical routes.`);
+    } catch (err) {
+      console.error("Purge packages error:", err);
+      alert(`Purge error: ${err.message}`);
+    } finally {
+      setIsPurging(false);
     }
   };
 
@@ -1218,8 +1243,9 @@ export default function AdminConsole({
     });
   };
 
-  // Filtered Treks
-  const filteredTreks = (treks || []).filter(t => 
+  // Filtered Treks - strictly scoped to canonical codebase routes
+  const validTreks = (treks || []).filter(t => CANONICAL_TREK_IDS.has(t.id));
+  const filteredTreks = validTreks.filter(t => 
     (t.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
     (t.location || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -1601,9 +1627,20 @@ export default function AdminConsole({
               onClick={handleSeedAllTreks}
               disabled={isSeeding}
               className="h-11 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 font-outfit text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
-              title="Batch populate all 22 static trek pages into Firestore"
+              title="Batch populate all 21 static trek pages into Firestore"
             >
               <span>⚡ {isSeeding ? 'Seeding...' : 'Seed All Trek Packages'}</span>
+            </button>
+
+            {/* Purge Obsolete Treks Button */}
+            <button
+              onClick={handlePurgeObsoletePackages}
+              disabled={isPurging}
+              className="h-11 px-4 rounded-xl bg-red-600/90 hover:bg-red-700 font-outfit text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
+              title="Delete extra packages not existing in public/treks/"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span>{isPurging ? 'Purging...' : 'Purge Extra Packages'}</span>
             </button>
 
             {/* Add Trek Button */}
@@ -1621,20 +1658,20 @@ export default function AdminConsole({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-5 rounded-xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-sm">
             <span className="text-xxs uppercase tracking-wider text-autumn-bark/60 font-bold block">Total Packages</span>
-            <span className="font-outfit text-2xl font-black text-autumn-bark mt-1 block">{treks.length}</span>
+            <span className="font-outfit text-2xl font-black text-autumn-bark mt-1 block">{validTreks.length}</span>
           </div>
 
           <div className="p-5 rounded-xl border border-autumn-amber/20 bg-autumn-amber/5 backdrop-blur-sm">
             <span className="text-xxs uppercase tracking-wider text-autumn-amber font-bold block">Active Slots Available</span>
             <span className="font-outfit text-2xl font-black text-autumn-amber mt-1 block">
-              {treks.reduce((acc, t) => acc + (t.slotsLeft || 0), 0)} Slots
+              {validTreks.reduce((acc, t) => acc + (t.slotsLeft || 0), 0)} Slots
             </span>
           </div>
 
           <div className="p-5 rounded-xl border border-autumn-maple/20 bg-autumn-maple/5 backdrop-blur-sm">
             <span className="text-xxs uppercase tracking-wider text-autumn-maple font-bold block">Featured High Season Treks</span>
             <span className="font-outfit text-2xl font-black text-autumn-maple mt-1 block">
-              {treks.filter(t => t.tag === 'FILLING FAST!').length} Packages
+              {validTreks.filter(t => t.tag === 'FILLING FAST!').length} Packages
             </span>
           </div>
         </div>

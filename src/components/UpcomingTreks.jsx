@@ -13,16 +13,11 @@ export default function UpcomingTreks({
   userRole
 }) {
   const isAdminOrDev = userRole === 'admin' || userRole === 'developer' || (typeof window !== 'undefined' && sessionStorage.getItem('dev_bypass') === 'true');
-  const availableTreks = (treks && treks.length > 0) ? treks : CURATED_TREKS;
+  const CANONICAL_IDS = new Set(CURATED_TREKS.map(t => t.id));
+  const availableTreks = (treks && treks.length > 0) 
+    ? treks.filter(t => CANONICAL_IDS.has(t.id)) 
+    : CURATED_TREKS;
   const filteredTreks = availableTreks.filter(trek => {
-    const title = (trek.title || trek.name || '').toLowerCase();
-    const isSV = trek.id === 'silent-valley' || trek.id === 'trek-1787201750613' || title.includes('silent valley');
-    if (isSV) {
-      // If it's an active duplicate with active booking ("Silent Valley Rainforest Trek"), filter it out
-      if (title.includes('rainforest') && trek.status !== 'draft' && !trek.isDraft && trek.slotsLeft > 0 && trek.tag !== 'DRAFT / HIDDEN') {
-        return false;
-      }
-    }
     return isAdminOrDev ? true : (trek.isVisible !== false && !trek.isHidden);
   });
 
