@@ -9,6 +9,7 @@ import { X, CheckCircle2, Shield, Calendar, Users, Phone, Mail, User, AlertCircl
 import { collection, addDoc, doc, getDoc, runTransaction } from 'firebase/firestore';
 import emailjs from '@emailjs/browser';
 import { db, auth } from '../config/firebase';
+import { maskGovtId, maskGovtIdCard } from '../utils/masking';
 
 const HEALTH_ASSESSMENT_OPTIONS = [
   "Fit and prepared for high-altitude trek",
@@ -115,11 +116,12 @@ const syncBookingToGoogleSheet = async (bookingData) => {
       ? `Other: ${profile.healthOtherDetails.trim()}`
       : (profile.healthAssessment || profile.fitnessLevel || "Fit and prepared for high-altitude trek");
 
-  const resolvedIdCard =
+  const rawIdCard =
     profile.idCardNumber ||
     (profile.idType && profile.idNumber ? `${profile.idType}: ${profile.idNumber}` : (profile.idNumber || profile.govId || "N/A"));
+  const resolvedIdCard = maskGovtIdCard(rawIdCard);
 
-  // 4. Format multi-trekker roster array
+  // 4. Format multi-trekker roster array with strict PII masking
   const rawTrekkers = Array.isArray(bookingData.trekkers) && bookingData.trekkers.length > 0
     ? bookingData.trekkers
     : [];
@@ -130,9 +132,11 @@ const syncBookingToGoogleSheet = async (bookingData) => {
       ? `Other: ${t.healthOtherDetails.trim()}`
       : (t.healthAssessment || (isLead ? resolvedHealth : "Fit and prepared for high-altitude trek"));
 
-    const tId = t.idType && t.idNumber
+    const rawTId = t.idType && t.idNumber
       ? `${t.idType}: ${t.idNumber}`
       : (t.idNumber || t.idCardNumber || (isLead ? resolvedIdCard : "N/A"));
+    const maskedTId = maskGovtIdCard(rawTId);
+    const maskedNum = maskGovtId(t.idType, t.idNumber || rawTId);
 
     const tName = t.fullName || t.name || (isLead ? (profile.fullName || bookingData.payerName || auth.currentUser?.displayName || "Lead Trekker") : `Trekker #${idx + 1}`);
 
@@ -144,9 +148,9 @@ const syncBookingToGoogleSheet = async (bookingData) => {
       whatsapp: t.whatsapp || (isLead ? (profile.whatsapp || bookingData.payerPhone || "N/A") : (profile.whatsapp || bookingData.payerPhone || "N/A")),
       email: t.email || (isLead ? (profile.email || bookingData.payerEmail || auth.currentUser?.email || "N/A") : "N/A"),
       idType: t.idType || "Aadhaar Card",
-      idNumber: t.idNumber || "",
-      idCard: tId,
-      idCardNumber: tId,
+      idNumber: maskedNum,
+      idCard: maskedTId,
+      idCardNumber: maskedTId,
       dietary: t.dietary || (isLead ? (profile.dietary || "Standard Veg") : "Standard Veg"),
       healthAssessment: tHealth,
       fitnessLevel: tHealth,
@@ -406,7 +410,11 @@ export default function BookingModal({
       console.warn('Profile validation check notice:', err);
     }
 
-    // 3. Build Full Roster (Lead + Co-Trekkers)
+    // 3. Build Full Roster (Lead + Co-Trekkers) with Strict PII Masking
+    const rawLeadId = leadProfile.idNumber || leadProfile.idCardNumber || "";
+    const maskedLeadId = maskGovtId(leadProfile.idType, rawLeadId);
+    const maskedLeadCard = maskGovtIdCard(leadProfile.idCardNumber || (leadProfile.idType ? `${leadProfile.idType}: ${maskedLeadId}` : maskedLeadId));
+
     const leadTrekker = {
       fullName: formData.name || leadProfile.fullName || currentUser?.displayName || "Lead Trekker",
       name: formData.name || leadProfile.fullName || currentUser?.displayName || "Lead Trekker",
@@ -415,8 +423,8 @@ export default function BookingModal({
       age: leadProfile.age || "N/A",
       gender: leadProfile.gender || "Male",
       idType: leadProfile.idType || "Aadhaar Card",
-      idNumber: leadProfile.idNumber || leadProfile.idCardNumber || "",
-      idCardNumber: leadProfile.idCardNumber || (leadProfile.idType && leadProfile.idNumber ? `${leadProfile.idType}: ${leadProfile.idNumber}` : leadProfile.idNumber || "N/A"),
+      idNumber: maskedLeadId,
+      idCardNumber: maskedLeadCard,
       dietary: leadProfile.dietary || "Standard Veg",
       healthAssessment: leadProfile.healthAssessment || "Fit and prepared for high-altitude trek",
       emergencyName: leadProfile.emergencyName || "N/A",
@@ -425,19 +433,23 @@ export default function BookingModal({
       isLead: true
     };
 
-    const coTrekkersFormatted = coTrekkers.map((t, idx) => ({
-      fullName: t.fullName.trim(),
-      name: t.fullName.trim(),
-      age: t.age,
-      gender: t.gender || "Male",
-      idType: t.idType || "Aadhaar Card",
-      idNumber: t.idNumber.trim(),
-      idCardNumber: `${t.idType || "Aadhaar Card"}: ${t.idNumber.trim()}`,
-      dietary: t.dietary || "Standard Veg",
-      healthAssessment: t.healthAssessment || "Fit and prepared for high-altitude trek",
-      role: `Co-Trekker #${idx + 2}`,
-      isLead: false
-    }));
+    const coTrekkersFormatted = coTrekkers.map((t, idx) => {
+      const maskedId = maskGovtId(t.idType, t.idNumber.trim());
+      const maskedCard = `${t.idType || "Aadhaar Card"}: ${maskedId}`;
+      return {
+        fullName: t.fullName.trim(),
+        name: t.fullName.trim(),
+        age: t.age,
+        gender: t.gender || "Male",
+        idType: t.idType || "Aadhaar Card",
+        idNumber: maskedId,
+        idCardNumber: maskedCard,
+        dietary: t.dietary || "Standard Veg",
+        healthAssessment: t.healthAssessment || "Fit and prepared for high-altitude trek",
+        role: `Co-Trekker #${idx + 2}`,
+        isLead: false
+      };
+    });
 
     const resolvedTrekkers = [leadTrekker, ...coTrekkersFormatted];
 
@@ -990,10 +1002,16 @@ export default function BookingModal({
                               updated[index].idNumber = e.target.value;
                               setCoTrekkers(updated);
                             }}
-                            className="w-full px-3 py-2 text-sm border rounded-lg"
+                            className="w-full px-3 py-2 text-sm border rounded-lg font-mono"
                             required
                           />
                         </div>
+                        {trekker.idNumber && (
+                          <div className="text-[10px] text-stone-600 font-mono flex items-center justify-between px-2.5 py-1 rounded bg-white border border-stone-200">
+                            <span>Masked Format:</span>
+                            <span className="font-bold text-stone-800">{maskGovtId(trekker.idType, trekker.idNumber)}</span>
+                          </div>
+                        )}
                         <select
                           value={trekker.healthAssessment}
                           onChange={(e) => {
@@ -1092,7 +1110,7 @@ export default function BookingModal({
                     {coTrekkers.map((t, idx) => (
                       <div key={idx} className="flex items-center justify-between text-[11px] text-[#52524E]">
                         <span>{idx + 2}. {t.fullName || `Trekker #${idx + 2}`}</span>
-                        <span className="font-mono text-[10px] text-[#1A1A18] font-medium">{t.idType}: {t.idNumber}</span>
+                        <span className="font-mono text-[10px] text-[#1A1A18] font-medium">{t.idType}: {maskGovtId(t.idType, t.idNumber)}</span>
                       </div>
                     ))}
                   </div>

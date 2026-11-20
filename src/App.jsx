@@ -23,6 +23,7 @@ import TrekViewerModal from './components/TrekViewerModal';
 import { CURATED_TREKS } from './data/curatedTreks';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
+import { maskGovtId, maskGovtIdCard } from './utils/masking';
 import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
 import { 
@@ -1066,6 +1067,10 @@ export default function App() {
     setIsProcessingPayment(true);
     
     // Construct full roster
+    const rawLeadId = profileData?.idNumber || profileData?.idCardNumber || '';
+    const maskedLeadId = maskGovtId(profileData?.idType, rawLeadId);
+    const maskedLeadCard = maskGovtIdCard(profileData?.idCardNumber || (profileData?.idType ? `${profileData.idType}: ${maskedLeadId}` : maskedLeadId));
+
     const leadTrekker = {
       fullName: name || user?.name || profileData?.fullName || 'Lead Trekker',
       name: name || user?.name || profileData?.fullName || 'Lead Trekker',
@@ -1074,27 +1079,30 @@ export default function App() {
       age: profileData?.age || 'N/A',
       gender: profileData?.gender || 'Male',
       idType: profileData?.idType || 'Aadhaar Card',
-      idNumber: profileData?.idNumber || profileData?.idCardNumber || '',
-      idCardNumber: profileData?.idCardNumber || (profileData?.idType && profileData?.idNumber ? `${profileData.idType}: ${profileData.idNumber}` : profileData?.idNumber || 'N/A'),
+      idNumber: maskedLeadId,
+      idCardNumber: maskedLeadCard,
       dietary: profileData?.dietary || 'Standard Veg',
       healthAssessment: profileData?.healthAssessment || 'Fit and prepared for high-altitude trek',
       role: 'Lead Trekker',
       isLead: true
     };
 
-    const coTrekkersFormatted = coTrekkers.map((t, idx) => ({
-      fullName: t.fullName.trim(),
-      name: t.fullName.trim(),
-      age: t.age,
-      gender: t.gender || 'Male',
-      idType: t.idType || 'Aadhaar Card',
-      idNumber: t.idNumber.trim(),
-      idCardNumber: `${t.idType || 'Aadhaar Card'}: ${t.idNumber.trim()}`,
-      dietary: t.dietary || 'Standard Veg',
-      healthAssessment: t.healthAssessment || 'Fit and prepared for high-altitude trek',
-      role: `Co-Trekker #${idx + 2}`,
-      isLead: false
-    }));
+    const coTrekkersFormatted = coTrekkers.map((t, idx) => {
+      const maskedId = maskGovtId(t.idType, t.idNumber.trim());
+      return {
+        fullName: t.fullName.trim(),
+        name: t.fullName.trim(),
+        age: t.age,
+        gender: t.gender || 'Male',
+        idType: t.idType || 'Aadhaar Card',
+        idNumber: maskedId,
+        idCardNumber: `${t.idType || 'Aadhaar Card'}: ${maskedId}`,
+        dietary: t.dietary || 'Standard Veg',
+        healthAssessment: t.healthAssessment || 'Fit and prepared for high-altitude trek',
+        role: `Co-Trekker #${idx + 2}`,
+        isLead: false
+      };
+    });
 
     const resolvedTrekkers = [leadTrekker, ...coTrekkersFormatted];
 
@@ -1157,7 +1165,9 @@ export default function App() {
           batchDate: newRecord.date,
           trekkersCount: newRecord.trekkersCount || 1,
           totalPrice: newRecord.totalPrice || amount || 0,
-          status: "CONFIRMED"
+          status: "CONFIRMED",
+          idCardNumber: maskedLeadCard,
+          trekkers: resolvedTrekkers
         })
       }).catch((err) => console.error("Google Sheet Sync Error:", err));
     } catch (sheetErr) {
@@ -3277,8 +3287,9 @@ export default function App() {
               : selectedHealth;
 
             const selectedIdType = profileData.idType || "Aadhaar Card";
-            const selectedIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (profileData.idCardNumber || "")).trim();
-            const formattedIdCard = `${selectedIdType}: ${selectedIdNum}`;
+            const rawIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (profileData.idCardNumber || "")).trim();
+            const maskedIdNum = maskGovtId(selectedIdType, rawIdNum);
+            const formattedIdCard = `${selectedIdType}: ${maskedIdNum}`;
 
             const profilePayload = {
               fullName: (profileData.fullName || user.name || '').trim(),
@@ -3293,7 +3304,7 @@ export default function App() {
               healthOtherDetails: selectedHealthOther,
               fitnessLevel: resolvedFitness,
               idType: selectedIdType,
-              idNumber: selectedIdNum,
+              idNumber: maskedIdNum,
               idCardNumber: formattedIdCard,
               emergencyName: (profileData.emergencyName || profileData.emergencyContact || '').trim(),
               emergencyContact: (profileData.emergencyName || profileData.emergencyContact || '').trim(),

@@ -41,8 +41,10 @@ import {
   Download,
   Users,
   DollarSign,
-  RefreshCw
+  RefreshCw,
+  ShieldCheck
 } from 'lucide-react';
+import { maskGovtId, maskGovtIdCard } from '../utils/masking';
 
 const BADGE_OPTIONS = [
   { label: 'FILLING FAST!', color: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40' },
@@ -354,7 +356,7 @@ export default function AdminConsole({
       return;
     }
 
-    const headers = ['Booking ID', 'Lead Trekker', 'Email', 'Phone / WhatsApp', 'Destination & Batch', 'Batch Date', 'Headcount', 'Amount Paid (INR)', 'Status', 'Payment ID', 'Created At'];
+    const headers = ['Booking ID', 'Lead Trekker', 'Email', 'Phone / WhatsApp', 'Destination & Batch', 'Batch Date', 'Headcount', 'Govt ID (Masked)', 'Amount Paid (INR)', 'Status', 'Payment ID', 'Created At'];
     
     const rows = filteredBookings.map(b => [
       `"${b.id || ''}"`,
@@ -364,6 +366,7 @@ export default function AdminConsole({
       `"${(b.title || b.trekTitle || '').replace(/"/g, '""')}"`,
       `"${b.date || b.batchDate || ''}"`,
       b.trekkers || b.trekkersCount || 1,
+      `"${maskGovtIdCard(b.idCardNumber || (Array.isArray(b.trekkers) && b.trekkers[0]?.idCardNumber) || 'N/A')}"`,
       b.price || b.totalPrice || 0,
       `"${b.status || 'Confirmed'}"`,
       `"${b.paymentId || ''}"`,
@@ -422,9 +425,21 @@ export default function AdminConsole({
             ? `Other: ${profile.healthOtherDetails.trim()}`
             : (profile.healthAssessment || profile.fitnessLevel || booking.healthAssessment || booking.fitnessLevel || "Fit and prepared for high-altitude trek");
 
-        const resolvedIdCard =
+        const rawIdCard =
           profile.idCardNumber ||
           (profile.idType && profile.idNumber ? `${profile.idType}: ${profile.idNumber}` : (profile.idNumber || booking.idCardNumber || "N/A"));
+        const resolvedIdCard = maskGovtIdCard(rawIdCard);
+
+        const rawTrekkersList = Array.isArray(booking.trekkers) ? booking.trekkers : (Array.isArray(booking.trekkersList) ? booking.trekkersList : []);
+        const sanitizedTrekkers = rawTrekkersList.map(t => {
+          const rawTId = t.idType && t.idNumber ? `${t.idType}: ${t.idNumber}` : (t.idNumber || t.idCardNumber || "N/A");
+          return {
+            ...t,
+            idNumber: maskGovtId(t.idType, t.idNumber || rawTId),
+            idCard: maskGovtIdCard(rawTId),
+            idCardNumber: maskGovtIdCard(rawTId)
+          };
+        });
 
         const payload = {
           timestamp: booking.createdAt || booking.timestamp || new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
@@ -447,7 +462,7 @@ export default function AdminConsole({
           amountPaid: Number(booking.amountPaid || booking.payableAmount || booking.price || booking.totalPrice || 0),
           status: (booking.status || "CONFIRMED").toUpperCase(),
           skipEmail: true, // Prevents firing duplicate emails during batch sync
-          trekkers: Array.isArray(booking.trekkers) ? booking.trekkers : (Array.isArray(booking.trekkersList) ? booking.trekkersList : undefined)
+          trekkers: sanitizedTrekkers.length > 0 ? sanitizedTrekkers : undefined
         };
 
         await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -1865,6 +1880,10 @@ export default function AdminConsole({
               <Trash2 className="h-4 w-4 text-rose-600" />
               <span>{isPurgingDemo ? 'Purging...' : '🗑️ Purge Demo Bookings'}</span>
             </button>
+            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <span>Strict PII Masking Active</span>
+            </div>
             <button
               onClick={() => window.open(GOOGLE_SHEET_WEBHOOK_URL, "_blank")}
               className="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2 cursor-pointer font-outfit"
@@ -2060,8 +2079,29 @@ export default function AdminConsole({
                         </td>
 
                         {/* Headcount */}
-                        <td className="py-4 px-5 font-bold font-outfit text-sm text-[#1A1A18]">
-                          {b.trekkers || b.trekkersCount || 1} {Number(b.trekkers || b.trekkersCount || 1) === 1 ? 'Person' : 'Persons'}
+                        <td className="py-4 px-5">
+                          <span className="font-bold font-outfit text-sm text-[#1A1A18] block">
+                            {b.trekkers || b.trekkersCount || 1} {Number(b.trekkers || b.trekkersCount || 1) === 1 ? 'Person' : 'Persons'}
+                          </span>
+                          {Array.isArray(b.trekkers) && b.trekkers.length > 0 ? (
+                            <div className="mt-1.5 space-y-1">
+                              {b.trekkers.map((t, idx) => {
+                                const idStr = t.idCardNumber || (t.idType && t.idNumber ? `${t.idType}: ${t.idNumber}` : t.idNumber || '');
+                                return (
+                                  <div key={idx} className="text-[10px] bg-[#F8F8F6] border border-[#E7E7E4] px-2 py-0.5 rounded font-mono text-[#52524E] flex items-center justify-between gap-2 max-w-[220px]">
+                                    <span className="truncate">{t.fullName || t.name || `Trekker #${idx + 1}`}</span>
+                                    <span className="font-semibold text-emerald-700 shrink-0">
+                                      {idStr ? maskGovtIdCard(idStr) : 'Permit OK'}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ) : b.idCardNumber ? (
+                            <span className="inline-block mt-1 text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                              {maskGovtIdCard(b.idCardNumber)}
+                            </span>
+                          ) : null}
                         </td>
 
                         {/* Amount Paid */}

@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { X, ShieldCheck, User, Phone, Mail, MapPin, Heart, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
+import { maskGovtId, maskGovtIdCard } from '../utils/masking';
 
 const HEALTH_ASSESSMENT_OPTIONS = [
   "Fit and prepared for high-altitude trek",
@@ -199,7 +200,8 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
       ? `Other: ${form.healthOtherDetails.trim()}`
       : form.healthAssessment;
 
-    const formattedIdCard = `${form.idType || "Aadhaar Card"}: ${form.idNumber.trim()}`;
+    const maskedIdNumber = maskGovtId(form.idType, form.idNumber.trim());
+    const formattedIdCard = `${form.idType || "Aadhaar Card"}: ${maskedIdNumber}`;
 
     const profileData = {
       fullName: form.fullName?.trim() || "",
@@ -213,7 +215,7 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
       healthOtherDetails: form.healthOtherDetails?.trim() || "",
       fitnessLevel: resolvedFitnessLevel,
       idType: form.idType || "Aadhaar Card",
-      idNumber: form.idNumber.trim(),
+      idNumber: maskedIdNumber,
       idCardNumber: formattedIdCard,
       emergencyName: form.emergencyName?.trim() || "",
       emergencyPhone: form.emergencyPhone?.trim() || "",
@@ -228,7 +230,7 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
         form.dietary &&
         form.healthAssessment &&
         (form.healthAssessment !== "Other:" || form.healthOtherDetails?.trim()) &&
-        form.idNumber.trim() &&
+        maskedIdNumber &&
         form.emergencyName?.trim() &&
         form.emergencyPhone?.trim()
       ),
@@ -236,7 +238,7 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
     };
 
     try {
-      // 1. Save to Firestore
+      // 1. Save to Firestore (Strictly storing masked PII)
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         ...profileData,
         profile: profileData,
@@ -245,6 +247,13 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
 
       // 2. Cache in localStorage for instant checkout access
       localStorage.setItem("bootpaths_hiker_profile", JSON.stringify(profileData));
+
+      // 3. Update local state to reflect masked format
+      setForm(prev => ({
+        ...prev,
+        idNumber: maskedIdNumber,
+        idCardNumber: formattedIdCard
+      }));
 
       setSavedSuccess(true);
       if (onProfileSaved) {
@@ -426,9 +435,15 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1">
-                  ID Card Number (Govt ID) <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E]">
+                    ID Card Number (Govt ID) <span className="text-red-500">*</span>
+                  </label>
+                  <span className="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-semibold">
+                    <ShieldCheck className="h-3 w-3 text-emerald-600" />
+                    PII Masked &amp; Protected
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div className="sm:col-span-1">
                     <select
@@ -453,6 +468,17 @@ export default function UserProfileModal({ isOpen, onClose, user, onProfileSaved
                     />
                   </div>
                 </div>
+                {form.idNumber && (
+                  <div className="mt-1.5 flex items-center justify-between text-[11px] px-2.5 py-1 rounded-lg bg-stone-50 border border-stone-200 font-mono text-[#52524E]">
+                    <span>Masked Preview:</span>
+                    <span className="font-bold text-[#1A1A18] tracking-wider">
+                      {maskGovtId(form.idType, form.idNumber)}
+                    </span>
+                  </div>
+                )}
+                <span className="text-[10px] text-[#718096] block mt-1">
+                  🔒 Strictly protected: Raw Aadhaar/Passport numbers are masked before Firestore storage &amp; sync.
+                </span>
               </div>
 
               <div>

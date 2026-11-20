@@ -23,6 +23,7 @@ import {
   Compass
 } from 'lucide-react';
 import { db, auth } from '../config/firebase';
+import { maskGovtId, maskGovtIdCard } from '../utils/masking';
 import { collection, query, where, onSnapshot, doc, setDoc } from 'firebase/firestore';
 
 const HEALTH_ASSESSMENT_OPTIONS = [
@@ -116,8 +117,9 @@ export default function UserDashboard({
         : selectedHealth;
 
       const selectedIdType = profileData.idType || currentIdType || "Aadhaar Card";
-      const selectedIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (currentIdNumber || profileData.idCardNumber || "")).trim();
-      const formattedIdCard = `${selectedIdType}: ${selectedIdNum}`;
+      const rawIdNum = (profileData.idNumber !== undefined ? profileData.idNumber : (currentIdNumber || profileData.idCardNumber || "")).trim();
+      const maskedIdNum = maskGovtId(selectedIdType, rawIdNum);
+      const formattedIdCard = `${selectedIdType}: ${maskedIdNum}`;
 
       const profileDataToSave = {
         fullName: (profileData.fullName || user.name || "").trim(),
@@ -132,7 +134,7 @@ export default function UserDashboard({
         healthOtherDetails: selectedHealthOther?.trim() || "",
         fitnessLevel: resolvedFitness,
         idType: selectedIdType,
-        idNumber: selectedIdNum,
+        idNumber: maskedIdNum,
         idCardNumber: formattedIdCard,
         emergencyName: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
         emergencyContact: (profileData.emergencyName || profileData.emergencyContact || "").trim(),
@@ -627,9 +629,15 @@ export default function UserDashboard({
 
                   {/* Split Govt ID: ID Type Dropdown + ID Number Field */}
                   <div className="sm:col-span-2">
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E] mb-1.5">
-                      ID Card Number (Govt ID) <span className="text-red-500">*</span>
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-[#52524E]">
+                        ID Card Number (Govt ID) <span className="text-red-500">*</span>
+                      </label>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-semibold">
+                        <ShieldCheck className="h-3 w-3 text-emerald-600" />
+                        PII Protected
+                      </span>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                       <div className="sm:col-span-1 relative">
                         <select
@@ -671,6 +679,14 @@ export default function UserDashboard({
                         />
                       </div>
                     </div>
+                    {(profileData.idNumber !== undefined ? profileData.idNumber : currentIdNumber) && (
+                      <div className="mt-1.5 flex items-center justify-between text-[11px] px-3 py-1 rounded-lg bg-stone-50 border border-stone-200 font-mono text-[#52524E]">
+                        <span>Masked Storage Format:</span>
+                        <span className="font-bold text-[#1A1A18] tracking-wider">
+                          {maskGovtId(profileData.idType || currentIdType, profileData.idNumber !== undefined ? profileData.idNumber : currentIdNumber)}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="sm:col-span-2 flex items-center">
