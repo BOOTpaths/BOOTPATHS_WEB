@@ -17,12 +17,15 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
     };
   }, [isOpen, onClose]);
 
-  // Listen for "BOOK NOW" messages posted from the embedded sub-page iframe
+  // Listen for messages posted from the embedded sub-page iframe
   useEffect(() => {
     const handleIframeMessage = (event) => {
       if (event.data && (event.data.type === 'TRIGGER_BOOKING' || event.data.type === 'BOOK_NOW')) {
         onClose();
         if (onBookNow) onBookNow(event.data.trekSlug || event.data.trekId || trekTitle);
+      }
+      if (event.data && event.data.type === 'CLOSE_PREVIEW') {
+        onClose();
       }
     };
     window.addEventListener('message', handleIframeMessage);
@@ -47,6 +50,18 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
             if (onBookNow) onBookNow(slug || trekTitle);
           });
         });
+
+        // Intercept "Back to BOOTpaths" links inside iframe
+        const allLinks = iframeDoc.querySelectorAll('a');
+        allLinks.forEach((link) => {
+          if (link.textContent && link.textContent.includes('Back to BOOTpaths')) {
+            link.addEventListener('click', (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              onClose();
+            });
+          }
+        });
       }
     } catch (err) {
       // In case of any cross-origin sandboxing restriction
@@ -57,36 +72,16 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black/80 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
-      {/* Top Bar Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 bg-stone-900/95 border-b border-stone-800 text-white shadow-lg shrink-0">
-        <div className="flex items-center space-x-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse"></span>
-          <h3 className="text-sm font-semibold tracking-wide text-stone-200 uppercase truncate">
-            {trekTitle || "Expedition Details"}
-          </h3>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => {
-              onClose();
-              if (onBookNow) onBookNow(trekTitle);
-            }}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-orange-600 hover:bg-orange-500 text-white rounded-lg transition-colors shadow-sm cursor-pointer"
-          >
-            Book This Trek
-          </button>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors cursor-pointer"
-            aria-label="Close Preview"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
+      {/* Sleek Floating Close Button in Top-Right Corner */}
+      <button
+        onClick={onClose}
+        className="fixed top-3 right-4 z-[60] p-2 rounded-full bg-stone-900/80 hover:bg-stone-900 text-white shadow-lg backdrop-blur-md border border-white/15 transition-all hover:scale-105 cursor-pointer"
+        aria-label="Close Preview"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
       {/* Embedded Sub-Website Container */}
       <div className="flex-1 w-full h-full bg-white relative overflow-hidden">
