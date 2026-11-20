@@ -264,11 +264,34 @@ export default function UserDashboard({
 
   const handleProcessCancellation = () => {
     if (!selectedBookingForCancel || !cancelDetails) return;
-    onConfirmCancellation({
-      booking: selectedBookingForCancel,
-      refundOption: selectedRefundOption,
-      cancelDetails
-    });
+    const targetBooking = selectedBookingForCancel;
+
+    // Dispatch webhook POST request to Google Apps Script URL
+    try {
+      const webhookUrl = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "UPDATE_STATUS",
+          bookingId: targetBooking.id || targetBooking.bookingId || targetBooking.displayId,
+          newStatus: "CANCELLED",
+          status: "CANCELLED",
+          cancelledBy: "user"
+        })
+      }).catch((err) => console.error("Dashboard Cancellation Webhook Notice:", err));
+    } catch (err) {
+      console.warn("Webhook dispatch notice:", err);
+    }
+
+    if (onConfirmCancellation) {
+      onConfirmCancellation({
+        booking: targetBooking,
+        refundOption: selectedRefundOption,
+        cancelDetails
+      });
+    }
     setSelectedBookingForCancel(null);
   };
 

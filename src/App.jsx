@@ -24,7 +24,7 @@ import { CURATED_TREKS } from './data/curatedTreks';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { maskGovtId, maskGovtIdCard } from './utils/masking';
-import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy, increment } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
 import { 
   Shield, 
@@ -755,17 +755,73 @@ export default function App() {
 
   // Handle Cancellation Confirmation from Dashboard
   const handleConfirmCancellation = async ({ booking, refundOption, cancelDetails }) => {
+    const isPreviouslyConfirmed = (booking.status || '').toLowerCase() === 'confirmed';
+    const headcount = Number(booking.headcount || booking.trekkersCount || booking.trekkers || 1) || 1;
+    const cancelledAt = new Date().toISOString();
+
     setExpeditionRecords(prev => prev.map(rec => 
-      rec.id === booking.id ? { ...rec, status: 'Cancelled' } : rec
+      rec.id === booking.id ? {
+        ...rec,
+        status: 'Cancelled',
+        bookingStatus: 'CANCELLED',
+        cancelledBy: 'user',
+        cancelledAt
+      } : rec
     ));
 
     // Update cancelled status in Firestore bookings collection
     try {
       await setDoc(doc(db, 'bookings', booking.id), {
-        status: 'Cancelled'
+        status: 'Cancelled',
+        bookingStatus: 'CANCELLED',
+        cancelledBy: 'user',
+        cancelledAt
       }, { merge: true });
     } catch (err) {
       console.warn('Firestore booking cancellation sync notice:', err.message);
+    }
+
+    // Atomically increment the trek's available slots back in Firestore using increment(booking.headcount)
+    if (isPreviouslyConfirmed) {
+      const trekId = booking.trekId || booking.packageId;
+      const trekTitle = booking.title || booking.trekName || booking.trekTitle;
+      const matchedTrek = (treks || []).find(t => (trekId && t.id === trekId) || (trekTitle && t.title && t.title.toLowerCase() === trekTitle.toLowerCase()));
+      const targetTrekId = trekId || matchedTrek?.id;
+
+      if (targetTrekId) {
+        try {
+          await updateDoc(doc(db, 'packages', targetTrekId), {
+            slotsLeft: increment(headcount),
+            availableSlots: increment(headcount)
+          });
+          setTreks?.(prev => prev.map(t => t.id === targetTrekId ? {
+            ...t,
+            slotsLeft: (t.slotsLeft || 0) + headcount,
+            availableSlots: ((t.availableSlots !== undefined ? t.availableSlots : t.slotsLeft) || 0) + headcount
+          } : t));
+        } catch (slotErr) {
+          console.warn('Firestore slot increment notice:', slotErr);
+        }
+      }
+    }
+
+    // Sync cancellation to Google Sheets webhook
+    try {
+      const webhookUrl = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "UPDATE_STATUS",
+          bookingId: booking.id || booking.bookingId || booking.displayId,
+          newStatus: "CANCELLED",
+          status: "CANCELLED",
+          cancelledBy: "user"
+        })
+      }).catch((err) => console.error("Google Sheet cancellation sync error:", err));
+    } catch (sheetErr) {
+      console.warn("Google Sheet webhook notice:", sheetErr);
     }
 
     if (refundOption === 'bonus_credit') {

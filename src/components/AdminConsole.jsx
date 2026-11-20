@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { auth, db, storage } from '../config/firebase';
-import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot, getDocs, increment } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { CURATED_TREKS } from '../data/curatedTreks';
 import { 
@@ -294,16 +294,43 @@ export default function AdminConsole({
     if (!window.confirm(`Are you sure you want to CANCEL booking ${booking.id} for ${booking.userName || booking.name || 'this trekker'}?`)) return;
 
     try {
-      await setDoc(doc(db, 'bookings', booking.id), { status: 'Cancelled' }, { merge: true });
-      setAdminBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'Cancelled' } : b));
+      const isPreviouslyConfirmed = (booking.status || '').toLowerCase() === 'confirmed';
+      const returnedSlots = Number(booking.headcount || booking.trekkers || booking.trekkersCount || 1) || 1;
+      const cancelledAt = new Date().toISOString();
 
-      // Re-increment slotsLeft on corresponding package if available
-      const matchedTrek = (treks || []).find(t => t.id === booking.trekId || (t.title && booking.title && t.title.toLowerCase() === booking.title.toLowerCase()));
-      if (matchedTrek && matchedTrek.id) {
-        const returnedSlots = Number(booking.trekkers || booking.trekkersCount || 1);
-        const newSlotsLeft = (matchedTrek.slotsLeft || 0) + returnedSlots;
-        await updateDoc(doc(db, 'packages', matchedTrek.id), { slotsLeft: newSlotsLeft });
-        setTreks?.(prev => prev.map(t => t.id === matchedTrek.id ? { ...t, slotsLeft: newSlotsLeft } : t));
+      await setDoc(doc(db, 'bookings', booking.id), {
+        status: 'Cancelled',
+        bookingStatus: 'CANCELLED',
+        cancelledBy: 'admin',
+        cancelledAt
+      }, { merge: true });
+
+      setAdminBookings(prev => prev.map(b => b.id === booking.id ? {
+        ...b,
+        status: 'Cancelled',
+        bookingStatus: 'CANCELLED',
+        cancelledBy: 'admin',
+        cancelledAt
+      } : b));
+
+      // Atomically re-increment slots on corresponding package in Firestore if previously confirmed
+      if (isPreviouslyConfirmed) {
+        const matchedTrek = (treks || []).find(t => (booking.trekId && t.id === booking.trekId) || (t.title && booking.title && t.title.toLowerCase() === booking.title.toLowerCase()));
+        if (matchedTrek && matchedTrek.id) {
+          try {
+            await updateDoc(doc(db, 'packages', matchedTrek.id), {
+              slotsLeft: increment(returnedSlots),
+              availableSlots: increment(returnedSlots)
+            });
+            setTreks?.(prev => prev.map(t => t.id === matchedTrek.id ? {
+              ...t,
+              slotsLeft: (t.slotsLeft || 0) + returnedSlots,
+              availableSlots: ((t.availableSlots !== undefined ? t.availableSlots : t.slotsLeft) || 0) + returnedSlots
+            } : t));
+          } catch (slotErr) {
+            console.warn('Firestore slot increment notice:', slotErr);
+          }
+        }
       }
 
       // Send cancellation update payload to Google Apps Script Web App Webhook
@@ -314,9 +341,11 @@ export default function AdminConsole({
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            action: "update_status",
-            bookingId: booking.id,
-            status: "CANCELLED"
+            action: "UPDATE_STATUS",
+            bookingId: booking.id || booking.bookingId || booking.displayId,
+            newStatus: "CANCELLED",
+            status: "CANCELLED",
+            cancelledBy: "admin"
           })
         }).catch((err) => console.error("Sheet Cancellation Sync Error:", err));
       } catch (sheetErr) {
@@ -2139,7 +2168,16 @@ export default function AdminConsole({
                         {/* Actions */}
                         <td className="py-4 px-5 text-right">
                           <div className="flex items-center justify-end gap-2">
-                            {statusNormalized !== 'cancelled' ? (
+                            {statusNormalized === 'pending' && (
+                              <button
+                                onClick={() => handleConfirmBooking(b)}
+                                className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                title="Approve & confirm booking"
+                              >
+                                Confirm Booking
+                              </button>
+                            )}
+                            {statusNormalized === 'confirmed' && (
                               <button
                                 onClick={() => handleCancelBooking(b)}
                                 className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
@@ -2147,23 +2185,14 @@ export default function AdminConsole({
                               >
                                 Cancel Booking
                               </button>
-                            ) : (
-                              <button
-                                onClick={() => handleConfirmBooking(b)}
-                                className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                                title="Re-confirm booking"
-                              >
-                                Confirm Booking
-                              </button>
                             )}
-                            {statusNormalized === 'pending' && (
-                              <button
-                                onClick={() => handleConfirmBooking(b)}
-                                className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                                title="Approve booking"
+                            {statusNormalized === 'cancelled' && (
+                              <span
+                                className="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-400 border border-stone-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none inline-flex items-center gap-1"
+                                title="Booking cancelled and locked from accidental re-activation"
                               >
-                                Confirm
-                              </button>
+                                LOCKED / CANCELLED
+                              </span>
                             )}
                             <button
                               onClick={() => handleDeleteBookingRecord(b)}

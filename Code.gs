@@ -11,7 +11,7 @@
  */
 
 // Global Sheet Configuration
-var MASTER_SHEET_NAME = "All Bookings";
+var MASTER_SHEET_NAME = "Master_All_Bookings";
 
 var HEADERS = [
   "Timestamp",
@@ -129,6 +129,11 @@ function getOrCreateSheet(spreadsheet, sheetName) {
   var sanitizedName = sheetName.replace(/[:\\\/\?\*\[\]]/g, "").trim().substring(0, 95) || "General Roster";
   var sheet = spreadsheet.getSheetByName(sanitizedName);
 
+  // Fallback alias resolution between Master_All_Bookings and All Bookings
+  if (!sheet && (sanitizedName === "Master_All_Bookings" || sanitizedName === "All Bookings")) {
+    sheet = spreadsheet.getSheetByName("Master_All_Bookings") || spreadsheet.getSheetByName("All Bookings");
+  }
+
   if (!sheet) {
     sheet = spreadsheet.insertSheet(sanitizedName);
     sheet.appendRow(HEADERS);
@@ -182,21 +187,49 @@ function doPost(e) {
     }
 
     var payload = JSON.parse(e.postData.contents);
+    var data = (payload.data && typeof payload.data === "object") ? payload.data : payload;
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
-    // 1. Handle Cancellation / Status Update Action
-    if (payload.action === "update_status") {
-      var targetBookingId = String(payload.bookingId || "").trim();
-      var newStatus = String(payload.status || "CANCELLED").toUpperCase();
+    // 1. Handle Cancellation / Status Update Action (UPDATE_STATUS)
+    var rawAction = String(data.action || payload.action || "").toUpperCase();
+    if (rawAction === "UPDATE_STATUS") {
+      var targetBookingId = String(data.bookingId || data.id || payload.bookingId || "").trim();
+      var newStatus = String(data.newStatus || data.status || payload.newStatus || payload.status || "CANCELLED").toUpperCase();
       var updatedSheets = 0;
 
       var allSheets = spreadsheet.getSheets();
       for (var s = 0; s < allSheets.length; s++) {
         var curSheet = allSheets[s];
         var sheetData = curSheet.getDataRange().getValues();
+        if (sheetData.length <= 1) continue;
+
+        // Dynamically locate the Booking ID and Status columns in the sheet header
+        var headerRow = sheetData[0];
+        var statusColIdx = 18; // Default column 18
+        var idColIdx = 2; // Default column 2
+
+        for (var c = 0; c < headerRow.length; c++) {
+          var hName = String(headerRow[c] || "").trim().toLowerCase();
+          if (hName === "status") {
+            statusColIdx = c + 1;
+          }
+          if (hName.indexOf("booking id") !== -1 || hName === "id") {
+            idColIdx = c + 1;
+          }
+        }
+
+        var numCols = curSheet.getLastColumn() || headerRow.length;
+
         for (var r = 1; r < sheetData.length; r++) {
-          if (String(sheetData[r][1] || "").trim() === targetBookingId) {
-            curSheet.getRange(r + 1, 18).setValue(newStatus); // Column 18 is Status
+          var cellBookingId = String(sheetData[r][idColIdx - 1] || sheetData[r][1] || "").trim();
+          if (cellBookingId === targetBookingId) {
+            // Update the Status column
+            curSheet.getRange(r + 1, statusColIdx).setValue(newStatus);
+
+            // If CANCELLED, style entire row background light red (#fee2e2)
+            if (newStatus === "CANCELLED") {
+              curSheet.getRange(r + 1, 1, 1, numCols).setBackground("#fee2e2");
+            }
             updatedSheets++;
           }
         }
@@ -204,7 +237,7 @@ function doPost(e) {
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
-        action: "update_status",
+        action: "UPDATE_STATUS",
         bookingId: targetBookingId,
         newStatus: newStatus,
         updatedOccurrences: updatedSheets
