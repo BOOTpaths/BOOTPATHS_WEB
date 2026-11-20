@@ -45,6 +45,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { maskGovtId, maskGovtIdCard } from '../utils/masking';
+import { isTrekCompleted } from '../utils/dateUtils';
 
 const BADGE_OPTIONS = [
   { label: 'FILLING FAST!', color: 'bg-autumn-rhodo/20 text-autumn-rhodo border-autumn-rhodo/40' },
@@ -291,6 +292,11 @@ export default function AdminConsole({
 
   // Action Handlers
   const handleCancelBooking = async (booking) => {
+    if (isTrekCompleted(booking.batchDate || booking.date || booking.selectedDate)) {
+      alert("This expedition date has already passed and can no longer be cancelled.");
+      return;
+    }
+
     if (!window.confirm(`Are you sure you want to CANCEL booking ${booking.id} for ${booking.userName || booking.name || 'this trekker'}?`)) return;
 
     try {
@@ -2065,6 +2071,7 @@ export default function AdminConsole({
                 ) : (
                   filteredBookings.map((b) => {
                     const statusNormalized = (b.status || 'Confirmed').toLowerCase();
+                    const isCompleted = (statusNormalized === 'confirmed' || statusNormalized === 'completed') && isTrekCompleted(b.date || b.batchDate || b.selectedDate);
                     const cleanPhone = (b.userPhone || b.phone || b.whatsapp || '').replace(/[^0-9]/g, '');
 
                     return (
@@ -2148,9 +2155,21 @@ export default function AdminConsole({
                         {/* Status Badge */}
                         <td className="py-4 px-5">
                           {statusNormalized === 'confirmed' ? (
+                            isCompleted ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wider">
+                                <CheckCircle2 className="h-3 w-3" />
+                                Completed
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wider">
+                                <CheckCircle2 className="h-3 w-3" />
+                                Confirmed
+                              </span>
+                            )
+                          ) : statusNormalized === 'completed' ? (
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wider">
                               <CheckCircle2 className="h-3 w-3" />
-                              Confirmed
+                              Completed
                             </span>
                           ) : statusNormalized === 'pending' ? (
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-[10px] font-extrabold uppercase tracking-wider">
@@ -2178,13 +2197,30 @@ export default function AdminConsole({
                               </button>
                             )}
                             {statusNormalized === 'confirmed' && (
-                              <button
-                                onClick={() => handleCancelBooking(b)}
-                                className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                                title="Cancel booking & release slot"
+                              isCompleted ? (
+                                <span
+                                  className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none inline-flex items-center gap-1"
+                                  title="Expedition completed"
+                                >
+                                  Completed
+                                </span>
+                              ) : (
+                                <button
+                                  onClick={() => handleCancelBooking(b)}
+                                  className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                  title="Cancel booking & release slot"
+                                >
+                                  Cancel Booking
+                                </button>
+                              )
+                            )}
+                            {statusNormalized === 'completed' && (
+                              <span
+                                className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none inline-flex items-center gap-1"
+                                title="Expedition completed"
                               >
-                                Cancel Booking
-                              </button>
+                                Completed
+                              </span>
                             )}
                             {statusNormalized === 'cancelled' && (
                               <span

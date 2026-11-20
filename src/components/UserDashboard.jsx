@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { db, auth } from '../config/firebase';
 import { maskGovtId, maskGovtIdCard } from '../utils/masking';
+import { isTrekCompleted } from '../utils/dateUtils';
 import { collection, query, where, onSnapshot, doc, setDoc } from 'firebase/firestore';
 
 const HEALTH_ASSESSMENT_OPTIONS = [
@@ -266,6 +267,12 @@ export default function UserDashboard({
     if (!selectedBookingForCancel || !cancelDetails) return;
     const targetBooking = selectedBookingForCancel;
 
+    if (isTrekCompleted(targetBooking.batchDate || targetBooking.date || targetBooking.selectedDate)) {
+      alert("This expedition date has already passed and can no longer be cancelled.");
+      setSelectedBookingForCancel(null);
+      return;
+    }
+
     // Dispatch webhook POST request to Google Apps Script URL
     try {
       const webhookUrl = "https://script.google.com/macros/s/AKfycbznKeKp7ZVY6cKEOoAdmQTedaBA5TcLJo4Yi_oMjAGsUtf8k3ejsVXra95mYT0MBhM/exec";
@@ -389,31 +396,39 @@ export default function UserDashboard({
               </div>
 
               <div className="space-y-4">
-                {userBookings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#FFFFFF] border border-[#E7E7E4] rounded-3xl shadow-sm animate-in fade-in zoom-in-95 duration-200">
-                    <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
-                    <h3 className="font-outfit text-lg font-black text-[#1A1A18] uppercase tracking-wider">No Active Expeditions Found</h3>
-                    <p className="text-xs text-[#52524E] max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
-                    <button
-                      onClick={() => {
-                        onClose();
-                        setTimeout(() => {
-                          const upcoming = document.getElementById('upcoming-treks');
-                          if (upcoming) {
-                            upcoming.scrollIntoView({ behavior: 'smooth' });
-                          }
-                        }, 150);
-                      }}
-                      className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
-                    >
-                      Explore Upcoming Treks
-                    </button>
-                  </div>
-                ) : (
-                  (userBookings || []).map((record) => {
-                    const isConfirmed = record.status === 'Confirmed';
-                    const isCancelled = record.status === 'Cancelled';
-                    const isCompleted = record.status === 'Completed';
+                {(() => {
+                  const bookingsToDisplay = (userBookings && userBookings.length > 0) ? userBookings : (expeditionRecords || []);
+
+                  if (bookingsToDisplay.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#FFFFFF] border border-[#E7E7E4] rounded-3xl shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                        <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
+                        <h3 className="font-outfit text-lg font-black text-[#1A1A18] uppercase tracking-wider">No Active Expeditions Found</h3>
+                        <p className="text-xs text-[#52524E] max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
+                        <button
+                          onClick={() => {
+                            onClose();
+                            setTimeout(() => {
+                              const upcoming = document.getElementById('upcoming-treks');
+                              if (upcoming) {
+                                upcoming.scrollIntoView({ behavior: 'smooth' });
+                              }
+                            }, 150);
+                          }}
+                          className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                        >
+                          Explore Upcoming Treks
+                        </button>
+                      </div>
+                    );
+                  }
+
+                  return bookingsToDisplay.map((record) => {
+                    const statusUpper = (record.status || record.bookingStatus || 'CONFIRMED').toUpperCase();
+                    const isCancelled = statusUpper === 'CANCELLED';
+                    const rawDate = record.batchDate || record.date || record.selectedDate;
+                    const completed = !isCancelled && (statusUpper === 'CONFIRMED' || statusUpper === 'COMPLETED') && isTrekCompleted(rawDate);
+                    const isConfirmed = !isCancelled && !completed && (statusUpper === 'CONFIRMED');
 
                     return (
                       <div 
@@ -429,45 +444,65 @@ export default function UserDashboard({
                             <span className="text-xxs font-mono text-[#52524E] bg-[#F8F8F6] px-2 py-0.5 rounded border border-[#E7E7E4] font-bold">
                               {record.id}
                             </span>
-                            <span className={`text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 ${
-                              isConfirmed ? 'text-[#C1571F]' : isCompleted ? 'text-emerald-700' : 'text-[#8C2B2A]'
-                            }`}>
-                              {isConfirmed && <span className="flex h-2 w-2 rounded-full bg-[#C1571F] animate-pulse"></span>}
-                              {record.status}
-                            </span>
+                            {isCancelled ? (
+                              <span className="text-xxs font-bold uppercase tracking-widest text-[#8C2B2A]">
+                                Cancelled
+                              </span>
+                            ) : completed ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xxs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200">
+                                <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                                Completed
+                              </span>
+                            ) : (
+                              <span className="text-xxs font-bold uppercase tracking-widest flex items-center gap-1.5 text-[#C1571F]">
+                                <span className="flex h-2 w-2 rounded-full bg-[#C1571F] animate-pulse"></span>
+                                Confirmed
+                              </span>
+                            )}
                           </div>
                           <h4 className="font-outfit text-lg font-bold text-[#1A1A18] mt-1">{record.title}</h4>
                           <span className="text-xs text-[#52524E] flex items-center gap-2 mt-0.5">
                             <Calendar className="h-3.5 w-3.5 text-[#C1571F]" />
-                            {new Date(record.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            {rawDate && !isNaN(new Date(rawDate).getTime())
+                              ? new Date(rawDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                              : (rawDate || 'Scheduled Batch')}
                           </span>
                         </div>
 
                         <div className="mt-4 sm:mt-0 flex flex-col items-start sm:items-end justify-between border-t sm:border-t-0 border-[#E7E7E4] pt-3 sm:pt-0 gap-2">
                           <div className="text-right">
                             <span className="text-xs text-[#52524E] block">{record.trekkers} Explorer{record.trekkers > 1 ? 's' : ''}</span>
-                            <span className="font-outfit text-xl font-black text-[#C1571F]">₹{record.price.toLocaleString('en-IN')}</span>
+                            <span className="font-outfit text-xl font-black text-[#C1571F]">₹{Number(record.price || 0).toLocaleString('en-IN')}</span>
                           </div>
 
-                          {/* RENDER CANCEL BUTTON ONLY FOR CONFIRMED BOOKINGS */}
-                          {isConfirmed && (
+                          {/* ACTION BUTTONS */}
+                          {isCancelled ? (
+                            <span className="text-[10px] font-bold text-[#8C2B2A] uppercase tracking-wider bg-[#8C2B2A]/10 px-2.5 py-1 rounded-md">
+                              Cancelled & Processed
+                            </span>
+                          ) : completed ? (
+                            <span className="inline-block px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg select-none">
+                              Expedition Completed
+                            </span>
+                          ) : (
                             <button
-                              onClick={() => setSelectedBookingForCancel(record)}
-                              className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1 shadow-xs"
+                              onClick={() => {
+                                if (isTrekCompleted(rawDate)) {
+                                  alert("This expedition date has already passed and can no longer be cancelled.");
+                                  return;
+                                }
+                                setSelectedBookingForCancel(record);
+                              }}
+                              className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1 shadow-xs cursor-pointer"
                             >
                               Cancel Booking
                             </button>
                           )}
-                          {isCancelled && (
-                            <span className="text-[10px] font-bold text-[#8C2B2A] uppercase tracking-wider bg-[#8C2B2A]/10 px-2.5 py-1 rounded-md">
-                              Cancelled & Processed
-                            </span>
-                          )}
                         </div>
                       </div>
                     );
-                  })
-                )}
+                  });
+                })()}
               </div>
             </div>
           )}

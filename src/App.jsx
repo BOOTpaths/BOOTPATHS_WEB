@@ -24,6 +24,7 @@ import { CURATED_TREKS } from './data/curatedTreks';
 import { useAuth } from './context/AuthContext';
 import { db, auth, googleProvider } from './config/firebase';
 import { maskGovtId, maskGovtIdCard } from './utils/masking';
+import { isTrekCompleted } from './utils/dateUtils';
 import { collection, onSnapshot, doc, updateDoc, setDoc, query, orderBy, increment } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
 import { 
@@ -755,6 +756,11 @@ export default function App() {
 
   // Handle Cancellation Confirmation from Dashboard
   const handleConfirmCancellation = async ({ booking, refundOption, cancelDetails }) => {
+    if (isTrekCompleted(booking.batchDate || booking.date || booking.selectedDate)) {
+      alert("This expedition date has already passed and can no longer be cancelled.");
+      return;
+    }
+
     const isPreviouslyConfirmed = (booking.status || '').toLowerCase() === 'confirmed';
     const headcount = Number(booking.headcount || booking.trekkersCount || booking.trekkers || 1) || 1;
     const cancelledAt = new Date().toISOString();
