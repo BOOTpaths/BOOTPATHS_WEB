@@ -16,6 +16,8 @@ import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import RefundPolicy from './components/RefundPolicy';
 import UserDashboard from './components/UserDashboard';
+import LegalPolicyModal from './components/LegalPolicyModal';
+import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
 import TrekCard from './components/TrekCard';
@@ -212,6 +214,7 @@ export default function App() {
   const [isPrivacyRoute, setIsPrivacyRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/privacy') : false);
   const [isRefundRoute, setIsRefundRoute] = useState(typeof window !== 'undefined' ? window.location.pathname.endsWith('/refund') : false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [activePolicy, setActivePolicy] = useState(null);
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
   const [expeditionViews, setExpeditionViews] = useState([]);
   const [heroImage, setHeroImage] = useState(() => {
@@ -1477,6 +1480,12 @@ export default function App() {
             }
           }}
         />
+        <LegalPolicyModal
+          isOpen={Boolean(activePolicy)}
+          onClose={() => setActivePolicy(null)}
+          policy={activePolicy}
+          activePolicy={activePolicy}
+        />
         {devBanner}
       </>
     );
@@ -1494,6 +1503,12 @@ export default function App() {
               window.location.hash = '';
             }
           }}
+        />
+        <LegalPolicyModal
+          isOpen={Boolean(activePolicy)}
+          onClose={() => setActivePolicy(null)}
+          policy={activePolicy}
+          activePolicy={activePolicy}
         />
         {devBanner}
       </>
@@ -1795,9 +1810,27 @@ export default function App() {
           <div className="mx-auto max-w-7xl mt-12 pt-8 border-t border-autumn-bark/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-autumn-bark/40">
             <span>© 2026 BOOTpaths. All Rights Reserved. Confidential & Proprietary.</span>
             <div className="flex gap-4">
-              <a href="/terms" className="hover:underline transition-all">Terms of Service</a>
-              <a href="/privacy" className="hover:underline transition-all">Privacy Policy</a>
-              <a href="/refund" className="hover:underline transition-all">Refund Policy</a>
+              <button 
+                type="button" 
+                onClick={() => setActivePolicy('terms')} 
+                className="hover:underline transition-all cursor-pointer bg-transparent border-none p-0 text-autumn-bark/40"
+              >
+                Terms of Service
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActivePolicy('privacy')} 
+                className="hover:underline transition-all cursor-pointer bg-transparent border-none p-0 text-autumn-bark/40"
+              >
+                Privacy Policy
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActivePolicy('refund')} 
+                className="hover:underline transition-all cursor-pointer bg-transparent border-none p-0 text-autumn-bark/40"
+              >
+                Cancellation &amp; Refund Policy
+              </button>
             </div>
           </div>
         </footer>
@@ -1810,6 +1843,14 @@ export default function App() {
             setIsAuthModalOpen(false);
           }}
           defaultAction={pendingAction || 'login'}
+        />
+
+        {/* LEGAL POLICY MODAL OVERLAY */}
+        <LegalPolicyModal
+          isOpen={Boolean(activePolicy)}
+          onClose={() => setActivePolicy(null)}
+          policy={activePolicy}
+          activePolicy={activePolicy}
         />
         {devBanner}
       </div>
@@ -1844,6 +1885,12 @@ export default function App() {
               document.getElementById('upcoming-treks')?.scrollIntoView({ behavior: 'smooth' });
             }, 200);
           }}
+        />
+        <LegalPolicyModal
+          isOpen={Boolean(activePolicy)}
+          onClose={() => setActivePolicy(null)}
+          policy={activePolicy}
+          activePolicy={activePolicy}
         />
         {devBanner}
       </>
@@ -2530,8 +2577,8 @@ export default function App() {
                       I have read and agree to the{' '}
                       <button 
                         type="button" 
-                        onClick={() => setIsTermsModalOpen(true)}
-                        className="text-[#C1571F] font-bold hover:underline bg-transparent border-none p-0 inline-block align-baseline"
+                        onClick={() => setActivePolicy('terms')}
+                        className="text-[#C1571F] font-bold hover:underline bg-transparent border-none p-0 inline-block align-baseline cursor-pointer"
                       >
                         BOOTpaths Terms of Service
                       </button>
@@ -2975,36 +3022,27 @@ export default function App() {
             &copy; {new Date().getFullYear()} BOOTpaths Adventure Labs. All rights reserved.
           </div>
           <div className="flex gap-4">
-            <a 
-              href="#/terms" 
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = '#/terms';
-              }}
-              className="hover:text-autumn-bark/70"
+            <button 
+              type="button" 
+              onClick={() => setActivePolicy('terms')}
+              className="hover:text-autumn-bark/70 cursor-pointer bg-transparent border-none p-0 text-xxs font-medium"
             >
               Terms of Service
-            </a>
-            <a 
-              href="#/privacy" 
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = '#/privacy';
-              }}
-              className="hover:text-autumn-bark/70"
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setActivePolicy('privacy')}
+              className="hover:text-autumn-bark/70 cursor-pointer bg-transparent border-none p-0 text-xxs font-medium"
             >
               Privacy Policy
-            </a>
-            <a 
-              href="#/refund" 
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = '#/refund';
-              }}
-              className="hover:text-autumn-bark/70"
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setActivePolicy('refund')}
+              className="hover:text-autumn-bark/70 cursor-pointer bg-transparent border-none p-0 text-xxs font-medium"
             >
-              Cancellation & Refund Policy
-            </a>
+              Cancellation &amp; Refund Policy
+            </button>
           </div>
         </div>
       </footer>
@@ -3407,6 +3445,14 @@ export default function App() {
             setIsSavingProfile(false);
           }
         }}
+      />
+
+      {/* LEGAL POLICY MODAL OVERLAY */}
+      <LegalPolicyModal
+        isOpen={Boolean(activePolicy)}
+        onClose={() => setActivePolicy(null)}
+        policy={activePolicy}
+        activePolicy={activePolicy}
       />
 
       {/* DEVELOPER INDICATOR BANNER */}

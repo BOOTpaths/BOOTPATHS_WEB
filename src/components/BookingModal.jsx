@@ -222,7 +222,8 @@ export default function BookingModal({
   selectedDate: initialDate,
   currentUser,
   onBookingSuccess,
-  onOpenProfileModal
+  onOpenProfileModal,
+  onOpenPolicy
 }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -1043,7 +1044,15 @@ export default function BookingModal({
                   className="mt-0.5 rounded border-[#E7E7E4] text-[#EB5A0D] focus:ring-[#EB5A0D]"
                 />
                 <span>
-                  I agree to the <a href="#terms" className="text-[#EB5A0D] underline font-medium">Terms of Service</a> &amp; expedition fitness guidelines.
+                  I agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={() => onOpenPolicy ? onOpenPolicy('terms') : null}
+                    className="text-[#EB5A0D] underline font-medium cursor-pointer bg-transparent border-none p-0 inline align-baseline"
+                  >
+                    Terms of Service
+                  </button>{' '}
+                  &amp; expedition fitness guidelines.
                 </span>
               </label>
 
