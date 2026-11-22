@@ -25,7 +25,7 @@ const STATIC_WESTERN_GHATS = [
   { id: 'brahmagiri', name: 'Brahmagiri Coorg Trek', duration: '2 Days', url: '/treks/Brahmagiri/index.html' },
   { id: 'meeshapulimala', name: 'Meeshapulimala Peak', duration: '2 Days', url: '/treks/Meeshapulimala/index.html' },
   { id: 'kolukkumala', name: 'Kolukkumala Sunrise Trek', duration: '2 Days', url: '/treks/Kolukkumala/index.html' },
-  { id: 'arippa', name: 'Arippa Rainforest Trail', duration: '2 Days', url: '/treks/Arippa/index.html' },
+  { id: 'arippa', name: 'Arippa Forest Trek & Tribal Camp', duration: '2 Days / 1 Night', url: '/treks/Arippa/index.html' },
   { id: 'banasura', name: 'Banasura Hills Trek', duration: '2 Days', url: '/treks/Banasura/index.html' },
   { id: 'chimmini', name: 'Chimmini Amphitheatre Walk', duration: '2 Days', url: '/treks/Chimmini-amphi/index.html' },
   { id: 'parambikulam', name: 'Parambikulam Jungle Trek', duration: '2 Days', url: '/treks/Parambikulam/index.html' },
