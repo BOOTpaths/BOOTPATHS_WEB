@@ -91,7 +91,7 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
           title={trekTitle || "Trek Details"}
           onLoad={handleIframeLoad}
           className="w-full h-full border-0"
-          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
         />
       </div>
     </div>
