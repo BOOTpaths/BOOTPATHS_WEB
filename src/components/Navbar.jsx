@@ -30,7 +30,7 @@ const STATIC_WESTERN_GHATS = [
   { id: 'chimmini', name: 'Chimmini Amphitheatre Walk', duration: '2 Days', url: '/treks/Chimmini-amphi/index.html' },
   { id: 'parambikulam', name: 'Parambikulam Jungle Trek', duration: '2 Days', url: '/treks/Parambikulam/index.html' },
   { id: 'periyar-border', name: 'Periyar Border Trail', duration: '2 Days', url: '/treks/Periyar-boarder/index.html' },
-  { id: 'thommankuthu', name: 'Thommankuthu Waterfalls', duration: '1 Day', url: '/treks/Thommankuthu/index.html' },
+  { id: 'thommankuthu', name: 'Thommankuthu Riverbed Trek', duration: '1 Day', url: '/treks/Thommankuthu/index.html' },
   { id: 'yellapatty', name: 'Yellapatty Shola Ridge', duration: '2 Days', url: '/treks/Yellapatty/index.html' },
   { id: 'chokkramudi', name: 'Chokramudi Peak Trail', duration: '1 Day', url: '/treks/chokkramudi/index.html' },
   { id: 'peechimoodal', name: 'Peechimoodal Forest Walk', duration: '1 Day', url: '/treks/peechimoodal/index.html' }

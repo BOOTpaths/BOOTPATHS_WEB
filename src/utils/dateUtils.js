@@ -22,3 +22,4 @@ export const isTrekCompleted = (dateString) => {
 
   return trekDate < today;
 };
+

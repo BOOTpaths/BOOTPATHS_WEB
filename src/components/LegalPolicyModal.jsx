@@ -376,3 +376,4 @@ export default function LegalPolicyModal({ isOpen, onClose, policy, activePolicy
     </div>
   );
 }
+
