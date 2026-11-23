@@ -43,6 +43,7 @@ export default function LegalPolicyModal({ isOpen, onClose, policy, activePolicy
   };
 
   const [currentTab, setCurrentTab] = useState(() => normalizePolicy(initialRaw));
+  const [refundCategory, setRefundCategory] = useState('kerala');
 
   useEffect(() => {
     setCurrentTab(normalizePolicy(activePolicy || policy));
@@ -293,64 +294,168 @@ export default function LegalPolicyModal({ isOpen, onClose, policy, activePolicy
               <div className="border-b border-[#E7E7E4] pb-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Reservation Rules</span>
                 <h3 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight mt-0.5">
-                  Cancellation & Refund Policy
+                  Cancellation &amp; Refund Policy
                 </h3>
-                <p className="text-xs text-[#52524E] mt-1">Last Updated: August 2026 • Governs all wilderness passes & batch slots</p>
+                <p className="text-xs text-[#52524E] mt-1">Last Updated: November 2026 • 5-Tier Regional Cancellation &amp; Replacement Framework</p>
               </div>
 
-              {/* Refund Tier Table */}
-              <section className="space-y-3">
+              {/* 1. Regional 5-Tier Refund Policy */}
+              <section className="space-y-4">
                 <div className="flex items-center gap-2.5 text-[#1A1A18] font-bold text-base border-b border-[#E7E7E4] pb-2">
                   <Calendar className="h-4.5 w-4.5 text-[#C1571F]" />
-                  <h4>1. Standard Refund Timelines by Category</h4>
+                  <h4>1. Standard Cancellation &amp; Refund Slabs (Select Category)</h4>
                 </div>
                 <p className="text-xs text-[#52524E]">
                   Refund percentages are calculated strictly based on the elapsed time between your cancellation submission and the expedition batch date:
                 </p>
 
-                <div className="overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#F8F8F6] text-xs shadow-xs">
-                  <div className="grid grid-cols-2 bg-[#E7E7E4]/50 font-bold border-b border-[#E7E7E4] py-3 px-4 text-[#1A1A18]">
-                    <div>Cancellation Notice Period</div>
-                    <div>Eligible Refund (Excl. Govt Permits)</div>
-                  </div>
-                  <div className="divide-y divide-[#E7E7E4]">
-                    <div className="grid grid-cols-2 py-3 px-4 items-center">
-                      <div className="font-medium text-[#1A1A18]">30 days or more prior to departure</div>
-                      <div className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded w-fit border border-emerald-200">90% Monetary Refund</div>
-                    </div>
-                    <div className="grid grid-cols-2 py-3 px-4 items-center">
-                      <div className="font-medium text-[#1A1A18]">15 to 29 days prior to departure</div>
-                      <div className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded w-fit border border-amber-200">50% Monetary Refund</div>
-                    </div>
-                    <div className="grid grid-cols-2 py-3 px-4 items-center">
-                      <div className="font-medium text-[#1A1A18]">Less than 15 days prior to departure</div>
-                      <div className="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded w-fit border border-rose-200">Non-Refundable (0%)</div>
-                    </div>
-                  </div>
+                {/* Regional Category Selector Tabs */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {[
+                    { id: 'kerala', label: '1–2 Day Kerala', badge: 'KERALA' },
+                    { id: 'karnataka', label: 'Karnataka', badge: 'KARNATAKA' },
+                    { id: 'himalayan', label: 'Himalayan', badge: 'HIMALAYAN' },
+                    { id: 'international', label: 'International', badge: 'INTERNATIONAL' },
+                    { id: 'special', label: 'Special Permit', badge: 'SPECIAL PERMIT' }
+                  ].map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setRefundCategory(cat.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                        refundCategory === cat.id
+                          ? 'bg-[#1A1A18] text-white border-[#1A1A18] shadow-xs'
+                          : 'bg-[#F8F8F6] text-[#52524E] border-[#E7E7E4] hover:bg-white hover:text-[#1A1A18]'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
                 </div>
+
+                {/* Active Policy Card */}
+                {(() => {
+                  const POLICIES = {
+                    kerala: {
+                      title: "1-Day / 2-Day Kerala Treks Cancellation Policy",
+                      badge: "KERALA EXPEDITIONS",
+                      slabs: [
+                        { window: "30+ days before trek", refund: "95% of the Trek Fee" },
+                        { window: "15+ days before trek", refund: "80% of the Trek Fee" },
+                        { window: "7+ days before trek", refund: "50% Refund" },
+                        { window: "Within 7 days", refund: "No Refund" }
+                      ]
+                    },
+                    karnataka: {
+                      title: "Karnataka Treks Cancellation Policy",
+                      badge: "KARNATAKA EXPEDITIONS",
+                      slabs: [
+                        { window: "30+ days before trek", refund: "90% of the Trek Fee" },
+                        { window: "15+ days before trek", refund: "70% of the Trek Fee" },
+                        { window: "7+ days before trek", refund: "40% of the Trek Fee" },
+                        { window: "Within 7 days", refund: "No Refund" }
+                      ]
+                    },
+                    himalayan: {
+                      title: "Himalayan Treks Cancellation Policy",
+                      badge: "HIMALAYAN EXPEDITIONS",
+                      slabs: [
+                        { window: "45+ days before trek", refund: "90% of the Trek Fee" },
+                        { window: "30+ days before trek", refund: "70% of the Trek Fee" },
+                        { window: "15+ days before trek", refund: "50% of the Trek Fee" },
+                        { window: "Within 15 days / No show", refund: "No Refund" }
+                      ]
+                    },
+                    international: {
+                      title: "International Treks Cancellation Policy",
+                      badge: "INTERNATIONAL SUMMITS",
+                      slabs: [
+                        { window: "45+ days before trek", refund: "85% of the Trek Fee" },
+                        { window: "30+ days before trek", refund: "75% of the Trek Fee" },
+                        { window: "15+ days before trek", refund: "50% of the Trek Fee" },
+                        { window: "Within 15 days / No show", refund: "No Refund" }
+                      ]
+                    },
+                    special: {
+                      title: "Special Permit Treks Cancellation Policy",
+                      badge: "FOREST PERMIT RESTRICTED",
+                      note: "Forest Department entry permits are strictly non-refundable once issued.",
+                      slabs: [
+                        { window: "30+ days before trek", refund: "50% refund on total cost (excluding forest permit fees)" },
+                        { window: "15+ days before trek", refund: "50% refund on total cost (excluding forest permit fees)" },
+                        { window: "7+ days before trek", refund: "50% refund on total cost (excluding forest permit fees)" },
+                        { window: "Within 7 days", refund: "No Refund" }
+                      ]
+                    }
+                  };
+                  const activePol = POLICIES[refundCategory] || POLICIES.kerala;
+
+                  return (
+                    <div className="rounded-2xl border border-stone-200 bg-white shadow-xs overflow-hidden">
+                      <div className="px-5 py-4 bg-stone-900 text-white flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <span className="text-[10px] font-bold tracking-wider uppercase text-orange-400">{activePol.badge}</span>
+                          <h5 className="text-sm md:text-base font-bold mt-0.5">{activePol.title}</h5>
+                        </div>
+                        <span className="text-[11px] text-stone-300">Transparent Refund Terms</span>
+                      </div>
+
+                      <div className="p-5 space-y-4">
+                        {activePol.note && (
+                          <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium">
+                            ⚠️ {activePol.note}
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                          {activePol.slabs.map((s, idx) => (
+                            <div key={idx} className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/80">
+                              <div className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">{s.window}</div>
+                              <div className="text-xs font-bold text-stone-900 mt-1">{s.refund}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </section>
 
-              {/* Trail Wallet & Credit Bonus */}
+              {/* 2. BOOTpaths Wallet Money Policy */}
               <section className="space-y-3">
                 <div className="flex items-center gap-2.5 text-[#1A1A18] font-bold text-base border-b border-[#E7E7E4] pb-2">
                   <TrendingUp className="h-4.5 w-4.5 text-[#C1571F]" />
-                  <h4>2. Trail Wallet Credit Option (110% Value)</h4>
+                  <h4>2. BOOTpaths Wallet Money Policy (+50% Additional Value)</h4>
                 </div>
-                <div className="bg-[#F8F8F6] border border-[#E7E7E4] rounded-xl p-4 text-xs leading-relaxed text-[#52524E]">
-                  <p className="font-bold text-[#C1571F] uppercase mb-1">Opt for Bonus Trail Credit</p>
-                  Instead of standard cash refunds, trekkers can choose to receive their refund credited instantly to their BOOTpaths Trail Wallet with a **10% extra bonus value**, valid for 12 months across all live mountain expeditions.
+                <div className="p-5 rounded-2xl bg-orange-50/70 border border-orange-200/70 text-xs text-stone-700 space-y-2">
+                  <div className="font-bold uppercase tracking-wider text-orange-700 flex items-center gap-1.5 text-xs">
+                    <span>💳</span>
+                    <span>Bonus Credit Carry-Forward Guarantee</span>
+                  </div>
+                  <ul className="space-y-1.5 list-disc pl-5 leading-relaxed">
+                    <li>Participants opting to carry forward their refund receive <strong>50% additional value</strong> as wallet credit.</li>
+                    <li><strong>Credit Validity:</strong> 12 months from the original cancelled trek date.</li>
+                    <li><strong>Applicable For:</strong> Self participation or Immediate Family (Parents / Children / Spouse).</li>
+                  </ul>
                 </div>
               </section>
 
-              {/* Replacement & Transfers */}
+              {/* 3. Participant Replacement Policy */}
               <section className="space-y-3">
                 <div className="flex items-center gap-2.5 text-[#1A1A18] font-bold text-base border-b border-[#E7E7E4] pb-2">
                   <RefreshCw className="h-4.5 w-4.5 text-[#C1571F]" />
-                  <h4>3. Trekker Replacement Policy</h4>
+                  <h4>3. Participant Replacement Policy</h4>
                 </div>
-                <div className="space-y-2 text-xs leading-relaxed text-[#52524E]">
-                  <p><strong>3.1 Replacement Window:</strong> You may transfer your pass to another eligible trekker up to 5 days before departure by updating your co-trekker manifest.</p>
-                  <p><strong>3.2 Administrative Fee:</strong> A nominal processing fee of ₹500 applies to re-issue forest gate permits and guide roster logs.</p>
+                <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200/80 text-xs text-stone-700 space-y-2">
+                  <div className="font-bold uppercase tracking-wider text-stone-800 flex items-center gap-1.5 text-xs">
+                    <span>🔄</span>
+                    <span>Replacement &amp; Manifest Transfer Windows</span>
+                  </div>
+                  <ul className="space-y-1.5 list-disc pl-5 leading-relaxed">
+                    <li><strong>30+ days before trek:</strong> 100% replacement allowed (no extra fee).</li>
+                    <li><strong>15+ days before trek (1–2 Day Treks):</strong> 10% additional charges.</li>
+                    <li><strong>15+ days before trek (Himalayan Treks):</strong> 25% additional charges.</li>
+                  </ul>
                 </div>
               </section>
             </div>
