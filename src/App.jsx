@@ -438,13 +438,45 @@ export default function App() {
   const [selectedTrek, setSelectedTrek] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
 
-  // Handle URL query parameter (?book=<trekId> or ?trek=<trekId> or #book=<trekId>) to preselect trek & scroll to booking widget
+  // Handle URL deep-linking (?trek=<slug>) for in-page TrekViewerModal
+  useEffect(() => {
+    const checkUrlForTrek = () => {
+      const params = new URLSearchParams(window.location.search);
+      const trekParam = params.get('trek');
+      if (trekParam) {
+        const cleanSlug = trekParam.replace(/[^a-zA-Z0-9._-]/g, '');
+        const candidateList = (treks && treks.length > 0) ? treks : CURATED_TREKS;
+        const matched = candidateList.find(t => {
+          const idClean = String(t.id || '').toLowerCase();
+          const slugClean = String(t.slug || '').toLowerCase();
+          const detailsClean = String(t.detailsUrl || t.detailsLink || '').toLowerCase();
+          const paramLower = cleanSlug.toLowerCase();
+          return idClean === paramLower || slugClean === paramLower || detailsClean.includes(paramLower);
+        });
+
+        setActivePreviewTrek({
+          ...(matched || {}),
+          title: matched?.title || cleanSlug.replace(/-/g, ' ').toUpperCase(),
+          slug: cleanSlug,
+          previewUrl: matched?.detailsUrl || `/treks/${cleanSlug}/index.html`
+        });
+      } else {
+        setActivePreviewTrek(null);
+      }
+    };
+
+    checkUrlForTrek();
+    window.addEventListener('popstate', checkUrlForTrek);
+    return () => window.removeEventListener('popstate', checkUrlForTrek);
+  }, [treks]);
+
+  // Handle URL query parameter (?book=<trekId> or #book=<trekId>) to preselect trek & scroll to booking widget
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const checkUrlForBooking = () => {
       const urlParams = new URLSearchParams(window.location.search);
-      let bookQuery = urlParams.get('book') || urlParams.get('trek');
+      let bookQuery = urlParams.get('book');
 
       if (!bookQuery && window.location.hash) {
         const hashStr = window.location.hash.replace(/^#\/?/, '');
@@ -503,7 +535,7 @@ export default function App() {
     if (treks.length > 0 && !selectedTrek) {
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
-        let bookQuery = urlParams.get('book') || urlParams.get('trek');
+        let bookQuery = urlParams.get('book');
         if (!bookQuery && window.location.hash) {
           const hashStr = window.location.hash.replace(/^#\/?/, '');
           if (hashStr.startsWith('book=')) bookQuery = hashStr.replace('book=', '');
@@ -1034,35 +1066,20 @@ export default function App() {
       return;
     }
 
-    // Match folder name from detailsLink, detailsUrl, slug, or title
-    const details = trek.detailsLink || trek.detailsUrl || trek.details_url;
-    let formattedUrl = '';
+    const folder = trek.detailsLink || trek.detailsUrl || trek.details_url || trek.slug || trek.folderName || (trek.title || trek.name || '').toLowerCase().replace(/\s+/g, '-');
+    const cleanSlug = String(folder).replace(/^\/?treks\//, '').replace(/\/index\.html$/, '').replace(/\/$/, '');
+    const formattedUrl = String(folder).startsWith('http') ? folder : `/treks/${cleanSlug}/index.html`;
 
-    if (details && details.trim()) {
-      const trimmed = details.trim();
-      if (trimmed.startsWith('http') || trimmed.startsWith('/treks/')) {
-        formattedUrl = trimmed;
-      } else if (trimmed.startsWith('treks/')) {
-        formattedUrl = `/${trimmed}`;
-      } else if (trimmed.startsWith('#')) {
-        window.location.hash = trimmed;
-        return;
-      }
-    }
+    // Update address bar to ?trek=<slug> so copying the URL shares this exact trek
+    const newUrl = `${window.location.pathname}?trek=${encodeURIComponent(cleanSlug)}`;
+    window.history.pushState({ trekSlug: cleanSlug }, '', newUrl);
 
-    if (!formattedUrl) {
-      const matchCurated = CURATED_TREKS.find(c => c.id === trek.id || c.slug === trek.id || (c.title && trek.title && c.title.toLowerCase() === trek.title.toLowerCase()));
-      if (matchCurated?.detailsUrl) {
-        formattedUrl = matchCurated.detailsUrl;
-      } else {
-        const folder = trek.detailsLink || trek.slug || trek.folderName || (trek.title || trek.name || '').toLowerCase().replace(/\s+/g, '-');
-        formattedUrl = folder.startsWith('http') || folder.startsWith('/treks/')
-          ? folder
-          : `/treks/${folder}/index.html`;
-      }
-    }
+    setActivePreviewTrek({ ...trek, slug: cleanSlug, previewUrl: formattedUrl });
+  };
 
-    setActivePreviewTrek({ ...trek, previewUrl: formattedUrl });
+  const handleCloseTrekPreview = () => {
+    window.history.pushState({}, '', window.location.pathname);
+    setActivePreviewTrek(null);
   };
 
   const handleGetDetails = handleOpenTrekPreview;
@@ -3322,12 +3339,12 @@ export default function App() {
       {/* IN-PAGE INTERACTIVE TREK VIEWER OVERLAY MODAL */}
       <TrekViewerModal 
         isOpen={!!activePreviewTrek} 
-        onClose={() => setActivePreviewTrek(null)} 
+        onClose={handleCloseTrekPreview} 
         trekTitle={activePreviewTrek?.title || activePreviewTrek?.name || "Expedition Details"} 
         trekUrl={activePreviewTrek?.previewUrl}
         onBookNow={(trekOrSlug) => {
           const target = trekOrSlug || activePreviewTrek;
-          setActivePreviewTrek(null);
+          handleCloseTrekPreview();
           handleBookNow(target);
         }}
       />
