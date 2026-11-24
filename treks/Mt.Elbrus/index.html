@@ -1043,7 +1043,7 @@
       var links = document.querySelectorAll('a');
       for (var i = 0; i < links.length; i++) {
         var link = links[i];
-        if (link.textContent && (link.textContent.indexOf('Back') !== -1) {
+        if (link.textContent && link.textContent.indexOf('Back') !== -1) {
           link.addEventListener('click', function(e) {
             if (window.self !== window.top) {
               e.preventDefault();

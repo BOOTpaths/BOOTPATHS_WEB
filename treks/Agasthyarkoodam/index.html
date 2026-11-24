@@ -21,8 +21,6 @@
 <body data-policy="special">
 
   <!-- NAVBAR -->
-    <!-- NAVBAR -->
-    <!-- NAVBAR -->
   <nav class="navbar bg-white/95 backdrop-blur-md border-b border-[#E7E7E4] px-6 py-3 flex items-center justify-between w-full z-50 fixed top-0 left-0 right-0" id="navbar">
     <div class="nav-container flex items-center justify-between w-full max-w-7xl mx-auto">
       <a href="https://bootpaths.com/" class="nav-logo flex items-center gap-2">
@@ -884,7 +882,7 @@
       var links = document.querySelectorAll('a');
       for (var i = 0; i < links.length; i++) {
         var link = links[i];
-        if (link.textContent && (link.textContent.indexOf('Back') !== -1) {
+        if (link.textContent && link.textContent.indexOf('Back') !== -1) {
           link.addEventListener('click', function(e) {
             if (window.self !== window.top) {
               e.preventDefault();
