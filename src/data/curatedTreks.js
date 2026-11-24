@@ -20,7 +20,7 @@ export const CURATED_TREKS = [
     tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
     detailsUrl: '/treks/Agasthyarkoodam/index.html',
     description: 'Journey into the sacred UNESCO biosphere reserve of Agasthyarkoodam peak, rich in rare medicinal flora and biological diversity.',
-    image: '/treks/Agasthyarkoodam/Assets/hero-bg.jpg',
+    image: '/treks/Agasthyarkoodam/images/agastya_hero.jpg',
     inclusion: ['Forest Permits', 'Certified Guide', 'Safety Harness'],
     batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
     isVisible: true
