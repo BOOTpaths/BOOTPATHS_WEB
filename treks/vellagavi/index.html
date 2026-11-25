@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Vellagavi Trek · Kumbakarai to Vattakanal | BOOTpaths – Walk the World's Greatest Trails</title>
+  <meta name="description" content="Climb from the foothills near Periyakulam, spend a night near Vellagavi, and finish above the valleys of the Palani Hills at Vattakanal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body data-policy="kerala">
+
+  <!-- NAVBAR -->
+  <nav class="navbar bg-white/95 backdrop-blur-md border-b border-[#E7E7E4] px-6 py-3 flex items-center justify-between w-full z-50 fixed top-0 left-0 right-0" id="navbar">
+    <div class="nav-container flex items-center justify-between w-full max-w-7xl mx-auto">
+      <a href="https://bootpaths.com/" class="nav-logo flex items-center gap-2">
+        <div class="logo-icon-wrap">
+          <img src="/logo.png" alt="BOOTpaths" class="logo-img h-8 w-auto object-contain" onerror="this.src='../../logo.png'; this.onerror=null;" />
+        </div>
+        <span class="logo-text font-extrabold text-xl tracking-tight"><span style="color: #EB5A0D; font-weight: 800;">BOOT</span><span style="color: #1A1A18; font-weight: 700;">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links flex items-center gap-6 font-semibold text-xs md:text-sm text-[#52524E]" id="navLinks">
+          <li><a href="#overview" class="hover:text-[#1A1A18] transition-colors">Overview</a></li>
+          <li><a href="#highlights" class="hover:text-[#1A1A18] transition-colors">Highlights</a></li>
+          <li><a href="#itinerary" class="hover:text-[#1A1A18] transition-colors">Itinerary</a></li>
+          <li><a href="#gallery" class="hover:text-[#1A1A18] transition-colors">Gallery</a></li>
+          <li><a href="#inclusions" class="hover:text-[#1A1A18] transition-colors">Inclusions</a></li>
+          <li><a href="#faq" class="hover:text-[#1A1A18] transition-colors">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions md:hidden flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Vellagavi%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-[#10B981] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider">Request Callback</a>
+          <a href="/?book=vellagavi" class="btn-p bg-[#EB5A0D] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider" onclick="if (typeof closeMenu === 'function') closeMenu()">Book Now</a>
+          <a href="/" class="group flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-900 border border-stone-200 transition-all" onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }">
+            <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-actions flex items-center gap-3">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Vellagavi%20Trek." target="_blank" rel="noopener noreferrer" class="nav-callback-btn bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          REQUEST CALLBACK
+        </a>
+        <a href="/?book=vellagavi" class="nav-cta bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
+          BOOK NOW
+        </a>
+        <a
+          href="/"
+          onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }"
+          class="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-stone-600 bg-stone-100/90 hover:bg-stone-200/80 hover:text-stone-900 border border-stone-200/80 transition-all duration-200 shadow-2xs"
+          aria-label="Back to BOOTpaths"
+        >
+          <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back</span>
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero relative flex flex-col items-center justify-center min-h-[92vh] text-center pt-28 pb-16 px-4" id="hero">
+    <div class="hero-bg absolute inset-0 overflow-hidden z-0">
+      <img src="images/vellagavi_hero.jpg" alt="Vellagavi Trek" class="hero-bg-img w-full h-full object-cover" />
+      <div class="hero-overlay absolute inset-0 bg-black/45"></div>
+    </div>
+    
+    <div class="hero-content relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+      <div class="hero-badge bg-white/15 backdrop-blur-md text-white/90 border border-white/20 text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block">
+        <span class="bdot inline-block w-1.5 h-1.5 rounded-full bg-[#EB5A0D] mr-2"></span>PALANI HILLS, TAMIL NADU
+      </div>
+      
+      <h1 class="hero-title font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-4 font-['Open_Sans'] text-center">
+        Vellagavi Trek · Kumbakarai to Vattakanal
+      </h1>
+      
+      <p class="hero-sub text-sm md:text-base text-white/85 max-w-2xl mx-auto leading-relaxed text-center font-normal mb-10 font-['Open_Sans']">
+        Climb from the foothills near Periyakulam, spend a night near Vellagavi, and finish above the valleys of the Palani Hills at Vattakanal.
+      </p>
+      
+      <!-- 4-Column Stats Bar -->
+      <div class="max-w-5xl mx-auto my-8 px-4 w-full">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 bg-stone-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl divide-y md:divide-y-0 md:divide-x divide-white/10 text-left">
+          
+          <!-- Stat 1: Highest Point -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">HIGHEST POINT</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">~2,200 m</p>
+              <p class="text-[10px] text-stone-400">~16 km Total Distance</p>
+            </div>
+          </div>
+
+          <!-- Stat 2: Duration -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DURATION</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">2 Days / 1 Night</p>
+              <p class="text-[10px] text-stone-400">Oct to Feb Best Season</p>
+            </div>
+          </div>
+
+          <!-- Stat 3: Difficulty -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DIFFICULTY</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">Tough</p>
+              <p class="text-[10px] text-orange-400 font-medium">Sustained Foothill Climb</p>
+            </div>
+          </div>
+
+          <!-- Stat 4: Start & Finish (Clickable Google Maps link) -->
+          <a
+            href="https://maps.app.goo.gl/6Qkvy1qnbEGZxfEv7"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View Kumbakarai Falls on Google Maps"
+            class="group flex items-center space-x-3 px-3 py-2 md:py-0 hover:bg-white/10 rounded-xl transition-all cursor-pointer"
+          >
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-all shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400 group-hover:text-orange-400 transition-colors">START &amp; TRAILHEAD ↗</p>
+              <p class="text-sm md:text-base font-bold text-white group-hover:text-orange-300 transition-colors">Kumbakarai Falls</p>
+              <p class="text-[10px] text-stone-400">Finish: Vattakanal (Kodaikanal)</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-6">
+        <a href="/?book=vellagavi" class="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Vellagavi%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-white/10 hover:bg-white/20 backdrop-blur border border-white/25 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- QUICK INFO HIGHLIGHTS STRIP -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>⏱️</span><div><small>Duration</small><strong>2 Days / 1 Night</strong></div></div>
+        <div class="qi"><span>🥾</span><div><small>Distance</small><strong>~16 km Total Distance</strong></div></div>
+        <div class="qi"><span>🏔️</span><div><small>Highest Point</small><strong>~2,200 m (Palani Hills)</strong></div></div>
+        <div class="qi"><span>📍</span><div><small>Trail Route</small><strong>Kumbakarai ➔ Vellagavi ➔ Vattakanal</strong></div></div>
+        <div class="qi"><span>💰</span><div><small>Trek Fee</small><strong>₹4,200 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW SECTION -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trail</div>
+          <h2 class="stitle">Kumbakarai to Vattakanal:<br/>The Ancient Foothill Highway</h2>
+          <p class="ov-lead">The trek starts at Kumbakarai Falls, about 9 km from Periyakulam. A steep, rocky climb takes you out of the foothills and into a forested valley. As you approach Vellagavi, small farm plots appear between stretches of forest, with coffee, cardamom, and avocado grown around the village. This is the longest climbing day, so settle into a steady pace early.</p>
+          <p class="ov-body">After a night near Vellagavi, the trail climbs again towards Vattakanal. The upper section passes through shola forest and eucalyptus groves near Dolphin's Nose, a rock viewpoint overlooking the Palani Hills. From there, the final stretch climbs past exposed tree roots and local shops to the road in Vattakanal.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>~2,200m</b><small>Summit Elevation</small></div>
+            <div class="fact"><b>~16 km</b><small>Total Foothill Climb</small></div>
+            <div class="fact"><b>Oct–Feb</b><small>Best Season Window</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/vellagavi_village.jpg" alt="Vellagavi Village and Orchards" class="si1"/>
+            <img src="images/kumbakarai_falls.jpg" alt="Kumbakarai Falls Foothills" class="si2"/>
+            <div class="img-float"><span>2</span><small>Days in Nature</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS / WHY THIS EXPERIENCE -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Experience</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">From foothill streams to cloud-covered ridges and isolated mountain customs</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kumbakarai_falls.jpg" alt="Climb the Palani Hills" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Climb the Palani Hills from the foothills</h3><p>Starting at Kumbakarai spreads the elevation gain across two days, with the longer climb on Day 1.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/campsite_night.jpg" alt="Spend a night near Vellagavi" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Spend a night near Vellagavi</h3><p>Rest at the hillside camp after the climb and look out over the surrounding valleys on clear skies.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/cloud_bed_sunrise.jpg" alt="Sunrise with cloud bed" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Watch a Sunrise with cloud bed</h3><p>Open your tent in the morning to see a beautiful sunrise above a sea of clouds.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/vellagavi_village.jpg" alt="Village with barefoot tradition" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Walk through a village with a barefoot tradition</h3><p>Follow your local guide's lead on where to remove footwear and ask before photographing residents or places of worship.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/dolphins_nose.jpg" alt="Finish via Dolphin's Nose" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Finish via Dolphin's Nose</h3><p>Pause for a view over the Palani Hills if trail access and visibility allow, then follow the final uphill stretch into Vattakanal.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">🌄</div>
+            <h3>Palani Hills Shola &amp; Cloud Vista</h3>
+            <p>Experience an authentic transition from the dry scrub foothills of Kumbakarai through cardamom and avocado agro-forests to the high altitude mist of Vattakanal.</p>
+            <div class="mtn-tags"><span>Kumbakarai Falls</span><span>Vellagavi Village</span><span>Dolphin's Nose</span><span>Vattakanal</span><span>Cloud Bed Sunrise</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY SECTION -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trek Plan &amp; Guide</div>
+        <h2 class="stitle">2-Day Itinerary</h2>
+        <p class="ssub">Complete hour-by-hour schedule from Kumbakarai Falls to Vattakanal</p>
+      </div>
+
+      <div class="itinerary-accordions">
+
+        <!-- ACCORDION: QUICK OVERVIEW -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">📋</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary Overview</h3>
+                <p>Day-by-day milestone summary at a glance</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            <div class="quick-itin-wrapper">
+              <div class="quick-itin-map-card">
+                <div class="qim-badge">📍 Official Vellagavi Foothill Trail</div>
+                <h4>Kumbakarai Falls to Vattakanal Route</h4>
+                <p class="qim-path">Kumbakarai Falls Reception &rarr; Rocky Foothills &rarr; Forested Valley &rarr; Vellagavi Camp &rarr; Shola &amp; Eucalyptus Stretches &rarr; Dolphin's Nose &rarr; Vattakanal Roadhead</p>
+              </div>
+
+              <div class="quick-itin-list">
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 1</div>
+                  <div class="qi-row-content">
+                    <h4>Kumbakarai Falls to Vellagavi Campsite</h4>
+                    <div class="qi-meta">8:00 AM briefing &bull; Sustained rocky uphill climb &bull; Cardamom &amp; avocado farms &bull; Campsite near Vellagavi</div>
+                  </div>
+                </div>
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 2</div>
+                  <div class="qi-row-content">
+                    <h4>Vellagavi to Vattakanal via Dolphin's Nose</h4>
+                    <div class="qi-meta">8:00 AM breakfast &bull; Shola &amp; eucalyptus ascent &bull; Dolphin's Nose viewpoint &bull; 12:30 PM arrival at Vattakanal</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION: DETAILED ITINERARY (OPEN) -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">🗺️</span>
+              <div class="mah-text">
+                <h3>Detailed Day-by-Day Schedule</h3>
+                <p>Exact timestamps, elevation profiles, meals, and terrain details</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            
+            <!-- Day 1 Card -->
+            <div class="bg-white rounded-2xl border border-stone-200 p-6 md:p-8 mb-6 shadow-sm">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-[#EB5A0D] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">DAY 1</span>
+                <h3 class="text-xl md:text-2xl font-bold text-[#1A1A18]">Kumbakarai Falls to Vellagavi</h3>
+              </div>
+              <p class="text-sm text-stone-600 mb-6 leading-relaxed">
+                Meet at the foothills and embark on the longest climbing segment of the trek, ascending into lush agro-forest valleys before camping under the stars near Vellagavi.
+              </p>
+              <div class="space-y-4 border-l-2 border-orange-200 pl-4 ml-2">
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">8:00 AM</p>
+                  <p class="text-sm text-stone-700">Meet at the Kumbakarai Falls reception point after breakfast. Meet the local guide, complete entry formalities, and fill your bottles before setting off.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">8:30 AM</p>
+                  <p class="text-sm text-stone-700">Start the steep climb from the foothills. The opening stretch is rocky before entering the forested valley.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">Midday</p>
+                  <p class="text-sm text-stone-700">Break for the included lunch along the route or at camp, depending on group pace.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">3:00 PM</p>
+                  <p class="text-sm text-stone-700">Reach the Vellagavi area and settle in at the campsite. Walk through the village and observe its barefoot custom if time and local guidance allow.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">7:30 PM</p>
+                  <p class="text-sm text-stone-700">Dinner and overnight stay at the campsite near Vellagavi.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day 2 Card -->
+            <div class="bg-white rounded-2xl border border-stone-200 p-6 md:p-8 shadow-sm">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-[#EB5A0D] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">DAY 2</span>
+                <h3 class="text-xl md:text-2xl font-bold text-[#1A1A18]">Vellagavi to Vattakanal via Dolphin's Nose</h3>
+              </div>
+              <p class="text-sm text-stone-600 mb-6 leading-relaxed">
+                Climb through shola groves, witness stunning morning vistas over the Palani Hills, visit Dolphin's Nose, and top out at Vattakanal.
+              </p>
+              <div class="space-y-4 border-l-2 border-orange-200 pl-4 ml-2">
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">8:00 AM</p>
+                  <p class="text-sm text-stone-700">Have the included breakfast at camp, pack up, and start the climb towards Vattakanal.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">Late Morning</p>
+                  <p class="text-sm text-stone-700">Pass through shola and eucalyptus stretches towards Dolphin's Nose. Stop at the viewpoint if the guide confirms access and conditions.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">12:30 PM</p>
+                  <p class="text-sm text-stone-700">Complete the final climb to the road in Vattakanal. The BOOTpaths trek ends here; arrange onward journey separately.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trail Moments</div>
+        <h2 class="stitle">Vellagavi &amp; Palani Hills Gallery</h2>
+        <p class="ssub">Vibrant snapshots along the trail from Kumbakarai to Vattakanal</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gi"><img src="images/kumbakarai_falls.jpg" alt="Kumbakarai Falls" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Kumbakarai Falls trailhead in the foothills</span></div></div>
+        <div class="gi"><img src="images/vellagavi_village.jpg" alt="Vellagavi Village" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Cardamom and coffee orchards surrounding Vellagavi</span></div></div>
+        <div class="gi"><img src="images/cloud_bed_sunrise.jpg" alt="Cloud Bed Sunrise" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Sunrise over the Palani Hills sea of clouds</span></div></div>
+        <div class="gi"><img src="images/dolphins_nose.jpg" alt="Dolphin's Nose" loading="lazy"/><div class="gi-ov"><span class="gi-cap">The dramatic rock viewpoint at Dolphin's Nose</span></div></div>
+        <div class="gi"><img src="images/shola_forest.jpg" alt="Shola Forest" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Lush shola and eucalyptus groves near Vattakanal</span></div></div>
+        <div class="gi"><img src="images/campsite_night.jpg" alt="Campsite at Night" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Starry overnight campsite near Vellagavi</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INCLUSIONS & EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Transparent Pricing</div>
+        <h2 class="stitle">What's Included &amp; Excluded</h2>
+        <p class="ssub">Everything covered on the guided expedition from Kumbakarai to Vattakanal</p>
+      </div>
+
+      <div class="ie-grid">
+        <!-- INCLUSIONS -->
+        <div class="ie-col inc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✓</span>
+            <h3>What's Included</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Guided Trek:</b> Guided trek from Kumbakarai Falls to Vattakanal via Vellagavi.</li>
+            <li><b>Permits &amp; Local Guide:</b> Forest trek permit and local guide.</li>
+            <li><b>Tented Accommodation:</b> One night of tented accommodation near Vellagavi.</li>
+            <li><b>Included Meals:</b> Day 1 lunch and dinner; Day 2 breakfast.</li>
+            <li><b>Leadership &amp; Safety:</b> BOOTpaths trek leader and first-aid support on the trail.</li>
+          </ul>
+        </div>
+
+        <!-- EXCLUSIONS -->
+        <div class="ie-col exc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✕</span>
+            <h3>What's Excluded</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Transfers:</b> Travel to Kumbakarai Falls and onward travel from Vattakanal.</li>
+            <li><b>Non-Included Meals:</b> Day 1 breakfast, Day 2 lunch, and other meals/refreshments beyond the three listed.</li>
+            <li><b>Personal Items:</b> Personal trekking gear, snacks, and expenses.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about the Vellagavi trek</p>
+      </div>
+
+      <div class="faq-accordion">
+        
+        <div class="faq-card open">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Is this suitable for beginners?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Best suited to trekkers already comfortable with several hours of sustained climbing on uneven ground; Day 1 is the longer climb and Day 2 still has steep sections.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>How do I reach the start, and where do I arrange pickup?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Meet at Kumbakarai Falls reception point (~9 km from Periyakulam, reachable by auto/taxi); arrange onward pickup at Vattakanal near Kodaikanal.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Do I have to walk barefoot throughout the trek?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Wear trekking shoes on the forest trail; inside Vellagavi, follow the guide's instructions on where to remove footwear out of respect for village custom.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Can I refill water on the Day 1 climb?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Start with enough water for the climb to camp as lower-section refill points can be unreliable.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Can we bathe at Kumbakarai Falls?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The falls are the starting landmark; a dip is outside the planned itinerary and depends on local access and water conditions.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What should I pack for the overnight stay?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Grippy trekking shoes, small backpack, reusable water bottles, rain protection, warm layer for camp, headlamp, personal medication, government-issued photo ID, and a pouch to carry wrappers back out.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="fg-col brand-col">
+          <a href="#" class="f-logo flex items-center gap-2">
+            <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img h-8 w-auto object-contain" onerror="this.src='/logo.png'; this.onerror=null;"/>
+            <span class="logo-text font-extrabold text-xl"><span style="color: #EB5A0D;">BOOT</span><span>paths</span></span>
+          </a>
+          <p class="f-desc">Bootpaths curates transformative walking expeditions to the world's greatest trails &mdash; from the high Himalayas to the mist-wrapped ridges of the Western Ghats.</p>
+          <div class="f-contact-item">
+            <span>📞</span> <b>+91 9446102200</b>
+          </div>
+          <div class="f-contact-item">
+            <span>✉️</span> <b>info@bootpaths.com</b>
+          </div>
+        </div>
+
+        <div class="fg-col">
+          <h4>Expeditions</h4>
+          <ul class="f-links">
+            <li><a href="#hero">Vellagavi Trek</a></li>
+            <li><a href="/treks/Meeshapulimala/index.html">Meesapulimala Day Trek</a></li>
+            <li><a href="/treks/Kolukkumala/index.html">Kolukkumalai &amp; Bose Peak</a></li>
+            <li><a href="/treks/Agasthyarkoodam/index.html">Agasthyarkoodam Trek</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Navigation</h4>
+          <ul class="f-links">
+            <li><a href="#overview">About the Trail</a></li>
+            <li><a href="#highlights">Why This Experience</a></li>
+            <li><a href="#itinerary">2-Day Itinerary</a></li>
+            <li><a href="#gallery">Photo Gallery</a></li>
+            <li><a href="#inclusions">Inclusions</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Trail Ethics</h4>
+          <p class="f-ethics-text">We strictly follow <strong>Leave No Trace</strong> principles. Carry all personal plastic and wrappers out, observe local customs with respect, and leave only footprints.</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bootpaths Trails Pvt Ltd. All rights reserved. Walk the World's Greatest Trails.</p>
+        <div class="fb-links">
+          <a href="/">Home</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms &amp; Conditions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Vellagavi%20Trek." target="_blank" rel="noopener" class="float-wa" aria-label="Chat on WhatsApp with Bootpaths">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+
+  <script>
+    // Close preview modal if clicked inside iframe
+    (function() {
+      function handleBackLinks() {
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          if (link.textContent && link.textContent.indexOf('Back') !== -1) {
+            link.addEventListener('click', function(e) {
+              if (window.self !== window.top) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*');
+              }
+            });
+          }
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleBackLinks);
+      } else {
+        handleBackLinks();
+      }
+    })();
+  </script>
+  <script src="/treks/policy-inject.js" defer></script>
+</body>
+</html>
