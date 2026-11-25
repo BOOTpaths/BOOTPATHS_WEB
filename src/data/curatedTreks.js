@@ -444,6 +444,26 @@ export const CURATED_TREKS = [
     inclusion: ['Pokhara Transfers', 'Teahouse Lodging', 'ACAP Permits'],
     batchDates: ['Apr 03, 2027', 'Apr 17, 2027', 'May 01, 2027'],
     isVisible: true
+  },
+  {
+    id: 'mardi-himal-base-camp',
+    title: 'Mardi Himal Base Camp Trek',
+    category: 'Himalayas',
+    price: 27500,
+    originalPrice: 34000,
+    slotsLeft: 12,
+    location: 'Annapurna Conservation Area, Nepal',
+    duration: '8 Days',
+    altitude: '~4,500 m (MBC)',
+    difficulty: 'Moderate',
+    tag: 'RIDGE EXPEDITION',
+    tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+    detailsUrl: '/treks/mardi-himal-base-camp/index.html',
+    description: 'From rhododendron forest to the foot of Fishtail — climb through shaded woodland to Badal Danda and Mardi Himal Base Camp (~4,500 m).',
+    image: '/treks/mardi-himal-base-camp/images/mardi_hero.jpg',
+    inclusion: ['Pokhara Transfers', 'Teahouse Lodging', 'ACAP / TIMS Permits'],
+    batchDates: ['Apr 05, 2027', 'Apr 19, 2027', 'May 03, 2027'],
+    isVisible: true
   }
 ];
 
