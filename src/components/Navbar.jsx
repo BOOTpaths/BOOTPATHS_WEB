@@ -42,6 +42,8 @@ const STATIC_HIMALAYAN_TRAILS = [
   { id: 'ebc-trek', name: 'Everest Base Camp (EBC)', duration: '14 Days', url: '/treks/ebc-trek/index.html' },
   { id: 'annapurna-base-camp', name: 'Annapurna Base Camp Trek', duration: '10 Days', url: '/treks/annapurna-base-camp/index.html' },
   { id: 'mardi-himal-base-camp', name: 'Mardi Himal Base Camp Trek', duration: '8 Days', url: '/treks/mardi-himal-base-camp/index.html' },
+  { id: 'kuari-pass', name: 'Kuari Pass Trek', duration: '6 Days / 5 Nights', url: '/treks/kuari-pass/index.html' },
+  { id: 'sandhakphu-phalut', name: 'Sandakphu Phalut Trek', duration: '7 Days / 6 Nights', url: '/treks/sandhakphu-phalut/index.html' },
   { id: 'goechala-pass', name: 'Goechala Pass Kanchenjunga', duration: '10 Days', url: '/treks/Goachala-pass/index.html' },
   { id: 'valley-of-flowers', name: 'Valley of Flowers Trek', duration: '6 Days', url: '#upcoming-treks' },
   { id: 'kedarkantha', name: 'Kedarkantha Summit Trek', duration: '5 Days', url: '#upcoming-treks' },

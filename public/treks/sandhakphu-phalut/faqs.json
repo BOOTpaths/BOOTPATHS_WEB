@@ -1,0 +1,356 @@
+[
+  {
+    "num": 1,
+    "q": "What makes Sandakphu–Phalut special?",
+    "a": "The route combines a famous Himalayan panorama with an extended ridge walk, mountain villages and forest descents. Phalut adds a substantial walking challenge beyond a Sandakphu-only visit.",
+    "cat": "trek"
+  },
+  {
+    "num": 2,
+    "q": "Can we see Everest from Sandakphu?",
+    "a": "On clear days, Everest can be seen in the distant western mountain group with Lhotse and Makalu. Clouds and haze can hide the view completely.",
+    "cat": "trek"
+  },
+  {
+    "num": 3,
+    "q": "What is the Sleeping Buddha?",
+    "a": "It is the reclining-figure outline associated with Kangchenjunga and its neighbouring peaks. Your guide can help you identify the skyline when visibility permits.",
+    "cat": "trek"
+  },
+  {
+    "num": 4,
+    "q": "Is this trek easy or moderate?",
+    "a": "For this full itinerary, moderate is the more useful description. The first climb, approximately 21 km Phalut stage, long descent and consecutive walking days demand preparation.",
+    "cat": "trek"
+  },
+  {
+    "num": 5,
+    "q": "Can a first-time Himalayan trekker join?",
+    "a": "A well-prepared beginner may be suitable after discussing fitness and health with the organiser. Previous short hikes and back-to-back walking practice will help.",
+    "cat": "trek"
+  },
+  {
+    "num": 6,
+    "q": "Do I need climbing skills or ropes?",
+    "a": "The usual route is non-technical. Snow, ice or severe weather can still make sections unsafe and may require equipment changes, rerouting or cancellation.",
+    "cat": "trek"
+  },
+  {
+    "num": 7,
+    "q": "Is there an age limit?",
+    "a": "The organiser must set the participation policy. Suitability depends on health, fitness and supervision; do not describe this itinerary as suitable for every age without assessment.",
+    "cat": "trek"
+  },
+  {
+    "num": 8,
+    "q": "How high do we go?",
+    "a": "The highest planned point is Sandakphu, approximately 3,636 m. Accommodation elevations and published readings vary slightly; Phalut is around 3,600 m.",
+    "cat": "trek"
+  },
+  {
+    "num": 9,
+    "q": "How far do we walk in total?",
+    "a": "Budget approximately 80–85 km for the proposed complete walking route. The total will be revised after the vendor confirms trail choices and the final pickup point.",
+    "cat": "trek"
+  },
+  {
+    "num": 10,
+    "q": "How long is the longest walking day?",
+    "a": "Sandakphu to Phalut is approximately 21 km. Allow roughly 8–10 hours, sometimes longer, including breaks and depending on weather and group pace.",
+    "cat": "trek"
+  },
+  {
+    "num": 11,
+    "q": "Why does the programme begin with Day 0?",
+    "a": "Day 0 is the arrival and transfer day, including the Manebhanjang overnight stay. Days 0–6 total seven calendar days; it is not an extra day outside the package.",
+    "cat": "trek"
+  },
+  {
+    "num": 12,
+    "q": "How many nights are included?",
+    "a": "The revised plan contains six: Manebhanjang, Tumling, Kalpokhri, Sandakphu, Phalut and Gorkhey. The vendor must confirm and price all six.",
+    "cat": "trek"
+  },
+  {
+    "num": 13,
+    "q": "Is Srikhola an overnight stop?",
+    "a": "Not in this seven-day plan. We walk to the confirmed Srikhola roadhead and transfer to Siliguri on Day 6.",
+    "cat": "trek"
+  },
+  {
+    "num": 14,
+    "q": "Can the long Phalut stage be split?",
+    "a": "Potentially, if authorised accommodation and logistics allow. An extra ridge night changes the programme unless another stage is redesigned; it needs a separate agreement.",
+    "cat": "trek"
+  },
+  {
+    "num": 15,
+    "q": "Are all route spellings the same places?",
+    "a": "Common variants include Manebhanjang/Maneybhanjyang, Kalpokhri/Kalipokhri, Gorkhey/Ghorkey and Srikhola/Shrikola. Match bookings to the actual property and pickup location.",
+    "cat": "trek"
+  },
+  {
+    "num": 16,
+    "q": "Which airport should I book?",
+    "a": "Bagdogra Airport, code IXB. Siliguri is the regional meeting hub, but the airport is a separate pickup location that must be confirmed.",
+    "cat": "travel"
+  },
+  {
+    "num": 17,
+    "q": "Which railway station is best?",
+    "a": "New Jalpaiguri, code NJP, is the main long-distance rail gateway. Check the booking carefully; it is not the same station as Siliguri Junction.",
+    "cat": "travel"
+  },
+  {
+    "num": 18,
+    "q": "Can I fly from Kochi?",
+    "a": "Yes, search COK–IXB connecting itineraries. Prefer one protected booking and confirm that the arrival time works with the group transfer.",
+    "cat": "travel"
+  },
+  {
+    "num": 19,
+    "q": "Can I fly directly from Bengaluru?",
+    "a": "Non-stop BLR–IXB options may be available for your dates. Verify the actual flight before booking; route pages do not guarantee daily non-stop operation.",
+    "cat": "travel"
+  },
+  {
+    "num": 20,
+    "q": "Which trains should I consider from Ernakulam?",
+    "a": "Check Vivek Express and Aronai Express services to NJP. Verify the current service number, ERN or ERS boarding station, running day and seat availability in IRCTC/NTES.",
+    "cat": "travel"
+  },
+  {
+    "num": 21,
+    "q": "When should I reach Siliguri?",
+    "a": "Preferably the evening before Day 0. A same-day arrival is workable only if it meets the organiser’s confirmed pickup cutoff with a realistic delay buffer.",
+    "cat": "travel"
+  },
+  {
+    "num": 22,
+    "q": "Can I book a flight on Day 6?",
+    "a": "This is not recommended. A full morning’s walking followed by a long drive makes a reliable airport arrival difficult. Stay in Siliguri and fly the next day.",
+    "cat": "travel"
+  },
+  {
+    "num": 23,
+    "q": "Is the final Siliguri hotel included?",
+    "a": "Not in the proposed six-night trek plan. Ask for a separate hotel and transfer arrangement if you want BOOTpaths to coordinate it.",
+    "cat": "travel"
+  },
+  {
+    "num": 24,
+    "q": "Are airport and station pickups included?",
+    "a": "Only if the final quotation specifically says so. A Siliguri group pickup does not automatically include separate transfers from IXB and NJP.",
+    "cat": "travel"
+  },
+  {
+    "num": 25,
+    "q": "What if my flight or train is late?",
+    "a": "Contact the organiser immediately. A delayed pickup or catch-up transfer depends on road access and staffing and may cost extra; catching the group cannot be guaranteed.",
+    "cat": "travel"
+  },
+  {
+    "num": 26,
+    "q": "Does the trail go along the Nepal border?",
+    "a": "Yes, parts of the traditional route and some accommodation lie along or across the border. The guide must confirm the permitted route and overnight arrangements for every participant.",
+    "cat": "travel"
+  },
+  {
+    "num": 27,
+    "q": "What identification should an Indian participant carry?",
+    "a": "Carry original government-issued photo ID and copies. Because Nepal-side access may be involved, confirm the accepted documents for this exact itinerary; do not assume Aadhaar alone is sufficient.",
+    "cat": "travel"
+  },
+  {
+    "num": 28,
+    "q": "Can foreign nationals join?",
+    "a": "Only after the operator verifies nationality-specific park, border, visa, accommodation and route restrictions. A route suitable for Indian nationals cannot automatically be promised to everyone.",
+    "cat": "travel"
+  },
+  {
+    "num": 29,
+    "q": "Are permits included?",
+    "a": "The source offer includes permits and local taxes. Confirm which permits, nationality categories and any additional fees are covered in the revised quote.",
+    "cat": "travel"
+  },
+  {
+    "num": 30,
+    "q": "Can I add Darjeeling before or after the trek?",
+    "a": "Yes, as a separate travel arrangement. Allow sufficient time and clarify luggage, hotel and transfer costs; it is not part of the stated route.",
+    "cat": "travel"
+  },
+  {
+    "num": 31,
+    "q": "Will we stay in tents every night?",
+    "a": "No. The intended style is simple mountain accommodation. The vendor’s tent alternative requires advance confirmation of equipment, permits, facilities and suitable conditions.",
+    "cat": "comfort"
+  },
+  {
+    "num": 32,
+    "q": "Will I have a private room?",
+    "a": "Not necessarily. Sharing and dormitory arrangements depend on the properties and group size. Request your preference early; single rooms may be unavailable.",
+    "cat": "comfort"
+  },
+  {
+    "num": 33,
+    "q": "Are toilets attached to the rooms?",
+    "a": "Do not assume so. Shared toilets are common in basic trekking accommodation. Confirm property-specific arrangements and any accessibility concerns before booking.",
+    "cat": "comfort"
+  },
+  {
+    "num": 34,
+    "q": "Will there be hot showers and heating?",
+    "a": "These are not guaranteed. Hot water may be limited or paid, and rooms may be unheated. Bring adequate warm layers and follow the host’s heating-safety instructions.",
+    "cat": "comfort"
+  },
+  {
+    "num": 35,
+    "q": "What food will be served?",
+    "a": "Expect simple local meals suited to trekking. The exact menu depends on supplies and kitchens. Long walking days may require packed lunches.",
+    "cat": "comfort"
+  },
+  {
+    "num": 36,
+    "q": "Can vegetarian or special diets be arranged?",
+    "a": "Vegetarian meals are generally practical, but all requirements need notice. Strict allergy, vegan or gluten-free needs require direct confirmation of ingredients and kitchen limitations.",
+    "cat": "comfort"
+  },
+  {
+    "num": 37,
+    "q": "Is drinking water provided?",
+    "a": "The final package must specify treated-water provision and charges. Carry reusable bottles and ask about refills before each day; untreated streams are not a safe default.",
+    "cat": "comfort"
+  },
+  {
+    "num": 38,
+    "q": "Will I get mobile reception and Wi-Fi?",
+    "a": "Coverage is patchy and Wi-Fi cannot be relied on. Near the border, watch for unintended roaming. Give family a realistic communication plan before leaving.",
+    "cat": "comfort"
+  },
+  {
+    "num": 39,
+    "q": "Can I charge my phone or camera?",
+    "a": "Some properties offer limited charging, sometimes at extra cost. Bring a power bank and protect batteries from cold; do not rely on a socket every night.",
+    "cat": "comfort"
+  },
+  {
+    "num": 40,
+    "q": "Can I pay digitally on the trail?",
+    "a": "Sometimes, but network and electricity failures can interrupt payment. Carry enough small-denomination cash for agreed extras and keep it secure.",
+    "cat": "comfort"
+  },
+  {
+    "num": 41,
+    "q": "Can I offload my backpack?",
+    "a": "Only if porter or animal support is arranged. Confirm availability, charges, weight limits, route coverage and suitable working conditions. Carry all daytime essentials yourself.",
+    "cat": "comfort"
+  },
+  {
+    "num": 42,
+    "q": "What shoes should I wear?",
+    "a": "Well-fitting, broken-in trekking shoes with reliable grip. Test them on descents with your trekking socks. Bring more weather-resistant footwear if winter conditions require it.",
+    "cat": "comfort"
+  },
+  {
+    "num": 43,
+    "q": "Do I need a sleeping bag?",
+    "a": "That depends on the confirmed bedding and accommodation plan. Ask before packing or renting, especially for Phalut and winter departures.",
+    "cat": "comfort"
+  },
+  {
+    "num": 44,
+    "q": "Are trekking poles useful?",
+    "a": "Yes, especially on the long descent and uneven ground. Practise using them beforehand and stow them safely in crowded rooms and vehicles.",
+    "cat": "comfort"
+  },
+  {
+    "num": 45,
+    "q": "What should I carry for menstrual care?",
+    "a": "Bring the products you normally use, spare underwear, sanitiser and sealable disposal bags. Water and privacy can be limited; carry used products out for proper disposal.",
+    "cat": "comfort"
+  },
+  {
+    "num": 46,
+    "q": "Will we definitely see snow?",
+    "a": "No. Snow depends on recent weather, season and elevation. Winter may bring bare, icy ground as well as snowfall; either can affect the route.",
+    "cat": "health"
+  },
+  {
+    "num": 47,
+    "q": "When is the park closed?",
+    "a": "The usual monsoon closure is 16 June–15 September. The operator must check current park orders, temporary restrictions and the opening status for your exact dates.",
+    "cat": "health"
+  },
+  {
+    "num": 48,
+    "q": "Will we see a red panda?",
+    "a": "Possibly, but sightings are rare and never guaranteed. Keep quiet, remain on the trail and follow the guide’s wildlife- distance instructions.",
+    "cat": "health"
+  },
+  {
+    "num": 49,
+    "q": "How fit should I be?",
+    "a": "Prepare for repeated long walks with hills and your planned pack. Use the eight-week plan and discuss difficulty completing practice outings with the organiser.",
+    "cat": "health"
+  },
+  {
+    "num": 50,
+    "q": "Can I get altitude sickness even if I am fit?",
+    "a": "Yes. Fitness is not protection against altitude illness. Follow the reporting and ascent guidance in the health section. [8]",
+    "cat": "health"
+  },
+  {
+    "num": 51,
+    "q": "What if I have headache or nausea?",
+    "a": "Tell the guide immediately and do not continue ascending while symptomatic. Worsening symptoms or serious warning signs require descent and medical help.",
+    "cat": "health"
+  },
+  {
+    "num": 52,
+    "q": "Should I take Diamox preventively?",
+    "a": "Discuss acetazolamide with a qualified clinician before travel. Do not use another trekker’s prescription or treat medication as a substitute for an appropriate ascent plan.",
+    "cat": "health"
+  },
+  {
+    "num": 53,
+    "q": "Can I join with a medical condition?",
+    "a": "Disclose relevant conditions, allergies and regular medicines. Seek individual clinical advice and confirm that the trek’s remoteness and support arrangements are appropriate for you.",
+    "cat": "health"
+  },
+  {
+    "num": 54,
+    "q": "Is a doctor or oxygen cylinder included?",
+    "a": "The vendor lists a guide’s first-aid kit only. Doctor support, oxygen, trained staffing and emergency equipment must be separately confirmed before they are advertised.",
+    "cat": "health"
+  },
+  {
+    "num": 55,
+    "q": "How does evacuation work?",
+    "a": "The guide coordinates the safest available route and transport. Weather, communication and road access can delay help; there is no assumed helicopter or immediate vehicle rescue.",
+    "cat": "health"
+  },
+  {
+    "num": 56,
+    "q": "Do I need insurance?",
+    "a": "Trek insurance is included in this cost. BOOTpaths gives safety the first priority and hence the insurance made compulsory.",
+    "cat": "health"
+  },
+  {
+    "num": 57,
+    "q": "What happens in severe weather?",
+    "a": "The route, timings or overnight stops may change, or the trek may end early. Participant safety and legal access take priority over completing the advertised route.",
+    "cat": "health"
+  },
+  {
+    "num": 58,
+    "q": "Can I use a drone or play music?",
+    "a": "Do not assume drone permission in this protected border landscape. Avoid loud music; keep the experience quiet for wildlife, residents and fellow trekkers.",
+    "cat": "health"
+  },
+  {
+    "num": 59,
+    "q": "What are the cancellation and early-exit rules?",
+    "a": "See BOOTpaths’ policy covering cancellation, replacement, weather changes, missed transfers, unused services and extra costs before payment.",
+    "cat": "health"
+  }
+]
