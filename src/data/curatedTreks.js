@@ -424,5 +424,28 @@ export const CURATED_TREKS = [
     inclusion: ['Forest Pass', 'Eco Guide', 'Snacks'],
     batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026'],
     isVisible: true
+  },
+  {
+    id: 'annapurna-base-camp',
+    title: 'Annapurna Base Camp Trek',
+    category: 'Himalayas',
+    price: 35000,
+    originalPrice: 42000,
+    slotsLeft: 10,
+    location: 'Annapurna Conservation Area, Nepal',
+    duration: '10 Days',
+    altitude: '4,130 m (ABC)',
+    difficulty: 'Difficult',
+    tag: 'POPULAR TRAIL',
+    tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+    detailsUrl: '/treks/annapurna-base-camp/index.html',
+    description: 'Walk past terraced Gurung villages in Ghandruk, climb the stone stairways of Chhomrong, and spend the night at Annapurna Base Camp (4,130 m).',
+    image: '/treks/annapurna-base-camp/images/abc_hero.jpg',
+    inclusion: ['Pokhara Transfers', 'Teahouse Lodging', 'ACAP Permits'],
+    batchDates: ['Apr 03, 2027', 'Apr 17, 2027', 'May 01, 2027'],
+    isVisible: true
   }
 ];
+
+export const canonicalTreksSeedList = CURATED_TREKS;
+

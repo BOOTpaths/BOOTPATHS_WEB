@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 import { auth, db, storage } from '../config/firebase';
 import { doc, updateDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot, getDocs, increment } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { CURATED_TREKS } from '../data/curatedTreks';
+import { CURATED_TREKS, canonicalTreksSeedList } from '../data/curatedTreks';
 import { 
   Plus, 
   Edit2, 
@@ -813,60 +813,68 @@ export default function AdminConsole({
   const [isSeeding, setIsSeeding] = useState(false);
   const [isPurging, setIsPurging] = useState(false);
 
-  const SEED_TREKS_DATA = CURATED_TREKS;
-  const CANONICAL_TREK_IDS = new Set(CURATED_TREKS.map(t => t.id));
+  const SEED_TREKS_DATA = canonicalTreksSeedList || CURATED_TREKS;
+  const CANONICAL_TREK_IDS = new Set(SEED_TREKS_DATA.map(t => t.id));
 
   const handleSeedAllPackages = async () => {
     try {
       setIsSeeding(true);
 
       // 1. Fetch all existing trek documents currently in Firestore
-      const snapshot = await getDocs(collection(db, "packages"));
-      const existingPackages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const packagesRef = collection(db, 'packages');
+      const existingSnap = await getDocs(packagesRef);
 
-      // Create a quick lookup map of existing IDs, titles, slugs, and folder names
-      const existingKeys = new Set(
-        existingPackages.flatMap(p => [
-          (p.id || "").toLowerCase().trim(),
-          (p.title || p.name || "").toLowerCase().trim(),
-          (p.slug || "").toLowerCase().trim(),
-          (p.folderName || "").toLowerCase().trim()
-        ]).filter(Boolean)
-      );
+      // Track all existing treks by detailsLink, detailsUrl, slug, title, and id
+      const existingKeys = new Set();
+      existingSnap.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.detailsLink) existingKeys.add(data.detailsLink.trim().toLowerCase());
+        if (data.detailsUrl) existingKeys.add(data.detailsUrl.trim().toLowerCase());
+        if (data.slug) existingKeys.add(data.slug.trim().toLowerCase());
+        if (data.title) existingKeys.add(data.title.trim().toLowerCase());
+        if (data.name) existingKeys.add(data.name.trim().toLowerCase());
+        if (data.id) existingKeys.add(data.id.trim().toLowerCase());
+        if (docSnap.id) existingKeys.add(docSnap.id.trim().toLowerCase());
+      });
 
       let addedCount = 0;
       let skippedCount = 0;
 
-      // 2. Iterate through canonical codebase treks list
-      for (const seedTrek of SEED_TREKS_DATA) {
-        const normalizedId = (seedTrek.id || "").toLowerCase().trim();
-        const normalizedTitle = (seedTrek.title || "").toLowerCase().trim();
-        const normalizedSlug = (seedTrek.slug || "").toLowerCase().trim();
+      // 2. Iterate through canonical codebase treks list with STRICT GUARD
+      for (const trek of SEED_TREKS_DATA) {
+        const linkKey = (trek.detailsLink || trek.detailsUrl || '').trim().toLowerCase();
+        const slugKey = (trek.slug || '').trim().toLowerCase();
+        const titleKey = (trek.title || '').trim().toLowerCase();
+        const idKey = (trek.id || '').trim().toLowerCase();
 
-        // 3. STRICT CHECK: If it already exists in inventory, SKIP IT completely
+        // STRICT GUARD: If this trek already exists in Firestore, DO NOT touch or reset it!
         if (
-          existingKeys.has(normalizedId) ||
-          existingKeys.has(normalizedTitle) || 
-          (normalizedSlug && existingKeys.has(normalizedSlug))
+          (linkKey && existingKeys.has(linkKey)) ||
+          (slugKey && existingKeys.has(slugKey)) ||
+          (titleKey && existingKeys.has(titleKey)) ||
+          (idKey && existingKeys.has(idKey))
         ) {
           skippedCount++;
-          continue; // Do NOT touch, overwrite, or reset customized dates/images/prices
+          continue; // Preserves customized dates, slots, images, and prices
         }
 
-        // 4. If it's genuinely a new trek from the codebase, add it as a new document
-        await setDoc(doc(db, "packages", seedTrek.id), {
-          ...seedTrek,
+        // Only create documents for brand-new treks missing from Firestore
+        await setDoc(doc(db, 'packages', trek.id), {
+          ...trek,
           isVisible: true,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
+          isSeeded: true
         });
         addedCount++;
       }
 
-      alert(`Sync Complete!\n• ${addedCount} new trek(s) enrolled.\n• ${skippedCount} existing trek(s) preserved with their custom images, dates, and prices intact.`);
+      alert(
+        `Sync Complete!\n• Newly Added: ${addedCount} trek(s)\n• Safely Preserved (Untouched): ${skippedCount} existing trek(s)`
+      );
     } catch (error) {
-      console.error("Error running additive seed:", error);
-      alert("Failed to seed trek packages: " + error.message);
+      console.error("Error syncing new treks:", error);
+      alert("Failed to sync new treks. Check console for details.");
     } finally {
       setIsSeeding(false);
     }
@@ -1697,9 +1705,9 @@ export default function AdminConsole({
               onClick={handleSeedAllTreks}
               disabled={isSeeding}
               className="h-11 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 font-outfit text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
-              title="Batch populate all 21 static trek pages into Firestore"
+              title="Adds newly uploaded treks without modifying existing images, prices, dates, or slots"
             >
-              <span>⚡ {isSeeding ? 'Seeding...' : 'Seed All Trek Packages'}</span>
+              <span>⚡ {isSeeding ? 'Syncing...' : 'SYNC NEW TREKS ONLY'}</span>
             </button>
 
             {/* Purge Obsolete Treks Button */}
