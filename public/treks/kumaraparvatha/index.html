@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Kumaraparvatha Trek | The King of the Western Ghats — BOOTpaths</title>
+  <meta name="description" content="14 km through the forests of Pushpagiri, a night at a local homestay, and a summit worth every uphill step." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body data-policy="karnataka">
+
+  <!-- NAVBAR -->
+  <nav class="navbar bg-white/95 backdrop-blur-md border-b border-[#E7E7E4] px-6 py-3 flex items-center justify-between w-full z-50 fixed top-0 left-0 right-0" id="navbar">
+    <div class="nav-container flex items-center justify-between w-full max-w-7xl mx-auto">
+      <a href="https://bootpaths.com/" class="nav-logo flex items-center gap-2">
+        <div class="logo-icon-wrap">
+          <img src="/logo.png" alt="BOOTpaths" class="logo-img h-8 w-auto object-contain" onerror="this.src='../../logo.png'; this.onerror=null;" />
+        </div>
+        <span class="logo-text font-extrabold text-xl tracking-tight"><span style="color: #EB5A0D; font-weight: 800;">BOOT</span><span style="color: #1A1A18; font-weight: 700;">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links flex items-center gap-6 font-semibold text-xs md:text-sm text-[#52524E]" id="navLinks">
+          <li><a href="#overview" class="hover:text-[#1A1A18] transition-colors">Overview</a></li>
+          <li><a href="#highlights" class="hover:text-[#1A1A18] transition-colors">Highlights</a></li>
+          <li><a href="#itinerary" class="hover:text-[#1A1A18] transition-colors">Itinerary</a></li>
+          <li><a href="#gallery" class="hover:text-[#1A1A18] transition-colors">Gallery</a></li>
+          <li><a href="#inclusions" class="hover:text-[#1A1A18] transition-colors">Inclusions</a></li>
+          <li><a href="#faq" class="hover:text-[#1A1A18] transition-colors">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions md:hidden flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kumaraparvatha%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-[#10B981] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider">Request Callback</a>
+          <a href="/?book=kumaraparvatha" class="btn-p bg-[#EB5A0D] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider" onclick="if (typeof closeMenu === 'function') closeMenu()">Book Now</a>
+          <a href="/" class="group flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-900 border border-stone-200 transition-all" onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }">
+            <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-actions flex items-center gap-3">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kumaraparvatha%20Trek." target="_blank" rel="noopener noreferrer" class="nav-callback-btn bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          REQUEST CALLBACK
+        </a>
+        <a href="/?book=kumaraparvatha" class="nav-cta bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
+          BOOK NOW
+        </a>
+        <a
+          href="/"
+          onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }"
+          class="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-stone-600 bg-stone-100/90 hover:bg-stone-200/80 hover:text-stone-900 border border-stone-200/80 transition-all duration-200 shadow-2xs"
+          aria-label="Back to BOOTpaths"
+        >
+          <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back</span>
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero relative flex flex-col items-center justify-center min-h-[92vh] text-center pt-28 pb-16 px-4" id="hero">
+    <div class="hero-bg absolute inset-0 overflow-hidden z-0">
+      <img src="images/kp_hero.jpg" alt="Kumaraparvatha Trek | The King of the Western Ghats" class="hero-bg-img w-full h-full object-cover" />
+      <div class="hero-overlay absolute inset-0 bg-black/45"></div>
+    </div>
+    
+    <div class="hero-content relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+      <div class="hero-badge bg-white/15 backdrop-blur-md text-white/90 border border-white/20 text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block">
+        <span class="bdot inline-block w-1.5 h-1.5 rounded-full bg-[#EB5A0D] mr-2"></span>PUSHPAGIRI WILDLIFE SANCTUARY, KARNATAKA
+      </div>
+      
+      <h1 class="hero-title font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-4 font-['Open_Sans'] text-center">
+        Kumaraparvatha Trek | The King of the Western Ghats
+      </h1>
+      
+      <p class="hero-sub text-sm md:text-base text-white/85 max-w-2xl mx-auto leading-relaxed text-center font-normal mb-10 font-['Open_Sans']">
+        14 km through the forests of Pushpagiri, a night at a local homestay, and a summit worth every uphill step.
+      </p>
+      
+      <!-- 4-Column Stats Bar -->
+      <div class="max-w-5xl mx-auto my-8 px-4 w-full">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 bg-stone-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl divide-y md:divide-y-0 md:divide-x divide-white/10 text-left">
+          
+          <!-- Stat 1: Maximum Altitude -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">MAXIMUM ALTITUDE</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">1,712 m</p>
+              <p class="text-[10px] text-stone-400">5,617 ft &bull; 14 km Round Trip</p>
+            </div>
+          </div>
+
+          <!-- Stat 2: Duration -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DURATION</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">2 Days / 1 Night</p>
+              <p class="text-[10px] text-stone-400">9–10 Jan 2027 Batch</p>
+            </div>
+          </div>
+
+          <!-- Stat 3: Difficulty -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DIFFICULTY</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">Challenging</p>
+              <p class="text-[10px] text-orange-400 font-medium">Sustained Climb &amp; Rocky Trail</p>
+            </div>
+          </div>
+
+          <!-- Stat 4: Trailhead & Pickup -->
+          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">ROUTE &amp; PICKUP</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">Beedalli Trailhead</p>
+              <p class="text-[10px] text-stone-400">Pickup: Mangaluru Central (MAQ)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-6">
+        <a href="/?book=kumaraparvatha" class="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kumaraparvatha%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-white/10 hover:bg-white/20 backdrop-blur border border-white/25 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- QUICK INFO HIGHLIGHTS STRIP -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>🥾</span><div><small>Trek Distance</small><strong>14 km round trip</strong></div></div>
+        <div class="qi"><span>🏔️</span><div><small>Maximum Altitude</small><strong>1,712 m (5,617 ft)</strong></div></div>
+        <div class="qi"><span>📍</span><div><small>Trek Route</small><strong>Beedalli ➔ KP Summit ➔ Beedalli</strong></div></div>
+        <div class="qi"><span>🚆</span><div><small>Pickup &amp; Drop-off</small><strong>Mangaluru Central (MAQ)</strong></div></div>
+        <div class="qi"><span>🗓️</span><div><small>Batch Date</small><strong>9–10 Jan 2027</strong></div></div>
+        <div class="qi"><span>💰</span><div><small>Trek Fee</small><strong>₹4,000 per person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW SECTION -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trek</div>
+          <h2 class="stitle">The King of the Western Ghats:<br/>Pushpagiri Sanctuary Expedition</h2>
+          <p class="ov-lead">Known as the King of the Western Ghats, Kumaraparvatha rises to 1,712 metres in Karnataka's Pushpagiri Wildlife Sanctuary. On this BOOTpaths trek, we approach the summit from Beedalli and descend along the same trail. The climb takes us through dense forest and up rocky stretches. When the clouds lift, the summit opens to sweeping views of the surrounding hills.</p>
+          <p class="ov-body">We spend the first afternoon settling into our homestay over a home-cooked lunch, visiting a private waterfall and getting to know the group around a campfire. The next morning, we take on the full 14 km trek together. Expect a sustained climb, a descent that asks for steady footing, and time to pause, catch your breath and take in the forest along the way.</p>
+          <div class="ov-facts">
+            <div class="fact"><b>1,712m</b><small>Summit Elevation</small></div>
+            <div class="fact"><b>14 km</b><small>Round Trip Trek</small></div>
+            <div class="fact"><b>Challenging</b><small>Difficulty Rating</small></div>
+          </div>
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/beedalli_forest.jpg" alt="Dense forest of Pushpagiri Wildlife Sanctuary" class="si1"/>
+            <img src="images/kp_summit.jpg" alt="Kumaraparvatha Summit" class="si2"/>
+            <div class="img-float"><span>1,712m</span><small>King of Ghats</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS / WHY THIS EXPERIENCE -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Experience?</div>
+        <h2 class="stitle">Trek Highlights</h2>
+        <p class="ssub">Six reasons why the Beedalli route to Kumaraparvatha is an unforgettable wilderness journey</p>
+      </div>
+      <div class="hl-grid">
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kp_hero.jpg" alt="Climb the King of the Western Ghats" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body"><h3>Climb the King of the Western Ghats</h3><p>Take on a full day of trekking and stand on Kumaraparvatha's 1,712 m summit.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/beedalli_forest.jpg" alt="Explore Pushpagiri from Beedalli" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body"><h3>Explore Pushpagiri from Beedalli</h3><p>Walk through dense forest and across rocky stretches on the way to the summit.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/western_ghats_view.jpg" alt="Look out over the Western Ghats" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body"><h3>Look out over the Western Ghats</h3><p>On a clear day, the summit gives you sweeping views of the surrounding hills and valleys.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/private_waterfall.jpg" alt="Spend an afternoon at a private waterfall" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body"><h3>Spend an afternoon at a private waterfall</h3><p>Take a refreshing dip if water levels and local conditions allow.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/homestay_evening.jpg" alt="Enjoy a homestay evening" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body"><h3>Enjoy a homestay evening</h3><p>Sit down to a home-cooked meal and swap stories with fellow trekkers around the campfire.</p></div>
+        </div>
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/kp_summit.jpg" alt="Trek with a team that keeps the group together" loading="lazy"/><div class="hlc-ov"></div><span class="hln">06</span></div>
+          <div class="hlc-body"><h3>Trek with a team that keeps the group together</h3><p>Local forest guides and a BOOTpaths trek leader accompany the group from the trailhead to the summit and back.</p></div>
+        </div>
+        <div class="hlc hlc-wide">
+          <div class="hlc-wide-inner">
+            <div class="hlc-w-icon">🌄</div>
+            <h3>Pushpagiri Wildlife Sanctuary Wilderness</h3>
+            <p>Immerse yourself in one of Karnataka's grandest ecological reserves &mdash; spanning evergreen forest canopies, rugged rock faces, cascading streams, and panoramic mountain crests.</p>
+            <div class="mtn-tags"><span>Kumaraparvatha (1,712m)</span><span>Pushpagiri Sanctuary</span><span>Beedalli Route</span><span>Private Waterfall</span><span>Local Homestay</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY SECTION -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Schedule &amp; Guide</div>
+        <h2 class="stitle">Full 2-Day Itinerary</h2>
+        <p class="ssub">From Mangaluru Central to the Beedalli trailhead, private waterfall, and summit</p>
+      </div>
+
+      <div class="itinerary-accordions">
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">🗺️</span>
+              <div class="mah-text">
+                <h3>Detailed Day-by-Day Timeline</h3>
+                <p>Hour-by-hour route schedule from start to finish</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="main-accordion-body">
+            
+            <!-- Day 1 Card -->
+            <div class="bg-white rounded-2xl border border-stone-200 p-6 md:p-8 mb-6 shadow-sm">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-[#EB5A0D] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">DAY 1</span>
+                <h3 class="text-xl md:text-2xl font-bold text-[#1A1A18]">Mangaluru to Beedalli</h3>
+              </div>
+              <p class="text-sm text-stone-600 mb-6 leading-relaxed">
+                Meet at Mangaluru Central, drive into the foothills of Pushpagiri, relax at our traditional homestay, visit a secluded private waterfall, and unwind around the evening campfire.
+              </p>
+              <div class="space-y-4 border-l-2 border-orange-200 pl-4 ml-2">
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">9:00 AM</p>
+                  <p class="text-sm text-stone-700">Meet at Mangaluru Central Railway Station and depart for Beedalli.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">2:00 PM</p>
+                  <p class="text-sm text-stone-700">Arrive at the homestay, settle in and enjoy a home-cooked lunch.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">4:00 PM</p>
+                  <p class="text-sm text-stone-700">Visit a private waterfall for a refreshing dip, subject to local conditions.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">6:00 PM</p>
+                  <p class="text-sm text-stone-700">Gather around the campfire for conversations and stories, weather permitting.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">8:00 PM</p>
+                  <p class="text-sm text-stone-700">Sit down to a home-cooked dinner and turn in early for summit day.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day 2 Card -->
+            <div class="bg-white rounded-2xl border border-stone-200 p-6 md:p-8 shadow-sm">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-[#EB5A0D] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">DAY 2</span>
+                <h3 class="text-xl md:text-2xl font-bold text-[#1A1A18]">Beedalli to Kumaraparvatha Summit and Back</h3>
+              </div>
+              <p class="text-sm text-stone-600 mb-6 leading-relaxed">
+                Take on the full 14 km round trip summit hike through Pushpagiri's ancient forest canopies and steep granite ridges, returning for lunch and onward transit to Mangaluru.
+              </p>
+              <div class="space-y-4 border-l-2 border-orange-200 pl-4 ml-2">
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">7:00 AM</p>
+                  <p class="text-sm text-stone-700">Have breakfast at the homestay.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">7:30 AM</p>
+                  <p class="text-sm text-stone-700">Head to the Beedalli trailhead for document and permit verification.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">8:00 AM</p>
+                  <p class="text-sm text-stone-700">Begin the trek with the local forest guides and BOOTpaths trek leader.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">11:00 AM</p>
+                  <p class="text-sm text-stone-700">Aim to reach Kumaraparvatha summit.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">12:00 Noon</p>
+                  <p class="text-sm text-stone-700">Stop for a packed lunch along the trail.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">2:30 PM</p>
+                  <p class="text-sm text-stone-700">Return to the homestay and freshen up.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">3:30 PM</p>
+                  <p class="text-sm text-stone-700">Depart for Mangaluru Central Railway Station.</p>
+                </div>
+                <div class="relative">
+                  <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full bg-[#EB5A0D]"></div>
+                  <p class="text-xs font-bold text-orange-600 uppercase">9:00 PM</p>
+                  <p class="text-sm text-stone-700">Expected arrival at Mangalore.</p>
+                </div>
+              </div>
+
+              <p class="text-xs text-stone-500 italic mt-6 bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+                <strong>Disclaimer:</strong> Trek timings are approximate and may change with forest formalities, weather, trail conditions and the group's pace.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Trail Moments</div>
+        <h2 class="stitle">Kumaraparvatha &amp; Pushpagiri Gallery</h2>
+        <p class="ssub">Images from the dense forests of Beedalli, private cascades, and the 1,712 m summit</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gi"><img src="images/kp_hero.jpg" alt="Kumaraparvatha Summit Peak" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Kumaraparvatha rising majestically into the sky</span></div></div>
+        <div class="gi"><img src="images/beedalli_forest.jpg" alt="Beedalli Forest Trail" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Dense evergreen forest canopy along the Beedalli trail</span></div></div>
+        <div class="gi"><img src="images/kp_summit.jpg" alt="Standing at the Summit" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Rocky stretches leading to the 1,712 m summit</span></div></div>
+        <div class="gi"><img src="images/private_waterfall.jpg" alt="Private Forest Waterfall" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Secluded private waterfall near the homestay</span></div></div>
+        <div class="gi"><img src="images/homestay_evening.jpg" alt="Campfire at Homestay" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Evening campfire and stories at our local homestay</span></div></div>
+        <div class="gi"><img src="images/western_ghats_view.jpg" alt="Western Ghats View" loading="lazy"/><div class="gi-ov"><span class="gi-cap">Sweeping panoramic vistas of the Western Ghats</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INCLUSIONS & EXCLUSIONS -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Transparent Pricing</div>
+        <h2 class="stitle">What's Included &amp; Excluded</h2>
+        <p class="ssub">Everything covered on our guided Pushpagiri expedition</p>
+      </div>
+
+      <div class="ie-grid">
+        <!-- INCLUSIONS -->
+        <div class="ie-col inc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✓</span>
+            <h3>What's Included</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Transfers:</b> Pickup and drop-off at Mangaluru Central Railway Station.</li>
+            <li><b>Forest Permits:</b> Karnataka Forest Department trek entry permits.</li>
+            <li><b>Local Guides:</b> Dedicated local forest guides.</li>
+            <li><b>Meals:</b> Meals from Day 1 lunch to Day 2 lunch.</li>
+            <li><b>Safety Support:</b> BOOTpaths safety and first-aid support.</li>
+            <li><b>Trek Leadership:</b> An experienced or certified BOOTpaths trek leader.</li>
+          </ul>
+        </div>
+
+        <!-- EXCLUSIONS -->
+        <div class="ie-col exc">
+          <div class="ie-col-head">
+            <span class="ie-ico-h">✕</span>
+            <h3>What's Excluded</h3>
+          </div>
+          <ul class="ie-list">
+            <li><b>Camera Fees:</b> Camera and videography fees charged by the Forest Department.</li>
+            <li><b>Personal Gear:</b> Personal trekking gear, including backpack, shoes and rainwear.</li>
+            <li><b>Personal Refreshments:</b> Personal snacks, soft drinks and bottled water (single-use bottles are restricted).</li>
+            <li><b>Gratuities:</b> Tips or voluntary gratuities for local forest guides.</li>
+            <li><b>Unforeseen Expenses:</b> Additional expenses arising from unforeseen roadblocks or extreme weather.</li>
+            <li><b>Insurance:</b> Medical or personal insurance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Got Questions?</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about the Kumaraparvatha trek via Beedalli</p>
+      </div>
+
+      <div class="faq-accordion">
+        
+        <div class="faq-card open">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>How difficult is the Beedalli route?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>It's a challenging 14 km out-and-back trek completed in a single day. Expect a sustained uphill climb and rocky stretches where footing matters, especially on the descent.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Can I join if I'm new to trekking?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>If you already walk or exercise regularly and are comfortable spending several hours on your feet, you can consider it. A few practice hikes with uphill and downhill sections will help you gauge your fitness before signing up.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Where exactly is the pickup point?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Meet at Mangaluru Central Railway Station (MAQ) for the 9:00 AM pickup on Day 1.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Can I book a return train for Day 2?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The vehicle is scheduled to leave the homestay at 3:30 PM. The drive to Mangaluru takes several hours, and traffic or a later finish on the trail can affect arrival. Allow a generous buffer for an onward train or plan to leave the following morning.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What documents should I bring?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Carry an original government-issued photo ID for verification at the trailhead. Use the same name and ID details when sharing your details during registration.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Where will we stay overnight?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The itinerary includes an overnight stop at a local homestay near Beedalli. Check with BOOTpaths for room-sharing arrangements and stay coverage details.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What meals are provided?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Day 1 lunch and dinner, Day 2 breakfast, and a packed lunch for summit day are included. Share any dietary requirements with BOOTpaths in advance so the team can check what the homestay can accommodate.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What should I carry for summit day?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>Bring trekking shoes with good grip, a small daypack, reusable water bottles, rainwear, a cap, a spare pair of socks, personal medication and trail snacks. A trekking pole can help on the descent. Carry your wrappers back and follow the forest guides' instructions throughout the trek.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>Can everyone get into the waterfall?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The dip is optional and depends on rainfall, water levels and local conditions. You can enjoy the visit from the banks if you prefer to stay dry.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <h4>What happens if the weather changes?</h4>
+            <span class="faq-arr">&#9660;</span>
+          </div>
+          <div class="faq-a">
+            <p>The trek leader and local forest guides may adjust the route timings or turn the group around based on weather, trail conditions and Forest Department instructions.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="fg-col brand-col">
+          <a href="#" class="f-logo flex items-center gap-2">
+            <img src="images/bootpaths_logo.png" alt="Bootpaths" class="logo-img h-8 w-auto object-contain" onerror="this.src='/logo.png'; this.onerror=null;"/>
+            <span class="logo-text font-extrabold text-xl"><span style="color: #EB5A0D;">BOOT</span><span>paths</span></span>
+          </a>
+          <p class="f-desc">Bootpaths curates transformative walking expeditions to the world's greatest trails &mdash; from the high Himalayas to the mist-wrapped ridges of the Western Ghats.</p>
+          <div class="f-contact-item">
+            <span>📞</span> <b>+91 9446102200</b>
+          </div>
+          <div class="f-contact-item">
+            <span>✉️</span> <b>info@bootpaths.com</b>
+          </div>
+        </div>
+
+        <div class="fg-col">
+          <h4>Expeditions</h4>
+          <ul class="f-links">
+            <li><a href="#hero">Kumaraparvatha Trek</a></li>
+            <li><a href="/treks/vellagavi/index.html">Vellagavi Trek</a></li>
+            <li><a href="/treks/Meeshapulimala/index.html">Meesapulimala Day Trek</a></li>
+            <li><a href="/treks/Kolukkumala/index.html">Kolukkumalai &amp; Bose Peak</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Navigation</h4>
+          <ul class="f-links">
+            <li><a href="#overview">About the Trek</a></li>
+            <li><a href="#highlights">Why This Experience</a></li>
+            <li><a href="#itinerary">2-Day Itinerary</a></li>
+            <li><a href="#gallery">Photo Gallery</a></li>
+            <li><a href="#inclusions">Inclusions</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="fg-col">
+          <h4>Trail Ethics</h4>
+          <p class="f-ethics-text">We strictly follow <strong>Leave No Trace</strong> principles. Pushpagiri Wildlife Sanctuary is an ecologically sensitive biodiversity hotspot &mdash; single-use plastics are banned, and all wrappers must be carried back out.</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bootpaths Trails Pvt Ltd. All rights reserved. Walk the World's Greatest Trails.</p>
+        <div class="fb-links">
+          <a href="/">Home</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms &amp; Conditions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Kumaraparvatha%20Trek." target="_blank" rel="noopener" class="float-wa" aria-label="Chat on WhatsApp with Bootpaths">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+
+  <script>
+    // Close preview modal if clicked inside iframe
+    (function() {
+      function handleBackLinks() {
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          if (link.textContent && link.textContent.indexOf('Back') !== -1) {
+            link.addEventListener('click', function(e) {
+              if (window.self !== window.top) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*');
+              }
+            });
+          }
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleBackLinks);
+      } else {
+        handleBackLinks();
+      }
+    })();
+  </script>
+  <script src="/treks/policy-inject.js" defer></script>
+</body>
+</html>

@@ -26,6 +26,7 @@ const STATIC_WESTERN_GHATS = [
   { id: 'meeshapulimala', name: 'Meesapulimala Day Trek', duration: '1 Day', url: '/treks/Meeshapulimala/index.html' },
   { id: 'kolukkumala', name: 'Kolukkumalai & Bose Peak New Year Special', duration: '2 Days / 1 Night', url: '/treks/Kolukkumala/index.html' },
   { id: 'vellagavi', name: 'Vellagavi Trek · Kumbakarai to Vattakanal', duration: '2 Days / 1 Night', url: '/treks/vellagavi/index.html' },
+  { id: 'kumaraparvatha', name: 'Kumaraparvatha Trek', duration: '2 Days / 1 Night', url: '/treks/kumaraparvatha/index.html' },
   { id: 'arippa', name: 'Arippa Forest Trek & Tribal Camp', duration: '2 Days / 1 Night', url: '/treks/Arippa/index.html' },
   { id: 'banasura', name: 'Banasura Hills Trek', duration: '2 Days', url: '/treks/Banasura/index.html' },
   { id: 'chimmini', name: 'Chimmini Amphitheatre Walk', duration: '2 Days', url: '/treks/Chimmini-amphi/index.html' },

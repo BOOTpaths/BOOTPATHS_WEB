@@ -490,6 +490,29 @@ export const CURATED_TREKS = [
     inclusion: ['Guided Trek', 'Forest Permit & Guide', 'Tented Stay', '3 Meals Included'],
     batchDates: ['Oct 17-18, 2026', 'Nov 14-15, 2026', 'Dec 12-13, 2026'],
     isVisible: true
+  },
+  {
+    id: 'kumaraparvatha',
+    slug: 'kumaraparvatha',
+    title: 'Kumaraparvatha Trek | The King of the Western Ghats',
+    category: 'Western Ghats',
+    price: 4000,
+    originalPrice: 4800,
+    slotsLeft: 10,
+    location: 'Pushpagiri Wildlife Sanctuary, Karnataka',
+    duration: '2 Days / 1 Night',
+    altitude: '1,712 m',
+    difficulty: 'Challenging',
+    tag: 'KING OF GHATS',
+    tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
+    detailsUrl: '/treks/kumaraparvatha/index.html',
+    detailsLink: '/treks/kumaraparvatha/index.html',
+    description: '14 km through the forests of Pushpagiri, a night at a local homestay, and a summit worth every uphill step.',
+    image: '/treks/kumaraparvatha/images/kp_hero.jpg',
+    inclusion: ['Mangaluru Transfers', 'Forest Permits & Guide', 'Homestay Stay', 'All Meals'],
+    batchDates: ['Jan 09-10, 2027'],
+    date: 'Jan 9, 2027',
+    isVisible: true
   }
 ];
 
