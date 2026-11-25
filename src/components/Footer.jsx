@@ -78,7 +78,7 @@ export default function Footer({ onOpenPolicy, isCareersEnabled = true }) {
           </p>
           <div className="flex items-center gap-3 mt-4">
             <a 
-              href="https://instagram.com/bootpaths" 
+              href="https://www.instagram.com/bootpaths/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
@@ -94,7 +94,7 @@ export default function Footer({ onOpenPolicy, isCareersEnabled = true }) {
               <Youtube className="h-5 w-5" />
             </a>
             <a 
-              href="https://www.facebook.com/share/1ELLiv1gUJ/" 
+              href="https://www.facebook.com/share/19rS7r9DJZ/?mibextid=wwXIfr" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-10 h-10 rounded-full bg-white border border-[#E7E7E4] flex items-center justify-center text-[#52524E] hover:text-[#C1571F] hover:border-[#C1571F] transition-all shadow-sm"
