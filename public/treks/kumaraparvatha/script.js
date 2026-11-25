@@ -87,13 +87,13 @@ function toggleDay(headerElement) {
 }
 
 function toggleFaq(headerElement) {
-  const faqItem = headerElement.closest('.faq-item');
+  const faqItem = headerElement.closest('.faq-item') || headerElement.closest('.faq-card');
   if (!faqItem) return;
 
   const isOpen = faqItem.classList.contains('open');
 
   // Close all other faq items
-  document.querySelectorAll('.faq-item').forEach(item => {
+  document.querySelectorAll('.faq-item, .faq-card').forEach(item => {
     item.classList.remove('open');
     const q = item.querySelector('.faq-q');
     if (q) q.setAttribute('aria-expanded', 'false');

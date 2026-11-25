@@ -2,44 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 
 export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, onBookNow }) {
   const iframeRef = useRef(null);
-  const [copied, setCopied] = useState(false);
-
-  const handleShareTrek = async () => {
-    const shareUrl = window.location.href;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${trekTitle || 'BOOTpaths Expedition'} — BOOTpaths`,
-          text: `Check out this trek on BOOTpaths:`,
-          url: shareUrl
-        });
-        return;
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          // If share API failed for another reason, fallback to clipboard below
-        } else {
-          return; // user cancelled native share sheet
-        }
-      }
-    }
-
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-      } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = shareUrl;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.warn('Failed to copy to clipboard:', err);
-    }
-  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -112,24 +74,6 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black/80 backdrop-blur-sm transition-all duration-300 animate-fadeIn h-[100dvh] min-h-[100svh] w-screen overflow-hidden">
-      {/* Floating Share Button in Bottom-Left Corner */}
-      <div 
-        className="fixed left-4 z-[60]"
-        style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}
-      >
-        <button
-          onClick={handleShareTrek}
-          className="px-4 py-2.5 rounded-full bg-stone-900/95 hover:bg-orange-600 text-white text-xs font-semibold shadow-xl backdrop-blur-md border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 min-h-[44px]"
-          title="Share this trek link"
-          aria-label="Share Trek"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-          </svg>
-          <span>{copied ? "Link Copied!" : "Share"}</span>
-        </button>
-      </div>
-
       {/* Embedded Sub-Website Container */}
       <div className="flex-1 w-full h-[100dvh] min-h-[100svh] bg-white relative overflow-hidden">
         <iframe
