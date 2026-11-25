@@ -61,6 +61,7 @@ export default function UserDashboard({
   onSaveProfile
 }) {
   const [userBookings, setUserBookings] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedBookingForCancel, setSelectedBookingForCancel] = useState(null);
   const [selectedRefundOption, setSelectedRefundOption] = useState('bonus_credit'); // 'cash' or 'bonus_credit'
 
@@ -331,10 +332,10 @@ export default function UserDashboard({
           </div>
 
           {/* Navigation Items */}
-          <div className="flex flex-row md:flex-col gap-2 overflow-x-auto pb-4 md:pb-0 hide-scrollbar">
+          <div className="flex flex-row md:flex-col gap-2 overflow-x-auto no-scrollbar pb-4 md:pb-0 whitespace-nowrap">
             <button 
               onClick={() => setDashboardTab('bookings')}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 min-h-[44px] text-xs font-bold uppercase tracking-wider transition-all duration-200 shrink-0 ${
                 dashboardTab === 'bookings' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
                   : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
@@ -345,7 +346,7 @@ export default function UserDashboard({
             </button>
             <button 
               onClick={() => setDashboardTab('profile')}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 min-h-[44px] text-xs font-bold uppercase tracking-wider transition-all duration-200 shrink-0 ${
                 dashboardTab === 'profile' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
                   : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
@@ -356,7 +357,7 @@ export default function UserDashboard({
             </button>
             <button 
               onClick={() => setDashboardTab('wallet')}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 relative ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 min-h-[44px] text-xs font-bold uppercase tracking-wider transition-all duration-200 relative shrink-0 ${
                 dashboardTab === 'wallet' 
                   ? 'bg-[#C1571F] text-white shadow-md' 
                   : 'text-[#52524E] hover:bg-[#F8F8F6] hover:text-[#1A1A18]'
@@ -389,36 +390,82 @@ export default function UserDashboard({
           {/* TAB 1: EXPEDITION RECORDS */}
           {dashboardTab === 'bookings' && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Passes & History</span>
-                <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Expedition Records</h2>
-                <p className="text-xs text-[#52524E] mt-0.5">Your confirmed wilderness passes and historical trail records.</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#C1571F]">Passes & History</span>
+                  <h2 className="font-outfit text-2xl font-black text-[#1A1A18] tracking-tight">Expedition Records</h2>
+                  <p className="text-xs text-[#52524E] mt-0.5">Your confirmed wilderness passes and historical trail records.</p>
+                </div>
+
+                {/* Filter Tabs Bar (Horizontally scrollable on narrow screens) */}
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1 pt-1">
+                  {['ALL', 'CONFIRMED', 'PENDING', 'CANCELLED'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setStatusFilter(tab)}
+                      className={`px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-bold font-outfit uppercase tracking-wider transition-all whitespace-nowrap flex items-center justify-center cursor-pointer shrink-0 ${
+                        statusFilter === tab
+                          ? 'bg-[#C1571F] text-white shadow-sm'
+                          : 'bg-[#FFFFFF] border border-[#E7E7E4] text-[#52524E] hover:text-[#1A1A18] hover:bg-[#FAF8F5]'
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-4">
                 {(() => {
-                  const bookingsToDisplay = (userBookings && userBookings.length > 0) ? userBookings : (expeditionRecords || []);
+                  const rawBookings = (userBookings && userBookings.length > 0) ? userBookings : (expeditionRecords || []);
+                  const bookingsToDisplay = rawBookings.filter((record) => {
+                    if (statusFilter === 'ALL') return true;
+                    const statusUpper = (record.status || record.bookingStatus || 'CONFIRMED').toUpperCase();
+                    const isCancelled = statusUpper === 'CANCELLED';
+                    const rawDate = record.batchDate || record.date || record.selectedDate;
+                    const completed = !isCancelled && (statusUpper === 'CONFIRMED' || statusUpper === 'COMPLETED') && isTrekCompleted(rawDate);
+                    const isConfirmed = !isCancelled && !completed && (statusUpper === 'CONFIRMED');
+                    const isPending = statusUpper === 'PENDING';
+
+                    if (statusFilter === 'CONFIRMED') return isConfirmed || completed;
+                    if (statusFilter === 'CANCELLED') return isCancelled;
+                    if (statusFilter === 'PENDING') return isPending;
+                    return true;
+                  });
 
                   if (bookingsToDisplay.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center p-8 py-16 text-center bg-[#FFFFFF] border border-[#E7E7E4] rounded-3xl shadow-sm animate-in fade-in zoom-in-95 duration-200">
                         <Compass className="h-16 w-16 text-[#C1571F] animate-pulse mb-4" />
-                        <h3 className="font-outfit text-lg font-black text-[#1A1A18] uppercase tracking-wider">No Active Expeditions Found</h3>
-                        <p className="text-xs text-[#52524E] max-w-sm mt-2">You haven't reserved any wilderness passes with this account yet.</p>
-                        <button
-                          onClick={() => {
-                            onClose();
-                            setTimeout(() => {
-                              const upcoming = document.getElementById('upcoming-treks');
-                              if (upcoming) {
-                                upcoming.scrollIntoView({ behavior: 'smooth' });
-                              }
-                            }, 150);
-                          }}
-                          className="mt-6 px-6 py-2.5 rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
-                        >
-                          Explore Upcoming Treks
-                        </button>
+                        <h3 className="font-outfit text-lg font-black text-[#1A1A18] uppercase tracking-wider">No Expeditions Found</h3>
+                        <p className="text-xs text-[#52524E] max-w-sm mt-2">
+                          {statusFilter === 'ALL' 
+                            ? "You haven't reserved any wilderness passes with this account yet." 
+                            : `No expeditions matching "${statusFilter}" status.`}
+                        </p>
+                        {statusFilter === 'ALL' ? (
+                          <button
+                            onClick={() => {
+                              onClose();
+                              setTimeout(() => {
+                                const upcoming = document.getElementById('upcoming-treks');
+                                if (upcoming) {
+                                  upcoming.scrollIntoView({ behavior: 'smooth' });
+                                }
+                              }, 150);
+                            }}
+                            className="mt-6 px-6 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl bg-[#C1571F] hover:bg-[#A84310] text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                          >
+                            Explore Upcoming Treks
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => setStatusFilter('ALL')}
+                            className="mt-6 px-6 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-outfit text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                          >
+                            Show All Expeditions
+                          </button>
+                        )}
                       </div>
                     );
                   }
@@ -493,7 +540,7 @@ export default function UserDashboard({
                                 }
                                 setSelectedBookingForCancel(record);
                               }}
-                              className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1 shadow-xs cursor-pointer"
+                              className="border border-[#8C2B2A] text-[#8C2B2A] hover:bg-[#8C2B2A] hover:text-white rounded-lg px-3.5 py-2 min-h-[44px] text-xs font-bold transition-all flex items-center justify-center gap-1 shadow-xs cursor-pointer"
                             >
                               Cancel Booking
                             </button>

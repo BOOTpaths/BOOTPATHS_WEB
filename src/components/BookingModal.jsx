@@ -733,7 +733,7 @@ export default function BookingModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className={`relative w-full ${trekkers > 1 ? 'max-w-2xl' : 'max-w-lg'} transition-all duration-300 overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92vh] flex flex-col`}>
+      <div className={`relative w-full ${trekkers > 1 ? 'max-w-2xl' : 'max-w-lg'} transition-all duration-300 overflow-hidden rounded-2xl border border-[#E7E7E4] bg-[#FFFFFF] shadow-2xl animate-in zoom-in-95 duration-200 text-[#1A1A18] max-h-[92dvh] flex flex-col pb-safe`}>
 
         {/* Header */}
         <div className="bg-[#F8F8F6] px-6 py-4 flex items-center justify-between border-b border-[#E7E7E4] shrink-0">
@@ -755,7 +755,7 @@ export default function BookingModal({
           </div>
           <button
             onClick={onClose}
-            className="h-8 w-8 rounded-full bg-[#FFFFFF] border border-[#E7E7E4] text-[#52524E] hover:text-[#1A1A18] hover:bg-[#FAF8F5] flex items-center justify-center transition-colors cursor-pointer"
+            className="h-9 w-9 min-h-[36px] rounded-full bg-[#FFFFFF] border border-[#E7E7E4] text-[#52524E] hover:text-[#1A1A18] hover:bg-[#FAF8F5] flex items-center justify-center transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X className="h-4 w-4" />
@@ -763,7 +763,7 @@ export default function BookingModal({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
+        <div className="p-6 overflow-y-auto overscroll-contain space-y-5 flex-1 text-xs pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           {paymentStatus === 'FAILED' ? (
             /* Dedicated Payment Failed Screen */
             <div className="text-center py-6 px-4 animate-in fade-in duration-300 space-y-4">
@@ -888,11 +888,12 @@ export default function BookingModal({
                     <User className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="text"
+                      autoComplete="name"
                       placeholder="Full Legal Name (Lead Payer) *"
                       required
                       value={formData.name}
                       onChange={(e) => handleLeadFieldChange('name', e.target.value)}
-                      className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.name ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
+                      className={`w-full h-11 pl-9 pr-3 rounded-xl border ${formErrors.name ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D] min-h-[44px]`}
                     />
                   </div>
                   {formErrors.name && <span className="text-[10px] text-red-500 font-medium block mt-1">{formErrors.name}</span>}
@@ -903,11 +904,13 @@ export default function BookingModal({
                     <Mail className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       placeholder="Email Address (for Tickets & Receipts) *"
                       required
                       value={formData.email}
                       onChange={(e) => handleLeadFieldChange('email', e.target.value)}
-                      className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.email ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
+                      className={`w-full h-11 pl-9 pr-3 rounded-xl border ${formErrors.email ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D] min-h-[44px]`}
                     />
                   </div>
                   {formErrors.email && <span className="text-[10px] text-red-500 font-medium block mt-1">{formErrors.email}</span>}
@@ -918,11 +921,13 @@ export default function BookingModal({
                     <Phone className="absolute left-3 top-2.5 h-4 w-4 text-[#52524E]/50" />
                     <input
                       type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       placeholder="WhatsApp / Mobile Number *"
                       required
                       value={formData.phone}
                       onChange={(e) => handleLeadFieldChange('phone', e.target.value)}
-                      className={`w-full h-10 pl-9 pr-3 rounded-xl border ${formErrors.phone ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D]`}
+                      className={`w-full h-11 pl-9 pr-3 rounded-xl border ${formErrors.phone ? 'border-red-400 bg-red-50/20' : 'border-[#E7E7E4] bg-[#F8F8F6]'} text-xs text-[#1A1A18] placeholder-[#52524E]/50 focus:outline-none focus:border-[#EB5A0D] min-h-[44px]`}
                     />
                   </div>
                   {formErrors.phone && <span className="text-[10px] text-red-500 font-medium block mt-1">{formErrors.phone}</span>}
@@ -947,12 +952,13 @@ export default function BookingModal({
                             updated[index].fullName = e.target.value;
                             setCoTrekkers(updated);
                           }}
-                          className="w-full px-3 py-2 text-sm border rounded-lg"
+                          className="w-full px-3 py-2 text-sm border rounded-lg min-h-[44px]"
                           required
                         />
                         <div className="grid grid-cols-2 gap-2">
                           <input
                             type="number"
+                            inputMode="numeric"
                             placeholder="Age *"
                             min="10"
                             max="80"
@@ -962,7 +968,7 @@ export default function BookingModal({
                               updated[index].age = e.target.value;
                               setCoTrekkers(updated);
                             }}
-                            className="w-full px-3 py-2 text-sm border rounded-lg"
+                            className="w-full px-3 py-2 text-sm border rounded-lg min-h-[44px]"
                             required
                           />
                           <select
@@ -972,7 +978,7 @@ export default function BookingModal({
                               updated[index].gender = e.target.value;
                               setCoTrekkers(updated);
                             }}
-                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white min-h-[44px]"
                           >
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -987,7 +993,7 @@ export default function BookingModal({
                               updated[index].idType = e.target.value;
                               setCoTrekkers(updated);
                             }}
-                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                            className="w-full px-3 py-2 text-sm border rounded-lg bg-white min-h-[44px]"
                           >
                             <option value="Aadhaar Card">Aadhaar Card</option>
                             <option value="Passport">Passport</option>
@@ -996,6 +1002,7 @@ export default function BookingModal({
                           </select>
                           <input
                             type="text"
+                            inputMode={trekker.idType === 'Aadhaar Card' ? 'numeric' : 'text'}
                             placeholder="Govt ID Number *"
                             value={trekker.idNumber}
                             onChange={(e) => {
@@ -1003,7 +1010,7 @@ export default function BookingModal({
                               updated[index].idNumber = e.target.value;
                               setCoTrekkers(updated);
                             }}
-                            className="w-full px-3 py-2 text-sm border rounded-lg font-mono"
+                            className="w-full px-3 py-2 text-sm border rounded-lg font-mono min-h-[44px]"
                             required
                           />
                         </div>
@@ -1020,7 +1027,7 @@ export default function BookingModal({
                             updated[index].healthAssessment = e.target.value;
                             setCoTrekkers(updated);
                           }}
-                          className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
+                          className="w-full px-3 py-2 text-sm border rounded-lg bg-white min-h-[44px]"
                         >
                           <option value="Fit and prepared for high-altitude trek">Fit and prepared for high-altitude trek</option>
                           <option value="Reasonably fit; need basic guidance">Reasonably fit; need basic guidance</option>
@@ -1036,12 +1043,12 @@ export default function BookingModal({
               )}
 
               {/* Terms of Service Checkbox */}
-              <label className="flex items-start gap-2 text-[11px] text-[#52524E] cursor-pointer pt-1">
+              <label className="flex items-start gap-2 text-[11px] text-[#52524E] cursor-pointer pt-1 min-h-[32px]">
                 <input
                   type="checkbox"
                   required
                   defaultChecked
-                  className="mt-0.5 rounded border-[#E7E7E4] text-[#EB5A0D] focus:ring-[#EB5A0D]"
+                  className="mt-0.5 rounded border-[#E7E7E4] text-[#EB5A0D] focus:ring-[#EB5A0D] w-4 h-4"
                 />
                 <span>
                   I agree to the{' '}
@@ -1061,7 +1068,7 @@ export default function BookingModal({
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full flex h-11 items-center justify-center gap-2 rounded-xl bg-[#EB5A0D] hover:bg-[#D44E08] font-outfit text-xs font-bold uppercase tracking-widest text-white transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                  className="w-full flex h-12 min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#EB5A0D] hover:bg-[#D44E08] font-outfit text-xs font-bold uppercase tracking-widest text-white transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-[0.99]"
                 >
                   {isProcessing ? (
                     <>

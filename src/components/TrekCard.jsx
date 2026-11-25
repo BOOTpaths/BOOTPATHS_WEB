@@ -145,14 +145,14 @@ export default function TrekCard({ trek, onGetDetails, onOpenTrekPreview, onBook
             <button 
               type="button"
               onClick={handleDetailsClick} 
-              className="flex-1 py-2 text-xs font-semibold uppercase tracking-wider text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors cursor-pointer text-center font-['Open_Sans'] border border-stone-200"
+              className="flex-1 py-2.5 min-h-[44px] flex items-center justify-center text-xs font-semibold uppercase tracking-wider text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors cursor-pointer text-center font-['Open_Sans'] border border-stone-200"
             >
               GET INFO
             </button>
             <button 
               type="button"
               onClick={handleBookClick} 
-              className="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none font-['Open_Sans']"
+              className="flex-1 py-2.5 min-h-[44px] flex items-center justify-center text-xs font-bold uppercase tracking-wider rounded-lg bg-[#EB5A0D] hover:bg-[#D44E08] text-white shadow-sm transition-colors cursor-pointer text-center border-none font-['Open_Sans']"
             >
               BOOK NOW
             </button>

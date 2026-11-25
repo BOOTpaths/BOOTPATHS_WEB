@@ -2008,14 +2008,14 @@ export default function AdminConsole({
         {/* 3. Filter & Search Strip */}
         <div className="bg-[#FFFFFF] border border-[#E7E7E4] rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Quick Status Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 md:pb-0">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scrollbar-none pb-1 md:pb-0 whitespace-nowrap">
             {['All', 'Confirmed', 'Pending', 'Cancelled'].map((status) => {
               const isActive = bookingStatusFilter === status;
               return (
                 <button
                   key={status}
                   onClick={() => setBookingStatusFilter(status)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold font-outfit uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-bold font-outfit uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center justify-center shrink-0 ${
                     isActive
                       ? 'bg-[#C1571F] text-white shadow-sm'
                       : 'bg-[#F8F8F6] text-[#52524E] hover:bg-[#EFE8D6] hover:text-[#1A1A18]'
@@ -2215,7 +2215,7 @@ export default function AdminConsole({
                               ) : (
                                 <button
                                   onClick={() => handleCancelBooking(b)}
-                                  className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                                  className="px-3.5 py-2 min-h-[44px] inline-flex items-center justify-center rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 border border-rose-500/30 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                                   title="Cancel booking & release slot"
                                 >
                                   Cancel Booking
@@ -2224,7 +2224,7 @@ export default function AdminConsole({
                             )}
                             {statusNormalized === 'completed' && (
                               <span
-                                className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none inline-flex items-center gap-1"
+                                className="px-3.5 py-2 min-h-[44px] inline-flex items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none gap-1"
                                 title="Expedition completed"
                               >
                                 Completed
@@ -2232,7 +2232,7 @@ export default function AdminConsole({
                             )}
                             {statusNormalized === 'cancelled' && (
                               <span
-                                className="px-3 py-1.5 rounded-lg bg-stone-100 text-stone-400 border border-stone-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none inline-flex items-center gap-1"
+                                className="px-3.5 py-2 min-h-[44px] inline-flex items-center justify-center rounded-lg bg-stone-100 text-stone-400 border border-stone-200 text-xs font-bold uppercase tracking-wider cursor-not-allowed select-none gap-1"
                                 title="Booking cancelled and locked from accidental re-activation"
                               >
                                 LOCKED / CANCELLED
@@ -2240,7 +2240,7 @@ export default function AdminConsole({
                             )}
                             <button
                               onClick={() => handleDeleteBookingRecord(b)}
-                              className="p-1.5 rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                               title="Delete booking record"
                             >
                               <Trash2 className="h-4 w-4" />

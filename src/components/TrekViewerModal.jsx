@@ -48,9 +48,11 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -109,12 +111,15 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
   if (!isOpen || !trekUrl) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black/80 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex flex-col bg-black/80 backdrop-blur-sm transition-all duration-300 animate-fadeIn h-[100dvh] min-h-[100svh] w-screen overflow-hidden">
       {/* Floating Share Button in Bottom-Left Corner */}
-      <div className="fixed bottom-5 left-5 z-[60]">
+      <div 
+        className="fixed left-4 z-[60]"
+        style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}
+      >
         <button
           onClick={handleShareTrek}
-          className="px-3.5 py-2 rounded-full bg-stone-900/90 hover:bg-orange-600 text-white text-xs font-semibold shadow-xl backdrop-blur-md border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+          className="px-4 py-2.5 rounded-full bg-stone-900/95 hover:bg-orange-600 text-white text-xs font-semibold shadow-xl backdrop-blur-md border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 min-h-[44px]"
           title="Share this trek link"
           aria-label="Share Trek"
         >
@@ -126,7 +131,7 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
       </div>
 
       {/* Embedded Sub-Website Container */}
-      <div className="flex-1 w-full h-full bg-white relative overflow-hidden">
+      <div className="flex-1 w-full h-[100dvh] min-h-[100svh] bg-white relative overflow-hidden">
         <iframe
           ref={iframeRef}
           src={trekUrl}
