@@ -122,9 +122,126 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", renderPolicySection);
-  } else {
+  function renderFloatingSharePill() {
+    // Avoid double rendering if already mounted
+    if (document.getElementById("bootpaths-floating-share")) return;
+
+    const shareContainer = document.createElement("div");
+    shareContainer.id = "bootpaths-floating-share";
+    shareContainer.className = "fixed left-4 z-[9999]";
+    shareContainer.style.cssText = "position: fixed; left: 1rem; bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); z-index: 9999; pointer-events: auto;";
+
+    const btn = document.createElement("button");
+    btn.id = "bootpaths-share-btn";
+    btn.type = "button";
+    btn.title = "Share this trek link";
+    btn.setAttribute("aria-label", "Share Trek");
+    btn.className = "px-4 py-2.5 rounded-full bg-stone-900/95 hover:bg-orange-600 text-white text-xs font-semibold shadow-xl backdrop-blur-md border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 min-h-[44px]";
+    btn.style.cssText = "display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; min-height: 44px; border-radius: 9999px; background-color: rgba(28, 25, 23, 0.95); color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; transition: all 0.2s ease; outline: none;";
+
+    btn.innerHTML = `
+      <svg style="width: 16px; height: 16px; flex-shrink: 0; display: block;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+      </svg>
+      <span id="bootpaths-share-text">Share</span>
+    `;
+
+    btn.addEventListener("mouseenter", function () {
+      btn.style.backgroundColor = "#ea580c";
+      btn.style.borderColor = "#ea580c";
+      btn.style.transform = "scale(1.05)";
+    });
+    btn.addEventListener("mouseleave", function () {
+      btn.style.backgroundColor = "rgba(28, 25, 23, 0.95)";
+      btn.style.borderColor = "rgba(255, 255, 255, 0.2)";
+      btn.style.transform = "scale(1)";
+    });
+    btn.addEventListener("mousedown", function () {
+      btn.style.transform = "scale(0.95)";
+    });
+    btn.addEventListener("mouseup", function () {
+      btn.style.transform = "scale(1.05)";
+    });
+
+    function showCopied() {
+      const span = document.getElementById("bootpaths-share-text");
+      if (span) {
+        const orig = span.textContent;
+        span.textContent = "Link Copied!";
+        setTimeout(function () {
+          span.textContent = orig;
+        }, 2000);
+      }
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showCopied).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+      function fallbackCopy() {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          showCopied();
+        } catch (e) {}
+      }
+    }
+
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      let shareUrl = window.location.href;
+      try {
+        if (window.top && window.top !== window.self && window.top.location.href) {
+          shareUrl = window.top.location.href;
+        }
+      } catch (err) {}
+
+      try {
+        const urlObj = new URL(shareUrl);
+        const m = urlObj.pathname.match(/\/treks\/([^\/]+)/);
+        if (m && m[1]) {
+          shareUrl = `${urlObj.origin}/?trek=${m[1]}`;
+        }
+      } catch (err) {}
+
+      const pageTitle = document.title || "BOOTpaths Trek Expedition";
+      if (navigator.share) {
+        navigator.share({
+          title: pageTitle,
+          text: `Check out this trek on BOOTpaths:`,
+          url: shareUrl
+        }).catch(function (err) {
+          if (!err || err.name !== "AbortError") {
+            copyToClipboard(shareUrl);
+          }
+        });
+      } else {
+        copyToClipboard(shareUrl);
+      }
+    });
+
+    shareContainer.appendChild(btn);
+    document.body.appendChild(shareContainer);
+  }
+
+  function init() {
     renderPolicySection();
+    renderFloatingSharePill();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
 })();

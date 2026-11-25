@@ -176,18 +176,33 @@
           </div>
 
           <!-- Stat 4: Trailhead & Pickup -->
-          <div class="flex items-center space-x-3 px-3 py-2 md:py-0">
-            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <div>
-              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">ROUTE &amp; PICKUP</p>
-              <p class="text-sm md:text-base font-bold text-white tracking-tight">Beedalli Trailhead</p>
-              <p class="text-[10px] text-stone-400">Pickup: Mangaluru Central (MAQ)</p>
-            </div>
+          <div class="px-3 py-2 md:py-0">
+            <a
+              href="https://maps.app.goo.gl/uJFyCXqkz1SVhEASA"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open Pickup Location in Google Maps"
+              class="group flex items-start gap-3.5 text-left hover:opacity-95 transition-opacity"
+            >
+              <div class="w-11 h-11 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center shrink-0 text-orange-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-stone-300">ROUTE &amp; PICKUP</div>
+                <div class="text-base sm:text-lg font-extrabold text-orange-400 group-hover:text-orange-300 leading-tight mt-0.5 flex items-center gap-1.5">
+                  <span>Beedalli Trailhead</span>
+                  <svg class="w-3.5 h-3.5 shrink-0 opacity-80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+                <div class="text-xs text-stone-300 mt-0.5 underline decoration-orange-400/50 underline-offset-2">
+                  Pickup: Mangaluru Central (MAQ) ↗
+                </div>
+              </div>
+            </a>
           </div>
 
         </div>
@@ -449,34 +464,34 @@
 
       <div class="ie-grid">
         <!-- INCLUSIONS -->
-        <div class="ie-col inc">
-          <div class="ie-col-head">
-            <span class="ie-ico-h">✓</span>
+        <div class="iec inc-card">
+          <div class="iec-h">
+            <span class="chk">✓</span>
             <h3>What's Included</h3>
           </div>
-          <ul class="ie-list">
-            <li><b>Transfers:</b> Pickup and drop-off at Mangaluru Central Railway Station.</li>
-            <li><b>Forest Permits:</b> Karnataka Forest Department trek entry permits.</li>
-            <li><b>Local Guides:</b> Dedicated local forest guides.</li>
-            <li><b>Meals:</b> Meals from Day 1 lunch to Day 2 lunch.</li>
-            <li><b>Safety Support:</b> BOOTpaths safety and first-aid support.</li>
-            <li><b>Trek Leadership:</b> An experienced or certified BOOTpaths trek leader.</li>
+          <ul>
+            <li><span class="chk">✓</span><div><b>Transfers:</b> Pickup and drop-off at Mangaluru Central Railway Station.</div></li>
+            <li><span class="chk">✓</span><div><b>Forest Permits:</b> Karnataka Forest Department trek entry permits.</div></li>
+            <li><span class="chk">✓</span><div><b>Local Guides:</b> Dedicated local forest guides.</div></li>
+            <li><span class="chk">✓</span><div><b>Meals:</b> Meals from Day 1 lunch to Day 2 lunch.</div></li>
+            <li><span class="chk">✓</span><div><b>Safety Support:</b> BOOTpaths safety and first-aid support.</div></li>
+            <li><span class="chk">✓</span><div><b>Trek Leadership:</b> An experienced or certified BOOTpaths trek leader.</div></li>
           </ul>
         </div>
 
         <!-- EXCLUSIONS -->
-        <div class="ie-col exc">
-          <div class="ie-col-head">
-            <span class="ie-ico-h">✕</span>
+        <div class="iec exc-card">
+          <div class="iec-h">
+            <span class="cross">✕</span>
             <h3>What's Excluded</h3>
           </div>
-          <ul class="ie-list">
-            <li><b>Camera Fees:</b> Camera and videography fees charged by the Forest Department.</li>
-            <li><b>Personal Gear:</b> Personal trekking gear, including backpack, shoes and rainwear.</li>
-            <li><b>Personal Refreshments:</b> Personal snacks, soft drinks and bottled water (single-use bottles are restricted).</li>
-            <li><b>Gratuities:</b> Tips or voluntary gratuities for local forest guides.</li>
-            <li><b>Unforeseen Expenses:</b> Additional expenses arising from unforeseen roadblocks or extreme weather.</li>
-            <li><b>Insurance:</b> Medical or personal insurance.</li>
+          <ul>
+            <li><span class="cross">✕</span><div><b>Camera Fees:</b> Camera and videography fees charged by the Forest Department.</div></li>
+            <li><span class="cross">✕</span><div><b>Personal Gear:</b> Personal trekking gear, including backpack, shoes and rainwear.</div></li>
+            <li><span class="cross">✕</span><div><b>Personal Refreshments:</b> Personal snacks, soft drinks and bottled water (single-use bottles are restricted).</div></li>
+            <li><span class="cross">✕</span><div><b>Gratuities:</b> Tips or voluntary gratuities for local forest guides.</div></li>
+            <li><span class="cross">✕</span><div><b>Unforeseen Expenses:</b> Additional expenses arising from unforeseen roadblocks or extreme weather.</div></li>
+            <li><span class="cross">✕</span><div><b>Insurance:</b> Medical or personal insurance.</div></li>
           </ul>
         </div>
       </div>
@@ -492,102 +507,102 @@
         <p class="ssub">Everything you need to know about the Kumaraparvatha trek via Beedalli</p>
       </div>
 
-      <div class="faq-accordion">
+      <div class="faq-list">
         
-        <div class="faq-card open">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>How difficult is the Beedalli route?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item open">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>How difficult is the Beedalli route?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>It's a challenging 14 km out-and-back trek completed in a single day. Expect a sustained uphill climb and rocky stretches where footing matters, especially on the descent.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>Can I join if I'm new to trekking?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>Can I join if I'm new to trekking?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>If you already walk or exercise regularly and are comfortable spending several hours on your feet, you can consider it. A few practice hikes with uphill and downhill sections will help you gauge your fitness before signing up.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>Where exactly is the pickup point?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>Where exactly is the pickup point?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>Meet at Mangaluru Central Railway Station (MAQ) for the 9:00 AM pickup on Day 1.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>Can I book a return train for Day 2?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>Can I book a return train for Day 2?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>The vehicle is scheduled to leave the homestay at 3:30 PM. The drive to Mangaluru takes several hours, and traffic or a later finish on the trail can affect arrival. Allow a generous buffer for an onward train or plan to leave the following morning.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>What documents should I bring?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>What documents should I bring?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>Carry an original government-issued photo ID for verification at the trailhead. Use the same name and ID details when sharing your details during registration.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>Where will we stay overnight?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>Where will we stay overnight?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>The itinerary includes an overnight stop at a local homestay near Beedalli. Check with BOOTpaths for room-sharing arrangements and stay coverage details.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>What meals are provided?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>What meals are provided?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>Day 1 lunch and dinner, Day 2 breakfast, and a packed lunch for summit day are included. Share any dietary requirements with BOOTpaths in advance so the team can check what the homestay can accommodate.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>What should I carry for summit day?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>What should I carry for summit day?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>Bring trekking shoes with good grip, a small daypack, reusable water bottles, rainwear, a cap, a spare pair of socks, personal medication and trail snacks. A trekking pole can help on the descent. Carry your wrappers back and follow the forest guides' instructions throughout the trek.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>Can everyone get into the waterfall?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>Can everyone get into the waterfall?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>The dip is optional and depends on rainfall, water levels and local conditions. You can enjoy the visit from the banks if you prefer to stay dry.</p>
           </div>
         </div>
 
-        <div class="faq-card">
-          <div class="faq-q" onclick="toggleFaq(this)">
-            <h4>What happens if the weather changes?</h4>
-            <span class="faq-arr">&#9660;</span>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)" role="button" tabindex="0">
+            <h3>What happens if the weather changes?</h3>
+            <span class="faq-arrow">+</span>
           </div>
           <div class="faq-a">
             <p>The trek leader and local forest guides may adjust the route timings or turn the group around based on weather, trail conditions and Forest Department instructions.</p>
