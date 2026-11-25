@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Annapurna Base Camp Trek | BOOTpaths</title>
+  <meta name="description" content="Wake up beneath the Annapurnas — walk past terraced Gurung villages in Ghandruk, climb stone stairways in Chhomrong, pass Machhapuchhre Base Camp, and spend the night at Annapurna Base Camp (4,130 m)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body data-policy="himalayan">
+
+  <!-- NAVBAR -->
+  <nav class="navbar bg-white/95 backdrop-blur-md border-b border-[#E7E7E4] px-6 py-3 flex items-center justify-between w-full z-50 fixed top-0 left-0 right-0" id="navbar">
+    <div class="nav-container flex items-center justify-between w-full max-w-7xl mx-auto">
+      <a href="https://bootpaths.com/" class="nav-logo flex items-center gap-2">
+        <div class="logo-icon-wrap">
+          <img src="/logo.png" alt="BOOTpaths" class="logo-img h-8 w-auto object-contain" onerror="this.src='../../logo.png'; this.onerror=null;" />
+        </div>
+        <span class="logo-text font-extrabold text-xl tracking-tight"><span style="color: #EB5A0D; font-weight: 800;">BOOT</span><span style="color: #1A1A18; font-weight: 700;">paths</span></span>
+      </a>
+      
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links flex items-center gap-6 font-semibold text-xs md:text-sm text-[#52524E]" id="navLinks">
+          <li><a href="#overview" class="hover:text-[#1A1A18] transition-colors">Overview</a></li>
+          <li><a href="#highlights" class="hover:text-[#1A1A18] transition-colors">Highlights</a></li>
+          <li><a href="#itinerary" class="hover:text-[#1A1A18] transition-colors">Itinerary</a></li>
+          <li><a href="#gallery" class="hover:text-[#1A1A18] transition-colors">Gallery</a></li>
+          <li><a href="#inclusions" class="hover:text-[#1A1A18] transition-colors">Inclusions</a></li>
+          <li><a href="#faq" class="hover:text-[#1A1A18] transition-colors">FAQ</a></li>
+        </ul>
+        <div class="nav-mobile-actions md:hidden flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+          <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-[#10B981] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider">Request Callback</a>
+          <a href="/?book=annapurna-base-camp" class="btn-p bg-[#EB5A0D] text-white py-2.5 px-4 rounded-xl text-xs font-bold text-center uppercase tracking-wider" onclick="if (typeof closeMenu === 'function') closeMenu()">Book Now</a>
+          <a href="/" class="group flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-900 border border-stone-200 transition-all" onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }">
+            <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back to BOOTpaths</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-actions flex items-center gap-3">
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20Trek." target="_blank" rel="noopener noreferrer" class="nav-callback-btn bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          REQUEST CALLBACK
+        </a>
+        <a href="/?book=annapurna-base-camp" class="nav-cta bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
+          BOOK NOW
+        </a>
+        <a
+          href="/"
+          onclick="if (window.self !== window.top) { event.preventDefault(); window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*'); }"
+          class="group inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-stone-600 bg-stone-100/90 hover:bg-stone-200/80 hover:text-stone-900 border border-stone-200/80 transition-all duration-200 shadow-2xs"
+          aria-label="Back to BOOTpaths"
+        >
+          <svg class="w-3.5 h-3.5 text-stone-500 group-hover:text-orange-600 group-hover:-translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back</span>
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-backdrop" id="navBackdrop" onclick="toggleMenu()"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero relative flex flex-col items-center justify-center min-h-[92vh] text-center pt-28 pb-16 px-4" id="hero">
+    <div class="hero-bg absolute inset-0 overflow-hidden z-0">
+      <img src="images/abc_hero.jpg" alt="Annapurna Base Camp Sanctuary" class="hero-bg-img w-full h-full object-cover" />
+      <div class="hero-overlay absolute inset-0 bg-black/45"></div>
+    </div>
+    
+    <div class="hero-content relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+      <div class="hero-badge bg-white/15 backdrop-blur-md text-white/90 border border-white/20 text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block">
+        <span class="bdot inline-block w-1.5 h-1.5 rounded-full bg-[#EB5A0D] mr-2"></span>ANNAPURNA CONSERVATION AREA, NEPAL
+      </div>
+      
+      <h1 class="hero-title font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-4 font-['Open_Sans'] text-center">
+        Annapurna Base Camp Trek
+      </h1>
+      
+      <p class="hero-sub text-sm md:text-base text-white/90 max-w-3xl mx-auto leading-relaxed text-center font-normal mb-8 font-['Open_Sans']">
+        Wake up beneath the Annapurnas &mdash; walk past terraced Gurung villages in Ghandruk, climb the stone stairways of Chhomrong, pass Machhapuchhre Base Camp, and spend the night at Annapurna Base Camp (4,130 m).
+      </p>
+      
+      <!-- 4-Column Quick-Stats Bar -->
+      <div class="max-w-5xl mx-auto my-6 px-4 w-full">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 bg-stone-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl divide-y md:divide-y-0 md:divide-x divide-white/10 text-left">
+          
+          <!-- Stat 1: Max Altitude -->
+          <div class="flex items-center space-x-3.5 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">MAX &amp; OVERNIGHT ALTITUDE</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">4,130 m</p>
+              <p class="text-[10px] text-stone-300">Annapurna Base Camp</p>
+            </div>
+          </div>
+
+          <!-- Stat 2: Duration -->
+          <div class="flex items-center space-x-3.5 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DURATION</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">10 Days</p>
+              <p class="text-[10px] text-stone-300">7 Walking Days • ~60–65 km</p>
+            </div>
+          </div>
+
+          <!-- Stat 3: Difficulty -->
+          <div class="flex items-center space-x-3.5 px-3 py-2 md:py-0">
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">DIFFICULTY</p>
+              <p class="text-sm md:text-base font-bold text-white tracking-tight">Difficult</p>
+              <p class="text-[10px] text-orange-400 font-medium">Stone Stairways &amp; High Altitude</p>
+            </div>
+          </div>
+
+          <!-- Stat 4: Travel Route -->
+          <a
+            href="https://maps.google.com/?q=Annapurna+Base+Camp+Nepal"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View Annapurna Base Camp Route on Google Maps"
+            class="group flex items-center space-x-3.5 p-2 -m-2 rounded-xl hover:bg-white/10 transition-all duration-200 cursor-pointer block"
+          >
+            <div class="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 shrink-0 group-hover:scale-105 transition-transform duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-[11px] font-semibold tracking-wider uppercase text-stone-400">TRAVEL ROUTE</p>
+              <div class="flex items-center gap-1">
+                <span class="text-sm md:text-base font-bold text-white group-hover:text-orange-400 transition-colors">Gorakhpur – Pokhara</span>
+                <svg class="w-3 h-3 text-stone-400 group-hover:text-orange-400 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </div>
+              <p class="text-[10px] text-stone-300">Kimche to Jhinu Danda Trail</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="hero-btns flex flex-wrap items-center justify-center gap-4 mt-2 mb-4">
+        <a href="/?book=annapurna-base-camp" class="btn-p bg-[#EB5A0D] hover:bg-[#D44E08] text-white px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md">Book This Trek</a>
+        <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20Trek." target="_blank" rel="noopener noreferrer" class="btn-wa bg-white/10 hover:bg-white/20 backdrop-blur border border-white/25 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+          Request a Callback
+        </a>
+        <a href="#itinerary" class="btn-g bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all">View Itinerary</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK INFO BAR -->
+  <div class="qi-bar">
+    <div class="container">
+      <div class="qi-grid">
+        <div class="qi"><span>&#128197;</span><div><small>Expedition Dates</small><strong>3–12 April, 2027</strong></div></div>
+        <div class="qi"><span>&#127957;&#65039;</span><div><small>Stay Type</small><strong>Teahouses &amp; Pokhara</strong></div></div>
+        <div class="qi"><span>&#129495;</span><div><small>Walking Distance</small><strong>~60–65 km Trail</strong></div></div>
+        <div class="qi"><span>&#9992;&#65039;</span><div><small>Travel Route</small><strong>Gorakhpur – Pokhara</strong></div></div>
+        <div class="qi"><span>&#128176;</span><div><small>Trek Fee</small><strong>&#8377;35,000 / person</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="overview section" id="overview">
+    <div class="container">
+      <div class="ov-layout">
+        <div class="ov-text">
+          <div class="stag">About the Trail</div>
+          <h2 class="stitle">Annapurna Base Camp<br/>10-Day Journey</h2>
+          <p class="ov-lead">The first steps take you up to Ghandruk, where stone houses sit above terraced fields and the outline of Machhapuchhre rises beyond the rooftops. Over the next few days, you'll descend to river crossings, climb the stone stairways of Chhomrong and follow the Modi Khola valley through bamboo forest.</p>
+          <p class="ov-body">By Deurali, the landscape opens up and you can see how far the trail has brought you. The approach to Annapurna Base Camp is a day of two base camps. At Machhapuchhre Base Camp (3,700 m), you'll look up at the distinctive summit known as Fishtail, before walking farther into the Annapurna Sanctuary where Annapurna I, Annapurna South, Hiunchuli and Machhapuchhre rise around a glacial basin at 4,130 m.</p>
+
+          <!-- Trek Highlights at a Glance Grid -->
+          <div class="mt-8 pt-6 border-t border-stone-200">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-orange-600 mb-4">Trek Highlights at a Glance</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 text-xs text-stone-700">
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Date</span>
+                <strong class="text-stone-900 font-semibold">3–12 April, 2027</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Region</span>
+                <strong class="text-stone-900 font-semibold">Annapurna Conservation Area</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Duration</span>
+                <strong class="text-stone-900 font-semibold">10 Days (7 Walking Days)</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Walking Distance</span>
+                <strong class="text-stone-900 font-semibold">~60–65 km Total</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Max &amp; Overnight Alt.</span>
+                <strong class="text-stone-900 font-semibold">4,130 m at ABC</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Difficulty</span>
+                <strong class="text-stone-900 font-semibold">Difficult</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Travel Route</span>
+                <strong class="text-stone-900 font-semibold">Gorakhpur &amp; Pokhara</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Stay</span>
+                <strong class="text-stone-900 font-semibold">Teahouses &amp; Pokhara</strong>
+              </div>
+              <div class="bg-stone-50 border border-stone-200/80 rounded-xl p-3">
+                <span class="block text-[10px] uppercase font-bold text-stone-400">Trek Fee</span>
+                <strong class="text-stone-900 font-semibold">&#8377;35,000/- per person</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="ov-vis">
+          <div class="img-stack">
+            <img src="images/machhapuchhre.jpg" alt="Machhapuchhre Fishtail Peak" class="si1"/>
+            <img src="images/ghandruk.jpg" alt="Ghandruk Gurung Village" class="si2"/>
+            <div class="img-float"><span>4,130</span><small>m at Base Camp</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights section" id="highlights">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Why This Trek</div>
+        <h2 class="stitle">Why Trek to Annapurna Base Camp?</h2>
+        <p class="ssub">Key moments and natural perspectives along the Modi Khola into the Annapurna Sanctuary</p>
+      </div>
+      <div class="hl-grid">
+        
+        <!-- Card 1 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/abc_sanctuary.jpg" alt="Ring of snow-covered peaks" loading="lazy"/><div class="hlc-ov"></div><span class="hln">01</span></div>
+          <div class="hlc-body">
+            <h3>A ring of snow-covered Himalayan peaks</h3>
+            <p>Look from Annapurna I (8,091 m) towards Annapurna South, Hiunchuli and Machhapuchhre inside the Sanctuary.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/machhapuchhre.jpg" alt="Machhapuchhre Base Camp" loading="lazy"/><div class="hlc-ov"></div><span class="hln">02</span></div>
+          <div class="hlc-body">
+            <h3>Two base camps in one day</h3>
+            <p>Pass through Machhapuchhre Base Camp (3,700 m) on your climb into the glacial basin of ABC (4,130 m).</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/abc_hero.jpg" alt="Night at Annapurna Base Camp" loading="lazy"/><div class="hlc-ov"></div><span class="hln">03</span></div>
+          <div class="hlc-body">
+            <h3>A night at Annapurna Base Camp</h3>
+            <p>Experience the Sanctuary in evening light and step out at dawn to watch first light hit the snow walls.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/ghandruk.jpg" alt="Gurung village life in Ghandruk" loading="lazy"/><div class="hlc-ov"></div><span class="hln">04</span></div>
+          <div class="hlc-body">
+            <h3>Gurung village life in Ghandruk</h3>
+            <p>Spend your first trail night among traditional stone houses, terraced fields, and mountain views.</p>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/chhomrong.jpg" alt="Stone stairways of Chhomrong" loading="lazy"/><div class="hlc-ov"></div><span class="hln">05</span></div>
+          <div class="hlc-body">
+            <h3>Stone stairways &amp; river crossings</h3>
+            <p>Traverse hillside settlements, river crossings, and the signature stone stairways of the Modi Khola route.</p>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/bamboo_trail.jpg" alt="Bamboo forest trail" loading="lazy"/><div class="hlc-ov"></div><span class="hln">06</span></div>
+          <div class="hlc-body">
+            <h3>From bamboo shade to alpine terrain</h3>
+            <p>Move from dense bamboo forest between Sinuwa and Deurali to rock, alpine grass, and snow-covered headwalls.</p>
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/jhinu_springs.jpg" alt="Hot springs at Jhinu Danda" loading="lazy"/><div class="hlc-ov"></div><span class="hln">07</span></div>
+          <div class="hlc-body">
+            <h3>Optional hot springs at Jhinu Danda</h3>
+            <p>Take the downhill walk to the natural springs after the final trekking stage before returning to Pokhara, if time and access permit.</p>
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="hlc">
+          <div class="hlc-img-w"><img src="images/deurali.jpg" alt="Quiet mornings in the mountains" loading="lazy"/><div class="hlc-ov"></div><span class="hln">08</span></div>
+          <div class="hlc-body">
+            <h3>Time away from the usual routine</h3>
+            <p>Unhurried teahouse conversations, quiet river stretches, and mornings that begin looking at the mountains.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section class="itinerary section" id="itinerary">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">10-Day Route Plan</div>
+        <h2 class="stitle">10-Day Trek Itinerary</h2>
+        <p class="ssub">Via Gorakhpur, Pokhara, Ghandruk, Chhomrong, MBC and Annapurna Base Camp</p>
+      </div>
+
+      <!-- MAIN ACCORDIONS CONTAINER -->
+      <div class="itinerary-accordions">
+
+        <!-- DROPDOWN 1: QUICK ITINERARY -->
+        <div class="main-accordion-item" id="acc-quick-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128203;</span>
+              <div class="mah-text">
+                <h3>Quick Itinerary (Overview)</h3>
+                <p>10-day schedule overview with walking hours, travel segments &amp; overnight halts</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          
+          <div class="main-accordion-body">
+            <div class="quick-itin-wrapper">
+              
+              <!-- Trail Route Map Banner -->
+              <div class="quick-itin-map-card">
+                <div class="qim-badge">&#129517; Official Expedition Trail Route</div>
+                <h4>Annapurna Base Camp Sanctuary Route</h4>
+                <p class="qim-path">Gorakhpur &#10140; Pokhara (820 m) &#10140; Kimche &#10140; Ghandruk (1,940 m) &#10140; Chhomrong (2,170 m) &#10140; Bamboo (2,310 m) &#10140; Deurali (3,200 m) &#10140; MBC (3,700 m) &#10140; Annapurna Base Camp (4,130 m) &#10140; Bamboo &#10140; Jhinu Danda &#10140; Pokhara &#10140; Gorakhpur</p>
+              </div>
+
+              <!-- Day by day summary list -->
+              <div class="quick-itin-list">
+                
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 1</div>
+                  <div class="qi-row-content">
+                    <h4>Gorakhpur &rarr; Pokhara (820 m)</h4>
+                    <div class="qi-meta"><span class="text-orange-600 font-semibold">Overnight:</span> Pokhara | Report in Gorakhpur at 11:00 am IST. Cross-border road drive to Pokhara (allow 10+ hours).</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 2</div>
+                  <div class="qi-row-content">
+                    <h4>Pokhara &rarr; Kimche (1,600 m) &rarr; Ghandruk (1,940 m)</h4>
+                    <div class="qi-meta">Walking: ~1 hr | <span class="text-orange-600 font-semibold">Overnight:</span> Ghandruk teahouse | Drive to Kimche, walk up to Ghandruk village. Look for Annapurna South &amp; Machhapuchhre.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 3</div>
+                  <div class="qi-row-content">
+                    <h4>Ghandruk &rarr; Komrong Danda (2,200 m) &rarr; Chhomrong (2,170 m)</h4>
+                    <div class="qi-meta">Walking: ~5 hrs | <span class="text-orange-600 font-semibold">Overnight:</span> Chhomrong teahouse | Follow stone paths through Komrong, descend valley and climb stairways to Chhomrong.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 4</div>
+                  <div class="qi-row-content">
+                    <h4>Chhomrong &rarr; Sinuwa (2,350 m) &rarr; Bamboo (2,310 m)</h4>
+                    <div class="qi-meta">Walking: 4–5 hrs | <span class="text-orange-600 font-semibold">Overnight:</span> Bamboo teahouse | Descend towards river, climb to Sinuwa, continue through cooler woodland to Bamboo.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 5</div>
+                  <div class="qi-row-content">
+                    <h4>Bamboo &rarr; Dovan (2,500 m) &rarr; Himalaya (2,900 m) &rarr; Deurali (3,200 m)</h4>
+                    <div class="qi-meta">Walking: 5–6 hrs | <span class="text-orange-600 font-semibold">Overnight:</span> Deurali teahouse | Follow upper valley as forest thins and valley walls close in towards Deurali.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 6</div>
+                  <div class="qi-row-content">
+                    <h4>Deurali &rarr; Machhapuchhre Base Camp (3,700 m) &rarr; Annapurna Base Camp (4,130 m)</h4>
+                    <div class="qi-meta">Walking: 5–6 hrs | <span class="text-orange-600 font-semibold">Overnight:</span> Annapurna Base Camp teahouse | Climb past MBC into the Annapurna Sanctuary and spend the night at ABC.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 7</div>
+                  <div class="qi-row-content">
+                    <h4>Annapurna Base Camp &rarr; MBC &rarr; Bamboo (2,310 m)</h4>
+                    <div class="qi-meta">Walking: 6–7 hrs | <span class="text-orange-600 font-semibold">Overnight:</span> Bamboo teahouse | Step out for sunrise, then retrace upper valley via Deurali on longest sustained descent day.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 8</div>
+                  <div class="qi-row-content">
+                    <h4>Bamboo &rarr; Chhomrong (2,170 m) &rarr; Jhinu Danda (1,780 m) &rarr; Pokhara (820 m)</h4>
+                    <div class="qi-meta">Walking: 5–6 hrs + detour | <span class="text-orange-600 font-semibold">Overnight:</span> Pokhara | Return via Chhomrong, optional hot springs visit, then drive 3–4 hrs to Pokhara.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 9</div>
+                  <div class="qi-row-content">
+                    <h4>Pokhara (820 m) &rarr; Gorakhpur</h4>
+                    <div class="qi-meta"><span class="text-orange-600 font-semibold">Overnight:</span> Gorakhpur (late arrival) | Morning in Pokhara, leave by road in afternoon; expected arrival around 10–11 pm IST.</div>
+                  </div>
+                </div>
+
+                <div class="qi-row">
+                  <div class="qi-day-badge">DAY 10</div>
+                  <div class="qi-row-content">
+                    <h4>Gorakhpur &rarr; Hometown</h4>
+                    <div class="qi-meta">Schedule onward train or flight for Day 10 (preferably 2nd half of Day 10 or Day 11 buffer).</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROPDOWN 2: HOW DOES EACH DAY LOOK -->
+        <div class="main-accordion-item open" id="acc-detailed-itinerary">
+          <div class="main-accordion-header" onclick="toggleMainAccordion(this)">
+            <div class="mah-left">
+              <span class="mah-icon">&#128444;&#65039;</span>
+              <div class="mah-text">
+                <h3>How Does Each Day Look (Day-wise Detailed Guide)</h3>
+                <p>Complete 10-day breakdown with walking hours, overnight halts, and trail narrative</p>
+              </div>
+            </div>
+            <div class="mah-toggle-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+
+          <div class="main-accordion-body">
+            <div class="day-tabs-wrapper">
+              
+              <!-- Day Tab Selectors -->
+              <div class="day-tab-nav" id="dayTabNav">
+                <button class="day-tab-btn active" onclick="switchDayTab(1)">DAY 1</button>
+                <button class="day-tab-btn" onclick="switchDayTab(2)">DAY 2</button>
+                <button class="day-tab-btn" onclick="switchDayTab(3)">DAY 3</button>
+                <button class="day-tab-btn" onclick="switchDayTab(4)">DAY 4</button>
+                <button class="day-tab-btn" onclick="switchDayTab(5)">DAY 5</button>
+                <button class="day-tab-btn" onclick="switchDayTab(6)">DAY 6</button>
+                <button class="day-tab-btn" onclick="switchDayTab(7)">DAY 7</button>
+                <button class="day-tab-btn" onclick="switchDayTab(8)">DAY 8</button>
+                <button class="day-tab-btn" onclick="switchDayTab(9)">DAY 9</button>
+                <button class="day-tab-btn" onclick="switchDayTab(10)">DAY 10</button>
+              </div>
+
+              <!-- Day Tab Content Panels (Day 1 to Day 10) -->
+              <div class="day-tab-panels" id="dayTabPanels">
+                
+                <!-- Day 1 -->
+                <div class="day-panel active" id="day-panel-1">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 1</span>
+                    <h3 class="dt-title">Gorakhpur &rarr; Pokhara (820 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128337;</span><div><strong>Reporting Time:</strong> <span>11:00 am IST in Gorakhpur</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128663;</span><div><strong>Drive Time:</strong> <span>10+ hours cross-border</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Pokhara hotel</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>820 m</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Report in Gorakhpur at 11:00 am IST. If flying from Kochi or Bengaluru, choose an early connection allowing buffer time. Allow 10+ hours for the cross-border drive to the scenic lakeside city of Pokhara.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/machhapuchhre.jpg" alt="Pokhara lake and Machhapuchhre" loading="lazy" /><span class="dt-photo-caption">Pokhara with views towards the Annapurna Range</span></div>
+                    <div class="dt-photo-card"><img src="images/bootpaths_logo.png" alt="BOOTpaths Expedition" loading="lazy" /><span class="dt-photo-caption">Pre-departure team meetup and border verification</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="day-panel" id="day-panel-2">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 2</span>
+                    <h3 class="dt-title">Pokhara &rarr; Kimche (1,600 m) &rarr; Ghandruk (1,940 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>~1 hr</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>1,940 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Ghandruk teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Highlights:</strong> <span>Gurung stone architecture &amp; terraces</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Drive to Kimche, then walk up to Ghandruk. Explore the village and look for Annapurna South and Machhapuchhre on a clear evening. Experience traditional Gurung hospitality and stone-paved lanes.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/ghandruk.jpg" alt="Ghandruk terraced village" loading="lazy" /><span class="dt-photo-caption">Traditional stone houses and terraced fields of Ghandruk</span></div>
+                    <div class="dt-photo-card"><img src="images/machhapuchhre.jpg" alt="Machhapuchhre above Ghandruk" loading="lazy" /><span class="dt-photo-caption">Fishtail peak rising high above the village rooftops</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="day-panel" id="day-panel-3">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 3</span>
+                    <h3 class="dt-title">Ghandruk &rarr; Komrong Danda (2,200 m) &rarr; Chhomrong (2,170 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>~5 hrs</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>2,170 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Chhomrong teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Terrain:</strong> <span>Stone paths, valley descent &amp; stone stairs</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Follow stone paths through Komrong, descend into the valley, and climb the stairways towards Chhomrong. Chhomrong is the gateway to the upper Sanctuary, perched dramatically on the mountainside.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/chhomrong.jpg" alt="Chhomrong stone stairways" loading="lazy" /><span class="dt-photo-caption">The famous stone stairways and settlements of Chhomrong</span></div>
+                    <div class="dt-photo-card"><img src="images/deurali.jpg" alt="Modi Khola valley view" loading="lazy" /><span class="dt-photo-caption">Deep mountain valleys leading towards the Sanctuary</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 4 -->
+                <div class="day-panel" id="day-panel-4">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 4</span>
+                    <h3 class="dt-title">Chhomrong &rarr; Sinuwa (2,350 m) &rarr; Bamboo (2,310 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>4–5 hrs</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>2,310 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Bamboo teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Trail:</strong> <span>River crossing, forest climb &amp; bamboo groves</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Descend towards the river, climb to Sinuwa, and continue through cooler woodland before dropping into Bamboo. Enjoy the shade and calming sounds of rushing water along the Modi Khola.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/bamboo_trail.jpg" alt="Bamboo river trail" loading="lazy" /><span class="dt-photo-caption">Lush bamboo and rhododendron canopy between Sinuwa and Bamboo</span></div>
+                    <div class="dt-photo-card"><img src="images/jhinu_springs.jpg" alt="River crossing bridge" loading="lazy" /><span class="dt-photo-caption">Suspension bridge crossing over the glacial waters of the Modi Khola</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 5 -->
+                <div class="day-panel" id="day-panel-5">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 5</span>
+                    <h3 class="dt-title">Bamboo &rarr; Dovan (2,500 m) &rarr; Himalaya (2,900 m) &rarr; Deurali (3,200 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>5–6 hrs</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>3,200 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Deurali teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Transition:</strong> <span>Thinning forest, steep canyon walls</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Follow the upper valley as the forest thins and valley walls close in on the approach to Deurali. Notice the temperature dropping as you enter high sub-alpine territory beneath sheer rock faces.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/deurali.jpg" alt="Deurali canyon approach" loading="lazy" /><span class="dt-photo-caption">Valley walls closing in as the trail ascends towards Deurali</span></div>
+                    <div class="dt-photo-card"><img src="images/abc_sanctuary.jpg" alt="Alpine approach" loading="lazy" /><span class="dt-photo-caption">Alpine grasslands and rugged terrain approaching the Sanctuary gates</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 6 -->
+                <div class="day-panel" id="day-panel-6">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 6</span>
+                    <h3 class="dt-title">Deurali &rarr; Machhapuchhre Base Camp (3,700 m) &rarr; Annapurna Base Camp (4,130 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>5–6 hrs</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>4,130 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Annapurna Base Camp teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Milestone:</strong> <span>Two base camps in one day (MBC &amp; ABC)</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Climb past MBC into the Annapurna Sanctuary and spend the night at ABC surrounded by the peaks. Standing in the natural amphitheater surrounded by Annapurna I (8,091 m), Annapurna South, and Hiunchuli is an unforgettable milestone.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/abc_hero.jpg" alt="Annapurna Base Camp Sanctuary" loading="lazy" /><span class="dt-photo-caption">Standing inside the glacial basin of Annapurna Base Camp (4,130 m)</span></div>
+                    <div class="dt-photo-card"><img src="images/machhapuchhre.jpg" alt="Machhapuchhre from MBC" loading="lazy" /><span class="dt-photo-caption">Machhapuchhre Base Camp view looking up at the Fishtail summit</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 7 -->
+                <div class="day-panel" id="day-panel-7">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 7</span>
+                    <h3 class="dt-title">Annapurna Base Camp &rarr; MBC &rarr; Bamboo (2,310 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>6–7 hrs</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128200;</span><div><strong>Altitude:</strong> <span>2,310 m</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Bamboo teahouse</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Highlights:</strong> <span>Sanctuary sunrise &amp; long descent</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Step out for sunrise if skies are clear, then retrace the upper valley via Deurali and Himalaya on the longest sustained descent day. Returning into thicker air brings a noticeable surge in energy.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/abc_sanctuary.jpg" alt="Sunrise on snow walls" loading="lazy" /><span class="dt-photo-caption">Golden morning sunrise illuminating the sheer face of Annapurna South</span></div>
+                    <div class="dt-photo-card"><img src="images/bamboo_trail.jpg" alt="Descent to Bamboo" loading="lazy" /><span class="dt-photo-caption">Retracing the forested trail back down towards Bamboo</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 8 -->
+                <div class="day-panel" id="day-panel-8">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 8</span>
+                    <h3 class="dt-title">Bamboo &rarr; Chhomrong (2,170 m) &rarr; Jhinu Danda (1,780 m) &rarr; Pokhara (820 m)</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128694;</span><div><strong>Walking Duration:</strong> <span>5–6 hrs + detour</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128663;</span><div><strong>Drive Time:</strong> <span>3–4 hrs to Pokhara</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Pokhara hotel</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Optional:</strong> <span>Jhinu Danda natural hot springs</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Return via Sinuwa and Chhomrong, descend to Jhinu Danda for an optional hot springs visit (if time and access allow), then drive 3–4 hours back to Pokhara. Celebrate completing the trek with lakeside dinners and comfortable beds.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/jhinu_springs.jpg" alt="Jhinu Danda bridge and hot springs" loading="lazy" /><span class="dt-photo-caption">Jhinu Danda suspension bridge and riverbed valley</span></div>
+                    <div class="dt-photo-card"><img src="images/chhomrong.jpg" alt="Final trail stretch" loading="lazy" /><span class="dt-photo-caption">Final trail stairways before the roadhead pickup</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 9 -->
+                <div class="day-panel" id="day-panel-9">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 9</span>
+                    <h3 class="dt-title">Pokhara (820 m) &rarr; Gorakhpur</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128663;</span><div><strong>Travel:</strong> <span>Afternoon road transfer</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128337;</span><div><strong>Expected Arrival:</strong> <span>10:00–11:00 pm IST in Gorakhpur</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127957;&#65039;</span><div><strong>Overnight Stay:</strong> <span>Gorakhpur (late arrival)</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Activities:</strong> <span>Morning in Pokhara &amp; cross-border drive</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Check out and spend part of the day exploring Pokhara. Leave by road in the afternoon; expected arrival in Gorakhpur around 10:00–11:00 pm IST depending on road and border formalities.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/machhapuchhre.jpg" alt="Pokhara lake scenery" loading="lazy" /><span class="dt-photo-caption">Relaxing morning along Phewa Lake in Pokhara</span></div>
+                    <div class="dt-photo-card"><img src="images/bootpaths_logo.png" alt="Return journey" loading="lazy" /><span class="dt-photo-caption">Cross-border return to Gorakhpur</span></div>
+                  </div>
+                </div>
+
+                <!-- Day 10 -->
+                <div class="day-panel" id="day-panel-10">
+                  <div class="dt-header">
+                    <span class="dt-day-pill">Day 10</span>
+                    <h3 class="dt-title">Gorakhpur &rarr; Hometown</h3>
+                  </div>
+                  <div class="dt-spec-grid">
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#9992;&#65039;</span><div><strong>Departure:</strong> <span>Flight or train from Gorakhpur</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#128197;</span><div><strong>Timing Advice:</strong> <span>Book for 2nd half of Day 10 or Day 11</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#129534;</span><div><strong>Buffer:</strong> <span>Protects against border &amp; highway delays</span></div></div>
+                    <div class="dt-spec-item"><span class="dt-spec-icon">&#127956;</span><div><strong>Certificates:</strong> <span>BOOTpaths ABC expedition completion</span></div></div>
+                  </div>
+                  <div class="dt-narrative">
+                    <p>Schedule your onward train or flight for Day 10 (preferably 2nd half of Day 10 or Day 11 buffer). Return home with memories of the majestic Annapurna Sanctuary.</p>
+                  </div>
+                  <div class="dt-photos-grid">
+                    <div class="dt-photo-card"><img src="images/abc_hero.jpg" alt="Annapurna Sanctuary memories" loading="lazy" /><span class="dt-photo-caption">Cherished moments from the foot of Annapurna I</span></div>
+                    <div class="dt-photo-card"><img src="images/bootpaths_logo.png" alt="Expedition Completion" loading="lazy" /><span class="dt-photo-caption">Official BOOTpaths Annapurna Base Camp certification</span></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Itinerary Disclaimer Note -->
+      <div class="mt-8 p-4 bg-amber-50/80 border border-amber-200/80 rounded-2xl max-w-4xl mx-auto flex items-start gap-3.5 text-xs text-amber-900 leading-relaxed">
+        <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p><strong>Disclaimer Note:</strong> Walking and transfer times are approximate. Weather, trail conditions, border formalities and road access can change the schedule.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Visual Journey</div>
+        <h2 class="stitle">Trail Through the Lens</h2>
+        <p class="ssub">Every frame tells a story from the heart of the Annapurnas</p>
+      </div>
+    </div>
+    <div class="gal-grid">
+      <div class="gi gi-tall" onclick="ol('images/abc_hero.jpg','Annapurna Base Camp Sanctuary – 4,130m')"><img src="images/abc_hero.jpg" alt="Annapurna Base Camp Sanctuary" loading="lazy"/><div class="gc"><h4>Annapurna Base Camp</h4><p>4,130m &bull; Day 6</p></div></div>
+      <div class="gi" onclick="ol('images/machhapuchhre.jpg','Machhapuchhre Base Camp – 3,700m')"><img src="images/machhapuchhre.jpg" alt="Machhapuchhre Fishtail Peak" loading="lazy"/><div class="gc"><h4>Machhapuchhre Peak</h4><p>3,700m &bull; Day 6</p></div></div>
+      <div class="gi" onclick="ol('images/ghandruk.jpg','Ghandruk Gurung Village – 1,940m')"><img src="images/ghandruk.jpg" alt="Ghandruk Village" loading="lazy"/><div class="gc"><h4>Ghandruk Village</h4><p>1,940m &bull; Day 2</p></div></div>
+      <div class="gi gi-wide" onclick="ol('images/abc_sanctuary.jpg','Annapurna Glacial Basin')"><img src="images/abc_sanctuary.jpg" alt="Annapurna Glacial Basin" loading="lazy"/><div class="gc"><h4>Annapurna Sanctuary</h4><p>Basin View</p></div></div>
+      <div class="gi" onclick="ol('images/chhomrong.jpg','Chhomrong Stone Stairways')"><img src="images/chhomrong.jpg" alt="Chhomrong Stairs" loading="lazy"/><div class="gc"><h4>Chhomrong</h4><p>2,170m &bull; Day 3</p></div></div>
+      <div class="gi" onclick="ol('images/jhinu_springs.jpg','Jhinu Danda Suspension Bridge')"><img src="images/jhinu_springs.jpg" alt="Jhinu Danda Bridge" loading="lazy"/><div class="gc"><h4>Jhinu Danda</h4><p>1,780m &bull; Day 8</p></div></div>
+    </div>
+    <div class="lightbox" id="lb" onclick="cl()">
+      <button class="lb-close" onclick="cl()">&#10005;</button>
+      <div class="lb-inner" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt=""/>
+        <p id="lb-cap"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INCLUSIONS / EXCLUSIONS / GEAR CHECKLIST -->
+  <section class="ie-section section" id="inclusions">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">What is Covered</div>
+        <h2 class="stitle">Inclusions &amp; Exclusions</h2>
+        <p class="ssub">Clear transparency on your Annapurna Base Camp expedition package</p>
+      </div>
+      <div class="ie-grid">
+        <!-- Inclusions -->
+        <div class="iec inc-card">
+          <div class="iec-h"><span>&#9989;</span><h3>What is Included</h3></div>
+          <ul>
+            <li><span class="chk">&#10003;</span> Gorakhpur–Pokhara return transfers and transfers to Kimche and from Jhinu Danda</li>
+            <li><span class="chk">&#10003;</span> 2 nights in Pokhara and 6 nights in teahouses, including one night at ABC (4,130 m)</li>
+            <li><span class="chk">&#10003;</span> All meals on Days 2–7, plus breakfast on Day 8 and Day 9</li>
+            <li><span class="chk">&#10003;</span> Local guide, BOOTpaths trek leader, ABC trekking permits, and group first-aid kit</li>
+            <li><span class="chk">&#10003;</span> Porter service with a limit of 7 kg per person</li>
+          </ul>
+        </div>
+        <!-- Exclusions -->
+        <div class="iec exc-card">
+          <div class="iec-h"><span>&#10060;</span><h3>What is Excluded</h3></div>
+          <ul>
+            <li><span class="crs">&#10007;</span> Optional Jhinu Danda hot springs entry</li>
+            <li><span class="crs">&#10007;</span> Any stay in Gorakhpur</li>
+            <li><span class="crs">&#10007;</span> Flight/Train from/to Gorakhpur</li>
+            <li><span class="crs">&#10007;</span> Any additional food, hot water, Wi-Fi, charging, showers, etc.</li>
+            <li><span class="crs">&#10007;</span> Travel and Trekking Insurance</li>
+            <li><span class="crs">&#10007;</span> Anything not mentioned in the Inclusions</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Getting Ready Note -->
+      <div class="mt-8 p-4 bg-orange-50/80 border border-orange-200/80 rounded-2xl max-w-4xl mx-auto flex items-start gap-3.5 text-xs text-orange-950 leading-relaxed">
+        <svg class="w-5 h-5 text-orange-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <p><strong>Getting Ready for the Annapurna Trail:</strong> We recommend preparing 2–3 months ahead with brisk walks, stair climbing, lower-body strength work, and back-to-back hill hikes with downhill practice in broken-in trekking boots.</p>
+      </div>
+
+      <!-- Essential Trekking Gear Checklist (3-Column Card Grid) -->
+      <div class="mt-16">
+        <div class="sh center mb-10">
+          <div class="stag">Packing Guide</div>
+          <h2 class="stitle">Essential Trekking Gear Checklist</h2>
+          <p class="ssub">Mandatory gear and clothing checklist for the Annapurna Sanctuary route</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Column 1: Clothing & Wearables -->
+          <div class="bg-white rounded-2xl p-6 border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-stone-100">
+              <span class="p-2.5 bg-orange-100 text-orange-600 rounded-xl text-lg">&#129509;</span>
+              <div>
+                <h3 class="font-bold text-stone-900 text-base">1. Clothing &amp; Wearables</h3>
+                <p class="text-[11px] text-stone-500 font-medium">Layering for variable mountain weather</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-xs text-stone-700 leading-normal">
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Thermal Top &amp; Bottom (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Full Sleeve T-shirt (2–3)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Trekking Pant (2–3)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Fleece Jacket (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Padded/Down Jacket -10&deg;C (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Windsheeter (1, Optional)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Poncho (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Waterproof Gloves (1–2)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Liner Gloves (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Bandana / Monkey Cap (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Sun Cap (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Socks (3–4 pairs)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Woollen Socks (2–3 pairs)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>UV Sunglasses</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Waterproof Ankle-Support Trekking Boots (1 pair)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Sandals / Flip-flops (1 pair)</span></li>
+              <li class="flex items-start gap-2"><span class="text-orange-500 font-bold">&#8226;</span><span>Undergarments</span></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Backpacking Gear & Trek Equipment -->
+          <div class="bg-white rounded-2xl p-6 border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-stone-100">
+              <span class="p-2.5 bg-blue-100 text-blue-600 rounded-xl text-lg">&#127954;</span>
+              <div>
+                <h3 class="font-bold text-stone-900 text-base">2. Backpacking &amp; Equipment</h3>
+                <p class="text-[11px] text-stone-500 font-medium">Rucksack, daypack, trekking poles</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-xs text-stone-700 leading-normal">
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Rucksack 50/60L (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Daypack 20–25L</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Rain Cover for Rucksack &amp; Daypack</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Ziplock Bags (3–4)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Water Bottle / Hydration Bladder (2L)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Lightweight Thermos (Optional)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Lunch Box</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Headlamp with Extra Batteries (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Trekking Poles (2)</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">&#8226;</span><span>Power Bank</span></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Personal Care, Health & Hygiene -->
+          <div class="bg-white rounded-2xl p-6 border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-stone-100">
+              <span class="p-2.5 bg-emerald-100 text-emerald-600 rounded-xl text-lg">&#129658;</span>
+              <div>
+                <h3 class="font-bold text-stone-900 text-base">3. Personal Care &amp; Hygiene</h3>
+                <p class="text-[11px] text-stone-500 font-medium">Toiletries, skin protection &amp; hydration</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-xs text-stone-700 leading-normal">
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Small Soap (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Toothbrush (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Small Toothpaste (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Sanitiser (1)</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Tissue / Toilet Paper</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Sunscreen</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Lip Balm</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Moisturizer</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>ORS Packets</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Personal Medicines</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">&#8226;</span><span>Snacks / Energy Bars</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="sh center">
+        <div class="stag">Common Questions</div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Everything you need to know about the trail, accommodation, permits, and preparation</p>
+      </div>
+
+      <!-- FAQ Category Selector Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-10 max-w-4xl mx-auto px-4" id="faqTabNav">
+        <button type="button" class="faq-tab-btn active px-4 py-2 rounded-full text-xs font-bold transition-all bg-[#EB5A0D] text-white shadow-sm" onclick="switchFaqTab('all', this)">
+          All FAQs (23)
+        </button>
+        <button type="button" class="faq-tab-btn px-4 py-2 rounded-full text-xs font-semibold transition-all bg-stone-100 text-stone-600 hover:bg-stone-200" onclick="switchFaqTab('group-a', this)">
+          Difficulty &amp; Altitude (1–7)
+        </button>
+        <button type="button" class="faq-tab-btn px-4 py-2 rounded-full text-xs font-semibold transition-all bg-stone-100 text-stone-600 hover:bg-stone-200" onclick="switchFaqTab('group-b', this)">
+          Stay, Food &amp; Trail (8–14)
+        </button>
+        <button type="button" class="faq-tab-btn px-4 py-2 rounded-full text-xs font-semibold transition-all bg-stone-100 text-stone-600 hover:bg-stone-200" onclick="switchFaqTab('group-c', this)">
+          Porters, Permits &amp; Travel (15–23)
+        </button>
+      </div>
+
+      <!-- FAQ Grid -->
+      <div class="faq-grid max-w-4xl mx-auto">
+        
+        <!-- ================= GROUP A: TREK DIFFICULTY & ALTITUDE ================= -->
+
+        <!-- Q1 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q1</span>
+              <span>How difficult is this route?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>It's a difficult multi-day trek with sustained walking, repeated stone stairways, and sleeping at 4,130 m. Expect 5–7 hours of walking per day across varied terrain.</p>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q2</span>
+              <span>Can I join if this is my first Himalayan trek?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Tell us what you've hiked recently; you should be comfortable with full-day hill walks repeated on consecutive days. If you only have experience on short trails, building fitness before joining is essential.</p>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q3</span>
+              <span>Do I need technical climbing experience?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>No, it is a walking trek. However, you should be comfortable on steep stone steps, uneven ground, and possible snow/ice near the Sanctuary basin.</p>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q4</span>
+              <span>Is there a dedicated acclimatisation day?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Altitude is gained progressively over nights at Bamboo and Deurali before ABC without a separate rest day; report any altitude symptoms (headache, nausea, dizziness) immediately to your guide.</p>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q5</span>
+              <span>Will we sleep at Annapurna Base Camp?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Yes, Day 6 is scheduled as an overnight at ABC (4,130 m), subject to weather and safety conditions.</p>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q6</span>
+              <span>What's the difference between Machhapuchhre Base Camp and Annapurna Base Camp?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>MBC is at ~3,700 m on the approach; we pass through it on Day 6 and continue into the Sanctuary to ABC at 4,130 m for our overnight stay.</p>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="fqi" data-faq-group="group-a">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold">Q7</span>
+              <span>Is this the same as the Annapurna Circuit?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>No, ABC follows the Modi Khola valley directly into the Annapurna Sanctuary basin and returns via Jhinu Danda, whereas the Circuit circumambulates the entire massif across Thorong La Pass.</p>
+          </div>
+        </div>
+
+        <!-- ================= GROUP B: STAY, FOOD & TRAIL FACILITIES ================= -->
+
+        <!-- Q8 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q8</span>
+              <span>What are teahouses like?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Simple mountain lodges with indoor rooms (shared rooms and shared bathrooms are common higher up) and heated communal dining halls.</p>
+          </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q9</span>
+              <span>What food can I expect?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Dal bhat, rice, noodles, soups, and simple breakfasts; all meals on Days 2–7 plus Day 8 &amp; Day 9 breakfasts are covered under the package.</p>
+          </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q10</span>
+              <span>Can you accommodate vegetarian meals or food allergies?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Vegetarian options are widely available throughout the Annapurna trail; notify us of allergies or strict dietary needs before booking so we can guide your meal plans.</p>
+          </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q11</span>
+              <span>Will there be hot showers and charging?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Available at many teahouses for an extra fee paid directly to the lodge; carry a high-capacity power bank and save offline maps before departing.</p>
+          </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q12</span>
+              <span>How should I carry drinking water?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Bring refillable bottles and consult your guide on safe water refill and purification stops along the trail.</p>
+          </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q13</span>
+              <span>Will I need cash?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Carry Nepalese rupees (NPR) arranged in Pokhara for personal purchases, hot showers, Wi-Fi, and snacks on the trail.</p>
+          </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="fqi" data-faq-group="group-b">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Q14</span>
+              <span>Is the Jhinu Danda hot springs visit guaranteed?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>It is an optional stop subject to trail pace, return drive timing, and local river/trail access conditions.</p>
+          </div>
+        </div>
+
+        <!-- ================= GROUP C: PORTERS, PERMITS & ONWARD TRAVEL ================= -->
+
+        <!-- Q15 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q15</span>
+              <span>Is porter support available, and what is the luggage limit?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Yes, porter service is included with a strict limit of up to 7 kg per trekker for your main rucksack.</p>
+          </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q16</span>
+              <span>What should I keep in my daypack?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Keep water, snacks, warm fleece, waterproof jacket/poncho, sun protection, personal medicines, and valuables with you while walking.</p>
+          </div>
+        </div>
+
+        <!-- Q17 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q17</span>
+              <span>Do I need a trekking permit?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Yes, an Annapurna Conservation Area entry permit is required and arranged by BOOTpaths using your pre-departure documents.</p>
+          </div>
+        </div>
+
+        <!-- Q18 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q18</span>
+              <span>What insurance should I arrange?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Mandatory travel and trekking insurance covering trekking in Nepal up to at least 4,130 m, emergency medical care, and helicopter evacuation.</p>
+          </div>
+        </div>
+
+        <!-- Q19 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q19</span>
+              <span>When should I reach Gorakhpur on Day 1?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Report at 11:00 am IST on Day 1 (arriving the previous evening in Gorakhpur is strongly recommended to buffer flight or train delays).</p>
+          </div>
+        </div>
+
+        <!-- Q20 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q20</span>
+              <span>Can I join the group directly in Pokhara?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Contact BOOTpaths before booking independent flights to confirm Pokhara joining logistics and timings.</p>
+          </div>
+        </div>
+
+        <!-- Q21 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q21</span>
+              <span>Should I keep a buffer for the trip home?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Yes, Day 9 arrives in Gorakhpur around 10:00–11:00 pm IST; book onward flights/trains for the 2nd half of Day 10 or Day 11.</p>
+          </div>
+        </div>
+
+        <!-- Q22 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q22</span>
+              <span>What happens if snow or bad weather affects the route?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>The guide will adjust walking times, overnight stops, or turnaround points for participant safety.</p>
+          </div>
+        </div>
+
+        <!-- Q23 -->
+        <div class="fqi" data-faq-group="group-c">
+          <button class="fqq" onclick="tf(this)">
+            <span class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Q23</span>
+              <span>How do we keep the trail clean and respect the villages?</span>
+            </span>
+            <span class="fqa-arr">+</span>
+          </button>
+          <div class="fqa">
+            <p>Carry out all personal litter, use refillable bottles, ask before photographing locals, and always give porters and pack animals the mountain-side right of way.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <div class="ft-logo">
+            <div class="logo-icon-wrap">
+              <img src="/logo.png" alt="BOOTpaths" onerror="this.src='images/bootpaths_logo.png'; this.onerror=null;" />
+            </div>
+            <span><span style="color: #ff5e00; font-weight: 800;">BOOT</span><span style="color: #1A1A18; font-weight: 700;">paths</span></span>
+          </div>
+          <p>Walk the world's greatest paths with expert guides, thoughtful logistics, and a passion for the mountains.</p>
+          <div class="socials">
+            <a href="#" aria-label="Instagram" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="#" aria-label="Facebook" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a href="#" aria-label="YouTube" class="sb"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
+          </div>
+        </div>
+        <div class="ft-col"><h4>Quick Links</h4><ul><li><a href="#overview">About the Trek</a></li><li><a href="#highlights">Trek Highlights</a></li><li><a href="#itinerary">Detailed Itinerary</a></li><li><a href="#gallery">Photo Gallery</a></li><li><a href="#inclusions">Inclusions</a></li><li><a href="#faq">FAQs</a></li><li><a href="/?book=annapurna-base-camp">Book Now</a></li></ul></div>
+        <div class="ft-col"><h4>Other Treks</h4><ul><li><a href="/?trek=ebc-trek">Everest Base Camp Trek</a></li><li><a href="/?trek=agasthyarkoodam">Agasthyarkoodam Trek</a></li><li><a href="/?trek=arippa">Arippa Forest Trek</a></li><li><a href="/?trek=thommankuthu">Thommankuthu Riverbed Trek</a></li><li><a href="/?trek=meeshapulimala">Meeshapulimala Trek</a></li><li><a href="/?trek=kolukkumala">Kolukkumalai Sunrise Trek</a></li></ul></div>
+        <div class="ft-col"><h4>Contact Bootpaths</h4><ul class="ct"><li><span>&#128231;</span> <a href="mailto:bootpaths@gmail.com">bootpaths@gmail.com</a></li><li><span>&#128241;</span> <a href="tel:+919446102200">Call: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20trek." target="_blank" rel="noopener">WhatsApp: +91 9446102200</a></li><li><span>&#128172;</span> <a href="https://wa.me/919895452187?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20trek." target="_blank" rel="noopener">WhatsApp: +91 9895452187</a></li><li><span>&#128172;</span> <a href="https://wa.me/918848998470?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20trek." target="_blank" rel="noopener">WhatsApp: +91 8848998470</a></li><li><span>&#128336;</span> Mon&ndash;Sat: 9am &ndash; 7pm IST</li></ul></div>
+      </div>
+      <div class="ft-bottom"><p>&#169; 2026 Bootpaths Trekking Expeditions. All rights reserved.</p><p>Respect Wilderness &bull; Zero Plastic &bull; Leave No Trace</p></div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP / CALLBACK BUTTON -->
+  <a href="https://wa.me/919446102200?text=Hi%20Bootpaths%2C%20I%20would%20like%20to%20request%20a%20callback%20regarding%20the%20Annapurna%20Base%20Camp%20trek." target="_blank" rel="noopener" class="floating-callback" title="Request a Callback on WhatsApp">
+    <div class="floating-pulse"></div>
+    <div class="floating-inner">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.538 1.95.823 2.791.824h.001c3.182 0 5.769-2.587 5.769-5.768 0-3.181-2.586-5.767-5.771-5.767zm3.376 8.21c-.144.405-.837.774-1.17.824-.312.045-.718.067-2.316-.593-1.805-.747-2.955-2.58-3.044-2.7-.09-.12-1.748-2.327-1.748-4.439 0-2.112 1.107-3.15 1.498-3.57.391-.42.853-.526 1.138-.526.284 0 .568.002.818.014.266.012.622-.101.974.743.363.87 1.242 3.03 1.349 3.249.106.219.178.474.036.755-.143.282-.214.457-.427.707-.213.25-.45.559-.643.75-.213.21-.436.438-.187.865.249.427 1.104 1.82 2.368 2.946 1.626 1.448 2.997 1.897 3.424 2.11.427.213.676.178.925-.107.25-.284 1.066-1.242 1.35-1.668.284-.427.569-.356.96-.213.391.142 2.488 1.173 2.915 1.386.427.213.711.32.818.498.107.178.107 1.032-.037 1.437z"/></svg>
+      <span class="floating-label">Request Callback</span>
+    </div>
+  </a>
+
+  <script src="script.js"></script>
+
+  <!-- FAQ Category Filter & Tab Switcher Script -->
+  <script>
+    function switchFaqTab(category, btn) {
+      const buttons = document.querySelectorAll('#faqTabNav .faq-tab-btn');
+      buttons.forEach(b => {
+        b.classList.remove('active', 'bg-[#EB5A0D]', 'text-white', 'shadow-sm');
+        b.classList.add('bg-stone-100', 'text-stone-600');
+      });
+      if (btn) {
+        btn.classList.add('active', 'bg-[#EB5A0D]', 'text-white', 'shadow-sm');
+        btn.classList.remove('bg-stone-100', 'text-stone-600');
+      }
+
+      const items = document.querySelectorAll('.faq-grid .fqi');
+      items.forEach(item => {
+        const group = item.getAttribute('data-faq-group');
+        if (category === 'all' || group === category) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+  <!-- Close preview modal if clicked inside iframe -->
+  <script>
+    (function() {
+      function handleBackLinks() {
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          if (link.textContent && link.textContent.indexOf('Back') !== -1) {
+            link.addEventListener('click', function(e) {
+              if (window.self !== window.top) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.postMessage({ type: 'CLOSE_PREVIEW' }, '*');
+              }
+            });
+          }
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleBackLinks);
+      } else {
+        handleBackLinks();
+      }
+    })();
+  </script>
+
+  <!-- Policy Injection for Himalayan Treks -->
+  <script src="/treks/policy-inject.js" defer></script>
+</body>
+</html>
