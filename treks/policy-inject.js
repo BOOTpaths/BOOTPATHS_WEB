@@ -236,86 +236,378 @@
 
   // 3. Compact Minimal "Upcoming Batches" Bar & Live Firestore Sync
   const CANONICAL_FALLBACK_TREKS = {
-    kumaraparvatha: {
-      id: 'kumaraparvatha',
-      title: 'Kumaraparvatha Trek',
-      price: 4000,
-      originalPrice: 4800,
-      slots: 10,
-      badge: 'King of Ghats',
-      batchDates: ['Jan 09–10, 2027', 'Jan 23–24, 2027', 'Feb 06–07, 2027']
+    "agasthyarkoodam": {
+      "id": "agasthyarkoodam",
+      "title": "Agasthyarkoodam Wilderness Trek",
+      "price": 4500,
+      "originalPrice": 5500,
+      "slots": 8,
+      "badge": "PREMIUM TRAIL",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Agasthyarkoodam/index.html"
     },
-    'kuari-pass': {
-      id: 'kuari-pass',
-      title: 'Kuari Pass Trek',
-      price: 9850,
-      originalPrice: 12500,
-      slots: 12,
-      badge: 'Curzon Trail',
-      batchDates: ['Apr 11–16, 2027', 'May 02–07, 2027', 'May 16–21, 2027']
+    "arippa": {
+      "id": "arippa",
+      "title": "Arippa Forest Trek & Tribal Camp",
+      "price": 3850,
+      "originalPrice": 4500,
+      "slots": 12,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11-12, 2026",
+        "Jul 18-19, 2026",
+        "Jul 25-26, 2026"
+      ],
+      "detailsUrl": "/treks/Arippa/index.html"
     },
-    kolukkumala: {
-      id: 'kolukkumala',
-      title: 'Kolukkumalai Sunrise & Mountain Camp',
-      price: 3600,
-      originalPrice: 4200,
-      slots: 14,
-      badge: 'Highest Tea Trail',
-      batchDates: ['Dec 30–02 Jan 2027', 'Jan 16–17, 2027', 'Feb 13–14, 2027']
+    "athirapally": {
+      "id": "athirapally",
+      "title": "Athirapally Waterfall & Jungle Trail",
+      "price": 1800,
+      "originalPrice": 2400,
+      "slots": 12,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Athirapally/index.html"
     },
-    vellagavi: {
-      id: 'vellagavi',
-      title: 'Vellagavi Ancient Village Trek',
-      price: 3500,
-      originalPrice: 4200,
-      slots: 12,
-      badge: 'Sacred Whispers',
-      batchDates: ['Jul 11–12, 2026', 'Jul 18–19, 2026', 'Jul 25–26, 2026']
+    "banasura": {
+      "id": "banasura",
+      "title": "Banasura Hill Expedition",
+      "price": 3200,
+      "originalPrice": 4000,
+      "slots": 10,
+      "badge": "LIMITED SLOTS",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Banasura/index.html"
     },
-    agasthyarkoodam: {
-      id: 'agasthyarkoodam',
-      title: 'Agasthyarkoodam Wilderness Trek',
-      price: 4500,
-      originalPrice: 5500,
-      slots: 8,
-      badge: 'UNESCO Reserve',
-      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    "brahmagiri": {
+      "id": "brahmagiri",
+      "title": "Brahmagiri Peak Trek",
+      "price": 3899,
+      "originalPrice": 4500,
+      "slots": 7,
+      "badge": "PREMIUM TRAIL",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Brahmagiri/index.html"
     },
-    arippa: {
-      id: 'arippa',
-      title: 'Arippa Forest Walk & Camp',
-      price: 3850,
-      originalPrice: 4500,
-      slots: 15,
-      badge: 'Filling Fast!',
-      batchDates: ['Jul 11–12, 2026', 'Jul 18–19, 2026', 'Jul 25–26, 2026']
+    "chimmini-amphi": {
+      "id": "chimmini-amphi",
+      "title": "Chimmini Amphitheater Jungle Camp",
+      "price": 2800,
+      "originalPrice": 3500,
+      "slots": 14,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Chimmini-amphi/index.html"
     },
-    athirapally: {
-      id: 'athirapally',
-      title: 'Athirapally Waterfall Trail',
-      price: 1800,
-      originalPrice: 2400,
-      slots: 12,
-      badge: 'Jungle Trail',
-      batchDates: ['Jul 11, 2026', 'Jul 18, 2026', 'Jul 25, 2026']
+    "gavi": {
+      "id": "gavi",
+      "title": "Gavi Forest Expedition & Safari",
+      "price": 4200,
+      "originalPrice": 5000,
+      "slots": 6,
+      "badge": "LIMITED SLOTS",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Gavi/index.html"
     },
-    banasura: {
-      id: 'banasura',
-      title: 'Banasura Hill Expedition',
-      price: 3200,
-      originalPrice: 3800,
-      slots: 20,
-      badge: 'Limited Slots',
-      batchDates: ['Nov 28, 2026', 'Dec 19, 2026', 'Dec 31, 2026']
+    "goechala": {
+      "id": "goechala",
+      "title": "Goechala Pass Expedition",
+      "price": 18500,
+      "originalPrice": 22000,
+      "slots": 5,
+      "badge": "PREMIUM TRAIL",
+      "batchDates": [
+        "Jul 15, 2026",
+        "Aug 05, 2026",
+        "Sep 10, 2026"
+      ],
+      "detailsUrl": "/treks/Goachala-pass/index.html"
     },
-    'sandhakphu-phalut': {
-      id: 'sandhakphu-phalut',
-      title: 'Sandakphu Phalut Ridge Trek',
-      price: 14500,
-      originalPrice: 17500,
-      slots: 10,
-      badge: 'Sleeping Buddha',
-      batchDates: ['Oct 24–30, 2026', 'Nov 14–20, 2026', 'Dec 19–25, 2026']
+    "kathirmudi": {
+      "id": "kathirmudi",
+      "title": "Kathirmudi Mist Peak Trail",
+      "price": 2500,
+      "originalPrice": 3200,
+      "slots": 10,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Kathirmudi/index.html"
+    },
+    "kilimanjaro": {
+      "id": "kilimanjaro",
+      "title": "Mount Kilimanjaro Summit Trek",
+      "price": 145000,
+      "originalPrice": 165000,
+      "slots": 4,
+      "badge": "LIMITED SLOTS",
+      "batchDates": [
+        "Aug 10, 2026",
+        "Sep 15, 2026",
+        "Oct 20, 2026"
+      ],
+      "detailsUrl": "/treks/Kilimanjaro/index.html"
+    },
+    "kolukkumala": {
+      "id": "kolukkumala",
+      "title": "Kolukkumalai & Bose Peak New Year Special",
+      "price": 3500,
+      "originalPrice": 4200,
+      "slots": 9,
+      "badge": "NEW YEAR SPECIAL",
+      "batchDates": [
+        "Dec 31, 2026 – Jan 01, 2027"
+      ],
+      "detailsUrl": "/treks/Kolukkumala/index.html"
+    },
+    "meeshapulimala": {
+      "id": "meeshapulimala",
+      "title": "Meesapulimala Day Trek",
+      "price": 4399,
+      "originalPrice": 5200,
+      "slots": 8,
+      "badge": "MIDNIGHT START",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Meeshapulimala/index.html"
+    },
+    "mt-elbrus": {
+      "id": "mt-elbrus",
+      "title": "Mount Elbrus Summit Expedition",
+      "price": 135000,
+      "originalPrice": 150000,
+      "slots": 3,
+      "badge": "LIMITED SLOTS",
+      "batchDates": [
+        "Aug 01, 2026",
+        "Aug 20, 2026"
+      ],
+      "detailsUrl": "/treks/Mt.Elbrus/index.html"
+    },
+    "parambikulam": {
+      "id": "parambikulam",
+      "title": "Parambikulam Tiger Reserve Trail",
+      "price": 3400,
+      "originalPrice": 4200,
+      "slots": 11,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Parambikulam/index.html"
+    },
+    "periyar-boarder": {
+      "id": "periyar-boarder",
+      "title": "Periyar Border Hiking & Rafting",
+      "price": 3600,
+      "originalPrice": 4500,
+      "slots": 8,
+      "badge": "PREMIUM TRAIL",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Periyar-boarder/index.html"
+    },
+    "thommankuthu": {
+      "id": "thommankuthu",
+      "title": "Thommankuthu Riverbed Trek",
+      "price": 2000,
+      "originalPrice": 2500,
+      "slots": 15,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Thommankuthu/index.html"
+    },
+    "yellapatty": {
+      "id": "yellapatty",
+      "title": "Yellapatty Cloud Camping Trek",
+      "price": 3100,
+      "originalPrice": 3800,
+      "slots": 10,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/Yellapatty/index.html"
+    },
+    "chimmini-climate-walk": {
+      "id": "chimmini-climate-walk",
+      "title": "Chimmini Climate & Rain Walk",
+      "price": 2100,
+      "originalPrice": 2700,
+      "slots": 12,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 12, 2026",
+        "Jul 19, 2026",
+        "Jul 26, 2026"
+      ],
+      "detailsUrl": "/treks/chimmini-climate-walk/index.html"
+    },
+    "chokkramudi": {
+      "id": "chokkramudi",
+      "title": "Chokramudi Peak Sunrise Trek",
+      "price": 2900,
+      "originalPrice": 3600,
+      "slots": 10,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/chokkramudi/index.html"
+    },
+    "ebc-trek": {
+      "id": "ebc-trek",
+      "title": "Everest Base Camp Trek",
+      "price": 90000,
+      "originalPrice": 105000,
+      "slots": 6,
+      "badge": "PREMIUM EXPEDITION",
+      "batchDates": [
+        "Apr 10, 2027",
+        "May 01, 2027",
+        "Oct 10, 2027"
+      ],
+      "detailsUrl": "/treks/ebc-trek/index.html"
+    },
+    "peechimoodal": {
+      "id": "peechimoodal",
+      "title": "Peechi Moodal Forest Trail",
+      "price": 1700,
+      "originalPrice": 2200,
+      "slots": 16,
+      "badge": "FILLING FAST!",
+      "batchDates": [
+        "Jul 11, 2026",
+        "Jul 18, 2026",
+        "Jul 25, 2026"
+      ],
+      "detailsUrl": "/treks/peechimoodal/index.html"
+    },
+    "annapurna-base-camp": {
+      "id": "annapurna-base-camp",
+      "title": "Annapurna Base Camp Trek",
+      "price": 35000,
+      "originalPrice": 42000,
+      "slots": 10,
+      "badge": "POPULAR TRAIL",
+      "batchDates": [
+        "Apr 03, 2027",
+        "Apr 17, 2027",
+        "May 01, 2027"
+      ],
+      "detailsUrl": "/treks/annapurna-base-camp/index.html"
+    },
+    "mardi-himal-base-camp": {
+      "id": "mardi-himal-base-camp",
+      "title": "Mardi Himal Base Camp Trek",
+      "price": 27500,
+      "originalPrice": 34000,
+      "slots": 12,
+      "badge": "RIDGE EXPEDITION",
+      "batchDates": [
+        "Apr 05, 2027",
+        "Apr 19, 2027",
+        "May 03, 2027"
+      ],
+      "detailsUrl": "/treks/mardi-himal-base-camp/index.html"
+    },
+    "vellagavi": {
+      "id": "vellagavi",
+      "title": "Vellagavi Trek · Kumbakarai to Vattakanal",
+      "price": 4200,
+      "originalPrice": 5000,
+      "slots": 12,
+      "badge": "NEW TRAIL",
+      "batchDates": [
+        "Oct 17-18, 2026",
+        "Nov 14-15, 2026",
+        "Dec 12-13, 2026"
+      ],
+      "detailsUrl": "/treks/vellagavi/index.html"
+    },
+    "kumaraparvatha": {
+      "id": "kumaraparvatha",
+      "title": "Kumaraparvatha Trek | The King of the Western Ghats",
+      "price": 4000,
+      "originalPrice": 4800,
+      "slots": 10,
+      "badge": "KING OF GHATS",
+      "batchDates": [
+        "Jan 09-10, 2027"
+      ],
+      "detailsUrl": "/treks/kumaraparvatha/index.html"
+    },
+    "kuari-pass": {
+      "id": "kuari-pass",
+      "title": "Kuari Pass Trek",
+      "price": 9850,
+      "originalPrice": 12500,
+      "slots": 12,
+      "badge": "CURZON TRAIL",
+      "batchDates": [
+        "Oct 10-15, 2026",
+        "Nov 07-12, 2026",
+        "Dec 19-24, 2026"
+      ],
+      "detailsUrl": "/treks/kuari-pass/index.html"
+    },
+    "sandhakphu-phalut": {
+      "id": "sandhakphu-phalut",
+      "title": "Sandakphu Phalut Trek",
+      "price": 14500,
+      "originalPrice": 17500,
+      "slots": 10,
+      "badge": "SLEEPING BUDDHA",
+      "batchDates": [
+        "Oct 18-24, 2026",
+        "Nov 15-21, 2026",
+        "Dec 06-12, 2026"
+      ],
+      "detailsUrl": "/treks/sandhakphu-phalut/index.html"
     }
   };
 
@@ -380,6 +672,40 @@
     return null;
   }
 
+  // Helper to decode raw Firestore REST API values
+  function decodeFirestoreValue(val) {
+    if (val === null || val === undefined) return null;
+    if ('stringValue' in val) return val.stringValue;
+    if ('integerValue' in val) return parseInt(val.integerValue, 10);
+    if ('doubleValue' in val) return parseFloat(val.doubleValue);
+    if ('booleanValue' in val) return val.booleanValue;
+    if ('nullValue' in val) return null;
+    if ('timestampValue' in val) return val.timestampValue;
+    if ('arrayValue' in val) {
+      const list = val.arrayValue && val.arrayValue.values ? val.arrayValue.values : [];
+      return list.map(decodeFirestoreValue);
+    }
+    if ('mapValue' in val) {
+      const obj = {};
+      const fields = (val.mapValue && val.mapValue.fields) ? val.mapValue.fields : {};
+      for (const k in fields) {
+        obj[k] = decodeFirestoreValue(fields[k]);
+      }
+      return obj;
+    }
+    return val;
+  }
+
+  function decodeFirestoreDocument(doc) {
+    if (!doc) return null;
+    const obj = { id: (doc.name || '').split('/').pop() };
+    const fields = doc.fields || {};
+    for (const k in fields) {
+      obj[k] = decodeFirestoreValue(fields[k]);
+    }
+    return obj;
+  }
+
   async function syncLiveBatches() {
     try {
       const path = window.location.pathname || '';
@@ -392,62 +718,88 @@
       let packageData = null;
       let matchingBatches = [];
 
-      // 1. Fetch live package documents from Firestore REST API
+      // 1. Fetch live package documents from Firestore REST API with field mask
       try {
         const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const timeoutId = controller ? setTimeout(() => controller.abort(), 4500) : null;
-        const endpoint = "https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/packages?key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8&pageSize=100";
+        const timeoutId = controller ? setTimeout(() => controller.abort(), 6000) : null;
+        const maskFields = [
+          'title', 'batchDates', 'dates', 'date', 'price', 'originalPrice',
+          'slotsLeft', 'availableSlots', 'slots', 'tag', 'badge',
+          'detailsUrl', 'detailsLink', 'slug', 'isVisible', 'isArchived', 'status'
+        ];
+        const maskQuery = maskFields.map(f => 'mask.fieldPaths=' + encodeURIComponent(f)).join('&');
+        const endpoint = 'https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/packages?pageSize=100&' + maskQuery + '&key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8';
+        
+        let docs = [];
         const resp = await fetch(endpoint, controller ? { signal: controller.signal } : {});
         if (timeoutId) clearTimeout(timeoutId);
 
         if (resp.ok) {
           const data = await resp.json();
-          const docs = data.documents || [];
+          docs = (data.documents || []).map(decodeFirestoreDocument);
+        }
 
-          // Find matching document(s) for the current trek slug
-          const matchedDoc = docs.find(doc => {
-            const f = doc.fields || {};
-            if (f.isVisible && f.isVisible.booleanValue === false) return false;
-            if (f.isArchived && f.isArchived.booleanValue === true) return false;
-            if (f.status && (f.status.stringValue === 'draft' || f.status.stringValue === 'hidden')) return false;
+        // Match current trek slug against Firestore documents
+        let matchedDoc = docs.find(doc => {
+          if (!doc) return false;
+          if (doc.isVisible === false || doc.isArchived === true) return false;
+          if (doc.status === 'draft' || doc.status === 'hidden') return false;
 
-            const docId = (doc.name || '').split('/').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
-            const slug = (f.slug?.stringValue || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            const title = (f.title?.stringValue || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            const details = ((f.detailsUrl?.stringValue || f.detailsLink?.stringValue || '')).toLowerCase();
+          const docId = (doc.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const slug = (doc.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const title = (doc.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const details = (doc.detailsUrl || doc.detailsLink || '').toLowerCase().trim();
 
-            return (
-              docId === normSlug ||
-              slug === normSlug ||
-              (details && details.includes('/' + rawSlug)) ||
-              (title && (title === normSlug || normSlug.includes(title) || title.includes(normSlug)))
-            );
-          });
+          return (
+            docId === normSlug ||
+            slug === normSlug ||
+            (details && (details.includes('/' + rawSlug + '/') || details.endsWith('/' + rawSlug) || details.includes(rawSlug))) ||
+            (title && (title === normSlug || normSlug.includes(title) || title.includes(normSlug)))
+          );
+        });
 
-          if (matchedDoc) {
-            const f = matchedDoc.fields || {};
-            const docId = (matchedDoc.name || '').split('/').pop() || rawSlug;
-            const priceVal = f.price?.integerValue || f.price?.doubleValue || f.price?.stringValue || '';
-            const origPriceVal = f.originalPrice?.integerValue || f.originalPrice?.doubleValue || f.originalPrice?.stringValue || '';
-            const numPrice = Number(String(priceVal).replace(/[^0-9]/g, '')) || 0;
-            const numOrigPrice = Number(String(origPriceVal).replace(/[^0-9]/g, '')) || 0;
-            const slotsCount = f.slotsLeft?.integerValue !== undefined 
-              ? Number(f.slotsLeft.integerValue) 
-              : (f.availableSlots?.integerValue !== undefined 
-                  ? Number(f.availableSlots.integerValue) 
-                  : (f.slots?.integerValue !== undefined ? Number(f.slots.integerValue) : 8));
-            const tag = f.tag?.stringValue || f.badge?.stringValue || '';
-            const title = f.title?.stringValue || document.title.split('|')[0].trim();
-
-            let dateList = [];
-            if (f.batchDates && f.batchDates.arrayValue && f.batchDates.arrayValue.values) {
-              dateList = f.batchDates.arrayValue.values.map(v => v.stringValue).filter(Boolean);
-            } else if (f.dates && f.dates.stringValue) {
-              dateList = [f.dates.stringValue];
-            } else if (f.date && f.date.stringValue) {
-              dateList = [f.date.stringValue];
+        // Direct single document fallback if list didn't contain it
+        if (!matchedDoc) {
+          try {
+            const directEndpoint = 'https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/packages/' + encodeURIComponent(rawSlug) + '?' + maskQuery + '&key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8';
+            const directResp = await fetch(directEndpoint);
+            if (directResp.ok) {
+              const rawDirect = await directResp.json();
+              if (rawDirect && rawDirect.fields) {
+                matchedDoc = decodeFirestoreDocument(rawDirect);
+              }
             }
+          } catch (e) {}
+        }
 
+        if (matchedDoc) {
+          const docId = matchedDoc.id || rawSlug;
+          const numPrice = Number(matchedDoc.price) || 0;
+          const numOrigPrice = Number(matchedDoc.originalPrice) || 0;
+          const slotsCount = matchedDoc.slotsLeft !== undefined
+            ? Number(matchedDoc.slotsLeft)
+            : (matchedDoc.availableSlots !== undefined
+                ? Number(matchedDoc.availableSlots)
+                : (matchedDoc.slots !== undefined ? Number(matchedDoc.slots) : 10));
+          const tag = matchedDoc.tag || matchedDoc.badge || '';
+          const title = matchedDoc.title || document.title.split('|')[0].trim();
+
+          let dateList = [];
+          if (Array.isArray(matchedDoc.batchDates) && matchedDoc.batchDates.length > 0) {
+            dateList = matchedDoc.batchDates;
+          } else if (Array.isArray(matchedDoc.dates) && matchedDoc.dates.length > 0) {
+            dateList = matchedDoc.dates;
+          } else if (matchedDoc.batchDates && typeof matchedDoc.batchDates === 'string') {
+            dateList = [matchedDoc.batchDates];
+          } else if (matchedDoc.dates && typeof matchedDoc.dates === 'string') {
+            dateList = [matchedDoc.dates];
+          } else if (matchedDoc.date && typeof matchedDoc.date === 'string') {
+            dateList = [matchedDoc.date];
+          }
+
+          dateList = dateList.filter(d => typeof d === 'string' && d.trim().length > 0);
+
+          if (dateList.length > 0) {
             packageData = {
               id: docId,
               title,
@@ -460,7 +812,7 @@
 
             dateList.forEach((dStr, idx) => {
               matchingBatches.push({
-                id: `${docId}-${idx}`,
+                id: docId + '-' + idx,
                 date: dStr,
                 slots: slotsCount,
                 availableSlots: slotsCount,
@@ -475,7 +827,7 @@
         // Network or fetch error
       }
 
-      // 2. Fallback to canonical trek data if not yet created in Firestore
+      // 2. Fallback to canonical trek data if not yet fetched from Firestore
       if (!packageData || matchingBatches.length === 0) {
         const fallback = CANONICAL_FALLBACK_TREKS[rawSlug] || CANONICAL_FALLBACK_TREKS[normSlug] || {
           id: rawSlug,
@@ -484,7 +836,7 @@
           originalPrice: 4800,
           slots: 10,
           badge: 'Verified Trail',
-          batchDates: ['Jan 09–10, 2027', 'Jan 23–24, 2027', 'Feb 06–07, 2027']
+          batchDates: ['Dates TBA']
         };
 
         packageData = {
@@ -497,9 +849,13 @@
           badge: fallback.badge || ''
         };
 
-        (fallback.batchDates || []).forEach((dStr, idx) => {
+        const fallbackDates = Array.isArray(fallback.batchDates) && fallback.batchDates.length > 0
+          ? fallback.batchDates
+          : (fallback.date ? [fallback.date] : ['Dates TBA']);
+
+        fallbackDates.forEach((dStr, idx) => {
           matchingBatches.push({
-            id: `${packageData.id}-${idx}`,
+            id: packageData.id + '-' + idx,
             date: dStr,
             slots: fallback.slots || 10,
             availableSlots: fallback.slots || 10,
@@ -536,7 +892,7 @@
           if (small && /trek\s*fee|price|fee|cost/i.test(small.textContent || '') && packageData.price > 0) {
             const strong = item.querySelector('strong, span.value, p');
             if (strong && !item.closest('#bp-minimal-batch-bar') && !item.closest('#live-upcoming-batches')) {
-              strong.textContent = `₹${packageData.price.toLocaleString('en-IN')} per person`;
+              strong.textContent = '₹' + packageData.price.toLocaleString('en-IN') + ' per person';
             }
           }
         });
@@ -545,7 +901,7 @@
         const batchTexts = document.querySelectorAll('p, span, div');
         batchTexts.forEach(el => {
           if (el.children.length === 0 && /\bBatch\b/i.test(el.textContent || '') && !el.closest('#bp-minimal-batch-bar') && !el.closest('#live-upcoming-batches')) {
-            el.textContent = `${primaryBatch.date} Batch`;
+            el.textContent = primaryBatch.date + ' Batch';
           }
         });
       }
