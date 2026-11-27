@@ -444,7 +444,7 @@ export const CURATED_TREKS = [
     tagColor: 'bg-autumn-amber/20 text-autumn-amber border-autumn-amber/40',
     detailsUrl: '/treks/annapurna-base-camp/index.html',
     description: 'Walk past terraced Gurung villages in Ghandruk, climb the stone stairways of Chhomrong, and spend the night at Annapurna Base Camp (4,130 m).',
-    image: '/treks/annapurna-base-camp/images/abc_hero.jpg',
+    image: '/treks/annapurna-base-camp/images/abc-sanctuary-hero.jpg',
     inclusion: ['Pokhara Transfers', 'Teahouse Lodging', 'ACAP Permits'],
     batchDates: ['Apr 03, 2027', 'Apr 17, 2027', 'May 01, 2027'],
     isVisible: true
