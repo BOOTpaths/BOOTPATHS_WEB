@@ -2988,12 +2988,13 @@ button {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
+  object-position: center 40% !important;
 }
 
 .hero-overlay {
   position: absolute !important;
   inset: 0 !important;
-  background: rgba(0, 0, 0, 0.45) !important;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.3) 100%) !important;
 }
 
 .hero-content {
