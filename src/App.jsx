@@ -443,7 +443,8 @@ export default function App() {
     const checkUrlForTrek = () => {
       const params = new URLSearchParams(window.location.search);
       const trekParam = params.get('trek');
-      if (trekParam) {
+      const isBookingParam = params.get('book') === '1' || params.get('book') === 'true';
+      if (trekParam && !isBookingParam) {
         const cleanSlug = trekParam.replace(/[^a-zA-Z0-9._-]/g, '');
         const candidateList = (treks && treks.length > 0) ? treks : CURATED_TREKS;
         const matched = candidateList.find(t => {
@@ -470,13 +471,19 @@ export default function App() {
     return () => window.removeEventListener('popstate', checkUrlForTrek);
   }, [treks]);
 
-  // Handle URL query parameter (?book=<trekId> or #book=<trekId>) to preselect trek & scroll to booking widget
+  // Handle URL query parameter (?book=<trekId> or #book=<trekId> or ?trek=<slug>&book=1) to preselect trek & scroll to booking widget
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const checkUrlForBooking = () => {
       const urlParams = new URLSearchParams(window.location.search);
       let bookQuery = urlParams.get('book');
+      const trekParam = urlParams.get('trek');
+      const targetBatchDate = urlParams.get('batchDate') || urlParams.get('date');
+
+      if ((bookQuery === '1' || bookQuery === 'true') && trekParam) {
+        bookQuery = trekParam;
+      }
 
       if (!bookQuery && window.location.hash) {
         const hashStr = window.location.hash.replace(/^#\/?/, '');
@@ -508,7 +515,7 @@ export default function App() {
         if (matched) {
           setSelectedTrek(matched);
           const trekDates = matched.batchDates || matched.dates || [];
-          setSelectedDate(trekDates.length > 0 ? trekDates[0] : '');
+          setSelectedDate(targetBatchDate || (trekDates.length > 0 ? trekDates[0] : ''));
           setNumTrekkers(1);
           setCoTrekkers([]);
 
@@ -917,6 +924,9 @@ export default function App() {
   // Dynamic booking details
   const currentPackageData = selectedTrek ? (treks.find(t => t.id === selectedTrek.id) || selectedTrek) : null;
   const availableBatchDates = currentPackageData ? (currentPackageData.batchDates || currentPackageData.dates || []) : [];
+  const allBatchDates = (selectedDate && !availableBatchDates.includes(selectedDate))
+    ? [selectedDate, ...availableBatchDates]
+    : availableBatchDates;
   const currentSlotsLeft = currentPackageData ? (currentPackageData.slotsLeft || 0) : 0;
   const totalPrice = currentPackageData ? (currentPackageData.price * numTrekkers) : 0;
   const appliedWalletDiscount = (useWalletCredit && walletBalance > 0) ? Math.min(walletBalance, totalPrice) : 0;
@@ -925,13 +935,13 @@ export default function App() {
   // Auto-sync selectedDate to available batch dates
   useEffect(() => {
     if (availableBatchDates.length > 0) {
-      if (!selectedDate || !availableBatchDates.includes(selectedDate)) {
+      if (!selectedDate || (!availableBatchDates.includes(selectedDate) && !allBatchDates.includes(selectedDate))) {
         setSelectedDate(availableBatchDates[0]);
       }
-    } else {
+    } else if (!selectedDate) {
       setSelectedDate('');
     }
-  }, [selectedTrek ? selectedTrek.id : null, availableBatchDates, selectedDate]);
+  }, [selectedTrek ? selectedTrek.id : null, availableBatchDates]);
 
   // Stepper handlers for the on-page reservation widget
   const handleWidgetIncrement = () => {
@@ -986,7 +996,8 @@ export default function App() {
   const executeAction = (action) => {
     if (action.type === 'book_trek') {
       setSelectedTrek(action.payload);
-      setSelectedDate(action.payload.batchDates ? action.payload.batchDates[0] : (action.payload.dates ? action.payload.dates[0] : ''));
+      const chosenDate = action.batchDate || (action.payload.batchDates ? action.payload.batchDates[0] : (action.payload.dates ? action.payload.dates[0] : ''));
+      setSelectedDate(chosenDate);
       setNumTrekkers(1);
       setCoTrekkers([]);
       const widget = document.getElementById('booking-widget');
@@ -1032,8 +1043,8 @@ export default function App() {
 
 
 
-  // Keep compatibility with card calls
-  const handleBookNow = (trekOrSlug) => {
+  // Keep compatibility with card calls and batch selection
+  const handleBookNow = (trekOrSlug, targetBatchDate) => {
     if (!trekOrSlug) return;
 
     let targetTrek = null;
@@ -1058,8 +1069,19 @@ export default function App() {
       return;
     }
 
-    handleTrigger({ type: 'book_trek', payload: targetTrek });
+    handleTrigger({ type: 'book_trek', payload: targetTrek, batchDate: targetBatchDate });
   };
+
+  // Global listener for OPEN_BOOKING events dispatched from iframes or sub-sites
+  useEffect(() => {
+    const handleGlobalMessage = (event) => {
+      if (event.data && (event.data.type === 'OPEN_BOOKING' || event.data.type === 'BOOK_NOW' || event.data.type === 'TRIGGER_BOOKING')) {
+        handleBookNow(event.data.trekSlug || event.data.trekId, event.data.batchDate || event.data.date);
+      }
+    };
+    window.addEventListener('message', handleGlobalMessage);
+    return () => window.removeEventListener('message', handleGlobalMessage);
+  }, [treks]);
 
   const handleOpenTrekPreview = (trek) => {
     if (!trek || trek.isVisible === false || trek.isHidden === true || trek.status === 'draft' || trek.status === 'hidden') {
@@ -2369,12 +2391,12 @@ export default function App() {
                       className="w-full h-12 rounded-lg border border-autumn-bark/10 bg-autumn-mist px-4 text-sm text-autumn-bark transition-colors focus:border-autumn-maple focus:outline-none disabled:opacity-50"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      disabled={availableBatchDates.length === 0}
+                      disabled={allBatchDates.length === 0}
                     >
-                      {(availableBatchDates || []).length === 0 ? (
+                      {allBatchDates.length === 0 ? (
                         <option value="" disabled>No active batches available</option>
                       ) : (
-                        (availableBatchDates || []).map((dateStr, idx) => {
+                        allBatchDates.map((dateStr, idx) => {
                           let formattedDate = dateStr;
                           if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
                             const parsedDate = new Date(dateStr + 'T00:00:00');

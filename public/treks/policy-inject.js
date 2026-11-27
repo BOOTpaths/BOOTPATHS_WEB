@@ -234,9 +234,308 @@
     document.body.appendChild(shareContainer);
   }
 
+  // 3. Live Batch Fetcher & Auto-Sync from Firestore
+  function injectLiveStyles() {
+    if (document.getElementById("bp-live-styles")) return;
+    const style = document.createElement("style");
+    style.id = "bp-live-styles";
+    style.textContent = `
+      @keyframes bpPing {
+        75%, 100% { transform: scale(2); opacity: 0; }
+      }
+      .bp-ping-anim {
+        animation: bpPing 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+      }
+      .bp-batch-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(235, 90, 13, 0.6) !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 10px 25px -5px rgba(235, 90, 13, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.4) !important;
+      }
+      .bp-batch-card:active {
+        transform: scale(0.99);
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function parseBatchDateTimestamp(str) {
+    try {
+      if (!str) return 0;
+      const t = new Date(str).getTime();
+      if (!isNaN(t)) return t;
+      const parts = str.replace(/[–\-]/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+      if (parts.length >= 3) {
+        const lastTwo = parts.slice(-2).join(' ');
+        const t2 = new Date(parts[0] + ' ' + lastTwo).getTime();
+        if (!isNaN(t2)) return t2;
+      }
+      return 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  async function syncLiveBatches() {
+    try {
+      const path = window.location.pathname || '';
+      const match = path.match(/\/treks\/([^\/]+)/i);
+      if (!match) return;
+      const rawSlug = match[1].toLowerCase().trim();
+      const normSlug = rawSlug.replace(/[^a-z0-9]/g, '');
+      if (!normSlug) return;
+
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? setTimeout(() => controller.abort(), 4500) : null;
+
+      const endpoint = "https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/packages?key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8&pageSize=100";
+      const resp = await fetch(endpoint, controller ? { signal: controller.signal } : {});
+      if (timeoutId) clearTimeout(timeoutId);
+
+      if (!resp.ok) return;
+      const data = await resp.json();
+      if (!data.documents || !data.documents.length) return;
+
+      // Find matching package document
+      const pkg = data.documents.find(doc => {
+        const f = doc.fields || {};
+        if (f.isVisible && f.isVisible.booleanValue === false) return false;
+        if (f.isArchived && f.isArchived.booleanValue === true) return false;
+        if (f.status && (f.status.stringValue === 'draft' || f.status.stringValue === 'hidden')) return false;
+
+        const docId = (doc.name || '').split('/').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
+        const slug = (f.slug?.stringValue || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const title = (f.title?.stringValue || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const details = ((f.detailsUrl?.stringValue || f.detailsLink?.stringValue || '')).toLowerCase();
+
+        return (
+          docId === normSlug ||
+          slug === normSlug ||
+          (details && details.includes('/' + rawSlug)) ||
+          (title && (title === normSlug || normSlug.includes(title) || title.includes(normSlug)))
+        );
+      });
+
+      if (!pkg) return;
+      const f = pkg.fields || {};
+
+      // Parse batch dates
+      let batchDates = [];
+      if (f.batchDates && f.batchDates.arrayValue && f.batchDates.arrayValue.values) {
+        batchDates = f.batchDates.arrayValue.values.map(v => v.stringValue).filter(Boolean);
+      } else if (f.dates && f.dates.stringValue) {
+        batchDates = [f.dates.stringValue];
+      }
+
+      // Sort dates chronologically
+      if (batchDates.length > 1) {
+        batchDates.sort((a, b) => {
+          const ta = parseBatchDateTimestamp(a);
+          const tb = parseBatchDateTimestamp(b);
+          if (ta && tb) return ta - tb;
+          return 0;
+        });
+      }
+
+      const priceVal = f.price?.integerValue || f.price?.doubleValue || f.price?.stringValue || '';
+      const numPrice = Number(String(priceVal).replace(/[^0-9]/g, '')) || 0;
+      const slotsLeft = f.slotsLeft?.integerValue !== undefined ? Number(f.slotsLeft.integerValue) : (f.slotsLeft?.doubleValue !== undefined ? Number(f.slotsLeft.doubleValue) : null);
+      const tag = f.tag?.stringValue || '';
+      const trekId = (pkg.name || '').split('/').pop() || rawSlug;
+
+      // 1. Auto-sync existing page elements
+      if (batchDates.length > 0) {
+        const nextBatchDate = batchDates[0];
+
+        // Update Quick Info strip for Batch Date / Dates
+        const qiItems = document.querySelectorAll('.qi, .stat-item, .info-item, div');
+        qiItems.forEach(item => {
+          const small = item.querySelector('small, .label, span');
+          if (small && /batch\s*date|dates|departure|season/i.test(small.textContent || '')) {
+            const strong = item.querySelector('strong, span.value, p');
+            if (strong && !item.closest('#live-upcoming-batches')) {
+              strong.textContent = nextBatchDate;
+            }
+          }
+          if (small && /trek\s*fee|price|fee|cost/i.test(small.textContent || '') && numPrice > 0) {
+            const strong = item.querySelector('strong, span.value, p');
+            if (strong && !item.closest('#live-upcoming-batches')) {
+              strong.textContent = `₹${numPrice.toLocaleString('en-IN')} per person`;
+            }
+          }
+        });
+
+        // Update Duration batch subtext (e.g. "... Batch")
+        const batchTexts = document.querySelectorAll('p, span, div');
+        batchTexts.forEach(el => {
+          if (el.children.length === 0 && /\bBatch\b/i.test(el.textContent || '') && !el.closest('#live-upcoming-batches')) {
+            el.textContent = `${nextBatchDate} Batch`;
+          }
+        });
+      }
+
+      if (numPrice > 0) {
+        const feeHolders = document.querySelectorAll('.trek-fee, .price-display, [data-field="price"]');
+        feeHolders.forEach(el => {
+          if (!el.closest('#live-upcoming-batches')) {
+            el.textContent = `₹${numPrice.toLocaleString('en-IN')}`;
+          }
+        });
+      }
+
+      // 2. Render Live "Upcoming Batches" Banner
+      if (batchDates.length === 0 && !numPrice) return;
+      if (document.getElementById('live-upcoming-batches')) return;
+
+      injectLiveStyles();
+
+      const banner = document.createElement('section');
+      banner.id = 'live-upcoming-batches';
+      banner.style.cssText = 'width: 100%; max-width: 1152px; margin: 2rem auto; padding: 0 1rem; position: relative; z-index: 20; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;';
+
+      const getStatusBadge = (slots, tagStr) => {
+        if (slots === 0 || (tagStr && tagStr.toUpperCase() === 'SOLD OUT')) {
+          return '<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.03em;background:rgba(244,63,94,0.18);color:#fda4af;border:1px solid rgba(244,63,94,0.35);"><span style="width:6px;height:6px;border-radius:50%;background:#f43f5e;"></span>SOLD OUT</span>';
+        }
+        if ((slots !== null && slots <= 5) || (tagStr && (tagStr.toUpperCase().includes('FILLING') || tagStr.toUpperCase().includes('LIMITED')))) {
+          const leftText = slots !== null ? ` (${slots} Left)` : '';
+          return `<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.03em;background:rgba(245,158,11,0.18);color:#fcd34d;border:1px solid rgba(245,158,11,0.35);"><span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;"></span>FILLING FAST${leftText}</span>`;
+        }
+        const text = slots !== null ? `${slots} Slots Left` : 'Available';
+        return `<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.03em;background:rgba(16,185,129,0.18);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>${text}</span>`;
+      };
+
+      const pillsHtml = batchDates.map((bDate, idx) => {
+        const isNext = idx === 0;
+        return `
+          <div class="bp-batch-card" data-date="${bDate}" style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid ${isNext ? 'rgba(235, 90, 13, 0.45)' : 'rgba(255, 255, 255, 0.12)'};
+            box-shadow: 0 4px 20px -2px rgba(0,0,0,0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            flex: 1 1 260px;
+            min-width: 250px;
+            box-sizing: border-box;
+          ">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                background: ${isNext ? 'rgba(235, 90, 13, 0.15)' : 'rgba(255, 255, 255, 0.08)'};
+                border: 1px solid ${isNext ? 'rgba(235, 90, 13, 0.3)' : 'rgba(255, 255, 255, 0.15)'};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: ${isNext ? '#fb923c' : '#ffffff'};
+                font-size: 16px;
+                flex-shrink: 0;
+              ">
+                🗓️
+              </div>
+              <div style="text-align: left;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #ffffff; letter-spacing: -0.01em;">${bDate}</span>
+                  ${isNext ? '<span style="font-size: 9px; font-weight: 800; background: #ea580c; color: white; padding: 1px 6px; border-radius: 4px; text-transform: uppercase;">NEXT</span>' : ''}
+                </div>
+                ${numPrice > 0 ? `<div style="font-size: 12px; font-weight: 600; color: #fb923c; margin-top: 2px;">₹${numPrice.toLocaleString('en-IN')} <span style="font-size: 10px; color: #a8a29e; font-weight: 400;">/ person</span></div>` : ''}
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0;">
+              ${getStatusBadge(slotsLeft, tag)}
+              <span style="font-size: 11px; font-weight: 700; color: #fb923c; display: flex; align-items: center; gap: 3px;">
+                Book Now <span>→</span>
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      banner.innerHTML = `
+        <div style="
+          border-radius: 20px;
+          background: linear-gradient(135deg, rgba(28, 25, 23, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+          overflow: hidden;
+          padding: 22px 24px;
+          box-sizing: border-box;
+        ">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="position: relative; display: flex; height: 10px; width: 10px;">
+                <span class="bp-ping-anim" style="position: absolute; display: inline-flex; height: 100%; width: 100%; border-radius: 9999px; background-color: #34d399; opacity: 0.75;"></span>
+                <span style="position: relative; display: inline-flex; border-radius: 9999px; height: 10px; width: 10px; background-color: #10b981;"></span>
+              </span>
+              <div>
+                <h3 style="font-size: 14px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  Upcoming Expeditions &amp; Batches
+                </h3>
+                <p style="font-size: 11px; color: #a8a29e; margin: 2px 0 0 0;">
+                  Live batch slots &amp; verified real-time departure schedules
+                </p>
+              </div>
+            </div>
+
+            <div style="font-size: 11px; font-weight: 600; color: #94a3b8; background: rgba(255, 255, 255, 0.05); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);">
+              ⚡ Instant Confirmation &bull; Reserve Your Slot
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            ${pillsHtml}
+          </div>
+        </div>
+      `;
+
+      // Click listener on batch cards
+      const cards = banner.querySelectorAll('.bp-batch-card');
+      cards.forEach(card => {
+        card.addEventListener('click', function(ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          const chosenDate = this.getAttribute('data-date') || '';
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'OPEN_BOOKING',
+              trekId: trekId,
+              trekSlug: rawSlug,
+              batchDate: chosenDate,
+              date: chosenDate
+            }, '*');
+          } else {
+            window.location.href = `/?trek=${encodeURIComponent(rawSlug)}&book=1&batchDate=${encodeURIComponent(chosenDate)}`;
+          }
+        });
+      });
+
+      // Insert right after hero or before quick info
+      const hero = document.getElementById('hero') || document.querySelector('section.hero') || document.querySelector('.hero') || document.querySelector('header');
+      if (hero && hero.parentNode) {
+        hero.insertAdjacentElement('afterend', banner);
+      } else {
+        const main = document.querySelector('main') || document.body;
+        main.insertBefore(banner, main.firstChild);
+      }
+    } catch (err) {
+      // Graceful silent fallback
+    }
+  }
+
   function init() {
     renderPolicySection();
     renderFloatingSharePill();
+    syncLiveBatches();
   }
 
   if (document.readyState === "loading") {

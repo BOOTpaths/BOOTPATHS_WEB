@@ -22,9 +22,9 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
   // Listen for messages posted from the embedded sub-page iframe
   useEffect(() => {
     const handleIframeMessage = (event) => {
-      if (event.data && (event.data.type === 'TRIGGER_BOOKING' || event.data.type === 'BOOK_NOW')) {
+      if (event.data && (event.data.type === 'TRIGGER_BOOKING' || event.data.type === 'BOOK_NOW' || event.data.type === 'OPEN_BOOKING')) {
         onClose();
-        if (onBookNow) onBookNow(event.data.trekSlug || event.data.trekId || trekTitle);
+        if (onBookNow) onBookNow(event.data.trekSlug || event.data.trekId || trekTitle, event.data.batchDate || event.data.date);
       }
       if (event.data && (event.data.type === 'CLOSE_PREVIEW' || event.data.type === 'CLOSE_MODAL')) {
         onClose();
@@ -46,10 +46,12 @@ export default function TrekViewerModal({ isOpen, onClose, trekUrl, trekTitle, o
             const href = link.getAttribute('href') || '';
             const match = href.match(/book=([a-zA-Z0-9_-]+)/);
             const slug = match ? match[1] : '';
+            const dateMatch = href.match(/batchDate=([^&]+)/) || href.match(/date=([^&]+)/);
+            const batchDate = dateMatch ? decodeURIComponent(dateMatch[1]) : '';
             ev.preventDefault();
             ev.stopPropagation();
             onClose();
-            if (onBookNow) onBookNow(slug || trekTitle);
+            if (onBookNow) onBookNow(slug || trekTitle, batchDate);
           });
         });
 

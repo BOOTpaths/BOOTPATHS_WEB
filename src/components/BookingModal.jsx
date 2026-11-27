@@ -288,7 +288,7 @@ export default function BookingModal({
           name: nameVal,
           email: emailVal,
           phone: phoneVal,
-          selectedDate: initialDate || (trek?.batchDates && trek.batchDates[0]) || '',
+          selectedDate: initialDate || (trek?.batchDates && trek.batchDates[0]) || (trek?.dates && trek.dates[0]) || '',
           numberOfTrekkers: 1
         });
       };
@@ -818,7 +818,7 @@ export default function BookingModal({
                 </div>
 
                 {/* Batch Date Selector */}
-                {trek.batchDates && trek.batchDates.length > 0 && (
+                {((trek.batchDates && trek.batchDates.length > 0) || formData.selectedDate) && (
                   <div className="flex items-center justify-between pt-2 border-t border-[#E7E7E4]">
                     <span className="flex items-center gap-1.5 text-[#52524E]">
                       <Calendar className="h-3.5 w-3.5 text-[#EB5A0D]" /> Batch Date:
@@ -828,7 +828,10 @@ export default function BookingModal({
                       onChange={(e) => setFormData({ ...formData, selectedDate: e.target.value })}
                       className="bg-white border border-[#E7E7E4] rounded-lg px-2.5 py-1 text-xs font-semibold text-[#1A1A18] focus:outline-none focus:border-[#EB5A0D]"
                     >
-                      {trek.batchDates.map((bDate, idx) => (
+                      {formData.selectedDate && !(trek.batchDates || []).includes(formData.selectedDate) && (
+                        <option value={formData.selectedDate}>{formData.selectedDate}</option>
+                      )}
+                      {(trek.batchDates || []).map((bDate, idx) => (
                         <option key={idx} value={bDate}>{bDate}</option>
                       ))}
                     </select>
