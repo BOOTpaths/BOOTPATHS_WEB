@@ -346,7 +346,12 @@ export default function App() {
       if (docs.length === 0) {
         setTreks(CURATED_TREKS);
       } else {
-        setTreks(docs);
+        const firestoreMap = new Map(docs.map(d => [d.id, d]));
+        const merged = CURATED_TREKS.map(ct => {
+          const live = firestoreMap.get(ct.id);
+          return live ? { ...ct, ...live } : ct;
+        });
+        setTreks(merged);
       }
       setLoadingPackages(false);
     }, (err) => {
@@ -479,7 +484,7 @@ export default function App() {
       const urlParams = new URLSearchParams(window.location.search);
       let bookQuery = urlParams.get('book');
       const trekParam = urlParams.get('trek');
-      const targetBatchDate = urlParams.get('batchDate') || urlParams.get('date');
+      const targetBatchParam = urlParams.get('batch') || urlParams.get('batchDate') || urlParams.get('date');
 
       if ((bookQuery === '1' || bookQuery === 'true') && trekParam) {
         bookQuery = trekParam;
@@ -515,7 +520,15 @@ export default function App() {
         if (matched) {
           setSelectedTrek(matched);
           const trekDates = matched.batchDates || matched.dates || [];
-          setSelectedDate(targetBatchDate || (trekDates.length > 0 ? trekDates[0] : ''));
+          let chosenBatchDate = targetBatchParam || '';
+          if (targetBatchParam && trekDates.length > 0) {
+            const found = trekDates.find(d => d.toLowerCase().includes(targetBatchParam.toLowerCase()) || targetBatchParam.toLowerCase().includes(d.toLowerCase()));
+            if (found) chosenBatchDate = found;
+          }
+          if (!chosenBatchDate && trekDates.length > 0) {
+            chosenBatchDate = trekDates[0];
+          }
+          setSelectedDate(chosenBatchDate);
           setNumTrekkers(1);
           setCoTrekkers([]);
 
@@ -1076,7 +1089,7 @@ export default function App() {
   useEffect(() => {
     const handleGlobalMessage = (event) => {
       if (event.data && (event.data.type === 'OPEN_BOOKING' || event.data.type === 'BOOK_NOW' || event.data.type === 'TRIGGER_BOOKING')) {
-        handleBookNow(event.data.trekSlug || event.data.trekId, event.data.batchDate || event.data.date);
+        handleBookNow(event.data.trekSlug || event.data.trekId, event.data.batchDate || event.data.date || event.data.batch);
       }
     };
     window.addEventListener('message', handleGlobalMessage);

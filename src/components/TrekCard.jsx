@@ -24,19 +24,40 @@ export default function TrekCard({ trek, onGetDetails, onOpenTrekPreview, onBook
     }
   };
 
+  // Multi-batch support & earliest upcoming active batch
+  const allDates = trek.batchDates && Array.isArray(trek.batchDates) && trek.batchDates.length > 0 
+    ? trek.batchDates 
+    : (trek.dates ? (Array.isArray(trek.dates) ? trek.dates : [trek.dates]) : (trek.date ? [trek.date] : []));
+  const activeBatchDate = allDates.length > 0 ? allDates[0] : (trek.date || null);
+  const slotsCount = Number(trek.availableSlots ?? trek.slotsLeft ?? trek.slots ?? 0);
+
   const handleBookClick = (e) => {
     if (e) e.stopPropagation();
     if (isHidden) {
       return;
     }
 
+    if (slotsCount <= 0) {
+      // Check if there is another upcoming batch date
+      const alternativeBatch = (allDates.length > 1) ? allDates[1] : null;
+      if (alternativeBatch && onBookNow) {
+        onBookNow(trek, alternativeBatch);
+        return;
+      }
+      // If completely full, trigger request callback
+      const callbackBtn = document.getElementById('request-callback-btn') || document.querySelector('[data-action="request-callback"]');
+      if (callbackBtn) {
+        callbackBtn.click();
+        return;
+      }
+    }
+
     if (onBookNow) {
-      onBookNow(trek);
+      onBookNow(trek, activeBatchDate);
     }
   };
 
-  const slotsCount = trek.slotsLeft !== undefined ? trek.slotsLeft : trek.slots;
-  const tagText = trek.tag || (slotsCount !== undefined && Number(slotsCount) <= 5 ? 'LIMITED SLOTS' : null);
+  const tagText = trek.tag || (slotsCount !== undefined && Number(slotsCount) <= 5 && Number(slotsCount) > 0 ? 'LIMITED SLOTS' : null);
   const trekName = trek.name || trek.title || 'Wilderness Trail';
 
   return (
@@ -93,6 +114,42 @@ export default function TrekCard({ trek, onGetDetails, onOpenTrekPreview, onBook
         >
           <Heart className={`h-3.5 w-3.5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-600'}`} />
         </button>
+
+        {/* Bottom Gradient Scrim + Live Next Date & Slots Overlay */}
+        <div className="absolute inset-x-0 bottom-0 pt-10 pb-3 px-3.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex items-center justify-between gap-2 pointer-events-none z-10">
+          {/* Bottom-Left: Next Batch Date */}
+          <div className="inline-flex items-center gap-1.5 text-white text-xs font-bold tracking-tight drop-shadow-sm min-w-0 truncate">
+            <svg className="w-3.5 h-3.5 text-orange-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="truncate">
+              {activeBatchDate ? `Next: ${activeBatchDate}` : 'Dates TBA'}
+            </span>
+          </div>
+
+          {/* Bottom-Right: Live Available Slots Pill */}
+          {(() => {
+            if (slotsCount <= 0) {
+              return (
+                <span className="shrink-0 px-2.5 py-1 rounded-full bg-stone-900/85 backdrop-blur-md border border-white/15 text-stone-200 text-[11px] font-bold">
+                  Batch full
+                </span>
+              );
+            }
+            if (slotsCount <= 5) {
+              return (
+                <span className="shrink-0 px-2.5 py-1 rounded-full bg-orange-600/95 backdrop-blur-md text-white text-[11px] font-bold shadow-sm">
+                  {slotsCount} {slotsCount === 1 ? 'slot' : 'slots'} left
+                </span>
+              );
+            }
+            return (
+              <span className="shrink-0 px-2.5 py-1 rounded-full bg-emerald-600/90 backdrop-blur-md text-white text-[11px] font-bold shadow-sm">
+                {slotsCount} slots left
+              </span>
+            );
+          })()}
+        </div>
       </div>
 
       {/* Card Body */}
