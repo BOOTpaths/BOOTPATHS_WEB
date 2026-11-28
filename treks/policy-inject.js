@@ -784,38 +784,53 @@
           const tag = matchedDoc.tag || matchedDoc.badge || '';
           const title = matchedDoc.title || document.title.split('|')[0].trim();
 
-          let dateList = [];
+          // Normalize batch dates to structured objects [{ date, slots }]
+          let rawBatches = [];
           if (Array.isArray(matchedDoc.batchDates) && matchedDoc.batchDates.length > 0) {
-            dateList = matchedDoc.batchDates;
+            rawBatches = matchedDoc.batchDates;
           } else if (Array.isArray(matchedDoc.dates) && matchedDoc.dates.length > 0) {
-            dateList = matchedDoc.dates;
+            rawBatches = matchedDoc.dates;
           } else if (matchedDoc.batchDates && typeof matchedDoc.batchDates === 'string') {
-            dateList = [matchedDoc.batchDates];
+            rawBatches = [matchedDoc.batchDates];
           } else if (matchedDoc.dates && typeof matchedDoc.dates === 'string') {
-            dateList = [matchedDoc.dates];
+            rawBatches = [matchedDoc.dates];
           } else if (matchedDoc.date && typeof matchedDoc.date === 'string') {
-            dateList = [matchedDoc.date];
+            rawBatches = [matchedDoc.date];
           }
 
-          dateList = dateList.filter(d => typeof d === 'string' && d.trim().length > 0);
+          const parsedBatches = rawBatches.map((item, idx) => {
+            if (typeof item === 'string' && item.trim().length > 0) {
+              return { date: item.trim(), slots: slotsCount };
+            }
+            if (item && typeof item === 'object') {
+              const dStr = String(item.date || item.batchDate || '').trim();
+              const sNum = item.slots !== undefined ? Number(item.slots) : slotsCount;
+              if (dStr.length > 0) {
+                return { date: dStr, slots: sNum };
+              }
+            }
+            return null;
+          }).filter(Boolean);
 
-          if (dateList.length > 0) {
+          if (parsedBatches.length > 0) {
+            const firstActive = parsedBatches.find(b => b.slots > 0) || parsedBatches[0];
             packageData = {
               id: docId,
               title,
               price: numPrice,
               originalPrice: numOrigPrice,
-              slots: slotsCount,
-              availableSlots: slotsCount,
+              slots: firstActive ? firstActive.slots : slotsCount,
+              availableSlots: firstActive ? firstActive.slots : slotsCount,
               badge: tag
             };
 
-            dateList.forEach((dStr, idx) => {
+            parsedBatches.forEach((bObj, idx) => {
+              const bSlots = bObj.slots !== undefined ? Number(bObj.slots) : slotsCount;
               matchingBatches.push({
                 id: docId + '-' + idx,
-                date: dStr,
-                slots: slotsCount,
-                availableSlots: slotsCount,
+                date: bObj.date,
+                slots: bSlots,
+                availableSlots: bSlots,
                 price: numPrice,
                 originalPrice: numOrigPrice,
                 badge: tag
@@ -853,12 +868,14 @@
           ? fallback.batchDates
           : (fallback.date ? [fallback.date] : ['Dates TBA']);
 
-        fallbackDates.forEach((dStr, idx) => {
+        fallbackDates.forEach((item, idx) => {
+          const dStr = typeof item === 'string' ? item : (item.date || 'Dates TBA');
+          const bSlots = typeof item === 'object' && item.slots !== undefined ? Number(item.slots) : (fallback.slots || 10);
           matchingBatches.push({
             id: packageData.id + '-' + idx,
             date: dStr,
-            slots: fallback.slots || 10,
-            availableSlots: fallback.slots || 10,
+            slots: bSlots,
+            availableSlots: bSlots,
             price: packageData.price,
             originalPrice: packageData.originalPrice,
             badge: fallback.badge || ''
