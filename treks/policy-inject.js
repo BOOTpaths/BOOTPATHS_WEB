@@ -706,6 +706,180 @@
     return obj;
   }
 
+  
+  // Injects dynamic photo gallery when configured in Admin Console and enabled in DevOps
+  function injectDynamicGallery(galleryImages) {
+    if (!Array.isArray(galleryImages) || galleryImages.length === 0) return;
+    const gallerySection = document.getElementById('gallery');
+    if (!gallerySection) return;
+
+    // Extract unique categories
+    const categories = ['All Photos'];
+    galleryImages.forEach(img => {
+      const cat = (img.category || '').trim();
+      if (cat && !categories.includes(cat)) {
+        categories.push(cat);
+      }
+    });
+
+    // Check if gallery has an inner container
+    const container = gallerySection.querySelector('.container') || gallerySection;
+
+    // Preserve the header (.sh or h2)
+    const headerEl = container.querySelector('.sh') || container.querySelector('h2')?.parentElement;
+    const headerHtml = headerEl ? headerEl.outerHTML : '<div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-[#1A1A18] tracking-tight">Photo Gallery</h2><p class="text-sm text-stone-500 mt-2">Expedition moments and trail memories</p></div>';
+
+    // Build Category Filter Pills
+    let tabsHtml = '';
+    if (categories.length > 1) {
+      tabsHtml = '<div class="bp-dynamic-gallery-tabs flex flex-wrap items-center justify-center gap-2 mb-8">';
+      categories.forEach((cat, idx) => {
+        const isActive = idx === 0;
+        const activeClass = isActive 
+          ? 'bg-[#EB5A0D] text-white border-[#EB5A0D] shadow-sm font-bold'
+          : 'bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-200 font-semibold';
+        tabsHtml += `<button type="button" class="bp-cat-btn ${activeClass} text-xs uppercase tracking-wider px-4 py-2 rounded-xl border transition-all cursor-pointer" data-category="${cat.toLowerCase()}">${cat}</button>`;
+      });
+      tabsHtml += '</div>';
+    }
+
+    // Build Photos Grid
+    let gridHtml = '<div class="bp-dynamic-gallery-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="bpDynamicGalleryGrid">';
+    galleryImages.forEach((img, idx) => {
+      const cat = (img.category || 'general').toLowerCase().trim();
+      gridHtml += `
+        <div class="bp-gallery-card group relative rounded-2xl overflow-hidden shadow-md bg-stone-900 border border-stone-200/40 cursor-pointer transform hover:-translate-y-1 transition-all duration-300" data-category="${cat}" data-idx="${idx}">
+          <div class="w-full h-64 overflow-hidden relative">
+            <img src="${img.url}" alt="${img.caption || 'Trek Photo'}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='/logo.png'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+            <div class="absolute bottom-0 inset-x-0 p-3.5 flex flex-col justify-end">
+              ${img.category ? `<span class="text-[10px] uppercase font-bold tracking-widest text-[#EB5A0D] mb-1">${img.category}</span>` : ''}
+              <p class="text-xs sm:text-sm font-semibold text-white leading-snug drop-shadow-sm line-clamp-2">${img.caption || ''}</p>
+            </div>
+            <div class="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-xs p-1.5 rounded-lg text-white">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    gridHtml += '</div>';
+
+    // Replace container content cleanly
+    container.innerHTML = headerHtml + tabsHtml + gridHtml;
+
+    // Filter functionality
+    const catBtns = container.querySelectorAll('.bp-cat-btn');
+    const cards = container.querySelectorAll('.bp-gallery-card');
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => {
+          b.className = 'bp-cat-btn bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-200 font-semibold text-xs uppercase tracking-wider px-4 py-2 rounded-xl border transition-all cursor-pointer';
+        });
+        btn.className = 'bp-cat-btn bg-[#EB5A0D] text-white border-[#EB5A0D] shadow-sm font-bold text-xs uppercase tracking-wider px-4 py-2 rounded-xl border transition-all cursor-pointer';
+
+        const selectedCat = btn.getAttribute('data-category');
+        cards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          if (selectedCat === 'all photos' || selectedCat === cardCat) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Lightbox modal setup
+    let currentLightboxIdx = 0;
+    let lightboxEl = document.getElementById('bp-dynamic-lightbox');
+    if (!lightboxEl) {
+      lightboxEl = document.createElement('div');
+      lightboxEl.id = 'bp-dynamic-lightbox';
+      lightboxEl.className = 'fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md hidden items-center justify-center p-4 select-none';
+      lightboxEl.innerHTML = `
+        <button type="button" id="bp-lb-close" class="absolute top-4 right-4 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button type="button" id="bp-lb-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button type="button" id="bp-lb-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <div class="max-w-4xl w-full flex flex-col items-center">
+          <img id="bp-lb-img" src="" alt="" class="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl" />
+          <div class="mt-4 text-center text-white px-4">
+            <span id="bp-lb-cat" class="text-[10px] uppercase font-bold tracking-widest text-[#EB5A0D] block mb-1"></span>
+            <p id="bp-lb-caption" class="text-sm font-medium"></p>
+            <span id="bp-lb-counter" class="text-xs text-stone-400 mt-1 block font-mono"></span>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(lightboxEl);
+
+      const closeBtn = lightboxEl.querySelector('#bp-lb-close');
+      const prevBtn = lightboxEl.querySelector('#bp-lb-prev');
+      const nextBtn = lightboxEl.querySelector('#bp-lb-next');
+
+      const updateLb = (idx) => {
+        if (!galleryImages[idx]) return;
+        currentLightboxIdx = idx;
+        const item = galleryImages[idx];
+        const lbImg = lightboxEl.querySelector('#bp-lb-img');
+        const lbCat = lightboxEl.querySelector('#bp-lb-cat');
+        const lbCap = lightboxEl.querySelector('#bp-lb-caption');
+        const lbCount = lightboxEl.querySelector('#bp-lb-counter');
+
+        lbImg.src = item.url;
+        lbCat.textContent = item.category || '';
+        lbCap.textContent = item.caption || '';
+        lbCount.textContent = (idx + 1) + ' / ' + galleryImages.length;
+      };
+
+      closeBtn.addEventListener('click', () => { lightboxEl.style.display = 'none'; });
+      lightboxEl.addEventListener('click', (e) => {
+        if (e.target === lightboxEl) lightboxEl.style.display = 'none';
+      });
+
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const nextIdx = (currentLightboxIdx - 1 + galleryImages.length) % galleryImages.length;
+        updateLb(nextIdx);
+      });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const nextIdx = (currentLightboxIdx + 1) % galleryImages.length;
+        updateLb(nextIdx);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (lightboxEl.style.display === 'flex') {
+          if (e.key === 'Escape') lightboxEl.style.display = 'none';
+          if (e.key === 'ArrowLeft') prevBtn.click();
+          if (e.key === 'ArrowRight') nextBtn.click();
+        }
+      });
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = parseInt(card.getAttribute('data-idx'), 10);
+        const lb = document.getElementById('bp-dynamic-lightbox');
+        if (lb && galleryImages[idx]) {
+          const item = galleryImages[idx];
+          lb.querySelector('#bp-lb-img').src = item.url;
+          lb.querySelector('#bp-lb-cat').textContent = item.category || '';
+          lb.querySelector('#bp-lb-caption').textContent = item.caption || '';
+          lb.querySelector('#bp-lb-counter').textContent = (idx + 1) + ' / ' + galleryImages.length;
+          lb.style.display = 'flex';
+        }
+      });
+    });
+  }
+
   async function syncLiveBatches() {
     try {
       const path = window.location.pathname || '';
@@ -725,7 +899,7 @@
         const maskFields = [
           'title', 'batchDates', 'dates', 'date', 'price', 'originalPrice',
           'slotsLeft', 'availableSlots', 'slots', 'tag', 'badge',
-          'detailsUrl', 'detailsLink', 'slug', 'isVisible', 'isArchived', 'status'
+          'detailsUrl', 'detailsLink', 'slug', 'isVisible', 'isArchived', 'status', 'galleryImages'
         ];
         const maskQuery = maskFields.map(f => 'mask.fieldPaths=' + encodeURIComponent(f)).join('&');
         const endpoint = 'https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/packages?pageSize=100&' + maskQuery + '&key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8';
@@ -770,6 +944,28 @@
               }
             }
           } catch (e) {}
+        }
+
+        
+        // Check dynamicPhotoGallery feature flag
+        let isGalleryFeatureEnabled = true;
+        try {
+          const flagsEndpoint = 'https://firestore.googleapis.com/v1/projects/bootpaths-4b877/databases/(default)/documents/app_settings/feature_flags?key=AIzaSyDjzFMBlwAoN3y6KOUPWHbAD7w4xZEJGq8';
+          const flagsResp = await fetch(flagsEndpoint);
+          if (flagsResp.ok) {
+            const rawFlags = await flagsResp.json();
+            const decodedFlags = decodeFirestoreDocument(rawFlags);
+            if (decodedFlags && decodedFlags.dynamicPhotoGallery !== undefined) {
+              isGalleryFeatureEnabled = !!decodedFlags.dynamicPhotoGallery;
+            }
+          }
+        } catch (flagErr) {
+          console.warn('Feature flag fetch notice:', flagErr);
+        }
+
+        // If enabled and doc has custom galleryImages, inject dynamic gallery
+        if (isGalleryFeatureEnabled && matchedDoc && Array.isArray(matchedDoc.galleryImages) && matchedDoc.galleryImages.length > 0) {
+          injectDynamicGallery(matchedDoc.galleryImages);
         }
 
         if (matchedDoc) {
